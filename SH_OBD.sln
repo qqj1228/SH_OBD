@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.645
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SH_OBD", "SH_OBD\SH_OBD.csproj", "{FB88A49A-58E0-43C1-ACB7-0F287278729B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB88A49A-58E0-43C1-ACB7-0F287278729B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB88A49A-58E0-43C1-ACB7-0F287278729B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB88A49A-58E0-43C1-ACB7-0F287278729B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB88A49A-58E0-43C1-ACB7-0F287278729B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B8622135-5B00-431A-8E5D-9BFC91C5FDCC}
+	EndGlobalSection
+EndGlobal
