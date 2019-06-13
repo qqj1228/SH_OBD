@@ -112,66 +112,9 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="btnStart_Name_Pause" xml:space="preserve">
-    <value>暂停(&amp;P)</value>
-  </data>
-  <data name="btnStart_Name_Resume" xml:space="preserve">
-    <value>继续(&amp;e)</value>
-  </data>
-  <data name="btnStart_Name_Start" xml:space="preserve">
-    <value>开始(&amp;t)</value>
-  </data>
-  <data name="buttonName_DTC" xml:space="preserve">
-    <value>DTC</value>
-  </data>
-  <data name="buttonName_Dyno" xml:space="preserve">
-    <value>测功机</value>
-  </data>
-  <data name="buttonName_FreezeFrames" xml:space="preserve">
-    <value>冻结帧</value>
-  </data>
-  <data name="buttonName_FuelEconomy" xml:space="preserve">
-    <value>油耗</value>
-  </data>
-  <data name="buttonName_Log" xml:space="preserve">
-    <value>日志</value>
-  </data>
-  <data name="buttonName_OxygenSensors" xml:space="preserve">
-    <value>氧气传感器</value>
-  </data>
-  <data name="buttonName_Report" xml:space="preserve">
-    <value>报表</value>
-  </data>
-  <data name="buttonName_SensorChart" xml:space="preserve">
-    <value>图表数据流</value>
-  </data>
-  <data name="buttonName_SensorGrid" xml:space="preserve">
-    <value>表格数据流</value>
-  </data>
-  <data name="buttonName_Settings" xml:space="preserve">
-    <value>连接设置</value>
-  </data>
-  <data name="buttonName_Start" xml:space="preserve">
-    <value>开始</value>
-  </data>
-  <data name="buttonName_Terminal" xml:space="preserve">
-    <value>终端</value>
-  </data>
-  <data name="buttonName_Tests" xml:space="preserve">
-    <value>测试</value>
-  </data>
-  <data name="buttonName_Track" xml:space="preserve">
-    <value>跟踪</value>
-  </data>
-  <data name="buttonName_UserPrefs" xml:space="preserve">
-    <value>用户设置</value>
-  </data>
-  <data name="buttonName_Vehicles" xml:space="preserve">
-    <value>车辆设置</value>
-  </data>
 </root>

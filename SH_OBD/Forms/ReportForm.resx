@@ -117,61 +117,69 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="btnStart_Name_Pause" xml:space="preserve">
-    <value>暂停(&amp;P)</value>
+  <metadata name="ReportPage1.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="ReportPage1.MilOffImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        R0lGODlhKwAkAIcAAAAAAP///5qYmAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        ACH/C05FVFNDQVBFMi4wAwEBAAAh+QQBAAADACwAAAAAKwAkAAAIwQAHCBxI8J/BgwgTJiTIsKHDAf8e
+        SoQ4saLAiBYZYsz4UOHBggo5irxYcKTJkgM3nuzoUWVLlQ4RaoQpkqZGkiltcjQ4EeNGnitTNlxI8WPQ
+        nDch+qR4dCZKoBF1BjXqc6nUo1Grkrw6FajSrU0lurQaNiNUr2XFck3rlO3OqmvLQmXqNibZunbB4h16
+        dy9IvX6RFg38t2jcpnPpBiZq1K9Ooli9rm1skmdii2hrClVc8XBhpp4zd3aJ8+1LjzMNBgQAOw==
+</value>
   </data>
-  <data name="btnStart_Name_Resume" xml:space="preserve">
-    <value>继续(&amp;e)</value>
+  <data name="ReportPage1.MilOnImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        R0lGODlhKwAkAIIAAAAAAP/////bK/i4G////wAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEBAAAh+QQB
+        AAAEACwAAAAAKwAkAAAI2wAJCBxIUIDBgwgTJiTIsKFDAgIGSJxIseJEAQ8zNoxosSNFjBpDQlRo8KNC
+        kSg3fkzJ8iFHiSBbhiRZ8iLNmQcZ1vTIc0BMlzALvuzp0aBGjjF3EuX5U2DCoAeXLjVaECZSiFKzUnVq
+        FWpWrVSRXh36lSjGmmixlpUatatPtWunmvQady1apXXZks1bFi/fr3f3/i06drBeuoZ7phWceO5bxo3d
+        no3MtDDljoshN04L97LNnCM1D2468Onftm9xiq48MihKv2xLu34dd+vVlLBZy06Nm6ZvnQcDAgA7
+</value>
   </data>
-  <data name="btnStart_Name_Start" xml:space="preserve">
-    <value>开始(&amp;t)</value>
+  <metadata name="printPreviewDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>24, 17</value>
+  </metadata>
+  <metadata name="printDocument1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>195, 17</value>
+  </metadata>
+  <data name="printPreviewDialog1.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        AAABAAIAICAQAAAAAADoAgAAJgAAABAQEAAAAAAAKAEAAA4DAAAoAAAAIAAAAEAAAAABAAQAAAAAAIAC
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAICAgADAwMAAAAD/AAD/
+        AAAA//8A/wAAAP8A/wD//wAA////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiIiIiIiI
+        iIiIiIiIiIiIiIAACAAAAAjMzMzMzMzIAAiAAAgAAAAIzubm5ubmyAAIgAAIAAAACM5ubm5ubsgACIAA
+        CAAAAAjO5ubm5ubIAAiAAAgAAAAIzm5ubm5uyAAIgAAIAAAACM7m5ubm5sgACIiIiIiIiIjObm5ubm7I
+        AAiBEREREREYzu7u7u7uyAAIgdlZWVlZGMzMzMzMzMgACIHVlZWVlRiIiIiIiIiIiIiB2VlZWVkYMzMz
+        MzMzMzM4gdWVlZWVGD+4uLi4uLi4OIHZWVlZWRg/u4uLi4uLiziB1ZWVlZUYP7i4uLi4uLg4gdlZWVlZ
+        GD+7i4uLi4uLOIHVlZWVlRg/uLi4uLi4uDiB2VlZWVkYP7uLi4uLi4s4gdWVlZWVGD+4uLi4uLi4OIHd
+        3d3d3Rg/u4uLi4uLiziBEREREREYP7i4uLi4uLg4iIiIiIiIiD+7i4uLi4uLOIAAAAAAAAg/uLi4uLi4
+        uDiAAAAAAAAIP7uLi4uLi4s4gAAAAAAACD+4uLi4uLi4OIAAAAAAAAg/u7u7u7u7uziAAAAAAAAIP///
+        //////84gAAAAAAACDMzMzMzMzMzOIiIiIiIiIiIiIiIiIiIiIgAAAAAAAAAAAAAAAAAAAAA////////
+        //8AAAAAe/gADnv4AA57+AAOe/gADnv4AA57+AAOAAAADgAAAA4AAAAOAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAf/gAAH/4AAB/+AAAf/gAAH/4AAB/+AAAAAAAAP//
+        //8oAAAAEAAAACAAAAABAAQAAAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAgAAAAICAAIAA
+        AACAAIAAgIAAAICAgADAwMAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AAAAAAAAAAAAiIiIiIiI
+        iIiACACMzMzICIAIAIzmZsgIiIiIjO7uyAiBERGMzMzICIHZkYiIiIiIgdmRgzMzMziB2ZGD+7u7OIHd
+        0YP7u7s4gRERg/u7uziIiIiD+7u7OIAAAIP7u7s4gAAAg////ziAAACDMzMzOIiIiIiIiIiI//8AAAAA
+        AABsAgAAbAIAAAACAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfAAAAHwAAAB8AAAAAAAAAA==
+</value>
   </data>
-  <data name="buttonName_DTC" xml:space="preserve">
-    <value>DTC</value>
-  </data>
-  <data name="buttonName_Dyno" xml:space="preserve">
-    <value>测功机</value>
-  </data>
-  <data name="buttonName_FreezeFrames" xml:space="preserve">
-    <value>冻结帧</value>
-  </data>
-  <data name="buttonName_FuelEconomy" xml:space="preserve">
-    <value>油耗</value>
-  </data>
-  <data name="buttonName_Log" xml:space="preserve">
-    <value>日志</value>
-  </data>
-  <data name="buttonName_OxygenSensors" xml:space="preserve">
-    <value>氧气传感器</value>
-  </data>
-  <data name="buttonName_Report" xml:space="preserve">
-    <value>报表</value>
-  </data>
-  <data name="buttonName_SensorChart" xml:space="preserve">
-    <value>图表数据流</value>
-  </data>
-  <data name="buttonName_SensorGrid" xml:space="preserve">
-    <value>表格数据流</value>
-  </data>
-  <data name="buttonName_Settings" xml:space="preserve">
-    <value>连接设置</value>
-  </data>
-  <data name="buttonName_Start" xml:space="preserve">
-    <value>开始</value>
-  </data>
-  <data name="buttonName_Terminal" xml:space="preserve">
-    <value>终端</value>
-  </data>
-  <data name="buttonName_Tests" xml:space="preserve">
-    <value>测试</value>
-  </data>
-  <data name="buttonName_Track" xml:space="preserve">
-    <value>跟踪</value>
-  </data>
-  <data name="buttonName_UserPrefs" xml:space="preserve">
-    <value>用户设置</value>
-  </data>
-  <data name="buttonName_Vehicles" xml:space="preserve">
-    <value>车辆设置</value>
-  </data>
+  <metadata name="printDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>344, 17</value>
+  </metadata>
 </root>

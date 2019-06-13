@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DundasWinGauge">
+      <HintPath>lib\DundasWinGauge.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,14 +47,244 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="Classes\DataItem.cs" />
+    <Compile Include="Classes\DataList.cs" />
+    <Compile Include="Classes\DataNode.cs" />
+    <Compile Include="Classes\DatedValue.cs" />
+    <Compile Include="Classes\DTC.cs" />
+    <Compile Include="Classes\DynoRecord.cs" />
+    <Compile Include="Classes\Preferences.cs" />
+    <Compile Include="Classes\Sensor.cs" />
+    <Compile Include="Classes\SensorLogItem.cs" />
+    <Compile Include="Classes\SensorValue.cs" />
+    <Compile Include="Classes\SerialPort.cs" />
+    <Compile Include="Classes\TestStatus.cs" />
+    <Compile Include="Classes\Timeslip.cs" />
+    <Compile Include="Classes\UserPreferences.cs" />
+    <Compile Include="Classes\Utility.cs" />
+    <Compile Include="Classes\VehicleProfile.cs" />
+    <Compile Include="Classes\WheelStruc.cs" />
+    <Compile Include="CommBase\CommBase.cs" />
+    <Compile Include="Forms\CommLogForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Forms\CommLogForm.Designer.cs">
+      <DependentUpon>CommLogForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DynoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DynoForm.Designer.cs">
+      <DependentUpon>DynoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DTCForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DTCForm.Designer.cs">
+      <DependentUpon>DTCForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CommForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CommForm.Designer.cs">
+      <DependentUpon>CommForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CommBase\CommLine.cs" />
+    <Compile Include="CommBase\CommPortException.cs" />
+    <Compile Include="Controls\DGChartControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DiagnosticReportControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DynoControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FreezeFrameDataControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Gauge.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\O2TestResultsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\O2WaveformControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\RichTextBoxPrintCtrl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\SensorDisplayControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\FreezeFramesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FreezeFramesForm.Designer.cs">
+      <DependentUpon>FreezeFramesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FuelEconomyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FuelEconomyForm.Designer.cs">
+      <DependentUpon>FuelEconomyForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OBD\OBDCommELM.cs" />
+    <Compile Include="OBD\OBDCommLog.cs" />
+    <Compile Include="OBD\OBDCommLogItem.cs" />
+    <Compile Include="OBD\OBDDevice.cs" />
+    <Compile Include="OBD\OBDDeviceELM320.cs" />
+    <Compile Include="OBD\OBDDeviceELM322.cs" />
+    <Compile Include="OBD\OBDDeviceELM323.cs" />
+    <Compile Include="OBD\OBDDeviceELM327.cs" />
+    <Compile Include="OBD\OBDInterface.cs" />
+    <Compile Include="OBD\OBDInterpretter.cs" />
+    <Compile Include="OBD\OBDParameter.cs" />
+    <Compile Include="OBD\OBDParameterValue.cs" />
+    <Compile Include="OBD\OBDParser.cs" />
+    <Compile Include="OBD\OBDParser_ISO14230_4_KWP.cs" />
+    <Compile Include="OBD\OBDParser_ISO15765_4_CAN11.cs" />
+    <Compile Include="OBD\OBDParser_ISO15765_4_CAN29.cs" />
+    <Compile Include="OBD\OBDParser_ISO9141_2.cs" />
+    <Compile Include="OBD\OBDParser_J1850_PWM.cs" />
+    <Compile Include="OBD\OBDParser_J1850_VPW.cs" />
+    <Compile Include="OBD\OBDResponse.cs" />
+    <Compile Include="OBD\OBDResponseList.cs" />
+    <Compile Include="OBD\Win32Com.cs" />
+    <Compile Include="Forms\OxygenSensorsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\OxygenSensorsForm.Designer.cs">
+      <DependentUpon>OxygenSensorsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Forms\TestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TestForm.Designer.cs">
+      <DependentUpon>TestForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SensorMonitorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SensorMonitorForm.Designer.cs">
+      <DependentUpon>SensorMonitorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ScopeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ScopeForm.Designer.cs">
+      <DependentUpon>ScopeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\TrackForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TrackForm.Designer.cs">
+      <DependentUpon>TrackForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ReportGeneratorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ReportGeneratorForm.Designer.cs">
+      <DependentUpon>ReportGeneratorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ReportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ReportForm.Designer.cs">
+      <DependentUpon>ReportForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\TerminalForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TerminalForm.Designer.cs">
+      <DependentUpon>TerminalForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\UserPreferencesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\UserPreferencesForm.Designer.cs">
+      <DependentUpon>UserPreferencesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\VehicleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\VehicleForm.Designer.cs">
+      <DependentUpon>VehicleForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SpeedFactorCalcForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SpeedFactorCalcForm.Designer.cs">
+      <DependentUpon>SpeedFactorCalcForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Forms\CommLogForm.resx">
+      <DependentUpon>CommLogForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DTCForm.resx">
+      <DependentUpon>DTCForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CommForm.resx">
+      <DependentUpon>CommForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DGChartControl.resx" />
+    <EmbeddedResource Include="Controls\DiagnosticReportControl.resx" />
+    <EmbeddedResource Include="Controls\FreezeFrameDataControl.resx" />
+    <EmbeddedResource Include="Controls\Gauge.resx" />
+    <EmbeddedResource Include="Controls\O2TestResultsControl.resx" />
+    <EmbeddedResource Include="Controls\O2WaveformControl.resx" />
+    <EmbeddedResource Include="Controls\RichTextBoxPrintCtrl.resx" />
+    <EmbeddedResource Include="Controls\SensorDisplayControl.resx" />
+    <EmbeddedResource Include="Forms\DynoForm.resx">
+      <DependentUpon>DynoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FreezeFramesForm.resx">
+      <DependentUpon>FreezeFramesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FuelEconomyForm.resx">
+      <DependentUpon>FuelEconomyForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\OxygenSensorsForm.resx">
+      <DependentUpon>OxygenSensorsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ReportForm.resx">
+      <DependentUpon>ReportForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ScopeForm.resx">
+      <DependentUpon>ScopeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SensorMonitorForm.resx">
+      <DependentUpon>SensorMonitorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SpeedFactorCalcForm.resx">
+      <DependentUpon>SpeedFactorCalcForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TrackForm.resx">
+      <DependentUpon>TrackForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\VehicleForm.resx">
+      <DependentUpon>VehicleForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -60,7 +293,20 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Forms\TestForm.resx">
+      <DependentUpon>TestForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ReportGeneratorForm.resx">
+      <DependentUpon>ReportGeneratorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TerminalForm.resx">
+      <DependentUpon>TerminalForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\UserPreferencesForm.resx">
+      <DependentUpon>UserPreferencesForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -70,6 +316,20 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="dtc.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="generic.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="preferences.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="settings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
