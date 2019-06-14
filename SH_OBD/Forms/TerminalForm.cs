@@ -16,7 +16,7 @@ namespace SH_OBD {
             m_obdInterface = obd;
             InitializeComponent();
 
-            m_strID = m_obdInterface.getDeviceIDString();
+            m_strID = m_obdInterface.GetDeviceIDString();
             Update();
             richText.SelectionFont = new Font("Microsoft Sans Serif", 9f, FontStyle.Regular);
             richText.SelectionColor = Color.Black;
@@ -55,7 +55,7 @@ namespace SH_OBD {
 
             richText.SelectionColor = Color.DarkMagenta;
             richText.SelectionFont = new Font("Microsoft Sans Serif", 12f, FontStyle.Bold);
-            richText.AppendText(m_obdInterface.getRawResponse(txtCommand.Text));
+            richText.AppendText(m_obdInterface.GetRawResponse(txtCommand.Text));
 
             richText.SelectionFont = new Font("Microsoft Sans Serif", 9f, FontStyle.Regular);
             richText.AppendText("\r\n\r\n");

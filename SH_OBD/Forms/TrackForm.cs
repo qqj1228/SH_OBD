@@ -127,7 +127,7 @@ namespace SH_OBD {
             m_KphValues = new List<DatedValue>();
             if (m_bCapture) {
                 do {
-                    OBDParameterValue obdParameterValue = m_obdInterface.getValue("SAE.VSS", false);
+                    OBDParameterValue obdParameterValue = m_obdInterface.GetValue("SAE.VSS", false);
 
                     if (!obdParameterValue.ErrorDetected && obdParameterValue.DoubleValue > 0.0) {
                         if (m_KphValues.Count == 0) {

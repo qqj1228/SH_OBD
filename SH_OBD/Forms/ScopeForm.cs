@@ -247,28 +247,28 @@ namespace SH_OBD {
                     if (comboUnits1.SelectedIndex > 0)
                         bEnglishUnits = false;
                     if (chkSensor1.Checked) {
-                        OBDParameterValue obdParameterValue = m_obdInterface.getValue(comboSensor1.Items[comboSensor1.SelectedIndex] as OBDParameter, bEnglishUnits);
+                        OBDParameterValue obdParameterValue = m_obdInterface.GetValue(comboSensor1.Items[comboSensor1.SelectedIndex] as OBDParameter, bEnglishUnits);
                         if (!obdParameterValue.ErrorDetected) {
                             m_arraySensor1Values.Add(new DatedValue(obdParameterValue.DoubleValue));
                             UpdateChart1();
                         }
                     }
                     if (chkSensor2.Checked) {
-                        OBDParameterValue obdParameterValue = m_obdInterface.getValue(comboSensor2.Items[comboSensor2.SelectedIndex] as OBDParameter, bEnglishUnits);
+                        OBDParameterValue obdParameterValue = m_obdInterface.GetValue(comboSensor2.Items[comboSensor2.SelectedIndex] as OBDParameter, bEnglishUnits);
                         if (!obdParameterValue.ErrorDetected) {
                             m_arraySensor2Values.Add(new DatedValue(obdParameterValue.DoubleValue));
                             UpdateChart2();
                         }
                     }
                     if (chkSensor3.Checked) {
-                        OBDParameterValue obdParameterValue = m_obdInterface.getValue(comboSensor3.Items[comboSensor3.SelectedIndex] as OBDParameter, bEnglishUnits);
+                        OBDParameterValue obdParameterValue = m_obdInterface.GetValue(comboSensor3.Items[comboSensor3.SelectedIndex] as OBDParameter, bEnglishUnits);
                         if (!obdParameterValue.ErrorDetected) {
                             m_arraySensor3Values.Add(new DatedValue(obdParameterValue.DoubleValue));
                             UpdateChart3();
                         }
                     }
                     if (chkSensor4.Checked) {
-                        OBDParameterValue obdParameterValue = m_obdInterface.getValue(comboSensor4.Items[comboSensor4.SelectedIndex] as OBDParameter, bEnglishUnits);
+                        OBDParameterValue obdParameterValue = m_obdInterface.GetValue(comboSensor4.Items[comboSensor4.SelectedIndex] as OBDParameter, bEnglishUnits);
                         if (!obdParameterValue.ErrorDetected) {
                             m_arraySensor4Values.Add(new DatedValue(obdParameterValue.DoubleValue));
                             UpdateChart4();
@@ -480,19 +480,43 @@ namespace SH_OBD {
         }
 
         private void comboStyle1_SelectedIndexChanged(object sender, EventArgs e) {
-
+            if (comboStyle1.SelectedIndex == 0) {
+                chart1.DrawMode = DGChartControl.DrawModeType.Line;
+            } else if (comboStyle1.SelectedIndex == 1) {
+                chart1.DrawMode = DGChartControl.DrawModeType.Dot;
+            } else {
+                chart1.DrawMode = DGChartControl.DrawModeType.Bar;
+            }
         }
 
         private void comboStyle2_SelectedIndexChanged(object sender, EventArgs e) {
-
+            if (comboStyle2.SelectedIndex == 0) {
+                chart2.DrawMode = DGChartControl.DrawModeType.Line;
+            } else if (comboStyle2.SelectedIndex == 1) {
+                chart2.DrawMode = DGChartControl.DrawModeType.Dot;
+            } else {
+                chart2.DrawMode = DGChartControl.DrawModeType.Bar;
+            }
         }
 
         private void comboStyle3_SelectedIndexChanged(object sender, EventArgs e) {
-
+            if (comboStyle3.SelectedIndex == 0) {
+                chart3.DrawMode = DGChartControl.DrawModeType.Line;
+            } else if (comboStyle3.SelectedIndex == 1) {
+                chart3.DrawMode = DGChartControl.DrawModeType.Dot;
+            } else {
+                chart3.DrawMode = DGChartControl.DrawModeType.Bar;
+            }
         }
 
         private void comboStyle4_SelectedIndexChanged(object sender, EventArgs e) {
-
+            if (comboStyle4.SelectedIndex == 0) {
+                chart4.DrawMode = DGChartControl.DrawModeType.Line;
+            } else if (comboStyle4.SelectedIndex == 1) {
+                chart4.DrawMode = DGChartControl.DrawModeType.Dot;
+            } else {
+                chart4.DrawMode = DGChartControl.DrawModeType.Bar;
+            }
         }
 
         private void chkSensor1_CheckedChanged(object sender, EventArgs e) {

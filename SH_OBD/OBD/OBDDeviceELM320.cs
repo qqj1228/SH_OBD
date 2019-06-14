@@ -2,8 +2,7 @@
 
 namespace SH_OBD {
     public class OBDDeviceELM320 : OBDDevice {
-        public OBDDeviceELM320(OBDCommLog log)
-            : base(log) {
+        public OBDDeviceELM320(OBDCommLog log) : base(log) {
             try {
                 m_Parser = new OBDParser_J1850_PWM();
             } catch (Exception ex) {
@@ -17,17 +16,14 @@ namespace SH_OBD {
 
         public override bool Initialize(int iPort, int iBaud) {
             try {
-                if (m_CommELM.Online)
+                if (m_CommELM.Online) {
                     return true;
-                m_CommELM.setPort(iPort);
-                m_CommELM.setBaudRate(iBaud);
+                }
+                m_CommELM.SetPort(iPort);
+                m_CommELM.SetBaudRate(iBaud);
                 if (m_CommELM.Open()) {
-                    if (confirmAT("ATZ")
-                    && confirmAT("ATE0")
-                    && confirmAT("ATL0")
-                    && confirmAT("ATH1")
-                        ) {
-                        m_DeviceID = getDeviceID();
+                    if (ConfirmAT("ATZ") && ConfirmAT("ATE0") && ConfirmAT("ATL0") && ConfirmAT("ATH1")) {
+                        m_DeviceID = GetDeviceID();
                         return true;
                     }
                     m_CommELM.Close();
@@ -39,31 +35,34 @@ namespace SH_OBD {
 
         public override bool Initialize() {
             try {
-                if (m_CommELM.Online)
+                if (m_CommELM.Online) {
                     return true;
-
-                for (int iPort = 0; iPort < 100; ++iPort)
-                    if (CommBase.IsPortAvailable(iPort) == CommBase.PortStatus.Available
-                        && (Initialize(iPort, 38400) || Initialize(iPort, 115200) || Initialize(iPort, 9600))
-                        )
+                }
+                for (int iPort = 0; iPort < 100; ++iPort) {
+                    if (CommBase.GetPortAvailable(iPort) == CommBase.PortStatus.Available
+                        && (Initialize(iPort, 38400) || Initialize(iPort, 115200) || Initialize(iPort, 9600))) {
                         return true;
+                    }
+                }
             } catch { }
             return false;
         }
 
         public override OBDResponseList Query(OBDParameter param) {
-            return m_Parser.Parse(param, getOBDResponse(param.OBDRequest));
+            return m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
         }
 
         public override string Query(string command) {
-            if (m_CommELM.Online)
-                return m_CommELM.getResponse(command);
+            if (m_CommELM.Online) {
+                return m_CommELM.GetResponse(command);
+            }
             return "";
         }
 
         public override void Disconnect() {
-            if (m_CommELM.Online)
+            if (m_CommELM.Online) {
                 m_CommELM.Close();
+            }
         }
 
         public override bool Connected() {
@@ -71,30 +70,34 @@ namespace SH_OBD {
         }
 
 
-        public bool confirmAT(string command) {
-            return confirmAT(command, 3);
+        public bool ConfirmAT(string command) {
+            return ConfirmAT(command, 3);
         }
-        public bool confirmAT(string command, int attempts) {
-            if (!m_CommELM.Online)
+        public bool ConfirmAT(string command, int attempts) {
+            if (!m_CommELM.Online) {
                 return false;
+            }
             while (attempts > 0) {
-                string response = m_CommELM.getResponse(command);
-                if (response.IndexOf("OK") >= 0 || response.IndexOf("ELM") >= 0)
+                string response = m_CommELM.GetResponse(command);
+                if (response.IndexOf("OK") >= 0 || response.IndexOf("ELM") >= 0) {
                     return true;
+                }
                 --attempts;
             }
             return false;
         }
 
-        public string getOBDResponse(string strCmd) {
-            if (m_CommELM.Online)
-                return m_CommELM.getResponse(strCmd);
+        public string GetOBDResponse(string strCmd) {
+            if (m_CommELM.Online) {
+                return m_CommELM.GetResponse(strCmd);
+            }
             return "";
         }
 
-        public string getDeviceID() {
-            if (m_CommELM.Online)
-                return m_CommELM.getResponse("ATI");
+        public string GetDeviceID() {
+            if (m_CommELM.Online) {
+                return m_CommELM.GetResponse("ATI");
+            }
             return "";
         }
     }

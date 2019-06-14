@@ -40,7 +40,7 @@ namespace SH_OBD {
             richTextPending.Text = "";
             if (!m_obdInterface.ConnectedStatus) {
                 MessageBox.Show("A vehicle connection must first be established.", "Connection Required", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                m_obdInterface.logItem("Error. DTC Form. Attempted refresh without vehicle connection.");
+                m_obdInterface.LogItem("Error. DTC Form. Attempted refresh without vehicle connection.");
             } else {
                 ReadCodes();
                 RefreshDisplay();
@@ -53,31 +53,31 @@ namespace SH_OBD {
             m_ListPermanent.Clear();
             OBDParameterValue value;
 
-            value = m_obdInterface.getValue("SAE.MIL", true);
+            value = m_obdInterface.GetValue("SAE.MIL", true);
             if (!value.ErrorDetected) {
                 SetMilStatus(value.BoolValue);
             }
 
-            value = m_obdInterface.getValue("SAE.DTC_COUNT", true);
+            value = m_obdInterface.GetValue("SAE.DTC_COUNT", true);
             if (!value.ErrorDetected) {
                 SetDTCTotal((int)value.DoubleValue);
             }
 
-            value = m_obdInterface.getValue("SAE.STORED_DTCS", true);
+            value = m_obdInterface.GetValue("SAE.STORED_DTCS", true);
             if (!value.ErrorDetected) {
                 foreach (string dtc in value.StringCollectionValue) {
                     m_ListDTC.Add(m_obdInterface.GetDTC(dtc));
                 }
             }
 
-            value = m_obdInterface.getValue("SAE.PENDING_DTCS", true);
+            value = m_obdInterface.GetValue("SAE.PENDING_DTCS", true);
             if (!value.ErrorDetected) {
                 foreach (string dtc in value.StringCollectionValue) {
                     m_ListPending.Add(m_obdInterface.GetDTC(dtc));
                 }
             }
 
-            value = m_obdInterface.getValue("SAE.PERMANENT_DTCS", true);
+            value = m_obdInterface.GetValue("SAE.PERMANENT_DTCS", true);
             if (!value.ErrorDetected) {
                 foreach (string dtc in value.StringCollectionValue) {
                     m_ListPermanent.Add(m_obdInterface.GetDTC(dtc));
@@ -195,19 +195,20 @@ namespace SH_OBD {
         private void btnErase_Click(object sender, EventArgs e) {
             if (!m_obdInterface.ConnectedStatus) {
                 MessageBox.Show("A vehicle connection must first be established.", "Connection Required", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                m_obdInterface.logItem("Error. DTC Form. Attempted to erase codes without vehicle connection.");
+                m_obdInterface.LogItem("Error. DTC Form. Attempted to erase codes without vehicle connection.");
             } else if (MessageBox.Show("This will clear all trouble codes from your vehicle.\n\n" + "You should have repaired any problems indicated by these codes.\n\n" + "Also, your vehicle may run poorly for a short time while the system " + "recalibrates itself.\n\nAre you sure you want to reset your codes?", "Clear Trouble Codes?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == DialogResult.Yes) {
-                m_obdInterface.clearCodes();
+                m_obdInterface.ClearCodes();
                 RefreshDiagnosticData();
             }
         }
 
         private void DTCForm_Resize(object sender, EventArgs e) {
-            groupPermanent.Size = new Size(groupPermanent.Width, (Height - 70) / 3);
-            groupCodes.Size = new Size(groupCodes.Width, (Height - 70) / 3);
-            groupCodes.Location = new Point(groupCodes.Location.X, (Height - 60) / 3 + 20);
-            groupPending.Size = new Size(groupPending.Width, (Height - 70) / 3);
-            groupPending.Location = new Point(groupPending.Location.X, (Height * 2 - 120) / 3 + 20);
+            int margin = groupPermanent.Location.Y;
+            groupPermanent.Size = new Size(groupPermanent.Width, (Height - margin * 4) / 3);
+            groupCodes.Size = new Size(groupCodes.Width, (Height - margin * 4) / 3);
+            groupCodes.Location = new Point(groupCodes.Location.X, groupPermanent.Location.Y + groupPermanent.Height + margin);
+            groupPending.Size = new Size(groupPending.Width, (Height - margin * 4) / 3);
+            groupPending.Location = new Point(groupPending.Location.X, groupCodes.Location.Y + groupCodes.Height + margin);
         }
 
         private void DTCForm_Activated(object sender, EventArgs e) {

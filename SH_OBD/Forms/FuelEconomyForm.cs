@@ -66,10 +66,11 @@ namespace SH_OBD {
         }
 
         private void radioEnglishUnits_CheckedChanged(object sender, EventArgs e) {
-            if (radioEnglishUnits.Checked)
+            if (radioEnglishUnits.Checked) {
                 labelFuelUnit.Text = "/ 加仑";
-            else
+            } else {
                 labelFuelUnit.Text = "/ 升";
+            }
         }
 
         private void btnStart_Click(object sender, EventArgs e) {
@@ -77,13 +78,14 @@ namespace SH_OBD {
         }
 
         private void UpdateThread() {
-            if (!m_RunThread)
+            if (!m_RunThread) {
                 return;
+            }
 
             do {
                 if (m_obdInterface.ConnectedStatus && IsWorking) {
-                    OBDParameterValue sae_maf = m_obdInterface.getValue("SAE.MAF", false);
-                    OBDParameterValue sae_vss = m_obdInterface.getValue("SAE.VSS", false);
+                    OBDParameterValue sae_maf = m_obdInterface.GetValue("SAE.MAF", false);
+                    OBDParameterValue sae_vss = m_obdInterface.GetValue("SAE.VSS", false);
                     if (!sae_maf.ErrorDetected && !sae_vss.ErrorDetected) {
                         double sae_vss_double = sae_vss.DoubleValue;
                         double speed_miles = sae_vss_double * 0.621371192;
@@ -142,8 +144,7 @@ namespace SH_OBD {
                 } else {
                     Thread.Sleep(300);
                 }
-            }
-            while (m_RunThread);
+            } while (m_RunThread);
         }
 
         private void FuelEconomyForm_Load(object sender, EventArgs e) {

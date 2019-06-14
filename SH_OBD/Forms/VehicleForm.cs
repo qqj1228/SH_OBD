@@ -72,11 +72,13 @@ namespace SH_OBD {
             } else {
                  base.Close();
             }
+            m_obdInterface.SaveActiveProfile((VehicleProfile)comboProfile.SelectedItem);
         }
 
         private void VehicleForm_Load(object sender, EventArgs e) {
             UpdateProfileList(m_VehicleList);
             listVehicles.SetSelected(0, true);
+            PopulateProfileCombobox();
         }
 
         private void UpdateProfileList(List<VehicleProfile> vehicles) {
@@ -84,6 +86,7 @@ namespace SH_OBD {
             foreach (VehicleProfile vehicle in vehicles) {
                 listVehicles.Items.Add(vehicle);
             }
+            PopulateProfileCombobox();
         }
 
         public static int lastSelectedIndex;
@@ -197,6 +200,20 @@ namespace SH_OBD {
             if (speedFactorCalcForm.ShowDialog() == DialogResult.OK) {
                 txtSpeedoFactor.Text = speedFactorCalcForm.SpeedFactor.ToString("0.000");
                 MarkProfileDirty(true);
+            }
+        }
+
+        private void PopulateProfileCombobox() {
+            comboProfile.Items.Clear();
+            foreach (VehicleProfile vehicle in m_VehicleList) {
+                comboProfile.Items.Add(vehicle);
+            }
+            if (comboProfile.Items.Count > 0) {
+                if (m_obdInterface.CommSettings.ActiveProfileIndex < comboProfile.Items.Count) {
+                    comboProfile.SelectedIndex = m_obdInterface.CommSettings.ActiveProfileIndex;
+                } else {
+                    comboProfile.SelectedIndex = 0;
+                }
             }
         }
 

@@ -61,9 +61,9 @@
             this.lblBattery.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblBattery.Location = new System.Drawing.Point(11, 19);
+            this.lblBattery.Location = new System.Drawing.Point(12, 20);
             this.lblBattery.Name = "lblBattery";
-            this.lblBattery.Size = new System.Drawing.Size(759, 33);
+            this.lblBattery.Size = new System.Drawing.Size(751, 30);
             this.lblBattery.TabIndex = 0;
             this.lblBattery.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -78,40 +78,53 @@
             // 
             // lblOxygen
             // 
-            this.lblOxygen.Location = new System.Drawing.Point(6, 21);
+            this.lblOxygen.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblOxygen.Location = new System.Drawing.Point(12, 20);
             this.lblOxygen.Name = "lblOxygen";
-            this.lblOxygen.Size = new System.Drawing.Size(393, 108);
+            this.lblOxygen.Size = new System.Drawing.Size(380, 109);
             this.lblOxygen.TabIndex = 0;
             this.lblOxygen.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblOBD
             // 
-            this.lblOBD.Location = new System.Drawing.Point(6, 21);
+            this.lblOBD.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblOBD.Location = new System.Drawing.Point(12, 20);
             this.lblOBD.Name = "lblOBD";
-            this.lblOBD.Size = new System.Drawing.Size(393, 30);
+            this.lblOBD.Size = new System.Drawing.Size(380, 30);
             this.lblOBD.TabIndex = 0;
             this.lblOBD.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblAir
             // 
-            this.lblAir.Location = new System.Drawing.Point(12, 21);
+            this.lblAir.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblAir.Location = new System.Drawing.Point(12, 20);
             this.lblAir.Name = "lblAir";
-            this.lblAir.Size = new System.Drawing.Size(347, 30);
+            this.lblAir.Size = new System.Drawing.Size(340, 37);
             this.lblAir.TabIndex = 0;
             this.lblAir.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblPTO
             // 
-            this.lblPTO.Location = new System.Drawing.Point(12, 21);
+            this.lblPTO.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblPTO.Location = new System.Drawing.Point(12, 20);
             this.lblPTO.Name = "lblPTO";
-            this.lblPTO.Size = new System.Drawing.Size(347, 30);
+            this.lblPTO.Size = new System.Drawing.Size(340, 36);
             this.lblPTO.TabIndex = 0;
             this.lblPTO.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // groupBattery
             // 
+            this.groupBattery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBattery.Controls.Add(this.lblBattery);
-            this.groupBattery.Location = new System.Drawing.Point(12, 477);
+            this.groupBattery.Location = new System.Drawing.Point(12, 483);
             this.groupBattery.Name = "groupBattery";
             this.groupBattery.Size = new System.Drawing.Size(776, 60);
             this.groupBattery.TabIndex = 22;
@@ -120,9 +133,12 @@
             // 
             // lblFuel2
             // 
-            this.lblFuel2.Location = new System.Drawing.Point(12, 21);
+            this.lblFuel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblFuel2.Location = new System.Drawing.Point(12, 20);
             this.lblFuel2.Name = "lblFuel2";
-            this.lblFuel2.Size = new System.Drawing.Size(347, 30);
+            this.lblFuel2.Size = new System.Drawing.Size(340, 30);
             this.lblFuel2.TabIndex = 0;
             this.lblFuel2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -137,16 +153,20 @@
             // 
             // lblFuel1
             // 
-            this.lblFuel1.Location = new System.Drawing.Point(12, 21);
+            this.lblFuel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblFuel1.Location = new System.Drawing.Point(12, 20);
             this.lblFuel1.Name = "lblFuel1";
-            this.lblFuel1.Size = new System.Drawing.Size(347, 30);
+            this.lblFuel1.Size = new System.Drawing.Size(340, 30);
             this.lblFuel1.TabIndex = 0;
             this.lblFuel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // groupAir
             // 
+            this.groupAir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupAir.Controls.Add(this.lblAir);
-            this.groupAir.Location = new System.Drawing.Point(12, 404);
+            this.groupAir.Location = new System.Drawing.Point(12, 410);
             this.groupAir.Name = "groupAir";
             this.groupAir.Size = new System.Drawing.Size(365, 67);
             this.groupAir.TabIndex = 17;
@@ -155,8 +175,9 @@
             // 
             // groupFuel1
             // 
+            this.groupFuel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupFuel1.Controls.Add(this.lblFuel1);
-            this.groupFuel1.Location = new System.Drawing.Point(12, 200);
+            this.groupFuel1.Location = new System.Drawing.Point(12, 206);
             this.groupFuel1.Name = "groupFuel1";
             this.groupFuel1.Size = new System.Drawing.Size(365, 60);
             this.groupFuel1.TabIndex = 14;
@@ -165,82 +186,95 @@
             // 
             // gridNonConTests
             // 
+            this.gridNonConTests.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gridNonConTests.CaptionVisible = false;
             this.gridNonConTests.DataMember = "";
             this.gridNonConTests.HeaderForeColor = System.Drawing.SystemColors.ControlText;
-            this.gridNonConTests.Location = new System.Drawing.Point(6, 20);
+            this.gridNonConTests.Location = new System.Drawing.Point(12, 20);
             this.gridNonConTests.Name = "gridNonConTests";
             this.gridNonConTests.RowHeadersVisible = false;
-            this.gridNonConTests.Size = new System.Drawing.Size(393, 192);
+            this.gridNonConTests.Size = new System.Drawing.Size(380, 196);
             this.gridNonConTests.TabIndex = 1;
             // 
             // groupOxygen
             // 
+            this.groupOxygen.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.groupOxygen.Controls.Add(this.lblOxygen);
             this.groupOxygen.Location = new System.Drawing.Point(383, 338);
             this.groupOxygen.Name = "groupOxygen";
-            this.groupOxygen.Size = new System.Drawing.Size(405, 136);
+            this.groupOxygen.Size = new System.Drawing.Size(405, 139);
             this.groupOxygen.TabIndex = 19;
             this.groupOxygen.TabStop = false;
             this.groupOxygen.Text = "氧气传感器位置";
             // 
             // groupOBD
             // 
+            this.groupOBD.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.groupOBD.Controls.Add(this.lblOBD);
-            this.groupOBD.Location = new System.Drawing.Point(383, 266);
+            this.groupOBD.Location = new System.Drawing.Point(383, 272);
             this.groupOBD.Name = "groupOBD";
-            this.groupOBD.Size = new System.Drawing.Size(405, 66);
+            this.groupOBD.Size = new System.Drawing.Size(405, 60);
             this.groupOBD.TabIndex = 18;
             this.groupOBD.TabStop = false;
             this.groupOBD.Text = "车辆OBD要求";
             // 
             // groupNonConTests
             // 
+            this.groupNonConTests.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.groupNonConTests.Controls.Add(this.gridNonConTests);
             this.groupNonConTests.Location = new System.Drawing.Point(383, 42);
             this.groupNonConTests.Name = "groupNonConTests";
-            this.groupNonConTests.Size = new System.Drawing.Size(405, 218);
+            this.groupNonConTests.Size = new System.Drawing.Size(405, 224);
             this.groupNonConTests.TabIndex = 13;
             this.groupNonConTests.TabStop = false;
             this.groupNonConTests.Text = "非持续性测试";
             // 
             // gridConTests
             // 
+            this.gridConTests.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gridConTests.CaptionVisible = false;
             this.gridConTests.DataMember = "";
             this.gridConTests.HeaderForeColor = System.Drawing.SystemColors.ControlText;
-            this.gridConTests.Location = new System.Drawing.Point(6, 21);
+            this.gridConTests.Location = new System.Drawing.Point(12, 20);
             this.gridConTests.Name = "gridConTests";
             this.gridConTests.RowHeadersVisible = false;
-            this.gridConTests.Size = new System.Drawing.Size(353, 119);
+            this.gridConTests.Size = new System.Drawing.Size(340, 126);
             this.gridConTests.TabIndex = 0;
             // 
             // groupPTO
             // 
+            this.groupPTO.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupPTO.Controls.Add(this.lblPTO);
             this.groupPTO.Location = new System.Drawing.Point(12, 338);
             this.groupPTO.Name = "groupPTO";
-            this.groupPTO.Size = new System.Drawing.Size(365, 60);
+            this.groupPTO.Size = new System.Drawing.Size(365, 66);
             this.groupPTO.TabIndex = 16;
             this.groupPTO.TabStop = false;
             this.groupPTO.Text = "动力输出";
             // 
             // groupFuel2
             // 
+            this.groupFuel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupFuel2.Controls.Add(this.lblFuel2);
-            this.groupFuel2.Location = new System.Drawing.Point(12, 266);
+            this.groupFuel2.Location = new System.Drawing.Point(12, 272);
             this.groupFuel2.Name = "groupFuel2";
-            this.groupFuel2.Size = new System.Drawing.Size(365, 66);
+            this.groupFuel2.Size = new System.Drawing.Size(365, 60);
             this.groupFuel2.TabIndex = 15;
             this.groupFuel2.TabStop = false;
             this.groupFuel2.Text = "燃油系统 #2";
             // 
             // groupConTests
             // 
+            this.groupConTests.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.groupConTests.Controls.Add(this.gridConTests);
             this.groupConTests.Location = new System.Drawing.Point(12, 42);
             this.groupConTests.Name = "groupConTests";
-            this.groupConTests.Size = new System.Drawing.Size(365, 150);
+            this.groupConTests.Size = new System.Drawing.Size(365, 156);
             this.groupConTests.TabIndex = 12;
             this.groupConTests.TabStop = false;
             this.groupConTests.Text = "持续性测试";
@@ -249,7 +283,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 549);
+            this.ClientSize = new System.Drawing.Size(800, 555);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.groupBattery);
             this.Controls.Add(this.btnUpdate);

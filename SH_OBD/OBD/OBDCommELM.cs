@@ -2,7 +2,7 @@
 
 namespace SH_OBD {
     public class OBDCommELM : CommLine {
-        protected string m_Port = "COM1:";
+        protected string m_Port = "COM1";
         protected int m_BaudRate = 38400;
         protected int m_Timeout = 300;
         protected CommBase.ASCII m_asciiRxTerm = (CommBase.ASCII)62;
@@ -19,31 +19,31 @@ namespace SH_OBD {
         public OBDCommELM() {
         }
 
-        public void setPort(int iPort) {
-            m_Port = "COM" + iPort.ToString() + ":";
+        public void SetPort(int iPort) {
+            m_Port = "COM" + iPort.ToString();
             m_commLog.AddItem(string.Format("Port set to {0}", m_Port));
         }
 
-        public void setBaudRate(int iBaudRate) {
+        public void SetBaudRate(int iBaudRate) {
             m_BaudRate = iBaudRate;
             m_commLog.AddItem(string.Format("Baud rate set to {0}", m_BaudRate.ToString()));
         }
 
 
-        public int getBaudRate() {
+        public int GetBaudRate() {
             return m_BaudRate;
         }
 
-        public void setTimeout(int iTimeout) {
+        public void SetTimeout(int iTimeout) {
             m_Timeout = iTimeout;
             m_commLog.AddItem(string.Format("Timeout set to {0} ms", m_Timeout.ToString()));
         }
 
-        public void setRxTerminator(CommBase.ASCII ch) {
+        public void SetRxTerminator(CommBase.ASCII ch) {
             m_asciiRxTerm = ch;
         }
 
-        public string getResponse(string command) {
+        public string GetResponse(string command) {
             string response;
             try {
                 m_commLog.AddItem(string.Format("TX: {0}", command));
@@ -51,8 +51,9 @@ namespace SH_OBD {
                 m_commLog.AddItem(string.Format("RX: {0}", response.Replace("\r", @"\r")));
             } catch (Exception ex) {
                 m_commLog.AddItem(ex.Message);
-                if (string.Compare(ex.Message, "Timeout") == 0)
+                if (string.Compare(ex.Message, "Timeout") == 0) {
                     Open();
+                }
                 m_commLog.AddItem("RX: COMM TIMED OUT!");
                 response = "TIMEOUT";
             }

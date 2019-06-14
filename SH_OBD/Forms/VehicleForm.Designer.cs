@@ -68,6 +68,8 @@
             this.groupDrivetrain = new System.Windows.Forms.GroupBox();
             this.groupProfile = new System.Windows.Forms.GroupBox();
             this.lblName = new System.Windows.Forms.Label();
+            this.comboProfile = new System.Windows.Forms.ComboBox();
+            this.lblActiveProfile = new System.Windows.Forms.Label();
             this.groupMisc.SuspendLayout();
             this.groupNotes.SuspendLayout();
             this.groupTimeout.SuspendLayout();
@@ -557,10 +559,31 @@
             this.lblName.Text = "配置名:";
             this.lblName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // comboProfile
+            // 
+            this.comboProfile.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.comboProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboProfile.Location = new System.Drawing.Point(361, 419);
+            this.comboProfile.Name = "comboProfile";
+            this.comboProfile.Size = new System.Drawing.Size(226, 20);
+            this.comboProfile.TabIndex = 15;
+            // 
+            // lblActiveProfile
+            // 
+            this.lblActiveProfile.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.lblActiveProfile.Location = new System.Drawing.Point(249, 418);
+            this.lblActiveProfile.Name = "lblActiveProfile";
+            this.lblActiveProfile.Size = new System.Drawing.Size(106, 25);
+            this.lblActiveProfile.TabIndex = 16;
+            this.lblActiveProfile.Text = "当前车辆配置(&P):";
+            this.lblActiveProfile.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // VehicleForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.ClientSize = new System.Drawing.Size(719, 457);
+            this.Controls.Add(this.comboProfile);
+            this.Controls.Add(this.lblActiveProfile);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.groupVehicles);
             this.Controls.Add(this.groupProfile);
@@ -636,5 +659,7 @@
         private System.Windows.Forms.GroupBox groupDrivetrain;
         private System.Windows.Forms.GroupBox groupProfile;
         private System.Windows.Forms.Label lblName;
+        private System.Windows.Forms.ComboBox comboProfile;
+        private System.Windows.Forms.Label lblActiveProfile;
     }
 }

@@ -28,10 +28,11 @@ namespace SH_OBD {
 
         public bool Online {
             get {
-                if (!m_online)
-                    return false;
-                else
+                if (m_online) {
                     return CheckOnline();
+                } else {
+                    return false;
+                }
             }
         }
 
@@ -41,27 +42,28 @@ namespace SH_OBD {
 
         public static string AltName(string s) {
             s.Trim();
-            if (s.EndsWith(":"))
-                s = s.Substring(0, s.Length - 1);
-            if (s.StartsWith("\\"))
+            if (s.StartsWith("\\")) {
                 return s;
-            else
+            } else {
                 return "\\\\.\\" + s;
+            }
         }
 
-        public static bool isPortAvailable(int iComPort) {
-            return (IsPortAvailable(iComPort) > CommBase.PortStatus.Unavailable);
+        public static bool IsPortAvailable(int iComPort) {
+            return (GetPortAvailable(iComPort) > CommBase.PortStatus.Unavailable);
         }
 
-        public static PortStatus IsPortAvailable(int iComPort) {
+        public static PortStatus GetPortAvailable(int iComPort) {
             string comPort = "COM" + iComPort.ToString();
             IntPtr file = Win32Com.CreateFile(comPort, 3221225472U, 0U, IntPtr.Zero, 3U, 1073741824U, IntPtr.Zero);
             if (file == (IntPtr)(-1)) {
-                if ((long)Marshal.GetLastWin32Error() == 5L)
+                if ((long)Marshal.GetLastWin32Error() == 5L) {
                     return PortStatus.Unavailable;
+                }
                 file = Win32Com.CreateFile(AltName(comPort), 3221225472U, 0U, IntPtr.Zero, 3U, 1073741824U, IntPtr.Zero);
-                if (file == (IntPtr)(-1))
+                if (file == (IntPtr)(-1)) {
                     return (long)Marshal.GetLastWin32Error() == 5L ? PortStatus.Unavailable : PortStatus.Absent;
+                }
             }
             Win32Com.CloseHandle(file);
             return PortStatus.Available;
@@ -71,19 +73,22 @@ namespace SH_OBD {
             Win32Com.DCB lpDCB = new Win32Com.DCB();
             Win32Com.COMMTIMEOUTS lpCommTimeouts = new Win32Com.COMMTIMEOUTS();
             Win32Com.OVERLAPPED overlapped = new Win32Com.OVERLAPPED();
-            if (m_online)
+            if (m_online) {
                 return false;
+            }
             CommBase.CommBaseSettings commBaseSettings = CommSettings();
             m_hPort = Win32Com.CreateFile(commBaseSettings.Port, 3221225472U, 0U, IntPtr.Zero, 3U, 1073741824U, IntPtr.Zero);
             if (m_hPort == (IntPtr)(-1)) {
-                if ((long)Marshal.GetLastWin32Error() == 5L)
+                if ((long)Marshal.GetLastWin32Error() == 5L) {
                     return false;
+                }
                 m_hPort = Win32Com.CreateFile(AltName(commBaseSettings.Port), 3221225472U, 0U, IntPtr.Zero, 3U, 1073741824U, IntPtr.Zero);
                 if (m_hPort == (IntPtr)(-1)) {
-                    if ((long)Marshal.GetLastWin32Error() == 5L)
+                    if ((long)Marshal.GetLastWin32Error() == 5L) {
                         return false;
-                    else
+                    } else {
                         throw new CommPortException("Port Open Failure");
+                    }
                 }
             }
             m_online = true;
@@ -91,10 +96,8 @@ namespace SH_OBD {
             lpCommTimeouts.ReadIntervalTimeout = uint.MaxValue;
             lpCommTimeouts.ReadTotalTimeoutConstant = 0U;
             lpCommTimeouts.ReadTotalTimeoutMultiplier = 0U;
-            lpCommTimeouts.WriteTotalTimeoutMultiplier =
-                commBaseSettings.SendTimeoutMultiplier != 0
-                ? (uint)commBaseSettings.SendTimeoutMultiplier
-                : (Environment.OSVersion.Platform != PlatformID.Win32NT ? 10000U : 0U);
+            lpCommTimeouts.WriteTotalTimeoutMultiplier = commBaseSettings.SendTimeoutMultiplier != 0
+                ? (uint)commBaseSettings.SendTimeoutMultiplier : (Environment.OSVersion.Platform != PlatformID.Win32NT ? 10000U : 0U);
             lpCommTimeouts.WriteTotalTimeoutConstant = (uint)commBaseSettings.SendTimeoutConstant;
 
             lpDCB.init(commBaseSettings.Parity == CommBase.Parity.Odd || commBaseSettings.Parity == CommBase.Parity.Even, commBaseSettings.TxFlowCTS, commBaseSettings.TxFlowDSR, (int)commBaseSettings.UseDTR, commBaseSettings.RxGateDSR, !commBaseSettings.TxWhenRxXoff, commBaseSettings.TxFlowX, commBaseSettings.RxFlowX, (int)commBaseSettings.UseRTS);
@@ -106,29 +109,27 @@ namespace SH_OBD {
             lpDCB.XonChar = (byte)commBaseSettings.XonChar;
 
             if ((commBaseSettings.RxQueue != 0 || commBaseSettings.TxQueue != 0)
-            && !Win32Com.SetupComm(m_hPort, (uint)commBaseSettings.RxQueue, (uint)commBaseSettings.TxQueue)
-                )
+                && !Win32Com.SetupComm(m_hPort, (uint)commBaseSettings.RxQueue, (uint)commBaseSettings.TxQueue)) {
                 ThrowException("Bad queue settings");
+            }
 
             if (commBaseSettings.RxLowWater == 0 || commBaseSettings.RxHighWater == 0) {
-                Win32Com.COMMPROP cp;
-                if (!Win32Com.GetCommProperties(m_hPort, out cp))
+                if (!Win32Com.GetCommProperties(m_hPort, out Win32Com.COMMPROP cp)) {
                     cp.dwCurrentRxQueue = 0;
-                lpDCB.XoffLim =
-                    (cp.dwCurrentRxQueue <= 0U)
-                    ? (lpDCB.XonLim = 8)
-                    : (lpDCB.XonLim = (short)((int)cp.dwCurrentRxQueue / 10)
-                    );
+                }
+                lpDCB.XoffLim = (cp.dwCurrentRxQueue <= 0U) ? (lpDCB.XonLim = 8) : (lpDCB.XonLim = (short)((int)cp.dwCurrentRxQueue / 10));
             } else {
                 lpDCB.XoffLim = (short)commBaseSettings.RxHighWater;
                 lpDCB.XonLim = (short)commBaseSettings.RxLowWater;
             }
 
-            if (!Win32Com.SetCommState(m_hPort, ref lpDCB))
+            if (!Win32Com.SetCommState(m_hPort, ref lpDCB)) {
                 ThrowException("Bad com settings");
+            }
 
-            if (!Win32Com.SetCommTimeouts(m_hPort, ref lpCommTimeouts))
+            if (!Win32Com.SetCommTimeouts(m_hPort, ref lpCommTimeouts)) {
                 ThrowException("Bad timeout settings");
+            }
 
             m_checkSends = commBaseSettings.CheckAllSends;
             overlapped.Offset = 0U;
@@ -140,9 +141,10 @@ namespace SH_OBD {
             m_empty[0] = true;
             m_RxException = (Exception)null;
             m_RxExceptionReported = false;
-            m_RxThread = new Thread(new ThreadStart(ReceiveThread));
-            m_RxThread.Name = "CommBaseRx";
-            m_RxThread.Priority = ThreadPriority.AboveNormal;
+            m_RxThread = new Thread(new ThreadStart(ReceiveThread)) {
+                Name = "CommBaseRx",
+                Priority = ThreadPriority.AboveNormal
+            };
             m_RxThread.Start();
             m_startEvent.WaitOne(500, false);
             m_auto = false;
@@ -156,8 +158,9 @@ namespace SH_OBD {
         }
 
         public void Close() {
-            if (!m_online)
+            if (!m_online) {
                 return;
+            }
             m_auto = false;
             BeforeClose(false);
             InternalClose();
@@ -165,16 +168,21 @@ namespace SH_OBD {
         }
 
         private void InternalClose() {
-            Win32Com.CancelIo(m_hPort);
+            if (m_hPort != (IntPtr)(-1)) {
+                Win32Com.CancelIo(m_hPort);
+            }
             if (m_RxThread != null) {
                 m_RxThread.Abort();
                 m_RxThread.Join(100);
                 m_RxThread = (Thread)null;
             }
-            Win32Com.CloseHandle(m_hPort);
-            m_hPort = (IntPtr)(-1);
-            if (m_ptrUWO != IntPtr.Zero)
+            if (m_hPort != (IntPtr)(-1)) {
+                Win32Com.CloseHandle(m_hPort);
+            }
+            if (m_ptrUWO != IntPtr.Zero) {
                 Marshal.FreeHGlobal(m_ptrUWO);
+                m_ptrUWO = IntPtr.Zero;
+            }
         }
 
         public void Dispose() {
@@ -182,45 +190,50 @@ namespace SH_OBD {
         }
 
         protected void ThrowException(string reason) {
-            if (Thread.CurrentThread == m_RxThread)
+            if (Thread.CurrentThread == m_RxThread) {
                 throw new CommPortException(reason);
+            }
             if (m_online) {
                 BeforeClose(true);
                 InternalClose();
             }
-            if (m_RxException == null)
+            if (m_RxException == null) {
                 throw new CommPortException(reason);
-            else
+            } else {
                 throw new CommPortException(m_RxException);
+            }
         }
 
         protected void Send(byte[] tosend) {
-            uint lpNumberOfBytesWritten = 0U;
             CheckOnline();
             CheckResult();
             m_writeCount = tosend.GetLength(0);
-            if (Win32Com.WriteFile(m_hPort, tosend, (uint)m_writeCount, out lpNumberOfBytesWritten, m_ptrUWO)) {
+            if (Win32Com.WriteFile(m_hPort, tosend, (uint)m_writeCount, out uint lpNumberOfBytesWritten, m_ptrUWO)) {
                 m_writeCount -= (int)lpNumberOfBytesWritten;
             } else {
-                if ((long)Marshal.GetLastWin32Error() != 997L)
+                if ((long)Marshal.GetLastWin32Error() != 997L) {
                     ThrowException("Send failed");
+                }
             }
         }
 
         private void CheckResult() {
-            uint nNumberOfBytesTransferred = 0U;
-            if (m_writeCount <= 0)
+            if (m_writeCount <= 0) {
                 return;
-            if (Win32Com.GetOverlappedResult(m_hPort, m_ptrUWO, out nNumberOfBytesTransferred, m_checkSends)) {
-                if (!m_checkSends)
+            }
+            if (Win32Com.GetOverlappedResult(m_hPort, m_ptrUWO, out uint nNumberOfBytesTransferred, m_checkSends)) {
+                if (!m_checkSends) {
                     return;
+                }
                 m_writeCount -= (int)nNumberOfBytesTransferred;
-                if (m_writeCount != 0)
+                if (m_writeCount != 0) {
                     ThrowException("Send Timeout");
+                }
                 m_writeCount = 0;
             } else {
-                if ((long)Marshal.GetLastWin32Error() == 996L)
+                if ((long)Marshal.GetLastWin32Error() == 996L) {
                     return;
+                }
                 ThrowException("Write Error");
             }
         }
@@ -268,16 +281,17 @@ namespace SH_OBD {
                         flag = false;
                     }
                     if (!Win32Com.WaitCommEvent(m_hPort, num3, num2)) {
-                        if (Marshal.GetLastWin32Error() != 997)
+                        if (Marshal.GetLastWin32Error() != 997) {
                             throw new CommPortException("IO Error [002]");
+                        }
                         autoResetEvent.WaitOne();
                     }
 
                     int num4 = Marshal.ReadInt32(num3);
                     if ((num4 & 128) != 0) {
-                        uint lpErrors;
-                        if (!Win32Com.ClearCommError(m_hPort, out lpErrors, IntPtr.Zero))
+                        if (!Win32Com.ClearCommError(m_hPort, out uint lpErrors, IntPtr.Zero)) {
                             throw new CommPortException("IO Error [003]");
+                        }
                         int num5 = 0;
                         StringBuilder stringBuilder = new StringBuilder("UART Error: ", 40);
                         if ((lpErrors & 8) != 0) {
@@ -308,8 +322,9 @@ namespace SH_OBD {
                             stringBuilder.Length = stringBuilder.Length - 1;
                             throw new CommPortException(stringBuilder.ToString());
                         } else {
-                            if (lpErrors != 16)
+                            if (lpErrors != 16) {
                                 throw new CommPortException("IO Error [003]");
+                            }
                             num4 |= 64;
                         }
                     }
@@ -320,42 +335,51 @@ namespace SH_OBD {
                             if (!Win32Com.ReadFile(m_hPort, lpBuffer, 1U, out nNumberOfBytesRead, num2)) {
                                 Marshal.GetLastWin32Error();
                                 throw new CommPortException("IO Error [004]");
-                            } else if (nNumberOfBytesRead == 1)
+                            } else if (nNumberOfBytesRead == 1) {
                                 OnRxChar(lpBuffer[0]);
-                        }
-                        while (nNumberOfBytesRead > 0U);
+                            }
+                        } while (nNumberOfBytesRead > 0U);
                     }
                     if ((num4 & 4) != 0) {
-                        lock (m_empty)
+                        lock (m_empty) {
                             m_empty[0] = true;
+                        }
                         OnTxDone();
                     }
-                    if ((num4 & 64) != 0)
+                    if ((num4 & 64) != 0) {
                         OnBreak();
+                    }
                     uint val = 0U;
-                    if ((num4 & 8) != 0)
+                    if ((num4 & 8) != 0) {
                         val |= 16U;
-                    if ((num4 & 16) != 0)
+                    }
+                    if ((num4 & 16) != 0) {
                         val |= 32U;
-                    if ((num4 & 32) != 0)
+                    }
+                    if ((num4 & 32) != 0) {
                         val |= 128U;
-                    if ((num4 & 256) != 0)
+                    }
+                    if ((num4 & 256) != 0) {
                         val |= 64U;
+                    }
                     if (val != 0) {
-                        uint lpModemStat;
-                        if (!Win32Com.GetCommModemStatus(m_hPort, out lpModemStat))
+                        if (!Win32Com.GetCommModemStatus(m_hPort, out uint lpModemStat)) {
                             throw new CommPortException("IO Error [005]");
+                        }
                     }
                 }
                 throw new CommPortException("IO Error [001]");
             } catch (Exception ex) {
                 Win32Com.CancelIo(m_hPort);
-                if (num3 != IntPtr.Zero)
+                if (num3 != IntPtr.Zero) {
                     Marshal.FreeHGlobal(num3);
-                if (num2 != IntPtr.Zero)
+                }
+                if (num2 != IntPtr.Zero) {
                     Marshal.FreeHGlobal(num2);
-                if (ex is ThreadAbortException)
+                }
+                if (ex is ThreadAbortException) {
                     return;
+                }
                 m_RxException = ex;
                 OnRxException(ex);
             }
@@ -367,13 +391,15 @@ namespace SH_OBD {
                 ThrowException("rx");
             }
             if (m_online) {
-                if (m_hPort != (IntPtr)(-1))
+                if (m_hPort != (IntPtr)(-1)) {
                     return true;
+                }
                 ThrowException("Offline");
                 return false;
             } else {
-                if (m_auto && Open())
+                if (m_auto && Open()) {
                     return true;
+                }
                 ThrowException("Offline");
                 return false;
             }
@@ -407,7 +433,7 @@ namespace SH_OBD {
         }
 
         public class CommBaseSettings {
-            public string Port = "COM1:";
+            public string Port = "COM1";
             public int BaudRate = 2400;
             public CommBase.Parity Parity = CommBase.Parity.None;
             public int DataBits = 8;

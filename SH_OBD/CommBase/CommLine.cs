@@ -17,24 +17,28 @@ namespace SH_OBD {
             int len_data = Encoding.ASCII.GetByteCount(data);
 
             int len_term = 0;
-            if (m_TxTerm != null)
+            if (m_TxTerm != null) {
                 len_term = m_TxTerm.Length;
+            }
 
             byte[] sending = new byte[len_data + len_term];
             Encoding.ASCII.GetBytes(data).CopyTo(sending, 0);
 
-            if (m_TxTerm != null)
+            if (m_TxTerm != null) {
                 m_TxTerm.CopyTo(sending, len_data);
+            }
             base.Send(sending);
         }
 
         protected string Transact(string data) {
             Send(data);
             m_TransFlag.Reset();
-            if (!m_TransFlag.WaitOne(m_TransTimeout, false))
+            if (!m_TransFlag.WaitOne(m_TransTimeout, false)) {
                 ThrowException("Timeout");
-            lock (m_RxString)
+            }
+            lock (m_RxString) {
                 return m_RxString;
+            }
         }
 
         protected void Setup(CommLine.CommLineSettings settings) {
@@ -51,18 +55,22 @@ namespace SH_OBD {
         protected override void OnRxChar(byte ch) {
             CommBase.ASCII ascii = (CommBase.ASCII)ch;
             if (ascii == m_RxTerm || m_RxIndex >= m_RxBuffer.Length) {
-                lock (m_RxString)
+                lock (m_RxString) {
                     m_RxString = Encoding.ASCII.GetString(m_RxBuffer, 0, m_RxIndex);
+                }
                 m_RxIndex = 0;
-                if (m_TransFlag.WaitOne(0, false))
+                if (m_TransFlag.WaitOne(0, false)) {
                     OnRxLine(m_RxString);
-                else
+                } else {
                     m_TransFlag.Set();
+                }
             } else {
                 if (m_RxFilter != null) {
-                    for (int idx = 0; idx < m_RxFilter.Length; ++idx)
-                        if (m_RxFilter[idx] == ascii)
+                    for (int idx = 0; idx < m_RxFilter.Length; ++idx) {
+                        if (m_RxFilter[idx] == ascii) {
                             return;
+                        }
+                    }
                 }
                 m_RxBuffer[m_RxIndex] = ch;
                 ++m_RxIndex;

@@ -83,12 +83,6 @@
     <Compile Include="Forms\DTCForm.Designer.cs">
       <DependentUpon>DTCForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\CommForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\CommForm.Designer.cs">
-      <DependentUpon>CommForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="CommBase\CommLine.cs" />
     <Compile Include="CommBase\CommPortException.cs" />
     <Compile Include="Controls\DGChartControl.cs">
@@ -238,9 +232,6 @@
     <EmbeddedResource Include="Forms\DTCForm.resx">
       <DependentUpon>DTCForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\CommForm.resx">
-      <DependentUpon>CommForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Controls\DGChartControl.resx" />
     <EmbeddedResource Include="Controls\DiagnosticReportControl.resx" />
     <EmbeddedResource Include="Controls\FreezeFrameDataControl.resx" />
@@ -318,16 +309,16 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="dtc.xml">
+    <Content Include="Configs\dtc.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="generic.xml">
+    <Content Include="Configs\generic.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="preferences.xml">
+    <Content Include="Configs\preferences.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="settings.xml">
+    <Content Include="Configs\settings.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

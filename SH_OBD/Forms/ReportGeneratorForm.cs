@@ -53,7 +53,7 @@ namespace SH_OBD {
             m_iRequestCount = 0;
             DisplayStatusMessage("Requesting MIL Status & DTC Count");
             DisplayRequest("0101");
-            OBDParameterValue value5 = m_obdInterface.getValue("SAE.MIL", true);
+            OBDParameterValue value5 = m_obdInterface.GetValue("SAE.MIL", true);
             int num5 = progressBar.Value;
             progressBar.Value = num5 + 1;
             if (!value5.ErrorDetected) {
@@ -65,7 +65,7 @@ namespace SH_OBD {
                     m_bReportForm.ReportPage1.MilStatus = false;
                 }
             }
-            OBDParameterValue value3 = m_obdInterface.getValue("SAE.DTC_COUNT", true);
+            OBDParameterValue value3 = m_obdInterface.GetValue("SAE.DTC_COUNT", true);
             int num4 = progressBar.Value;
             progressBar.Value = num4 + 1;
             if (!value3.ErrorDetected) {
@@ -73,7 +73,7 @@ namespace SH_OBD {
                 DisplayDetailMessage("Stored DTCs: " + value3.DoubleValue.ToString());
             }
             DisplayStatusMessage("Requesting List of Stored DTCs");
-            OBDParameterValue value4 = m_obdInterface.getValue("SAE.STORED_DTCS", true);
+            OBDParameterValue value4 = m_obdInterface.GetValue("SAE.STORED_DTCS", true);
             int num3 = progressBar.Value;
             progressBar.Value = num3 + 1;
             if (!value4.ErrorDetected) {
@@ -91,7 +91,7 @@ namespace SH_OBD {
                 }
             }
             DisplayStatusMessage("Requesting List of Pending DTCs");
-            OBDParameterValue value2 = m_obdInterface.getValue("SAE.PENDING_DTCS", true);
+            OBDParameterValue value2 = m_obdInterface.GetValue("SAE.PENDING_DTCS", true);
             int num2 = progressBar.Value;
             progressBar.Value = num2 + 1;
             if (!value2.ErrorDetected) {
@@ -113,7 +113,7 @@ namespace SH_OBD {
             OBDParameter parameter = m_obdInterface.LookupParameter("SAE.FF_DTC");
             if (parameter != null) {
                 OBDParameter freezeFrameCopy = parameter.GetFreezeFrameCopy(0);
-                value2 = m_obdInterface.getValue(freezeFrameCopy, true);
+                value2 = m_obdInterface.GetValue(freezeFrameCopy, true);
                 int num = progressBar.Value;
                 progressBar.Value = num + 1;
                 if (!value2.ErrorDetected) {
@@ -139,7 +139,7 @@ namespace SH_OBD {
             m_bReportForm.ReportPage1.ShowFuelSystemStatus = false;
             if (param != null) {
                 param = param.GetFreezeFrameCopy(0);
-                OBDParameterValue value17 = m_obdInterface.getValue(param, true);
+                OBDParameterValue value17 = m_obdInterface.GetValue(param, true);
                 if (!value17.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowFuelSystemStatus = true;
                     DisplayDetailMessage("Fuel System 1: " + value17.StringValue);
@@ -152,7 +152,7 @@ namespace SH_OBD {
             m_bReportForm.ReportPage1.ShowFuelSystemStatus = false;
             if (freezeFrameCopy != null) {
                 freezeFrameCopy = freezeFrameCopy.GetFreezeFrameCopy(0);
-                OBDParameterValue value3 = m_obdInterface.getValue(freezeFrameCopy, true);
+                OBDParameterValue value3 = m_obdInterface.GetValue(freezeFrameCopy, true);
                 if (!value3.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowFuelSystemStatus = true;
                     DisplayDetailMessage("Fuel System 2: " + value3.StringValue);
@@ -165,7 +165,7 @@ namespace SH_OBD {
             m_bReportForm.ReportPage1.ShowCalculatedLoad = false;
             if (parameter16 != null) {
                 OBDParameter parameter17 = parameter16.GetFreezeFrameCopy(0);
-                OBDParameterValue value2 = m_obdInterface.getValue(parameter17, true);
+                OBDParameterValue value2 = m_obdInterface.GetValue(parameter17, true);
                 if (!value2.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowCalculatedLoad = true;
                     DisplayDetailMessage("Calculated Load: " + value2.DoubleValue.ToString());
@@ -178,7 +178,7 @@ namespace SH_OBD {
             m_bReportForm.ReportPage1.ShowEngineCoolantTemp = false;
             if (parameter14 != null) {
                 parameter14 = parameter14.GetFreezeFrameCopy(0);
-                OBDParameterValue value16 = m_obdInterface.getValue(parameter14, true);
+                OBDParameterValue value16 = m_obdInterface.GetValue(parameter14, true);
                 if (!value16.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowEngineCoolantTemp = true;
                     DisplayDetailMessage("Engine Coolant Temp: " + value16.DoubleValue.ToString());
@@ -191,7 +191,7 @@ namespace SH_OBD {
             m_bReportForm.ReportPage1.ShowSTFT13 = false;
             if (parameter13 != null) {
                 parameter13 = parameter13.GetFreezeFrameCopy(0);
-                OBDParameterValue value15 = m_obdInterface.getValue(parameter13, true);
+                OBDParameterValue value15 = m_obdInterface.GetValue(parameter13, true);
                 if (!value15.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowSTFT13 = true;
                     DisplayDetailMessage("STFT Bank 1: " + value15.DoubleValue.ToString());
@@ -204,7 +204,7 @@ namespace SH_OBD {
             m_bReportForm.ReportPage1.ShowSTFT13 = false;
             if (parameter12 != null) {
                 parameter12 = parameter12.GetFreezeFrameCopy(0);
-                OBDParameterValue value14 = m_obdInterface.getValue(parameter12, true);
+                OBDParameterValue value14 = m_obdInterface.GetValue(parameter12, true);
                 if (!value14.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowSTFT13 = true;
                     DisplayDetailMessage("STFT Bank 3: " + value14.DoubleValue.ToString());
@@ -217,7 +217,7 @@ namespace SH_OBD {
             m_bReportForm.ReportPage1.ShowLTFT13 = false;
             if (parameter11 != null) {
                 parameter11 = parameter11.GetFreezeFrameCopy(0);
-                OBDParameterValue value13 = m_obdInterface.getValue(parameter11, true);
+                OBDParameterValue value13 = m_obdInterface.GetValue(parameter11, true);
                 if (!value13.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowLTFT13 = true;
                     DisplayDetailMessage("LTFT Bank 1: " + value13.DoubleValue.ToString());
@@ -230,7 +230,7 @@ namespace SH_OBD {
             m_bReportForm.ReportPage1.ShowLTFT13 = false;
             if (parameter10 != null) {
                 parameter10 = parameter10.GetFreezeFrameCopy(0);
-                OBDParameterValue value12 = m_obdInterface.getValue(parameter10, true);
+                OBDParameterValue value12 = m_obdInterface.GetValue(parameter10, true);
                 if (!value12.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowLTFT13 = true;
                     DisplayDetailMessage("LTFT Bank 3: " + value12.DoubleValue.ToString());
@@ -243,7 +243,7 @@ namespace SH_OBD {
             m_bReportForm.ReportPage1.ShowSTFT24 = false;
             if (parameter9 != null) {
                 parameter9 = parameter9.GetFreezeFrameCopy(0);
-                OBDParameterValue value11 = m_obdInterface.getValue(parameter9, true);
+                OBDParameterValue value11 = m_obdInterface.GetValue(parameter9, true);
                 if (!value11.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowSTFT24 = true;
                     DisplayDetailMessage("STFT Bank 2: " + value11.DoubleValue.ToString());
@@ -256,7 +256,7 @@ namespace SH_OBD {
             m_bReportForm.ReportPage1.ShowSTFT24 = false;
             if (parameter8 != null) {
                 parameter8 = parameter8.GetFreezeFrameCopy(0);
-                OBDParameterValue value10 = m_obdInterface.getValue(parameter8, true);
+                OBDParameterValue value10 = m_obdInterface.GetValue(parameter8, true);
                 if (!value10.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowSTFT24 = true;
                     DisplayDetailMessage("STFT Bank 4: " + value10.DoubleValue.ToString());
@@ -269,7 +269,7 @@ namespace SH_OBD {
             m_bReportForm.ReportPage1.ShowLTFT24 = false;
             if (parameter7 != null) {
                 parameter7 = parameter7.GetFreezeFrameCopy(0);
-                OBDParameterValue value9 = m_obdInterface.getValue(parameter7, true);
+                OBDParameterValue value9 = m_obdInterface.GetValue(parameter7, true);
                 if (!value9.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowLTFT24 = true;
                     DisplayDetailMessage("LTFT Bank 2: " + value9.DoubleValue.ToString());
@@ -282,7 +282,7 @@ namespace SH_OBD {
             m_bReportForm.ReportPage1.ShowLTFT24 = false;
             if (parameter6 != null) {
                 parameter6 = parameter6.GetFreezeFrameCopy(0);
-                OBDParameterValue value8 = m_obdInterface.getValue(parameter6, true);
+                OBDParameterValue value8 = m_obdInterface.GetValue(parameter6, true);
                 if (!value8.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowLTFT24 = true;
                     DisplayDetailMessage("LTFT Bank 4: " + value8.DoubleValue.ToString());
@@ -295,7 +295,7 @@ namespace SH_OBD {
             m_bReportForm.ReportPage1.ShowIntakePressure = false;
             if (parameter5 != null) {
                 parameter5 = parameter5.GetFreezeFrameCopy(0);
-                OBDParameterValue value7 = m_obdInterface.getValue(parameter5, true);
+                OBDParameterValue value7 = m_obdInterface.GetValue(parameter5, true);
                 if (!value7.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowIntakePressure = true;
                     DisplayDetailMessage("Intake Pressure: " + value7.DoubleValue.ToString());
@@ -308,7 +308,7 @@ namespace SH_OBD {
             m_bReportForm.ReportPage1.ShowEngineRPM = false;
             if (parameter4 != null) {
                 parameter4 = parameter4.GetFreezeFrameCopy(0);
-                OBDParameterValue value6 = m_obdInterface.getValue(parameter4, true);
+                OBDParameterValue value6 = m_obdInterface.GetValue(parameter4, true);
                 if (!value6.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowEngineRPM = true;
                     DisplayDetailMessage("Engine RPM: " + value6.DoubleValue.ToString());
@@ -321,7 +321,7 @@ namespace SH_OBD {
             m_bReportForm.ReportPage1.ShowVehicleSpeed = false;
             if (parameter3 != null) {
                 parameter3 = parameter3.GetFreezeFrameCopy(0);
-                OBDParameterValue value5 = m_obdInterface.getValue(parameter3, true);
+                OBDParameterValue value5 = m_obdInterface.GetValue(parameter3, true);
                 if (!value5.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowVehicleSpeed = true;
                     DisplayDetailMessage("Vehicle Speed: " + value5.DoubleValue.ToString());
@@ -334,7 +334,7 @@ namespace SH_OBD {
             m_bReportForm.ReportPage1.ShowSparkAdvance = false;
             if (parameter2 != null) {
                 parameter2 = parameter2.GetFreezeFrameCopy(0);
-                OBDParameterValue value4 = m_obdInterface.getValue(parameter2, true);
+                OBDParameterValue value4 = m_obdInterface.GetValue(parameter2, true);
                 if (!value4.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowSparkAdvance = true;
                     DisplayDetailMessage("Spark Advance: " + value4.DoubleValue.ToString());
@@ -347,7 +347,7 @@ namespace SH_OBD {
             DisplayStatusMessage("Reading Monitor Test Results");
             int num = progressBar.Value;
             progressBar.Value = num + 1;
-            OBDParameterValue value23 = m_obdInterface.getValue("SAE.MISFIRE_SUPPORT", true);
+            OBDParameterValue value23 = m_obdInterface.GetValue("SAE.MISFIRE_SUPPORT", true);
             if (!value23.ErrorDetected) {
                 if (value23.BoolValue) {
                     DisplayDetailMessage("Misfire Monitoring Supported?: Yes");
@@ -357,7 +357,7 @@ namespace SH_OBD {
                     m_bReportForm.ReportPage1.MisfireMonitorSupported = false;
                 }
             }
-            OBDParameterValue value22 = m_obdInterface.getValue("SAE.MISFIRE_STATUS", true);
+            OBDParameterValue value22 = m_obdInterface.GetValue("SAE.MISFIRE_STATUS", true);
             if (!value22.ErrorDetected) {
                 if (value22.BoolValue) {
                     DisplayDetailMessage("Misfire Monitoring Completed?: Yes");
@@ -367,7 +367,7 @@ namespace SH_OBD {
                     m_bReportForm.ReportPage1.MisfireMonitorCompleted = false;
                 }
             }
-            OBDParameterValue value21 = m_obdInterface.getValue("SAE.FUEL_SUPPORT", true);
+            OBDParameterValue value21 = m_obdInterface.GetValue("SAE.FUEL_SUPPORT", true);
             if (!value21.ErrorDetected) {
                 if (value21.BoolValue) {
                     DisplayDetailMessage("Fuel System Monitoring Supported?: Yes");
@@ -377,7 +377,7 @@ namespace SH_OBD {
                     m_bReportForm.ReportPage1.FuelSystemMonitorSupported = false;
                 }
             }
-            OBDParameterValue value20 = m_obdInterface.getValue("SAE.FUEL_STATUS", true);
+            OBDParameterValue value20 = m_obdInterface.GetValue("SAE.FUEL_STATUS", true);
             if (!value20.ErrorDetected) {
                 if (value20.BoolValue) {
                     DisplayDetailMessage("Fuel System Monitoring Completed?: Yes");
@@ -387,7 +387,7 @@ namespace SH_OBD {
                     m_bReportForm.ReportPage1.FuelSystemMonitorCompleted = false;
                 }
             }
-            OBDParameterValue value19 = m_obdInterface.getValue("SAE.CCM_SUPPORT", true);
+            OBDParameterValue value19 = m_obdInterface.GetValue("SAE.CCM_SUPPORT", true);
             if (!value19.ErrorDetected) {
                 if (value19.BoolValue) {
                     DisplayDetailMessage("Comprehensive Component Monitoring Supported?: Yes");
@@ -397,7 +397,7 @@ namespace SH_OBD {
                     m_bReportForm.ReportPage1.ComprehensiveMonitorSupported = false;
                 }
             }
-            OBDParameterValue value18 = m_obdInterface.getValue("SAE.CCM_STATUS", true);
+            OBDParameterValue value18 = m_obdInterface.GetValue("SAE.CCM_STATUS", true);
             if (!value18.ErrorDetected) {
                 if (value18.BoolValue) {
                     DisplayDetailMessage("Comprehensive Component Monitoring Completed?: Yes");
@@ -407,7 +407,7 @@ namespace SH_OBD {
                     m_bReportForm.ReportPage1.ComprehensiveMonitorCompleted = false;
                 }
             }
-            OBDParameterValue value17 = m_obdInterface.getValue("SAE.CAT_SUPPORT", true);
+            OBDParameterValue value17 = m_obdInterface.GetValue("SAE.CAT_SUPPORT", true);
             if (!value17.ErrorDetected) {
                 if (value17.BoolValue) {
                     DisplayDetailMessage("Catalyst Monitoring Supported?: Yes");
@@ -417,7 +417,7 @@ namespace SH_OBD {
                     m_bReportForm.ReportPage1.CatalystMonitorSupported = false;
                 }
             }
-            OBDParameterValue value16 = m_obdInterface.getValue("SAE.CAT_STATUS", true);
+            OBDParameterValue value16 = m_obdInterface.GetValue("SAE.CAT_STATUS", true);
             if (!value16.ErrorDetected) {
                 if (value16.BoolValue) {
                     DisplayDetailMessage("Catalyst Monitoring Completed?: Yes");
@@ -427,7 +427,7 @@ namespace SH_OBD {
                     m_bReportForm.ReportPage1.CatalystMonitorCompleted = false;
                 }
             }
-            OBDParameterValue value15 = m_obdInterface.getValue("SAE.HCAT_SUPPORT", true);
+            OBDParameterValue value15 = m_obdInterface.GetValue("SAE.HCAT_SUPPORT", true);
             if (!value15.ErrorDetected) {
                 if (value15.BoolValue) {
                     DisplayDetailMessage("Heated Catalyst Monitoring Supported?: Yes");
@@ -437,7 +437,7 @@ namespace SH_OBD {
                     m_bReportForm.ReportPage1.HeatedCatalystMonitorSupported = false;
                 }
             }
-            OBDParameterValue value14 = m_obdInterface.getValue("SAE.HCAT_STATUS", true);
+            OBDParameterValue value14 = m_obdInterface.GetValue("SAE.HCAT_STATUS", true);
             if (!value14.ErrorDetected) {
                 if (value14.BoolValue) {
                     DisplayDetailMessage("Heated Catalyst Monitoring Completed?: Yes");
@@ -447,7 +447,7 @@ namespace SH_OBD {
                     m_bReportForm.ReportPage1.HeatedCatalystMonitorCompleted = false;
                 }
             }
-            OBDParameterValue value13 = m_obdInterface.getValue("SAE.EVAP_SUPPORT", true);
+            OBDParameterValue value13 = m_obdInterface.GetValue("SAE.EVAP_SUPPORT", true);
             if (!value13.ErrorDetected) {
                 if (value13.BoolValue) {
                     DisplayDetailMessage("Evaporative System Monitoring Supported?: Yes");
@@ -457,7 +457,7 @@ namespace SH_OBD {
                     m_bReportForm.ReportPage1.EvapSystemMonitorSupported = false;
                 }
             }
-            OBDParameterValue value12 = m_obdInterface.getValue("SAE.EVAP_STATUS", true);
+            OBDParameterValue value12 = m_obdInterface.GetValue("SAE.EVAP_STATUS", true);
             if (!value12.ErrorDetected) {
                 if (value12.BoolValue) {
                     DisplayDetailMessage("Evaporative System Monitoring Completed?: Yes");
@@ -467,7 +467,7 @@ namespace SH_OBD {
                     m_bReportForm.ReportPage1.EvapSystemMonitorCompleted = false;
                 }
             }
-            OBDParameterValue value11 = m_obdInterface.getValue("SAE.AIR_SUPPORT", true);
+            OBDParameterValue value11 = m_obdInterface.GetValue("SAE.AIR_SUPPORT", true);
             if (!value11.ErrorDetected) {
                 if (value11.BoolValue) {
                     DisplayDetailMessage("Secondary Air System Monitoring Supported?: Yes");
@@ -477,7 +477,7 @@ namespace SH_OBD {
                     m_bReportForm.ReportPage1.SecondaryAirMonitorSupported = false;
                 }
             }
-            OBDParameterValue value10 = m_obdInterface.getValue("SAE.AIR_STATUS", true);
+            OBDParameterValue value10 = m_obdInterface.GetValue("SAE.AIR_STATUS", true);
             if (!value10.ErrorDetected) {
                 if (value10.BoolValue) {
                     DisplayDetailMessage("Secondary Air System Monitoring Completed?: Yes");
@@ -487,7 +487,7 @@ namespace SH_OBD {
                     m_bReportForm.ReportPage1.SecondaryAirMonitorCompleted = false;
                 }
             }
-            OBDParameterValue value9 = m_obdInterface.getValue("SAE.AC_SUPPORT", true);
+            OBDParameterValue value9 = m_obdInterface.GetValue("SAE.AC_SUPPORT", true);
             if (!value9.ErrorDetected) {
                 if (value9.BoolValue) {
                     DisplayDetailMessage("A/C System Refrigerant Monitoring Supported?: Yes");
@@ -497,7 +497,7 @@ namespace SH_OBD {
                     m_bReportForm.ReportPage1.RefrigerantMonitorSupported = false;
                 }
             }
-            OBDParameterValue value8 = m_obdInterface.getValue("SAE.AC_STATUS", true);
+            OBDParameterValue value8 = m_obdInterface.GetValue("SAE.AC_STATUS", true);
             if (!value8.ErrorDetected) {
                 if (value8.BoolValue) {
                     DisplayDetailMessage("A/C System Refrigerant Monitoring Completed?: Yes");
@@ -507,7 +507,7 @@ namespace SH_OBD {
                     m_bReportForm.ReportPage1.RefrigerantMonitorCompleted = false;
                 }
             }
-            OBDParameterValue value7 = m_obdInterface.getValue("SAE.O2_SUPPORT", true);
+            OBDParameterValue value7 = m_obdInterface.GetValue("SAE.O2_SUPPORT", true);
             if (!value7.ErrorDetected) {
                 if (value7.BoolValue) {
                     DisplayDetailMessage("Oxygen Sensor Monitoring Supported?: Yes");
@@ -517,7 +517,7 @@ namespace SH_OBD {
                     m_bReportForm.ReportPage1.OxygenSensorMonitorSupported = false;
                 }
             }
-            OBDParameterValue value6 = m_obdInterface.getValue("SAE.O2_STATUS", true);
+            OBDParameterValue value6 = m_obdInterface.GetValue("SAE.O2_STATUS", true);
             if (!value6.ErrorDetected) {
                 if (value6.BoolValue) {
                     DisplayDetailMessage("Oxygen Sensor Monitoring Completed?: Yes");
@@ -527,7 +527,7 @@ namespace SH_OBD {
                     m_bReportForm.ReportPage1.OxygenSensorMonitorCompleted = false;
                 }
             }
-            OBDParameterValue value5 = m_obdInterface.getValue("SAE.O2HTR_SUPPORT", true);
+            OBDParameterValue value5 = m_obdInterface.GetValue("SAE.O2HTR_SUPPORT", true);
             if (!value5.ErrorDetected) {
                 if (value5.BoolValue) {
                     DisplayDetailMessage("Oxygen Sensor Heater Monitoring Supported?: Yes");
@@ -537,7 +537,7 @@ namespace SH_OBD {
                     m_bReportForm.ReportPage1.OxygenSensorHeaterMonitorSupported = false;
                 }
             }
-            OBDParameterValue value4 = m_obdInterface.getValue("SAE.O2HTR_STATUS", true);
+            OBDParameterValue value4 = m_obdInterface.GetValue("SAE.O2HTR_STATUS", true);
             if (!value4.ErrorDetected) {
                 if (value4.BoolValue) {
                     DisplayDetailMessage("Oxygen Sensor Heater Monitoring Completed?: Yes");
@@ -547,7 +547,7 @@ namespace SH_OBD {
                     m_bReportForm.ReportPage1.OxygenSensorHeaterMonitorCompleted = false;
                 }
             }
-            OBDParameterValue value3 = m_obdInterface.getValue("SAE.EGR_SUPPORT", true);
+            OBDParameterValue value3 = m_obdInterface.GetValue("SAE.EGR_SUPPORT", true);
             if (!value3.ErrorDetected) {
                 if (value3.BoolValue) {
                     DisplayDetailMessage("EGR System Monitoring Supported?: Yes");
@@ -557,7 +557,7 @@ namespace SH_OBD {
                     m_bReportForm.ReportPage1.EGRSystemMonitorSupported = false;
                 }
             }
-            OBDParameterValue value2 = m_obdInterface.getValue("SAE.EGR_STATUS", true);
+            OBDParameterValue value2 = m_obdInterface.GetValue("SAE.EGR_STATUS", true);
             if (!value2.ErrorDetected) {
                 if (value2.BoolValue) {
                     DisplayDetailMessage("EGR System Monitoring Completed?: Yes");

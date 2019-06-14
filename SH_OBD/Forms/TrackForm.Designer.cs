@@ -149,10 +149,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextSlip.BackColor = System.Drawing.SystemColors.Control;
             this.richTextSlip.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.richTextSlip.Location = new System.Drawing.Point(10, 17);
+            this.richTextSlip.Location = new System.Drawing.Point(12, 20);
             this.richTextSlip.Name = "richTextSlip";
             this.richTextSlip.ReadOnly = true;
-            this.richTextSlip.Size = new System.Drawing.Size(567, 284);
+            this.richTextSlip.Size = new System.Drawing.Size(558, 280);
             this.richTextSlip.TabIndex = 0;
             this.richTextSlip.Text = "";
             // 

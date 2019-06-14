@@ -33,7 +33,7 @@ namespace SH_OBD {
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Exclamation
                     );
-                m_obdInterface.logItem("Error. Freeze Frame Form. Attempted to refresh without vehicle connection.");
+                m_obdInterface.LogItem("Error. Freeze Frame Form. Attempted to refresh without vehicle connection.");
             }
         }
 
@@ -51,7 +51,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                OBDParameterValue value = m_obdInterface.getValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                OBDParameterValue value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (value.ErrorDetected) {
                     MessageBox.Show(
                         "An error was encountered while requesting SAE.FF_DTC",
@@ -59,7 +59,7 @@ namespace SH_OBD {
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Hand
                         );
-                    m_obdInterface.logItem("Error while requesting SAE.FF_DTC");
+                    m_obdInterface.LogItem("Error while requesting SAE.FF_DTC");
                     break;
                 }
 
@@ -81,7 +81,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.getValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
                     freezeFrame.FuelSystem1Status = value.StringValue;
                 }
@@ -91,7 +91,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.getValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
                     freezeFrame.FuelSystem2Status = value.StringValue;
                 }
@@ -106,7 +106,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.getValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
                     freezeFrame.CalculatedLoad = value.DoubleValue;
                 }
@@ -121,7 +121,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.getValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
                     freezeFrame.EngineCoolantTemp = value.DoubleValue;
                 }
@@ -136,7 +136,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.getValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
                     freezeFrame.STFT1 = value.DoubleValue;
                 }
@@ -146,7 +146,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.getValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
                     freezeFrame.STFT3 = value.DoubleValue;
                 }
@@ -161,7 +161,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.getValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
                     freezeFrame.LTFT1 = value.DoubleValue;
                 }
@@ -171,7 +171,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.getValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
                     freezeFrame.LTFT3 = value.DoubleValue;
                 }
@@ -186,7 +186,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.getValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
                     freezeFrame.STFT2 = value.DoubleValue;
                 }
@@ -196,7 +196,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.getValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
                     freezeFrame.STFT4 = value.DoubleValue;
                 }
@@ -212,7 +212,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.getValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
                     freezeFrame.LTFT2 = value.DoubleValue;
                 }
@@ -222,7 +222,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.getValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
                     freezeFrame.LTFT4 = value.DoubleValue;
                 }
@@ -237,7 +237,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.getValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
                     freezeFrame.IntakePressure = value.DoubleValue;
                 }
@@ -252,7 +252,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.getValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
                     freezeFrame.EngineRPM = value.DoubleValue;
                 }
@@ -267,7 +267,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.getValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
                     freezeFrame.VehicleSpeed = value.DoubleValue;
                 }
@@ -282,7 +282,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.getValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
                     freezeFrame.SparkAdvance = value.DoubleValue;
                 }

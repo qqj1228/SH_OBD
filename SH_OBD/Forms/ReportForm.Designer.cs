@@ -52,7 +52,7 @@
             this.btnPreview.Name = "btnPreview";
             this.btnPreview.Size = new System.Drawing.Size(90, 24);
             this.btnPreview.TabIndex = 2;
-            this.btnPreview.Text = "预览(&r)";
+            this.btnPreview.Text = "预览(&v)";
             this.btnPreview.Click += new System.EventHandler(this.btnPreview_Click);
             // 
             // btnPrint

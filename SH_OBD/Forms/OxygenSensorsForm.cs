@@ -37,149 +37,149 @@ namespace SH_OBD {
             o2TestResultsControl1.Reset();
             progressBar.Maximum = 12;
             progressBar.Value = 0;
-            if (!m_obdInterface.getValue("SAE.O2_SUPPORT", true).ErrorDetected) {
+            if (!m_obdInterface.GetValue("SAE.O2_SUPPORT", true).ErrorDetected) {
                 OBDParameterValue value;
-                value = m_obdInterface.getValue("SAE.O2_STATUS", true);
+                value = m_obdInterface.GetValue("SAE.O2_STATUS", true);
                 if (!value.ErrorDetected && value.BoolValue) {
                     progressBar.Increment(1);
                     int selectedSensorId = getSelectedSensorID();
                     progressBar.Increment(1);
 
-                    value = m_obdInterface.getValue(new OBDParameter(5, 1, 0, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 1, 0, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestValue01 = value.DoubleValue;
                     }
-                    value = m_obdInterface.getValue(new OBDParameter(5, 1, 1, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 1, 1, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestMinimum01 = value.DoubleValue;
                     }
-                    value = m_obdInterface.getValue(new OBDParameter(5, 1, 2, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 1, 2, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestMaximum01 = value.DoubleValue;
                     }
                     progressBar.Increment(1);
 
-                    value = m_obdInterface.getValue(new OBDParameter(5, 2, 0, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 2, 0, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestValue02 = value.DoubleValue;
                     }
-                    value = m_obdInterface.getValue(new OBDParameter(5, 2, 1, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 2, 1, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestMinimum02 = value.DoubleValue;
                     }
-                    value = m_obdInterface.getValue(new OBDParameter(5, 2, 2, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 2, 2, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestMaximum02 = value.DoubleValue;
                     }
                     progressBar.Increment(1);
 
-                    value = m_obdInterface.getValue(new OBDParameter(5, 3, 0, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 3, 0, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestValue03 = value.DoubleValue;
                     }
-                    value = m_obdInterface.getValue(new OBDParameter(5, 3, 1, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 3, 1, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestMinimum03 = value.DoubleValue;
                     }
-                    value = m_obdInterface.getValue(new OBDParameter(5, 3, 2, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 3, 2, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestMaximum03 = value.DoubleValue;
                     }
                     progressBar.Increment(1);
 
-                    value = m_obdInterface.getValue(new OBDParameter(5, 4, 0, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 4, 0, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestValue04 = value.DoubleValue;
                     }
-                    value = m_obdInterface.getValue(new OBDParameter(5, 4, 1, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 4, 1, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestMinimum04 = value.DoubleValue;
                     }
-                    value = m_obdInterface.getValue(new OBDParameter(5, 4, 2, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 4, 2, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestMaximum04 = value.DoubleValue;
                     }
                     progressBar.Increment(1);
 
-                    value = m_obdInterface.getValue(new OBDParameter(5, 5, 0, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 5, 0, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestValue05 = value.DoubleValue;
                     }
-                    value = m_obdInterface.getValue(new OBDParameter(5, 5, 1, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 5, 1, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestMinimum05 = value.DoubleValue;
                     }
-                    value = m_obdInterface.getValue(new OBDParameter(5, 5, 2, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 5, 2, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestMaximum05 = value.DoubleValue;
                     }
                     progressBar.Increment(1);
 
-                    value = m_obdInterface.getValue(new OBDParameter(5, 6, 0, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 6, 0, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestValue06 = value.DoubleValue;
                     }
-                    value = m_obdInterface.getValue(new OBDParameter(5, 6, 1, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 6, 1, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestMinimum06 = value.DoubleValue;
                     }
-                    value = m_obdInterface.getValue(new OBDParameter(5, 6, 2, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 6, 2, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestMaximum06 = value.DoubleValue;
                     }
                     progressBar.Increment(1);
 
-                    value = m_obdInterface.getValue(new OBDParameter(5, 7, 0, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 7, 0, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestValue07 = value.DoubleValue;
                     }
-                    value = m_obdInterface.getValue(new OBDParameter(5, 7, 1, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 7, 1, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestMinimum07 = value.DoubleValue;
                     }
-                    value = m_obdInterface.getValue(new OBDParameter(5, 7, 2, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 7, 2, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestMaximum07 = value.DoubleValue;
                     }
                     progressBar.Increment(1);
 
-                    value = m_obdInterface.getValue(new OBDParameter(5, 8, 0, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 8, 0, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestValue08 = value.DoubleValue;
                     }
-                    value = m_obdInterface.getValue(new OBDParameter(5, 8, 1, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 8, 1, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestMinimum08 = value.DoubleValue;
                     }
-                    value = m_obdInterface.getValue(new OBDParameter(5, 8, 2, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 8, 2, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestMaximum08 = value.DoubleValue;
                     }
                     progressBar.Increment(1);
 
-                    value = m_obdInterface.getValue(new OBDParameter(5, 9, 0, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 9, 0, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestValue09 = value.DoubleValue;
                     }
-                    value = m_obdInterface.getValue(new OBDParameter(5, 9, 1, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 9, 1, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestMinimum09 = value.DoubleValue;
                     }
-                    value = m_obdInterface.getValue(new OBDParameter(5, 9, 2, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 9, 2, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestMaximum09 = value.DoubleValue;
                     }
                     progressBar.Increment(1);
 
-                    value = m_obdInterface.getValue(new OBDParameter(5, 10, 0, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 10, 0, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestValue0A = value.DoubleValue;
                     }
-                    value = m_obdInterface.getValue(new OBDParameter(5, 10, 1, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 10, 1, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestMinimum0A = value.DoubleValue;
                     }
-                    value = m_obdInterface.getValue(new OBDParameter(5, 10, 2, selectedSensorId), true);
+                    value = m_obdInterface.GetValue(new OBDParameter(5, 10, 2, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestMaximum0A = value.DoubleValue;
                     }
@@ -229,42 +229,42 @@ namespace SH_OBD {
             comboOxygenSensor.Items.Clear();
             OBDParameterValue value;
 
-            value = m_obdInterface.getValue("SAE.O2B1S1A_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B1S1A_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
                 comboOxygenSensor.Items.Add("Bank 1, Sensor 1 (O2B1S1)");
             }
 
-            value = m_obdInterface.getValue("SAE.O2B1S2A_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B1S2A_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
                 comboOxygenSensor.Items.Add("Bank 1, Sensor 2 (O2B1S2)");
             }
 
-            value = m_obdInterface.getValue("SAE.O2B1S3A_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B1S3A_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
                 comboOxygenSensor.Items.Add("Bank 1, Sensor 3 (O2B1S3)");
             }
 
-            value = m_obdInterface.getValue("SAE.O2B1S4A_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B1S4A_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
                 comboOxygenSensor.Items.Add("Bank 1, Sensor 4 (O2B1S4)");
             }
 
-            value = m_obdInterface.getValue("SAE.O2B2S1A_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B2S1A_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
                 comboOxygenSensor.Items.Add("Bank 2, Sensor 1 (O2B2S1)");
             }
 
-            value = m_obdInterface.getValue("SAE.O2B2S2A_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B2S2A_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
                 comboOxygenSensor.Items.Add("Bank 2, Sensor 2 (O2B2S2)");
             }
 
-            value = m_obdInterface.getValue("SAE.O2B2S3A_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B2S3A_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
                 comboOxygenSensor.Items.Add("Bank 2, Sensor 3 (O2B2S3)");
             }
 
-            value = m_obdInterface.getValue("SAE.O2B2S4A_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B2S4A_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
                 comboOxygenSensor.Items.Add("Bank 2, Sensor 4 (O2B2S4)");
             }
@@ -273,22 +273,22 @@ namespace SH_OBD {
                 comboOxygenSensor.SelectedIndex = 0;
             }
 
-            value = m_obdInterface.getValue("SAE.O2B1S1B_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B1S1B_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
                 comboOxygenSensor.Items.Add("Bank 1, Sensor 1 (O2B1S1)");
             }
 
-            value = m_obdInterface.getValue("SAE.O2B1S2B_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B1S2B_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
                 comboOxygenSensor.Items.Add("Bank 1, Sensor 2 (O2B1S2)");
             }
 
-            value = m_obdInterface.getValue("SAE.O2B2S1B_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B2S1B_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
                 comboOxygenSensor.Items.Add("Bank 2, Sensor 1 (O2B2S1)");
             }
 
-            value = m_obdInterface.getValue("SAE.O2B2S2B_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B2S2B_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
                 comboOxygenSensor.Items.Add("Bank 2, Sensor 2 (O2B2S2)");
             }

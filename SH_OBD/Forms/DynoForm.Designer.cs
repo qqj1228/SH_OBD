@@ -192,7 +192,7 @@
             this.groupGraph.Controls.Add(this.dyno);
             this.groupGraph.Location = new System.Drawing.Point(204, 12);
             this.groupGraph.Name = "groupGraph";
-            this.groupGraph.Size = new System.Drawing.Size(537, 449);
+            this.groupGraph.Size = new System.Drawing.Size(537, 453);
             this.groupGraph.TabIndex = 9;
             this.groupGraph.TabStop = false;
             // 
@@ -223,7 +223,7 @@
             this.dyno.ShowData3 = false;
             this.dyno.ShowData4 = false;
             this.dyno.ShowData5 = false;
-            this.dyno.Size = new System.Drawing.Size(525, 429);
+            this.dyno.Size = new System.Drawing.Size(525, 433);
             this.dyno.TabIndex = 0;
             this.dyno.XData1 = null;
             this.dyno.XData2 = null;
@@ -323,7 +323,6 @@
             this.Name = "DynoForm";
             this.Text = "DynoForm";
             this.Activated += new System.EventHandler(this.DynoForm_Activated);
-            this.Resize += new System.EventHandler(this.DynoForm_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.numToRPM)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numFromRPM)).EndInit();
             this.groupSetup.ResumeLayout(false);

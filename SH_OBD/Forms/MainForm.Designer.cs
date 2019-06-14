@@ -23,17 +23,14 @@
         /// 使用代码编辑器修改此方法的内容。
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLabelConnStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusLabelVehicle = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusLabelDeviceName = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusLabelPort = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.buttonVehicles = new System.Windows.Forms.Button();
-            this.buttonUserPrefs = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.buttonReport = new System.Windows.Forms.Button();
-            this.buttonSettings = new System.Windows.Forms.Button();
             this.buttonCommLog = new System.Windows.Forms.Button();
             this.buttonTerminal = new System.Windows.Forms.Button();
             this.buttonFuel = new System.Windows.Forms.Button();
@@ -45,10 +42,22 @@
             this.buttonFF = new System.Windows.Forms.Button();
             this.buttonDTC = new System.Windows.Forms.Button();
             this.buttonTests = new System.Windows.Forms.Button();
-            this.buttonStart = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.buttonDefaultFontStyle = new System.Windows.Forms.Button();
+            this.picDiagram = new System.Windows.Forms.PictureBox();
+            this.lblInstruction1 = new System.Windows.Forms.Label();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripBtnConnect = new System.Windows.Forms.ToolStripButton();
+            this.toolStripBtnDisconnect = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripBtnUserPrefs = new System.Windows.Forms.ToolStripButton();
+            this.toolStripBtnVehicles = new System.Windows.Forms.ToolStripButton();
+            this.toolStripBtnSettings = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picDiagram)).BeginInit();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -61,7 +70,7 @@
             this.statusStrip1.Location = new System.Drawing.Point(0, 611);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.statusStrip1.Size = new System.Drawing.Size(884, 26);
+            this.statusStrip1.Size = new System.Drawing.Size(934, 26);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -69,15 +78,15 @@
             // 
             this.StatusLabelConnStatus.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.StatusLabelConnStatus.Name = "StatusLabelConnStatus";
-            this.StatusLabelConnStatus.Size = new System.Drawing.Size(217, 21);
+            this.StatusLabelConnStatus.Size = new System.Drawing.Size(229, 21);
             this.StatusLabelConnStatus.Spring = true;
-            this.StatusLabelConnStatus.Text = "OBD设备未连接";
+            this.StatusLabelConnStatus.Text = "OBD接口未连接";
             // 
             // StatusLabelVehicle
             // 
             this.StatusLabelVehicle.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.StatusLabelVehicle.Name = "StatusLabelVehicle";
-            this.StatusLabelVehicle.Size = new System.Drawing.Size(217, 21);
+            this.StatusLabelVehicle.Size = new System.Drawing.Size(229, 21);
             this.StatusLabelVehicle.Spring = true;
             this.StatusLabelVehicle.Text = "车辆配置";
             // 
@@ -85,25 +94,23 @@
             // 
             this.StatusLabelDeviceName.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.StatusLabelDeviceName.Name = "StatusLabelDeviceName";
-            this.StatusLabelDeviceName.Size = new System.Drawing.Size(217, 21);
+            this.StatusLabelDeviceName.Size = new System.Drawing.Size(229, 21);
             this.StatusLabelDeviceName.Spring = true;
             this.StatusLabelDeviceName.Text = "设备名称";
             // 
             // StatusLabelPort
             // 
             this.StatusLabelPort.Name = "StatusLabelPort";
-            this.StatusLabelPort.Size = new System.Drawing.Size(217, 21);
+            this.StatusLabelPort.Size = new System.Drawing.Size(229, 21);
             this.StatusLabelPort.Spring = true;
             this.StatusLabelPort.Text = "端口";
             // 
             // panel1
             // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.buttonVehicles);
-            this.panel1.Controls.Add(this.buttonUserPrefs);
-            this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.buttonReport);
-            this.panel1.Controls.Add(this.buttonSettings);
             this.panel1.Controls.Add(this.buttonCommLog);
             this.panel1.Controls.Add(this.buttonTerminal);
             this.panel1.Controls.Add(this.buttonFuel);
@@ -115,85 +122,44 @@
             this.panel1.Controls.Add(this.buttonFF);
             this.panel1.Controls.Add(this.buttonDTC);
             this.panel1.Controls.Add(this.buttonTests);
-            this.panel1.Controls.Add(this.buttonStart);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Location = new System.Drawing.Point(0, 58);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(120, 611);
-            this.panel1.TabIndex = 3;
-            // 
-            // buttonVehicles
-            // 
-            this.buttonVehicles.Location = new System.Drawing.Point(5, 423);
-            this.buttonVehicles.Name = "buttonVehicles";
-            this.buttonVehicles.Size = new System.Drawing.Size(110, 23);
-            this.buttonVehicles.TabIndex = 16;
-            this.buttonVehicles.Text = "buttonVehicles";
-            this.buttonVehicles.UseVisualStyleBackColor = true;
-            this.buttonVehicles.Click += new System.EventHandler(this.buttonVehicles_Click);
-            // 
-            // buttonUserPrefs
-            // 
-            this.buttonUserPrefs.Location = new System.Drawing.Point(5, 394);
-            this.buttonUserPrefs.Name = "buttonUserPrefs";
-            this.buttonUserPrefs.Size = new System.Drawing.Size(110, 23);
-            this.buttonUserPrefs.TabIndex = 15;
-            this.buttonUserPrefs.Text = "buttonUserPrefs";
-            this.buttonUserPrefs.UseVisualStyleBackColor = true;
-            this.buttonUserPrefs.Click += new System.EventHandler(this.buttonUserPrefs_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(5, 379);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(113, 12);
-            this.label1.TabIndex = 14;
-            this.label1.Text = "------------------";
+            this.panel1.Size = new System.Drawing.Size(120, 553);
+            this.panel1.TabIndex = 1;
             // 
             // buttonReport
             // 
-            this.buttonReport.Location = new System.Drawing.Point(5, 295);
+            this.buttonReport.Location = new System.Drawing.Point(5, 266);
             this.buttonReport.Name = "buttonReport";
             this.buttonReport.Size = new System.Drawing.Size(110, 23);
-            this.buttonReport.TabIndex = 13;
+            this.buttonReport.TabIndex = 10;
             this.buttonReport.Text = "buttonReport";
             this.buttonReport.UseVisualStyleBackColor = true;
             this.buttonReport.Click += new System.EventHandler(this.Button_Click);
             // 
-            // buttonSettings
-            // 
-            this.buttonSettings.Location = new System.Drawing.Point(5, 452);
-            this.buttonSettings.Name = "buttonSettings";
-            this.buttonSettings.Size = new System.Drawing.Size(110, 23);
-            this.buttonSettings.TabIndex = 12;
-            this.buttonSettings.Text = "buttonSettings";
-            this.buttonSettings.UseVisualStyleBackColor = true;
-            this.buttonSettings.Click += new System.EventHandler(this.buttonSettings_Click);
-            // 
             // buttonCommLog
             // 
-            this.buttonCommLog.Location = new System.Drawing.Point(5, 353);
+            this.buttonCommLog.Location = new System.Drawing.Point(5, 324);
             this.buttonCommLog.Name = "buttonCommLog";
             this.buttonCommLog.Size = new System.Drawing.Size(110, 23);
-            this.buttonCommLog.TabIndex = 11;
+            this.buttonCommLog.TabIndex = 12;
             this.buttonCommLog.Text = "buttonCommLog";
             this.buttonCommLog.UseVisualStyleBackColor = true;
             this.buttonCommLog.Click += new System.EventHandler(this.Button_Click);
             // 
             // buttonTerminal
             // 
-            this.buttonTerminal.Location = new System.Drawing.Point(5, 324);
+            this.buttonTerminal.Location = new System.Drawing.Point(5, 295);
             this.buttonTerminal.Name = "buttonTerminal";
             this.buttonTerminal.Size = new System.Drawing.Size(110, 23);
-            this.buttonTerminal.TabIndex = 10;
+            this.buttonTerminal.TabIndex = 11;
             this.buttonTerminal.Text = "buttonTerminal";
             this.buttonTerminal.UseVisualStyleBackColor = true;
             this.buttonTerminal.Click += new System.EventHandler(this.Button_Click);
             // 
             // buttonFuel
             // 
-            this.buttonFuel.Location = new System.Drawing.Point(5, 266);
+            this.buttonFuel.Location = new System.Drawing.Point(5, 237);
             this.buttonFuel.Name = "buttonFuel";
             this.buttonFuel.Size = new System.Drawing.Size(110, 23);
             this.buttonFuel.TabIndex = 9;
@@ -203,7 +169,7 @@
             // 
             // buttonDyno
             // 
-            this.buttonDyno.Location = new System.Drawing.Point(5, 237);
+            this.buttonDyno.Location = new System.Drawing.Point(5, 208);
             this.buttonDyno.Name = "buttonDyno";
             this.buttonDyno.Size = new System.Drawing.Size(110, 23);
             this.buttonDyno.TabIndex = 8;
@@ -213,7 +179,7 @@
             // 
             // buttonTrack
             // 
-            this.buttonTrack.Location = new System.Drawing.Point(5, 208);
+            this.buttonTrack.Location = new System.Drawing.Point(5, 179);
             this.buttonTrack.Name = "buttonTrack";
             this.buttonTrack.Size = new System.Drawing.Size(110, 23);
             this.buttonTrack.TabIndex = 7;
@@ -223,7 +189,7 @@
             // 
             // buttonSensorGraph
             // 
-            this.buttonSensorGraph.Location = new System.Drawing.Point(5, 179);
+            this.buttonSensorGraph.Location = new System.Drawing.Point(5, 150);
             this.buttonSensorGraph.Name = "buttonSensorGraph";
             this.buttonSensorGraph.Size = new System.Drawing.Size(110, 23);
             this.buttonSensorGraph.TabIndex = 6;
@@ -233,7 +199,7 @@
             // 
             // buttonSensorGrid
             // 
-            this.buttonSensorGrid.Location = new System.Drawing.Point(5, 150);
+            this.buttonSensorGrid.Location = new System.Drawing.Point(5, 121);
             this.buttonSensorGrid.Name = "buttonSensorGrid";
             this.buttonSensorGrid.Size = new System.Drawing.Size(110, 23);
             this.buttonSensorGrid.TabIndex = 5;
@@ -243,7 +209,7 @@
             // 
             // buttonO2
             // 
-            this.buttonO2.Location = new System.Drawing.Point(5, 121);
+            this.buttonO2.Location = new System.Drawing.Point(5, 92);
             this.buttonO2.Name = "buttonO2";
             this.buttonO2.Size = new System.Drawing.Size(110, 23);
             this.buttonO2.TabIndex = 4;
@@ -253,7 +219,7 @@
             // 
             // buttonFF
             // 
-            this.buttonFF.Location = new System.Drawing.Point(5, 92);
+            this.buttonFF.Location = new System.Drawing.Point(5, 63);
             this.buttonFF.Name = "buttonFF";
             this.buttonFF.Size = new System.Drawing.Size(110, 23);
             this.buttonFF.TabIndex = 3;
@@ -263,7 +229,7 @@
             // 
             // buttonDTC
             // 
-            this.buttonDTC.Location = new System.Drawing.Point(5, 62);
+            this.buttonDTC.Location = new System.Drawing.Point(5, 33);
             this.buttonDTC.Name = "buttonDTC";
             this.buttonDTC.Size = new System.Drawing.Size(110, 23);
             this.buttonDTC.TabIndex = 2;
@@ -273,7 +239,7 @@
             // 
             // buttonTests
             // 
-            this.buttonTests.Location = new System.Drawing.Point(5, 32);
+            this.buttonTests.Location = new System.Drawing.Point(5, 3);
             this.buttonTests.Name = "buttonTests";
             this.buttonTests.Size = new System.Drawing.Size(110, 23);
             this.buttonTests.TabIndex = 1;
@@ -281,33 +247,128 @@
             this.buttonTests.UseVisualStyleBackColor = true;
             this.buttonTests.Click += new System.EventHandler(this.Button_Click);
             // 
-            // buttonStart
-            // 
-            this.buttonStart.Location = new System.Drawing.Point(5, 3);
-            this.buttonStart.Name = "buttonStart";
-            this.buttonStart.Size = new System.Drawing.Size(110, 23);
-            this.buttonStart.TabIndex = 0;
-            this.buttonStart.Text = "buttonStart";
-            this.buttonStart.UseVisualStyleBackColor = true;
-            this.buttonStart.Click += new System.EventHandler(this.Button_Click);
-            // 
             // panel2
             // 
+            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(120, 0);
+            this.panel2.Controls.Add(this.buttonDefaultFontStyle);
+            this.panel2.Controls.Add(this.picDiagram);
+            this.panel2.Controls.Add(this.lblInstruction1);
+            this.panel2.Location = new System.Drawing.Point(120, 58);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(764, 611);
-            this.panel2.TabIndex = 5;
+            this.panel2.Size = new System.Drawing.Size(814, 553);
+            this.panel2.TabIndex = 3;
+            // 
+            // buttonDefaultFontStyle
+            // 
+            this.buttonDefaultFontStyle.Location = new System.Drawing.Point(198, 353);
+            this.buttonDefaultFontStyle.Name = "buttonDefaultFontStyle";
+            this.buttonDefaultFontStyle.Size = new System.Drawing.Size(75, 23);
+            this.buttonDefaultFontStyle.TabIndex = 21;
+            this.buttonDefaultFontStyle.Text = "DefaultFontStyle";
+            this.buttonDefaultFontStyle.UseVisualStyleBackColor = true;
+            this.buttonDefaultFontStyle.Visible = false;
+            // 
+            // picDiagram
+            // 
+            this.picDiagram.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.picDiagram.Image = ((System.Drawing.Image)(resources.GetObject("picDiagram.Image")));
+            this.picDiagram.Location = new System.Drawing.Point(146, 92);
+            this.picDiagram.Name = "picDiagram";
+            this.picDiagram.Size = new System.Drawing.Size(528, 72);
+            this.picDiagram.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picDiagram.TabIndex = 20;
+            this.picDiagram.TabStop = false;
+            // 
+            // lblInstruction1
+            // 
+            this.lblInstruction1.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.lblInstruction1.Location = new System.Drawing.Point(221, 198);
+            this.lblInstruction1.Name = "lblInstruction1";
+            this.lblInstruction1.Size = new System.Drawing.Size(386, 120);
+            this.lblInstruction1.TabIndex = 16;
+            this.lblInstruction1.Text = "1、请确认已使用了正确的通讯设置。\r\n\r\n2、请确认已使用了正确的车辆设置。\r\n\r\n3、使用OBD设备连接车辆OBD-II接口与电脑主机。\r\n\r\n4、打开车辆点火" +
+    "按钮至“ON”位置，或者发动引擎使其处于运转状态。\r\n\r\n5、点击工具栏“建立连接”按钮。";
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(48, 48);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripBtnConnect,
+            this.toolStripBtnDisconnect,
+            this.toolStripSeparator1,
+            this.toolStripBtnUserPrefs,
+            this.toolStripBtnVehicles,
+            this.toolStripBtnSettings});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(934, 55);
+            this.toolStrip1.TabIndex = 0;
+            this.toolStrip1.TabStop = true;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripBtnConnect
+            // 
+            this.toolStripBtnConnect.Image = ((System.Drawing.Image)(resources.GetObject("toolStripBtnConnect.Image")));
+            this.toolStripBtnConnect.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripBtnConnect.Name = "toolStripBtnConnect";
+            this.toolStripBtnConnect.Size = new System.Drawing.Size(108, 52);
+            this.toolStripBtnConnect.Text = "建立连接";
+            this.toolStripBtnConnect.Click += new System.EventHandler(this.toolStripBtnConnect_Click);
+            // 
+            // toolStripBtnDisconnect
+            // 
+            this.toolStripBtnDisconnect.Image = ((System.Drawing.Image)(resources.GetObject("toolStripBtnDisconnect.Image")));
+            this.toolStripBtnDisconnect.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripBtnDisconnect.Name = "toolStripBtnDisconnect";
+            this.toolStripBtnDisconnect.Size = new System.Drawing.Size(108, 52);
+            this.toolStripBtnDisconnect.Text = "断开连接";
+            this.toolStripBtnDisconnect.Click += new System.EventHandler(this.toolStripBtnDisconnect_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 55);
+            // 
+            // toolStripBtnUserPrefs
+            // 
+            this.toolStripBtnUserPrefs.Image = ((System.Drawing.Image)(resources.GetObject("toolStripBtnUserPrefs.Image")));
+            this.toolStripBtnUserPrefs.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripBtnUserPrefs.Name = "toolStripBtnUserPrefs";
+            this.toolStripBtnUserPrefs.Size = new System.Drawing.Size(108, 52);
+            this.toolStripBtnUserPrefs.Text = "用户设置";
+            this.toolStripBtnUserPrefs.Click += new System.EventHandler(this.toolStripBtnUserPrefs_Click);
+            // 
+            // toolStripBtnVehicles
+            // 
+            this.toolStripBtnVehicles.Image = ((System.Drawing.Image)(resources.GetObject("toolStripBtnVehicles.Image")));
+            this.toolStripBtnVehicles.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripBtnVehicles.Name = "toolStripBtnVehicles";
+            this.toolStripBtnVehicles.Size = new System.Drawing.Size(108, 52);
+            this.toolStripBtnVehicles.Text = "车辆设置";
+            this.toolStripBtnVehicles.Click += new System.EventHandler(this.toolStripBtnVehicles_Click);
+            // 
+            // toolStripBtnSettings
+            // 
+            this.toolStripBtnSettings.Image = ((System.Drawing.Image)(resources.GetObject("toolStripBtnSettings.Image")));
+            this.toolStripBtnSettings.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripBtnSettings.Name = "toolStripBtnSettings";
+            this.toolStripBtnSettings.Size = new System.Drawing.Size(108, 52);
+            this.toolStripBtnSettings.Text = "通讯设置";
+            this.toolStripBtnSettings.Click += new System.EventHandler(this.toolStripBtnSettings_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(884, 637);
+            this.ClientSize = new System.Drawing.Size(934, 637);
+            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.statusStrip1);
+            this.MinimumSize = new System.Drawing.Size(920, 600);
             this.Name = "MainForm";
             this.Text = "SH_OBD";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
@@ -315,7 +376,10 @@
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picDiagram)).EndInit();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -326,7 +390,6 @@
         private System.Windows.Forms.ToolStripStatusLabel StatusLabelConnStatus;
         private System.Windows.Forms.ToolStripStatusLabel StatusLabelDeviceName;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button buttonStart;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button buttonTests;
         private System.Windows.Forms.Button buttonDTC;
@@ -334,18 +397,24 @@
         private System.Windows.Forms.Button buttonO2;
         private System.Windows.Forms.Button buttonSensorGrid;
         private System.Windows.Forms.Button buttonSensorGraph;
-        private System.Windows.Forms.Button buttonSettings;
         private System.Windows.Forms.Button buttonCommLog;
         private System.Windows.Forms.Button buttonTerminal;
         private System.Windows.Forms.Button buttonFuel;
         private System.Windows.Forms.Button buttonDyno;
         private System.Windows.Forms.Button buttonTrack;
         private System.Windows.Forms.Button buttonReport;
-        private System.Windows.Forms.Button buttonVehicles;
-        private System.Windows.Forms.Button buttonUserPrefs;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripStatusLabel StatusLabelVehicle;
         private System.Windows.Forms.ToolStripStatusLabel StatusLabelPort;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton toolStripBtnConnect;
+        private System.Windows.Forms.ToolStripButton toolStripBtnDisconnect;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton toolStripBtnUserPrefs;
+        private System.Windows.Forms.ToolStripButton toolStripBtnVehicles;
+        private System.Windows.Forms.ToolStripButton toolStripBtnSettings;
+        private System.Windows.Forms.PictureBox picDiagram;
+        private System.Windows.Forms.Label lblInstruction1;
+        private System.Windows.Forms.Button buttonDefaultFontStyle;
     }
 }
 

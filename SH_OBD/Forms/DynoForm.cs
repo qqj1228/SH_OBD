@@ -43,9 +43,6 @@ namespace SH_OBD {
             pageSetupDialog.Document = printDocument;
         }
 
-        private void DynoForm_Resize(object sender, EventArgs e) {
-        }
-
         private void btnStart_Click(object sender, EventArgs e) {
             if (!m_obdInterface.ConnectedStatus) {
                 MessageBox.Show("A vehicle connection must first be established.", "Connection Required", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -71,13 +68,13 @@ namespace SH_OBD {
             OBDParameterValue value;
             DatedValue d_value;
             while (m_Capture) {
-                value = m_obdInterface.getValue("SAE.RPM", true);
+                value = m_obdInterface.GetValue("SAE.RPM", true);
                 if (!value.ErrorDetected) {
                     d_value = new DatedValue(value.DoubleValue);
                     d_value.Date = DateTime.Now;
                     if (Convert.ToDecimal(d_value.Value) >= numFromRPM.Value && Convert.ToDecimal(d_value.Value) <= numToRPM.Value) {
                         m_RpmValues.Add(d_value);
-                        value = m_obdInterface.getValue("SAE.VSS", false);
+                        value = m_obdInterface.GetValue("SAE.VSS", false);
                         if (!value.ErrorDetected) {
                             d_value = new DatedValue(value.DoubleValue * (double)m_obdInterface.ActiveProfile.SpeedCalibrationFactor);
                             d_value.Date = DateTime.Now;

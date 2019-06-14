@@ -19,12 +19,12 @@ namespace SH_OBD {
         private void SettingsForm_Load(object sender, EventArgs e) {
             try {
                 for (int iComPort = 0; iComPort < 50; ++iComPort) {
-                    if (CommBase.isPortAvailable(iComPort)) {
+                    if (CommBase.IsPortAvailable(iComPort)) {
                         comboPorts.Items.Add("COM" + iComPort.ToString());
                     }
                 }
 
-                if (CommBase.isPortAvailable(m_preferences.ComPort)) {
+                if (CommBase.IsPortAvailable(m_preferences.ComPort)) {
                     comboPorts.SelectedItem = m_preferences.ComPortName;
                 } else if (comboPorts.Items.Count > 0) {
                     comboPorts.SelectedIndex = 0;

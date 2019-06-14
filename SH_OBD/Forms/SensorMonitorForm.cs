@@ -17,6 +17,8 @@ namespace SH_OBD {
         private OBDInterface m_obdInterface;
         private DateTime m_dtStartTime;
 
+        private const int _margin = 5;
+
         private static List<OBDParameter> m_ListSensors;
         private static List<SensorLogItem> m_ListLog;
 
@@ -75,16 +77,15 @@ namespace SH_OBD {
         }
 
         private void SensorMonitorForm_Resize(object sender, EventArgs e) {
-            int index = 0;
-            while (index < panelDisplay.Controls.Count) {
-                Control control = panelDisplay.Controls[index];
-                control.Width = panelDisplay.Width / 2 - 8;
-                if (index % 2 != 0) {
-                    control.Location = new Point(panelDisplay.Width / 2 + 3, (control.Height + 5) * (index / 2) + 5);
+            Control control;
+            for (int i = 0; i < panelDisplay.Controls.Count; i++) {
+                control = panelDisplay.Controls[i];
+                control.Width = (panelDisplay.Width - _margin * 3) / 2;
+                if (i % 2 == 0) {
+                    control.Location = new Point(_margin, (control.Height + _margin) * (i / 2) + _margin);
                 } else {
-                    control.Location = new Point(0, (control.Height + 5) * (index / 2) + 5);
+                    control.Location = new Point(control.Width + _margin * 2, (control.Height + _margin) * (i / 2) + _margin);
                 }
-                ++index;
             }
             panelDisplay.Refresh();
         }
@@ -128,7 +129,7 @@ namespace SH_OBD {
                 if (m_obdInterface.ConnectedStatus && IsLogging) {
                     foreach (SensorDisplayControl control in panelDisplay.Controls) {
                         OBDParameter param = (OBDParameter)control.Tag;
-                        OBDParameterValue value = m_obdInterface.getValue(param, radioDisplayEnglish.Checked);
+                        OBDParameterValue value = m_obdInterface.GetValue(param, radioDisplayEnglish.Checked);
                         if (!value.ErrorDetected) {
                             string text = param.EnglishUnitLabel;
                             if (!radioDisplayEnglish.Checked)
@@ -165,10 +166,11 @@ namespace SH_OBD {
             panelDisplay.Controls.Clear();
             int index = 0;
             foreach (OBDParameter param in SensorMonitorForm.m_ListSensors) {
-                SensorDisplayControl control = new SensorDisplayControl();
-                control.Title = param.Name;
-                control.Size = new Size(panelDisplay.Width / 2 - 8, 65);
-                control.Tag = param;
+                SensorDisplayControl control = new SensorDisplayControl {
+                    Title = param.Name,
+                    Size = new Size(panelDisplay.Width / 2 - 8, 65),
+                    Tag = param
+                };
                 if (radioDisplayEnglish.Checked) {
                     control.SetDisplayMode(1);
                 } else {
@@ -177,10 +179,10 @@ namespace SH_OBD {
 
                 control.Refresh();
 
-                if (index % 2 != 0) {
-                    control.Location = new Point(panelDisplay.Width / 2 + 3, (control.Height + 5) * (index / 2) + 5);
+                if (index % 2 == 0) {
+                    control.Location = new Point(_margin, (control.Height + _margin) * (index / 2) + _margin);
                 } else {
-                    control.Location = new Point(5, (control.Height + 5) * (index / 2) + 5);
+                    control.Location = new Point(control.Width + _margin * 2, (control.Height + _margin) * (index / 2) + _margin);
                 }
 
                 panelDisplay.Controls.Add((Control)control);

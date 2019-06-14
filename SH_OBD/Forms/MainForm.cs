@@ -6,12 +6,12 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SH_OBD {
     public partial class MainForm : Form {
         private Dictionary<string, Form> dicSubForms;
-        private CommForm f_Start;
         private TestForm f_MonitorTests;
         private DTCForm f_DTC;
         private FreezeFramesForm f_FreezeFrames;
@@ -25,6 +25,7 @@ namespace SH_OBD {
         private TerminalForm f_Terminal;
         private CommLogForm f_CommLog;
         private OBDInterface m_obdInterface;
+
         private Font m_boldFont, m_originFont;
 
         public MainForm() {
@@ -32,7 +33,8 @@ namespace SH_OBD {
             m_obdInterface = new OBDInterface();
             m_obdInterface.OnConnect += new OBDInterface.__Delegate_OnConnect(On_OBD_Connect);
             m_obdInterface.OnDisconnect += new OBDInterface.__Delegate_OnDisconnect(On_OBD_Disconnect);
-            m_originFont = buttonSettings.Font;
+
+            m_originFont = buttonDefaultFontStyle.Font;
             m_boldFont = new Font(m_originFont, FontStyle.Bold);
 
             if (m_obdInterface.ActiveProfile != null) {
@@ -54,7 +56,6 @@ namespace SH_OBD {
         void InitSubForm() {
             dicSubForms = new Dictionary<string, Form>();
 
-            f_Start = new CommForm(m_obdInterface);
             f_MonitorTests = new TestForm(m_obdInterface);
             f_DTC = new DTCForm(m_obdInterface);
             f_FreezeFrames = new FreezeFramesForm(m_obdInterface);
@@ -68,7 +69,6 @@ namespace SH_OBD {
             f_Terminal = new TerminalForm(m_obdInterface);
             f_CommLog = new CommLogForm();
 
-            buttonStart.Text = Properties.Resources.buttonName_Start;
             buttonTests.Text = Properties.Resources.buttonName_Tests;
             buttonDTC.Text = Properties.Resources.buttonName_DTC;
             buttonFF.Text = Properties.Resources.buttonName_FreezeFrames;
@@ -82,11 +82,6 @@ namespace SH_OBD {
             buttonTerminal.Text = Properties.Resources.buttonName_Terminal;
             buttonCommLog.Text = Properties.Resources.buttonName_Log;
 
-            buttonUserPrefs.Text = Properties.Resources.buttonName_UserPrefs;
-            buttonVehicles.Text = Properties.Resources.buttonName_Vehicles;
-            buttonSettings.Text = Properties.Resources.buttonName_Settings;
-
-            dicSubForms.Add(Properties.Resources.buttonName_Start, f_Start);
             dicSubForms.Add(Properties.Resources.buttonName_Tests, f_MonitorTests);
             dicSubForms.Add(Properties.Resources.buttonName_DTC, f_DTC);
             dicSubForms.Add(Properties.Resources.buttonName_FreezeFrames, f_FreezeFrames);
@@ -118,22 +113,26 @@ namespace SH_OBD {
         }
 
         private void On_OBD_Connect() {
-            StatusLabelDeviceName.Text = m_obdInterface.getDeviceIDString().Trim();
-            StatusLabelConnStatus.Text = "OBD设备已连接";
-            StatusLabelConnStatus.ForeColor = Color.Green;
-            StatusLabelVehicle.Text = m_obdInterface.ActiveProfile.Name;
-            buttonUserPrefs.Enabled = false;
-            buttonVehicles.Enabled = false;
-            buttonSettings.Enabled = false;
+            if (InvokeRequired) {
+                this.Invoke((EventHandler)delegate {
+                    StatusLabelDeviceName.Text = m_obdInterface.GetDeviceIDString().Trim();
+                    StatusLabelConnStatus.Text = "OBD接口已连接";
+                    StatusLabelConnStatus.ForeColor = Color.Green;
+                    StatusLabelVehicle.Text = m_obdInterface.ActiveProfile.Name;
+                    toolStripBtnUserPrefs.Enabled = false;
+                    toolStripBtnVehicles.Enabled = false;
+                    toolStripBtnSettings.Enabled = false;
+                });
+            }
             BroadcastConnectionUpdate();
         }
 
         private void On_OBD_Disconnect() {
-            StatusLabelConnStatus.Text = "OBD设备未连接";
+            StatusLabelConnStatus.Text = "OBD接口未连接";
             StatusLabelConnStatus.ForeColor = Color.Red;
-            buttonUserPrefs.Enabled = true;
-            buttonVehicles.Enabled = true;
-            buttonSettings.Enabled = true;
+            toolStripBtnUserPrefs.Enabled = true;
+            toolStripBtnVehicles.Enabled = true;
+            toolStripBtnSettings.Enabled = true;
             BroadcastConnectionUpdate();
             MessageBox.Show("与OBD设备的连接已断开", "断开OBD设备", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
@@ -141,7 +140,7 @@ namespace SH_OBD {
         private void Button_Click(object sender, EventArgs e) {
             if (sender is Button button) {
                 if (panel2.Controls.Count > 0 && panel2.Controls[0] is Form activeForm) {
-                    if (activeForm == dicSubForms[Properties.Resources.buttonName_SensorGrid] && f_SensorGrid.IsLogging ) {
+                    if (activeForm == dicSubForms[Properties.Resources.buttonName_SensorGrid] && f_SensorGrid.IsLogging) {
                         if (DialogResult.Yes == MessageBox.Show("当前记录过程将会中断.\r\n\r\n是否继续?", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation)) {
                             f_SensorGrid.PauseLogging();
                         } else {
@@ -197,18 +196,26 @@ namespace SH_OBD {
             }
         }
 
-        private void buttonUserPrefs_Click(object sender, EventArgs e) {
+        private void MainForm_Load(object sender, EventArgs e) {
+            if (!m_obdInterface.LoadParameters(".\\configs\\generic.xml")) {
+                MessageBox.Show("加载generic.xml配置文件失败!", "出错", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            if (m_obdInterface.LoadDTCDefinitions(".\\configs\\dtc.xml") == 0) {
+                MessageBox.Show("加载dtc.xml配置文件失败!", "出错", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+
+        private void toolStripBtnUserPrefs_Click(object sender, EventArgs e) {
             UserPreferences userPreferences = m_obdInterface.UserPreferences;
             int num = (int)new UserPreferencesForm(userPreferences).ShowDialog();
             m_obdInterface.SaveUserPreferences(userPreferences);
         }
 
-        private void buttonVehicles_Click(object sender, EventArgs e) {
+        private void toolStripBtnVehicles_Click(object sender, EventArgs e) {
             int num = (int)new VehicleForm(m_obdInterface).ShowDialog();
-            f_Start.UpdateForm();
         }
 
-        private void buttonSettings_Click(object sender, EventArgs e) {
+        private void toolStripBtnSettings_Click(object sender, EventArgs e) {
             Preferences commSettings = m_obdInterface.CommSettings;
             new SettingsForm(commSettings).ShowDialog();
             m_obdInterface.SaveCommSettings(commSettings);
@@ -219,13 +226,60 @@ namespace SH_OBD {
             }
         }
 
-        private void MainForm_Load(object sender, EventArgs e) {
-            if (!m_obdInterface.LoadParameters("generic.xml")) {
-                MessageBox.Show("加载generic.xml配置文件失败!", "出错", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        private void toolStripBtnConnect_Click(object sender, EventArgs e) {
+            toolStripBtnConnect.Enabled = false;
+            toolStripBtnDisconnect.Enabled = true;
+
+            m_obdInterface.LogItem("SH_OBD");
+            m_obdInterface.LogItem("连接过程初始化");
+
+            if (m_obdInterface.CommSettings.AutoDetect) {
+                m_obdInterface.LogItem("   自动探测OBD硬件设备: 打开");
+            } else {
+                m_obdInterface.LogItem("   自动探测OBD硬件设备: 关闭");
             }
-            if (m_obdInterface.LoadDTCDefinitions("dtc.xml") == 0) {
-                MessageBox.Show("加载dtc.xml配置文件失败!", "出错", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+            m_obdInterface.LogItem(string.Format("   波特率: {0}", m_obdInterface.CommSettings.BaudRate));
+            m_obdInterface.LogItem(string.Format("   默认端口: {0}", m_obdInterface.CommSettings.ComPortName));
+
+            switch (m_obdInterface.CommSettings.HardwareIndex) {
+                case HardwareType.Automatic:
+                    m_obdInterface.LogItem("   设备接口: 自动探测");
+                    break;
+                case HardwareType.ELM327:
+                    m_obdInterface.LogItem("   设备接口: ELM327");
+                    break;
+                case HardwareType.ELM320:
+                    m_obdInterface.LogItem("   设备接口: ELM320");
+                    break;
+                case HardwareType.ELM322:
+                    m_obdInterface.LogItem("   设备接口: ELM322");
+                    break;
+                case HardwareType.ELM323:
+                    m_obdInterface.LogItem("   设备接口: ELM323");
+                    break;
+                case HardwareType.CANtact:
+                    m_obdInterface.LogItem("   设备接口: CANtact");
+                    break;
+                default:
+                    throw new Exception("不支持的硬件设备");
             }
+
+
+            m_obdInterface.LogItem(string.Format("   OBD协议: {0}", m_obdInterface.CommSettings.ProtocolName));
+
+            if (m_obdInterface.CommSettings.DoInitialization) {
+                m_obdInterface.LogItem("   初始化: 是");
+            } else {
+                m_obdInterface.LogItem("   初始化: 否");
+            }
+
+            Task.Factory.StartNew(ConnectThreadNew);
+        }
+
+        private void toolStripBtnDisconnect_Click(object sender, EventArgs e) {
+            ShowDisconnectedLabel();
+            m_obdInterface.Disconnect();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
@@ -234,6 +288,77 @@ namespace SH_OBD {
                 m_obdInterface.Disconnect();
             }
             Monitor.Exit(m_obdInterface);
+        }
+
+        private void ConnectThreadNew() {
+            ShowConnectingLabel();
+            if (m_obdInterface.CommSettings.AutoDetect) {
+                if (m_obdInterface.InitDeviceAuto()) {
+                    m_obdInterface.LogItem("OBD连接已建立！");
+                    ShowConnectedLabel();
+                    OBDParameter param = new OBDParameter {
+                        OBDRequest = "0902",
+                        Service = 9,
+                        Parameter = 2,
+                        ValueTypes = 4
+                    };
+                    m_obdInterface.GetValue(param, true);
+                } else {
+                    MessageBox.Show("软件无法找到与本机相连的兼容的OBD-II硬件设备。\r\n\r\n请确认没有其他软件正在使用所需端口。", "自动探测失败", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    m_obdInterface.LogItem("无法找到兼容的OBD-II协议设备。");
+                    ShowDisconnectedLabel();
+                }
+            } else {
+                int baudRate = m_obdInterface.CommSettings.BaudRate;
+                int comPort = m_obdInterface.CommSettings.ComPort;
+                if (m_obdInterface.InitDevice(m_obdInterface.CommSettings.HardwareIndex, comPort, baudRate, m_obdInterface.CommSettings.ProtocolIndex)) {
+                    m_obdInterface.LogItem("连接已建立！");
+                    ShowConnectedLabel();
+                } else {
+                    MessageBox.Show(
+                        string.Format("软件无法找到与 {0} 连接的波特率为 {1} bps 的兼容的OBD-II协议设备。\r\n\r\n请确认没有其他软件正在使用所需端口且波特率设置正确。",
+                            m_obdInterface.CommSettings.ComPortName,
+                            m_obdInterface.CommSettings.BaudRate
+                            ),
+                        "连接失败",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Exclamation
+                        );
+                    m_obdInterface.LogItem("无法找到兼容的OBD-II协议设备。");
+                    ShowDisconnectedLabel();
+                }
+            }
+        }
+
+        private void ShowConnectedLabel() {
+            this.Invoke((EventHandler)delegate {
+                StatusLabelConnStatus.ForeColor = Color.Green;
+                StatusLabelConnStatus.Text = "OBD接口已连接";
+            });
+        }
+
+        private void ShowConnectingLabel() {
+            if (InvokeRequired) {
+                BeginInvoke((MethodInvoker)delegate { ShowConnectingLabel(); });
+            } else {
+                StatusLabelConnStatus.ForeColor = Color.Black;
+                StatusLabelConnStatus.Text = "OBD接口连接中...";
+            }
+        }
+
+        private void ShowDisconnectedLabel() {
+            if (InvokeRequired) {
+                BeginInvoke((MethodInvoker)delegate { ShowDisconnectedLabel(); });
+            } else {
+                StatusLabelConnStatus.ForeColor = Color.Red;
+                StatusLabelConnStatus.Text = "OBD接口已断开";
+                toolStripBtnConnect.Enabled = true;
+                toolStripBtnDisconnect.Enabled = false;
+            }
+        }
+
+        private void ShowOBD2InitFailedError() {
+            MessageBox.Show("当前OBD硬件设备已探测到并成功初始化，但是无法与车辆进行通讯。请确认车辆点火键处于ON位置或者发动机处于运转中。\r\n\r\n如果使用 ELM320 (PWM)、ELM322 (VPW)、ELM323 (ISO)设备：\r\n\t请确认车辆OBD协议与当前OBD设备匹配。\r\n\r\n如果使用 ELM327 (VPW, PWM, ISO, and CAN)设备：\r\n\t请确认当前OBD设备的通讯设置。\r\n\t尝试手动设置OBD协议。\r\n\t尝试旁路初始化。", "初始化错误", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
     }
