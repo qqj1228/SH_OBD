@@ -23,7 +23,6 @@ namespace SH_OBD {
         private FuelEconomyForm f_FuelEconomy;
         private ReportGeneratorForm f_Report;
         private TerminalForm f_Terminal;
-        private CommLogForm f_CommLog;
         private OBDInterface m_obdInterface;
 
         private Font m_boldFont, m_originFont;
@@ -49,7 +48,6 @@ namespace SH_OBD {
             }
 
             InitSubForm();
-            m_obdInterface.EnableLogFile(true);
             StatusLabelConnStatus.ForeColor = Color.Red;
         }
 
@@ -67,7 +65,6 @@ namespace SH_OBD {
             f_FuelEconomy = new FuelEconomyForm(m_obdInterface);
             f_Report = new ReportGeneratorForm(m_obdInterface);
             f_Terminal = new TerminalForm(m_obdInterface);
-            f_CommLog = new CommLogForm();
 
             buttonTests.Text = Properties.Resources.buttonName_Tests;
             buttonDTC.Text = Properties.Resources.buttonName_DTC;
@@ -93,7 +90,6 @@ namespace SH_OBD {
             dicSubForms.Add(Properties.Resources.buttonName_FuelEconomy, f_FuelEconomy);
             dicSubForms.Add(Properties.Resources.buttonName_Report, f_Report);
             dicSubForms.Add(Properties.Resources.buttonName_Terminal, f_Terminal);
-            dicSubForms.Add(Properties.Resources.buttonName_Log, f_CommLog);
         }
 
         private void BroadcastConnectionUpdate() {
@@ -198,9 +194,11 @@ namespace SH_OBD {
 
         private void MainForm_Load(object sender, EventArgs e) {
             if (!m_obdInterface.LoadParameters(".\\configs\\generic.xml")) {
+                m_obdInterface.TraceError("Failed to load generic parameter definitions!");
                 MessageBox.Show("加载generic.xml配置文件失败!", "出错", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             if (m_obdInterface.LoadDTCDefinitions(".\\configs\\dtc.xml") == 0) {
+                m_obdInterface.TraceError("Failed to load DTC definitions!");
                 MessageBox.Show("加载dtc.xml配置文件失败!", "出错", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
@@ -230,48 +228,47 @@ namespace SH_OBD {
             toolStripBtnConnect.Enabled = false;
             toolStripBtnDisconnect.Enabled = true;
 
-            m_obdInterface.LogItem("SH_OBD");
-            m_obdInterface.LogItem("连接过程初始化");
+            m_obdInterface.TraceInfo("Connection Procedure Initiated");
 
             if (m_obdInterface.CommSettings.AutoDetect) {
-                m_obdInterface.LogItem("   自动探测OBD硬件设备: 打开");
+                m_obdInterface.TraceInfo("   Automatic Hardware Detection: ON");
             } else {
-                m_obdInterface.LogItem("   自动探测OBD硬件设备: 关闭");
+                m_obdInterface.TraceInfo("   Automatic Hardware Detection: OFF");
             }
 
-            m_obdInterface.LogItem(string.Format("   波特率: {0}", m_obdInterface.CommSettings.BaudRate));
-            m_obdInterface.LogItem(string.Format("   默认端口: {0}", m_obdInterface.CommSettings.ComPortName));
+            m_obdInterface.TraceInfo(string.Format("   Baud Rate: {0}", m_obdInterface.CommSettings.BaudRate));
+            m_obdInterface.TraceInfo(string.Format("   Default Port: {0}", m_obdInterface.CommSettings.ComPortName));
 
             switch (m_obdInterface.CommSettings.HardwareIndex) {
                 case HardwareType.Automatic:
-                    m_obdInterface.LogItem("   设备接口: 自动探测");
+                    m_obdInterface.TraceInfo("   Interface: Auto-Detect");
                     break;
                 case HardwareType.ELM327:
-                    m_obdInterface.LogItem("   设备接口: ELM327");
+                    m_obdInterface.TraceInfo("   Interface: ELM327");
                     break;
                 case HardwareType.ELM320:
-                    m_obdInterface.LogItem("   设备接口: ELM320");
+                    m_obdInterface.TraceInfo("   Interface: ELM320");
                     break;
                 case HardwareType.ELM322:
-                    m_obdInterface.LogItem("   设备接口: ELM322");
+                    m_obdInterface.TraceInfo("   Interface: ELM322");
                     break;
                 case HardwareType.ELM323:
-                    m_obdInterface.LogItem("   设备接口: ELM323");
+                    m_obdInterface.TraceInfo("   Interface: ELM323");
                     break;
                 case HardwareType.CANtact:
-                    m_obdInterface.LogItem("   设备接口: CANtact");
+                    m_obdInterface.TraceInfo("   Interface: CANtact");
                     break;
                 default:
-                    throw new Exception("不支持的硬件设备");
+                    m_obdInterface.TraceInfo("Bad hardware type.");
+                    throw new Exception("Bad hardware type.");
             }
 
-
-            m_obdInterface.LogItem(string.Format("   OBD协议: {0}", m_obdInterface.CommSettings.ProtocolName));
+            m_obdInterface.TraceInfo(string.Format("   Protocol: {0}", m_obdInterface.CommSettings.ProtocolName));
 
             if (m_obdInterface.CommSettings.DoInitialization) {
-                m_obdInterface.LogItem("   初始化: 是");
+                m_obdInterface.TraceInfo("   Initialize: YES");
             } else {
-                m_obdInterface.LogItem("   初始化: 否");
+                m_obdInterface.TraceInfo("   Initialize: NO");
             }
 
             Task.Factory.StartNew(ConnectThreadNew);
@@ -294,7 +291,7 @@ namespace SH_OBD {
             ShowConnectingLabel();
             if (m_obdInterface.CommSettings.AutoDetect) {
                 if (m_obdInterface.InitDeviceAuto()) {
-                    m_obdInterface.LogItem("OBD连接已建立！");
+                    m_obdInterface.TraceInfo("Connection Established!");
                     ShowConnectedLabel();
                     OBDParameter param = new OBDParameter {
                         OBDRequest = "0902",
@@ -304,17 +301,18 @@ namespace SH_OBD {
                     };
                     m_obdInterface.GetValue(param, true);
                 } else {
+                    m_obdInterface.TraceWarning("Failed to find a compatible OBD-II interface.");
                     MessageBox.Show("无法找到与本机相连的兼容的OBD-II硬件设备。\r\n请确认没有其他软件正在使用所需端口。", "自动探测失败", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    m_obdInterface.LogItem("无法找到兼容的OBD-II协议设备。");
                     ShowDisconnectedLabel();
                 }
             } else {
                 int baudRate = m_obdInterface.CommSettings.BaudRate;
                 int comPort = m_obdInterface.CommSettings.ComPort;
                 if (m_obdInterface.InitDevice(m_obdInterface.CommSettings.HardwareIndex, comPort, baudRate, m_obdInterface.CommSettings.ProtocolIndex)) {
-                    m_obdInterface.LogItem("连接已建立！");
+                    m_obdInterface.TraceInfo("Connection Established!");
                     ShowConnectedLabel();
                 } else {
+                    m_obdInterface.TraceWarning("Failed to find a compatible OBD-II interface.");
                     MessageBox.Show(
                         string.Format("在 \"端口：{0}，波特率：{1}\" 通讯设置下，无法找到兼容的OBD-II协议设备。\r\n请确认没有其他软件正在使用所需端口且波特率设置正确。",
                             m_obdInterface.CommSettings.ComPortName,
@@ -324,7 +322,6 @@ namespace SH_OBD {
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Exclamation
                         );
-                    m_obdInterface.LogItem("无法找到兼容的OBD-II协议设备。");
                     ShowDisconnectedLabel();
                 }
             }
@@ -355,10 +352,6 @@ namespace SH_OBD {
                 toolStripBtnConnect.Enabled = true;
                 toolStripBtnDisconnect.Enabled = false;
             }
-        }
-
-        private void ShowOBD2InitFailedError() {
-            MessageBox.Show("当前OBD硬件设备已探测到并成功初始化，但是无法与车辆进行通讯。请确认车辆点火键处于ON位置或者发动机处于运转中。\r\n如果使用 ELM320 (PWM)、ELM322 (VPW)、ELM323 (ISO)设备：\r\n\t请确认车辆OBD协议与当前OBD设备匹配。\r\n如果使用 ELM327 (VPW, PWM, ISO, and CAN)设备：\r\n\t请确认当前OBD设备的通讯设置。\r\n\t尝试手动设置OBD协议。\r\n\t尝试旁路初始化。", "初始化错误", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
     }

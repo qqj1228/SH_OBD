@@ -4,7 +4,7 @@ namespace SH_OBD {
     public class OBDDeviceELM327 : OBDDevice {
         private ProtocolType m_iProtocol;
 
-        public OBDDeviceELM327(OBDCommLog log) : base(log) {
+        public OBDDeviceELM327(Logger log) : base(log) {
             try {
                 m_iProtocol = ProtocolType.Unknown;
             } catch (Exception ex) {
@@ -122,7 +122,7 @@ namespace SH_OBD {
 
         public void SetProtocol(ProtocolType iProtocol) {
             m_iProtocol = iProtocol;
-            base.m_commLog.AddItem(string.Format("Protocol switched to: {0}", Settings.ProtocolNames[(int)iProtocol]));
+            m_log.TraceInfo(string.Format("Protocol switched to: {0}", Settings.ProtocolNames[(int)iProtocol]));
             switch (iProtocol) {
                 case ProtocolType.J1850_PWM:
                     m_Parser = new OBDParser_J1850_PWM();
@@ -180,6 +180,7 @@ namespace SH_OBD {
                 }
                 --attempts;
             }
+            m_log.TraceWarning("Current device can't support command \"" + command + "\"!");
             return false;
         }
 

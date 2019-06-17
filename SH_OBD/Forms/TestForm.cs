@@ -480,8 +480,8 @@ namespace SH_OBD {
 
         private void btnUpdate_Click(object sender, EventArgs e) {
             if (!m_obd2Interface.ConnectedStatus) {
+                m_obd2Interface.TraceError("Test Form, Attempted refresh without vehicle connection.");
                 MessageBox.Show("A vehicle connection must first be established.", "Connection Required", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                m_obd2Interface.LogItem("Error. Test Form. Attempted refresh without vehicle connection.");
             } else {
                 btnUpdate.Enabled = false;
                 UpdateTests();

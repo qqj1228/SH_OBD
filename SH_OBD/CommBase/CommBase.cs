@@ -8,25 +8,20 @@ using System.Xml.Serialization;
 
 namespace SH_OBD {
     public abstract class CommBase : IDisposable {
-        public enum PortStatus {
-            Absent = -1,
-            Unavailable = 0,
-            Available = 1,
-        }
-
         private SerialPortClass m_serial = null;
-
-        private IntPtr m_ptrUWO = IntPtr.Zero;
-        private Thread m_RxThread = (Thread)null;
+        private Logger m_log;
         private bool m_online = false;
         private bool m_auto = false;
         private bool m_checkSends = true;
-        private Exception m_RxException = (Exception)null;
-        private bool m_RxExceptionReported = false;
         private int m_writeCount = 0;
-        private ManualResetEvent m_writeEvent = new ManualResetEvent(false);
-        private ManualResetEvent m_startEvent = new ManualResetEvent(false);
-        private bool[] m_empty = new bool[1];
+
+        public CommBase(Logger log) {
+            m_log = log;
+        }
+
+        ~CommBase() {
+            Close();
+        }
 
         public bool Online {
             get {
@@ -36,10 +31,6 @@ namespace SH_OBD {
                     return false;
                 }
             }
-        }
-
-        ~CommBase() {
-            Close();
         }
 
         public static string AltName(string s) {
@@ -85,9 +76,6 @@ namespace SH_OBD {
             );
             m_checkSends = commBaseSettings.CheckAllSends;
             m_writeCount = 0;
-            m_empty[0] = true;
-            m_RxException = (Exception)null;
-            m_RxExceptionReported = false;
             m_auto = false;
             m_serial.DataReceived += new SerialPortClass.SerialPortDataReceiveEventArgs(SerialDataReceived);
             try {
@@ -103,7 +91,8 @@ namespace SH_OBD {
                 } else {
                     return false;
                 }
-            } catch (Exception) {
+            } catch (Exception e) {
+                m_log.TraceFatal(string.Format("Can't open {0}! Reason: {1}", commBaseSettings.Port, e.Message));
                 return false;
             }
         }
@@ -121,7 +110,6 @@ namespace SH_OBD {
             m_auto = false;
             BeforeClose(false);
             InternalClose();
-            m_RxException = (Exception)null;
             m_online = false;
         }
 
@@ -134,18 +122,11 @@ namespace SH_OBD {
         }
 
         protected void ThrowException(string reason) {
-            if (Thread.CurrentThread == m_RxThread) {
-                throw new CommPortException(reason);
-            }
             if (m_online) {
                 BeforeClose(true);
                 InternalClose();
             }
-            if (m_RxException == null) {
-                throw new CommPortException(reason);
-            } else {
-                throw new CommPortException(m_RxException);
-            }
+            throw new CommPortException(reason);
         }
 
         protected void Send(byte[] tosend) {
@@ -155,6 +136,7 @@ namespace SH_OBD {
                 m_serial.SendData(tosend, 0, m_writeCount);
                 m_writeCount = 0;
             } catch (Exception e) {
+                m_log.TraceError("Send failed: " + e.Message);
                 ThrowException("Send failed: " + e.Message);
             }
         }
@@ -183,17 +165,14 @@ namespace SH_OBD {
         }
 
         private bool CheckOnline() {
-            if (m_RxException != null && !m_RxExceptionReported) {
-                m_RxExceptionReported = true;
-                ThrowException("rx");
-            }
             if (m_online) {
                 return true;
             } else {
                 if (m_auto && Open()) {
                     return true;
                 }
-                ThrowException("Offline");
+                m_log.TraceError("CheckOnline: Offline");
+                ThrowException("CheckOnline: Offline");
                 return false;
             }
         }
@@ -216,6 +195,12 @@ namespace SH_OBD {
                 Port = port;
                 BaudRate = baudrate;
             }
+        }
+
+        public enum PortStatus {
+            Absent = -1,
+            Unavailable = 0,
+            Available = 1,
         }
 
         public enum ASCII : byte {

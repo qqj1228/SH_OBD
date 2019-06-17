@@ -39,8 +39,8 @@ namespace SH_OBD {
             richTextDTC.Text = "";
             richTextPending.Text = "";
             if (!m_obdInterface.ConnectedStatus) {
+                m_obdInterface.TraceError("DTC Form, Attempted refresh without vehicle connection.");
                 MessageBox.Show("A vehicle connection must first be established.", "Connection Required", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                m_obdInterface.LogItem("Error. DTC Form. Attempted refresh without vehicle connection.");
             } else {
                 ReadCodes();
                 RefreshDisplay();
@@ -194,8 +194,8 @@ namespace SH_OBD {
 
         private void btnErase_Click(object sender, EventArgs e) {
             if (!m_obdInterface.ConnectedStatus) {
+                m_obdInterface.TraceError("DTC Form, Attempted to erase codes without vehicle connection.");
                 MessageBox.Show("A vehicle connection must first be established.", "Connection Required", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                m_obdInterface.LogItem("Error. DTC Form. Attempted to erase codes without vehicle connection.");
             } else if (MessageBox.Show("This will clear all trouble codes from your vehicle.\n\n" + "You should have repaired any problems indicated by these codes.\n\n" + "Also, your vehicle may run poorly for a short time while the system " + "recalibrates itself.\n\nAre you sure you want to reset your codes?", "Clear Trouble Codes?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == DialogResult.Yes) {
                 m_obdInterface.ClearCodes();
                 RefreshDiagnosticData();

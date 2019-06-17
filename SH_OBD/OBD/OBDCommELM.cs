@@ -6,21 +6,20 @@ namespace SH_OBD {
         protected int m_BaudRate = 38400;
         protected int m_Timeout = 300;
         protected CommBase.ASCII m_asciiRxTerm = (CommBase.ASCII)62;
+        protected Logger m_log;
 
-        protected OBDCommLog m_commLog;
-
-        public OBDCommELM(OBDCommLog log) {
-            m_commLog = log;
+        public OBDCommELM(Logger log) : base(log) {
+            m_log = log;
         }
 
         public void SetPort(int iPort) {
             m_Port = "COM" + iPort.ToString();
-            m_commLog.AddItem(string.Format("Port set to {0}", m_Port));
+            m_log.TraceInfo(string.Format("Port set to {0}", m_Port));
         }
 
         public void SetBaudRate(int iBaudRate) {
             m_BaudRate = iBaudRate;
-            m_commLog.AddItem(string.Format("Baud rate set to {0}", m_BaudRate.ToString()));
+            m_log.TraceInfo(string.Format("Baud rate set to {0}", m_BaudRate.ToString()));
         }
 
         public int GetBaudRate() {
@@ -30,7 +29,7 @@ namespace SH_OBD {
         public void SetTimeout(int iTimeout) {
             m_Timeout = iTimeout;
             SetTransTimeout(iTimeout);
-            m_commLog.AddItem(string.Format("Timeout set to {0} ms", m_Timeout.ToString()));
+            m_log.TraceInfo(string.Format("Timeout set to {0} ms", m_Timeout.ToString()));
         }
 
         public void SetRxTerminator(CommBase.ASCII ch) {
@@ -40,15 +39,15 @@ namespace SH_OBD {
         public string GetResponse(string command) {
             string response;
             try {
-                m_commLog.AddItem(string.Format("TX: {0}", command));
+                m_log.TraceInfo(string.Format("TX: {0}", command));
                 response = Transact(command);
-                m_commLog.AddItem(string.Format("RX: {0}", response.Replace("\r", @"\r")));
+                m_log.TraceInfo(string.Format("RX: {0}", response.Replace("\r", @"\r")));
             } catch (Exception ex) {
-                m_commLog.AddItem(ex.Message);
+                m_log.TraceError(ex.Message);
                 if (string.Compare(ex.Message, "Timeout") == 0) {
                     Open();
                 }
-                m_commLog.AddItem("RX: COMM TIMED OUT!");
+                m_log.TraceError("RX: COMM TIMED OUT!");
                 response = "TIMEOUT";
             }
             return response;

@@ -53,6 +53,7 @@
     <Compile Include="Classes\DatedValue.cs" />
     <Compile Include="Classes\DTC.cs" />
     <Compile Include="Classes\DynoRecord.cs" />
+    <Compile Include="Classes\Logger.cs" />
     <Compile Include="Classes\Settings.cs" />
     <Compile Include="Classes\Sensor.cs" />
     <Compile Include="Classes\SensorLogItem.cs" />
@@ -65,12 +66,6 @@
     <Compile Include="Classes\VehicleProfile.cs" />
     <Compile Include="Classes\WheelStruc.cs" />
     <Compile Include="CommBase\CommBase.cs" />
-    <Compile Include="Forms\CommLogForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\CommLogForm.Designer.cs">
-      <DependentUpon>CommLogForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\DynoForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -131,8 +126,6 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="OBD\OBDCommELM.cs" />
-    <Compile Include="OBD\OBDCommLog.cs" />
-    <Compile Include="OBD\OBDCommLogItem.cs" />
     <Compile Include="OBD\OBDDevice.cs" />
     <Compile Include="OBD\OBDDeviceELM320.cs" />
     <Compile Include="OBD\OBDDeviceELM322.cs" />
@@ -225,9 +218,6 @@
     <Compile Include="Forms\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Forms\CommLogForm.resx">
-      <DependentUpon>CommLogForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\DTCForm.resx">
       <DependentUpon>DTCForm.cs</DependentUpon>
     </EmbeddedResource>

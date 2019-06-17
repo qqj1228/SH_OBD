@@ -139,7 +139,7 @@
             this.groupTotal.Size = new System.Drawing.Size(156, 97);
             this.groupTotal.TabIndex = 12;
             this.groupTotal.TabStop = false;
-            this.groupTotal.Visible = false;
+            this.groupTotal.Text = "故障码数量";
             // 
             // lblTotalCodes
             // 
@@ -150,7 +150,6 @@
             this.lblTotalCodes.TabIndex = 2;
             this.lblTotalCodes.Text = "0";
             this.lblTotalCodes.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblTotalCodes.Visible = false;
             // 
             // btnErase
             // 

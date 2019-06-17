@@ -22,7 +22,7 @@ namespace SH_OBD {
         private List<DTC> m_listDTC;
         private List<OBDParameter> m_listAllParameters;
         private List<OBDParameter> m_listSupportedParameters;
-        private OBDCommLog m_commLog;
+        private Logger m_log;
         private UserPreferences m_userpreferences;
         private Settings m_settings;
         private List<VehicleProfile> m_VehicleProfiles;
@@ -34,8 +34,7 @@ namespace SH_OBD {
         public event OBDInterface.__Delegate_OnConnect OnConnect;
 
         public OBDInterface() {
-            m_commLog = new OBDCommLog();
-            m_commLog.Delete();
+            m_log = new Logger("./log", EnumLogLevel.LogLevelAll, true, 100);
             SetDevice(HardwareType.ELM327);
             m_listAllParameters = new List<OBDParameter>();
             m_listSupportedParameters = new List<OBDParameter>();
@@ -53,7 +52,7 @@ namespace SH_OBD {
         }
 
         public bool InitDevice(HardwareType device, int port, int baud, ProtocolType protocol) {
-            m_commLog.AddItem(string.Format("Attempting initialization on port {0}", port.ToString()));
+            m_log.TraceInfo(string.Format("Attempting initialization on port {0}", port.ToString()));
 
             SetDevice(device);
             if (m_obdDevice.Initialize(port, baud, protocol) && InitOBD()) {
@@ -66,7 +65,7 @@ namespace SH_OBD {
 
 
         public bool InitDeviceAuto() {
-            m_commLog.AddItem("Beginning AUTO initialization...");
+            m_log.TraceInfo("Beginning AUTO initialization...");
             bool flag = false;
             SetDevice(HardwareType.ELM327);
             if (m_obdDevice.Initialize() && InitOBD()) {
@@ -76,7 +75,6 @@ namespace SH_OBD {
             }
             return flag;
         }
-
 
         public bool InitOBD() {
             OBDParameter param = new OBDParameter(1, 0, 0) {
@@ -132,9 +130,9 @@ namespace SH_OBD {
 
         public OBDParameterValue GetValue(OBDParameter param, bool bEnglishUnits) {
             if (param.PID.Length > 0) {
-                m_commLog.AddItem("Requesting " + param.PID);
+                m_log.TraceInfo("Requesting " + param.PID);
             } else {
-                m_commLog.AddItem("Requesting " + param.OBDRequest);
+                m_log.TraceInfo("Requesting " + param.OBDRequest);
             }
 
             if (param.Service == 0) {
@@ -150,10 +148,10 @@ namespace SH_OBD {
                     ++count;
                 } while (count < responses.ResponseCount);
             }
-            m_commLog.AddItem(strItem1);
+            m_log.TraceInfo(strItem1);
             OBDParameterValue obdParameterValue = OBDInterpretter.getValue(param, responses, bEnglishUnits);
             if (obdParameterValue.ErrorDetected) {
-                m_commLog.AddItem("Error Detected!");
+                m_log.TraceError("Error Detected in obdParameterValue!");
                 return obdParameterValue;
             } else {
                 string values = "Values: ";
@@ -180,7 +178,7 @@ namespace SH_OBD {
                     }
                     values += " ]";
                 }
-                m_commLog.AddItem(values);
+                m_log.TraceInfo(values);
                 return obdParameterValue;
             }
         }
@@ -192,7 +190,7 @@ namespace SH_OBD {
 
             OBDParameterValue value = new OBDParameterValue();
             string respopnse = GetRawResponse("ATRV");
-            m_commLog.AddItem("Response: " + respopnse);
+            m_log.TraceInfo("Response of \"ATRV\": " + respopnse);
             if (respopnse != null) {
                 respopnse = respopnse.Replace("V", "");
                 value.DoubleValue = Utility.Text2Double(respopnse);
@@ -213,14 +211,6 @@ namespace SH_OBD {
             m_obdDevice.Disconnect();
             OnDisconnect?.Invoke();
             //OnDisconnect();
-        }
-
-        public void EnableLogFile(bool status) {
-            m_commLog.SetLogFileStatus(status);
-        }
-
-        public void LogItem(string text) {
-            m_commLog.AddItem(text);
         }
 
         public bool LoadParameters(string fileName) {
@@ -323,15 +313,15 @@ namespace SH_OBD {
                             param.ValueTypes = valueType;
                             m_listAllParameters.Add(param);
                         } catch (Exception) {
-                            m_commLog.AddItem(string.Format("Failed to load parameters from {0}", fileName));
+                            m_log.TraceError(string.Format("Failed to load parameters from {0}", fileName));
                             return false;
                         }
                     }
                 }
-                m_commLog.AddItem(string.Format("Loaded {0} parameters from {1}", lineNo, fileName));
+                m_log.TraceInfo(string.Format("Loaded {0} parameters from {1}", lineNo, fileName));
                 return true;
             } catch (Exception) {
-                m_commLog.AddItem(string.Format("Failed to locate parameter file: {0}", fileName));
+                m_log.TraceError(string.Format("Failed to locate parameter file: {0}", fileName));
                 return false;
             }
         }
@@ -368,24 +358,24 @@ namespace SH_OBD {
             m_iDevice = device;
             switch (device) {
                 case HardwareType.ELM327:
-                    m_commLog.AddItem("Set device to ELM327");
-                    m_obdDevice = new OBDDeviceELM327(m_commLog);
+                    m_log.TraceInfo("Set device to ELM327");
+                    m_obdDevice = new OBDDeviceELM327(m_log);
                     break;
                 case HardwareType.ELM320:
-                    m_commLog.AddItem("Set device to ELM320");
-                    m_obdDevice = new OBDDeviceELM320(m_commLog);
+                    m_log.TraceInfo("Set device to ELM320");
+                    m_obdDevice = new OBDDeviceELM320(m_log);
                     break;
                 case HardwareType.ELM322:
-                    m_commLog.AddItem("Set device to ELM322");
-                    m_obdDevice = new OBDDeviceELM322(m_commLog);
+                    m_log.TraceInfo("Set device to ELM322");
+                    m_obdDevice = new OBDDeviceELM322(m_log);
                     break;
                 case HardwareType.ELM323:
-                    m_commLog.AddItem("Set device to ELM323");
-                    m_obdDevice = new OBDDeviceELM323(m_commLog);
+                    m_log.TraceInfo("Set device to ELM323");
+                    m_obdDevice = new OBDDeviceELM323(m_log);
                     break;
                 default:
-                    m_commLog.AddItem("Set device to ELM327");
-                    m_obdDevice = new OBDDeviceELM327(m_commLog);
+                    m_log.TraceInfo("Set device to ELM327");
+                    m_obdDevice = new OBDDeviceELM327(m_log);
                     break;
             }
         }
@@ -522,6 +512,22 @@ namespace SH_OBD {
                     file.Close();
                 }
             }
+        }
+
+        public void TraceFatal(string strLog) {
+            m_log.TraceFatal(strLog);
+        }
+
+        public void TraceError(string strLog) {
+            m_log.TraceError(strLog);
+        }
+
+        public void TraceWarning(string strLog) {
+            m_log.TraceWarning(strLog);
+        }
+
+        public void TraceInfo(string strLog) {
+            m_log.TraceInfo(strLog);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace SH_OBD {
     public class OBDDeviceELM323 : OBDDevice {
-        public OBDDeviceELM323(OBDCommLog log) : base(log) {
+        public OBDDeviceELM323(Logger log) : base(log) {
             try {
                 m_Parser = new OBDParser_ISO9141_2();
             } catch (Exception ex) {

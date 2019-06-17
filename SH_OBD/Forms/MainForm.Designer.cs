@@ -53,11 +53,13 @@
             this.toolStripBtnUserPrefs = new System.Windows.Forms.ToolStripButton();
             this.toolStripBtnVehicles = new System.Windows.Forms.ToolStripButton();
             this.toolStripBtnSettings = new System.Windows.Forms.ToolStripButton();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picDiagram)).BeginInit();
             this.toolStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -253,6 +255,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.pictureBox1);
             this.panel2.Controls.Add(this.buttonDefaultFontStyle);
             this.panel2.Controls.Add(this.picDiagram);
             this.panel2.Controls.Add(this.lblInstruction1);
@@ -263,7 +266,7 @@
             // 
             // buttonDefaultFontStyle
             // 
-            this.buttonDefaultFontStyle.Location = new System.Drawing.Point(198, 353);
+            this.buttonDefaultFontStyle.Location = new System.Drawing.Point(196, 432);
             this.buttonDefaultFontStyle.Name = "buttonDefaultFontStyle";
             this.buttonDefaultFontStyle.Size = new System.Drawing.Size(75, 23);
             this.buttonDefaultFontStyle.TabIndex = 21;
@@ -275,7 +278,7 @@
             // 
             this.picDiagram.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.picDiagram.Image = ((System.Drawing.Image)(resources.GetObject("picDiagram.Image")));
-            this.picDiagram.Location = new System.Drawing.Point(146, 92);
+            this.picDiagram.Location = new System.Drawing.Point(143, 208);
             this.picDiagram.Name = "picDiagram";
             this.picDiagram.Size = new System.Drawing.Size(528, 72);
             this.picDiagram.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -285,7 +288,7 @@
             // lblInstruction1
             // 
             this.lblInstruction1.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.lblInstruction1.Location = new System.Drawing.Point(221, 198);
+            this.lblInstruction1.Location = new System.Drawing.Point(219, 297);
             this.lblInstruction1.Name = "lblInstruction1";
             this.lblInstruction1.Size = new System.Drawing.Size(386, 120);
             this.lblInstruction1.TabIndex = 16;
@@ -359,6 +362,17 @@
             this.toolStripBtnSettings.Text = "通讯设置";
             this.toolStripBtnSettings.Click += new System.EventHandler(this.toolStripBtnSettings_Click);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(260, 62);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(280, 140);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 22;
+            this.pictureBox1.TabStop = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -380,6 +394,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.picDiagram)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -415,6 +430,7 @@
         private System.Windows.Forms.PictureBox picDiagram;
         private System.Windows.Forms.Label lblInstruction1;
         private System.Windows.Forms.Button buttonDefaultFontStyle;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 

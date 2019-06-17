@@ -2,7 +2,7 @@
 
 namespace SH_OBD {
     public class OBDDeviceELM320 : OBDDevice {
-        public OBDDeviceELM320(OBDCommLog log) : base(log) {
+        public OBDDeviceELM320(Logger log) : base(log) {
             try {
                 m_Parser = new OBDParser_J1850_PWM();
             } catch (Exception ex) {

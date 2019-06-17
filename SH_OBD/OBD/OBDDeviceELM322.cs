@@ -1,7 +1,7 @@
 ﻿using System;
 namespace SH_OBD {
     public class OBDDeviceELM322 : OBDDevice {
-        public OBDDeviceELM322(OBDCommLog log) : base(log) {
+        public OBDDeviceELM322(Logger log) : base(log) {
             try {
                 m_Parser = new OBDParser_J1850_VPW();
             } catch (Exception ex) {

@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 namespace SH_OBD {
     public abstract class OBDDevice {
         protected string m_DeviceID;
-        protected OBDCommLog m_commLog;
+        protected Logger m_log;
         protected OBDParser m_Parser;
         protected OBDCommELM m_CommELM;
 
-        public OBDDevice(OBDCommLog log) {
-            m_commLog = log;
+        public OBDDevice(Logger log) {
+            m_log = log;
             m_CommELM = new OBDCommELM(log);
         }
 

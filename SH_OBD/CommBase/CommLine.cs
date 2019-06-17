@@ -13,6 +13,8 @@ namespace SH_OBD {
         private CommBase.ASCII[] m_RxFilter;
         private int m_TransTimeout;
 
+        public CommLine(Logger log) : base(log) { }
+
         protected void SetTransTimeout(int iTimeOut) {
             m_TransTimeout = iTimeOut;
         }
