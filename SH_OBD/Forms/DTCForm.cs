@@ -203,12 +203,12 @@ namespace SH_OBD {
         }
 
         private void DTCForm_Resize(object sender, EventArgs e) {
-            int margin = groupPermanent.Location.Y;
-            groupPermanent.Size = new Size(groupPermanent.Width, (Height - margin * 4) / 3);
+            int margin = groupCodes.Location.Y;
             groupCodes.Size = new Size(groupCodes.Width, (Height - margin * 4) / 3);
-            groupCodes.Location = new Point(groupCodes.Location.X, groupPermanent.Location.Y + groupPermanent.Height + margin);
             groupPending.Size = new Size(groupPending.Width, (Height - margin * 4) / 3);
             groupPending.Location = new Point(groupPending.Location.X, groupCodes.Location.Y + groupCodes.Height + margin);
+            groupPermanent.Size = new Size(groupPermanent.Width, (Height - margin * 4) / 3);
+            groupPermanent.Location = new Point(groupPermanent.Location.X, groupPending.Location.Y + groupPending.Height + margin);
         }
 
         private void DTCForm_Activated(object sender, EventArgs e) {

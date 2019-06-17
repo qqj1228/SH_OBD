@@ -112,12 +112,12 @@
             this.groupPermanent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupPermanent.Controls.Add(this.richTextPermanent);
-            this.groupPermanent.Location = new System.Drawing.Point(186, 12);
+            this.groupPermanent.Location = new System.Drawing.Point(186, 380);
             this.groupPermanent.Name = "groupPermanent";
             this.groupPermanent.Size = new System.Drawing.Size(538, 174);
             this.groupPermanent.TabIndex = 9;
             this.groupPermanent.TabStop = false;
-            this.groupPermanent.Text = "永久故障码";
+            this.groupPermanent.Text = "永久故障码（模式0A）";
             // 
             // richTextPermanent
             // 
@@ -174,7 +174,7 @@
             this.groupCodes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupCodes.Controls.Add(this.richTextDTC);
-            this.groupCodes.Location = new System.Drawing.Point(186, 195);
+            this.groupCodes.Location = new System.Drawing.Point(186, 12);
             this.groupCodes.Name = "groupCodes";
             this.groupCodes.Size = new System.Drawing.Size(538, 173);
             this.groupCodes.TabIndex = 13;
@@ -198,7 +198,7 @@
             this.groupPending.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupPending.Controls.Add(this.richTextPending);
-            this.groupPending.Location = new System.Drawing.Point(187, 380);
+            this.groupPending.Location = new System.Drawing.Point(187, 195);
             this.groupPending.Name = "groupPending";
             this.groupPending.Size = new System.Drawing.Size(537, 174);
             this.groupPending.TabIndex = 14;
