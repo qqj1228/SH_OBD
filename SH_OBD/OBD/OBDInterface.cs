@@ -12,7 +12,7 @@ namespace SH_OBD {
     public class OBDInterface {
         private const string m_vehicles_db = ".\\configs\\vehicles.db";
         private const string m_settings_xml = ".\\configs\\settings.xml";
-        private const string m_preferences_xml = ".\\configs\\preferences.xml";
+        private const string m_userprefs_xml = ".\\configs\\userprefs.xml";
 
         public delegate void __Delegate_OnConnect();
         public delegate void __Delegate_OnDisconnect();
@@ -24,7 +24,7 @@ namespace SH_OBD {
         private List<OBDParameter> m_listSupportedParameters;
         private OBDCommLog m_commLog;
         private UserPreferences m_userpreferences;
-        private Preferences m_settings;
+        private Settings m_settings;
         private List<VehicleProfile> m_VehicleProfiles;
         public bool ConnectedStatus {
             get { return m_obdDevice.Connected(); }
@@ -57,7 +57,8 @@ namespace SH_OBD {
 
             SetDevice(device);
             if (m_obdDevice.Initialize(port, baud, protocol) && InitOBD()) {
-                OnConnect();
+                OnConnect?.Invoke();
+                //OnConnect();
                 return true;
             }
             return false;
@@ -70,7 +71,8 @@ namespace SH_OBD {
             SetDevice(HardwareType.ELM327);
             if (m_obdDevice.Initialize() && InitOBD()) {
                 flag = true;
-                OnConnect();
+                OnConnect?.Invoke();
+                //OnConnect();
             }
             return flag;
         }
@@ -209,7 +211,8 @@ namespace SH_OBD {
 
         public void Disconnect() {
             m_obdDevice.Disconnect();
-            OnDisconnect();
+            OnDisconnect?.Invoke();
+            //OnDisconnect();
         }
 
         public void EnableLogFile(bool status) {
@@ -398,9 +401,9 @@ namespace SH_OBD {
             return 0;
         }
 
-        public void SaveCommSettings(Preferences settings) {
+        public void SaveCommSettings(Settings settings) {
             m_settings = settings;
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Preferences));
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Settings));
             using (TextWriter writer = new StreamWriter(m_settings_xml)) {
                 xmlSerializer.Serialize(writer, m_settings);
                 writer.Close();
@@ -410,7 +413,7 @@ namespace SH_OBD {
         public void SaveUserPreferences(UserPreferences prefs) {
             m_userpreferences = prefs;
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(UserPreferences));
-            using (TextWriter writer = (TextWriter)new StreamWriter(m_preferences_xml)) {
+            using (TextWriter writer = (TextWriter)new StreamWriter(m_userprefs_xml)) {
                 xmlSerializer.Serialize(writer, m_userpreferences);
                 writer.Close();
             }
@@ -420,19 +423,19 @@ namespace SH_OBD {
             get { return m_userpreferences; }
         }
 
-        public Preferences CommSettings {
+        public Settings CommSettings {
             get { return m_settings; }
         }
 
-        public Preferences LoadCommSettings() {
+        public Settings LoadCommSettings() {
             try {
-                XmlSerializer serializer = new XmlSerializer(typeof(Preferences));
+                XmlSerializer serializer = new XmlSerializer(typeof(Settings));
                 using (FileStream reader = new FileStream(m_settings_xml, FileMode.Open)) {
-                    m_settings = (Preferences)serializer.Deserialize(reader);
+                    m_settings = (Settings)serializer.Deserialize(reader);
                     reader.Close();
                 }
             } catch {
-                m_settings = new Preferences();
+                m_settings = new Settings();
             }
             return m_settings;
         }
@@ -440,7 +443,7 @@ namespace SH_OBD {
         public UserPreferences LoadUserPreferences() {
             try {
                 XmlSerializer serializer = new XmlSerializer(typeof(UserPreferences));
-                using (FileStream reader = new FileStream(m_preferences_xml, FileMode.Open)) {
+                using (FileStream reader = new FileStream(m_userprefs_xml, FileMode.Open)) {
                     m_userpreferences = (UserPreferences)serializer.Deserialize(reader);
                     reader.Close();
                 }
@@ -493,7 +496,7 @@ namespace SH_OBD {
         }
 
         public void SaveActiveProfile(VehicleProfile profile) {
-            Preferences settings = CommSettings;
+            Settings settings = CommSettings;
             settings.ActiveProfileIndex = VehicleProfiles.IndexOf(profile);
             SaveCommSettings(settings);
         }

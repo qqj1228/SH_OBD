@@ -115,7 +115,7 @@ namespace SH_OBD {
         private void On_OBD_Connect() {
             if (InvokeRequired) {
                 this.Invoke((EventHandler)delegate {
-                    StatusLabelDeviceName.Text = m_obdInterface.GetDeviceIDString().Trim();
+                    StatusLabelDeviceName.Text = m_obdInterface.GetDeviceIDString();
                     StatusLabelConnStatus.Text = "OBD接口已连接";
                     StatusLabelConnStatus.ForeColor = Color.Green;
                     StatusLabelVehicle.Text = m_obdInterface.ActiveProfile.Name;
@@ -141,21 +141,21 @@ namespace SH_OBD {
             if (sender is Button button) {
                 if (panel2.Controls.Count > 0 && panel2.Controls[0] is Form activeForm) {
                     if (activeForm == dicSubForms[Properties.Resources.buttonName_SensorGrid] && f_SensorGrid.IsLogging) {
-                        if (DialogResult.Yes == MessageBox.Show("当前记录过程将会中断.\r\n\r\n是否继续?", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation)) {
+                        if (DialogResult.Yes == MessageBox.Show("当前记录过程将会中断.\r\n是否继续?", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation)) {
                             f_SensorGrid.PauseLogging();
                         } else {
                             return;
                         }
                     }
                     if (activeForm == dicSubForms[Properties.Resources.buttonName_SensorChart] && f_SensorChart.IsPlotting) {
-                        if (DialogResult.Yes == MessageBox.Show("当前图表显示过程将会中止.\r\n\r\n是否继续?", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation)) {
+                        if (DialogResult.Yes == MessageBox.Show("当前图表显示过程将会中止.\r\n是否继续?", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation)) {
                             f_SensorChart.StopLogging();
                         } else {
                             return;
                         }
                     }
                     if (activeForm == dicSubForms[Properties.Resources.buttonName_FuelEconomy] && f_FuelEconomy.IsWorking) {
-                        if (DialogResult.Yes == MessageBox.Show("当前油耗分析过程将会中断.\r\n\r\n是否继续?", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation)) {
+                        if (DialogResult.Yes == MessageBox.Show("当前油耗分析过程将会中断.\r\n是否继续?", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation)) {
                             f_FuelEconomy.StopWorking();
                         } else {
                             return;
@@ -216,7 +216,7 @@ namespace SH_OBD {
         }
 
         private void toolStripBtnSettings_Click(object sender, EventArgs e) {
-            Preferences commSettings = m_obdInterface.CommSettings;
+            Settings commSettings = m_obdInterface.CommSettings;
             new SettingsForm(commSettings).ShowDialog();
             m_obdInterface.SaveCommSettings(commSettings);
             if (commSettings.AutoDetect) {
@@ -304,7 +304,7 @@ namespace SH_OBD {
                     };
                     m_obdInterface.GetValue(param, true);
                 } else {
-                    MessageBox.Show("软件无法找到与本机相连的兼容的OBD-II硬件设备。\r\n\r\n请确认没有其他软件正在使用所需端口。", "自动探测失败", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("无法找到与本机相连的兼容的OBD-II硬件设备。\r\n请确认没有其他软件正在使用所需端口。", "自动探测失败", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     m_obdInterface.LogItem("无法找到兼容的OBD-II协议设备。");
                     ShowDisconnectedLabel();
                 }
@@ -316,10 +316,10 @@ namespace SH_OBD {
                     ShowConnectedLabel();
                 } else {
                     MessageBox.Show(
-                        string.Format("软件无法找到与 {0} 连接的波特率为 {1} bps 的兼容的OBD-II协议设备。\r\n\r\n请确认没有其他软件正在使用所需端口且波特率设置正确。",
+                        string.Format("在 \"端口：{0}，波特率：{1}\" 通讯设置下，无法找到兼容的OBD-II协议设备。\r\n请确认没有其他软件正在使用所需端口且波特率设置正确。",
                             m_obdInterface.CommSettings.ComPortName,
                             m_obdInterface.CommSettings.BaudRate
-                            ),
+                        ),
                         "连接失败",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Exclamation
@@ -358,7 +358,7 @@ namespace SH_OBD {
         }
 
         private void ShowOBD2InitFailedError() {
-            MessageBox.Show("当前OBD硬件设备已探测到并成功初始化，但是无法与车辆进行通讯。请确认车辆点火键处于ON位置或者发动机处于运转中。\r\n\r\n如果使用 ELM320 (PWM)、ELM322 (VPW)、ELM323 (ISO)设备：\r\n\t请确认车辆OBD协议与当前OBD设备匹配。\r\n\r\n如果使用 ELM327 (VPW, PWM, ISO, and CAN)设备：\r\n\t请确认当前OBD设备的通讯设置。\r\n\t尝试手动设置OBD协议。\r\n\t尝试旁路初始化。", "初始化错误", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            MessageBox.Show("当前OBD硬件设备已探测到并成功初始化，但是无法与车辆进行通讯。请确认车辆点火键处于ON位置或者发动机处于运转中。\r\n如果使用 ELM320 (PWM)、ELM322 (VPW)、ELM323 (ISO)设备：\r\n\t请确认车辆OBD协议与当前OBD设备匹配。\r\n如果使用 ELM327 (VPW, PWM, ISO, and CAN)设备：\r\n\t请确认当前OBD设备的通讯设置。\r\n\t尝试手动设置OBD协议。\r\n\t尝试旁路初始化。", "初始化错误", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
     }

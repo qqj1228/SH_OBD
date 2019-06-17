@@ -3,43 +3,43 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
 namespace SH_OBD {
     public partial class SettingsForm : Form {
-        private Preferences m_preferences;
+        private Settings m_settings;
 
-        public SettingsForm(Preferences prefs) {
+        public SettingsForm(Settings settings) {
             InitializeComponent();
-            m_preferences = prefs;
+            m_settings = settings;
         }
 
         private void SettingsForm_Load(object sender, EventArgs e) {
             try {
-                for (int iComPort = 0; iComPort < 50; ++iComPort) {
-                    if (CommBase.IsPortAvailable(iComPort)) {
-                        comboPorts.Items.Add("COM" + iComPort.ToString());
-                    }
+                string[] serialPorts = SerialPort.GetPortNames();
+                foreach (string serialPort in serialPorts) {
+                    comboPorts.Items.Add(serialPort);
                 }
 
-                if (CommBase.IsPortAvailable(m_preferences.ComPort)) {
-                    comboPorts.SelectedItem = m_preferences.ComPortName;
+                if (CommBase.IsPortAvailable(m_settings.ComPort)) {
+                    comboPorts.SelectedItem = m_settings.ComPortName;
                 } else if (comboPorts.Items.Count > 0) {
                     comboPorts.SelectedIndex = 0;
                 }
 
-                comboHardware.SelectedIndex = m_preferences.HardwareIndexInt;
-                comboBaud.SelectedIndex = m_preferences.BaudRateIndex;
+                comboHardware.SelectedIndex = m_settings.HardwareIndexInt;
+                comboBaud.SelectedIndex = m_settings.BaudRateIndex;
 
-                foreach (string item in Preferences.ProtocolNames) {
+                foreach (string item in Settings.ProtocolNames) {
                     comboProtocol.Items.Add(item);
                 }
 
-                comboProtocol.SelectedIndex = m_preferences.ProtocolIndexInt;
-                comboInitialize.SelectedIndex = !m_preferences.DoInitialization ? 1 : 0;
-                if (m_preferences.AutoDetect) {
+                comboProtocol.SelectedIndex = m_settings.ProtocolIndexInt;
+                comboInitialize.SelectedIndex = !m_settings.DoInitialization ? 1 : 0;
+                if (m_settings.AutoDetect) {
                     checkBoxAutoDetect.Checked = true;
                 } else {
                     checkBoxAutoDetect.Checked = false;
@@ -50,15 +50,15 @@ namespace SH_OBD {
         }
 
         private void btnOK_Click(object sender, EventArgs e) {
-            m_preferences.AutoDetect = checkBoxAutoDetect.Checked;
+            m_settings.AutoDetect = checkBoxAutoDetect.Checked;
             if (comboPorts.SelectedItem != null && comboPorts.SelectedItem.ToString().Length > 3) {
-                m_preferences.ComPort = Convert.ToInt32(comboPorts.SelectedItem.ToString().Remove(0, 3));
+                m_settings.ComPort = Convert.ToInt32(comboPorts.SelectedItem.ToString().Remove(0, 3));
             }
 
-            m_preferences.BaudRateIndex = comboBaud.SelectedIndex;
-            m_preferences.HardwareIndexInt = comboHardware.SelectedIndex;
-            m_preferences.ProtocolIndexInt = comboProtocol.SelectedIndex;
-            m_preferences.DoInitialization = (comboInitialize.SelectedIndex == 0);
+            m_settings.BaudRateIndex = comboBaud.SelectedIndex;
+            m_settings.HardwareIndexInt = comboHardware.SelectedIndex;
+            m_settings.ProtocolIndexInt = comboProtocol.SelectedIndex;
+            m_settings.DoInitialization = (comboInitialize.SelectedIndex == 0);
             Close();
         }
 

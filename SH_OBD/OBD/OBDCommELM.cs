@@ -9,14 +9,8 @@ namespace SH_OBD {
 
         protected OBDCommLog m_commLog;
 
-        static OBDCommELM() {
-        }
-
         public OBDCommELM(OBDCommLog log) {
             m_commLog = log;
-        }
-
-        public OBDCommELM() {
         }
 
         public void SetPort(int iPort) {
@@ -29,13 +23,13 @@ namespace SH_OBD {
             m_commLog.AddItem(string.Format("Baud rate set to {0}", m_BaudRate.ToString()));
         }
 
-
         public int GetBaudRate() {
             return m_BaudRate;
         }
 
         public void SetTimeout(int iTimeout) {
             m_Timeout = iTimeout;
+            SetTransTimeout(iTimeout);
             m_commLog.AddItem(string.Format("Timeout set to {0} ms", m_Timeout.ToString()));
         }
 
@@ -62,7 +56,7 @@ namespace SH_OBD {
 
         protected override CommBaseSettings CommSettings() {
             CommLine.CommLineSettings settings = new CommLine.CommLineSettings();
-            settings.SetStandard(m_Port, m_BaudRate, Handshake.None);
+            settings.SetStandard(m_Port, m_BaudRate);
             settings.RxTerminator = m_asciiRxTerm;
             settings.RxFilter = new ASCII[] { ASCII.LF, ASCII.SP, ASCII.GT, ASCII.NULL };
             settings.TxTerminator = new ASCII[] { ASCII.CR };

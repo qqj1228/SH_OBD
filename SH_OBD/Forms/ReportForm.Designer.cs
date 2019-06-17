@@ -110,7 +110,7 @@
             this.ReportPage1.HeatedCatalystMonitorSupported = false;
             this.ReportPage1.IntakePressure = 0D;
             this.ReportPage1.Location = new System.Drawing.Point(38, 3);
-            this.ReportPage1.Logo = null;
+            this.ReportPage1.Logo = ((System.Drawing.Image)(resources.GetObject("ReportPage1.Logo")));
             this.ReportPage1.LTFT1 = 0D;
             this.ReportPage1.LTFT2 = 0D;
             this.ReportPage1.LTFT3 = 0D;

@@ -26,64 +26,49 @@ namespace SH_OBD {
                 m_CommELM.SetPort(iPort);
                 m_CommELM.SetBaudRate(iBaud);
 
-                // 原代码为if (m_CommELM.Open())
                 if (!m_CommELM.Open()) {
                     return false;
                 }
-
                 if (!ConfirmAT("ATWS") || !ConfirmAT("ATE0") || !ConfirmAT("ATL0") || !ConfirmAT("ATH1") /*|| !confirmAT("ATCAF1")*/) {
                     m_CommELM.Close();
                     return false;
                 }
+                // 使用当前版本的obdsim不支持"ATCAF1"命令，故不判断该命令是否可用，只需成功执行即可
+                ConfirmAT("ATCAF1");
 
-                base.m_DeviceID = GetDeviceID();
+                base.m_DeviceID = GetDeviceID().Trim();
                 if (m_iProtocol != ProtocolType.Unknown) {
                     if (!ConfirmAT("ATSP" + ((int)m_iProtocol).ToString())) {
                         m_CommELM.Close();
                         return false;
                     }
-                    //m_CommELM.Close();
 
                     m_CommELM.SetTimeout(5000);
-                    //if (!m_CommELM.Open())
-                    //	return false;
-
                     bool flag = false;
                     if (GetOBDResponse("0100").IndexOf("4100") >= 0) {
                         flag = true;
                         SetProtocol((ProtocolType)int.Parse(GetOBDResponse("ATDPN").Replace("A", "")));
                     }
-                    //m_CommELM.Close();
 
                     m_CommELM.SetTimeout(500);
-                    //if (!m_CommELM.Open())
-                    //	flag = false;
                     return flag;
                 }
                 if (!ConfirmAT("ATM0")) {
                     m_CommELM.Close();
                     return false;
                 }
-                //m_CommELM.Close();
 
                 m_CommELM.SetTimeout(5000);
-                //if (!m_CommELM.Open())
-                //	return false;
-
                 int[] xattr = new int[] { 6, 7, 2, 3, 1, 8, 9, 4, 5 };
                 for (int idx = 0; idx < xattr.Length; idx++) {
                     if (!ConfirmAT("ATTP" + xattr[idx].ToString())) {
                         m_CommELM.Close();
                         return false;
                     }
-
                     if (GetOBDResponse("0100").IndexOf("4100") >= 0) {
                         SetProtocol((ProtocolType)xattr[idx]);
-                        //m_CommELM.Close();
-                        m_CommELM.SetTimeout(500);
-                        //if (!m_CommELM.Open())
-                        //	return false;
 
+                        m_CommELM.SetTimeout(500);
                         ConfirmAT("ATM1");
                         return true;
                     }
@@ -137,7 +122,7 @@ namespace SH_OBD {
 
         public void SetProtocol(ProtocolType iProtocol) {
             m_iProtocol = iProtocol;
-            base.m_commLog.AddItem(string.Format("Protocol switched to: {0}", Preferences.ProtocolNames[(int)iProtocol]));
+            base.m_commLog.AddItem(string.Format("Protocol switched to: {0}", Settings.ProtocolNames[(int)iProtocol]));
             switch (iProtocol) {
                 case ProtocolType.J1850_PWM:
                     m_Parser = new OBDParser_J1850_PWM();

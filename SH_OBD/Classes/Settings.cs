@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace SH_OBD {
     [Serializable]
-    public class Preferences {
+    public class Settings {
         private bool m_AutoDetect;
         private int m_BaudRateIndex;
         private int m_ComPortIndex;
@@ -12,7 +12,7 @@ namespace SH_OBD {
         private int m_ActiveProfileIndex;
         private bool m_Initialize;
 
-        public Preferences() {
+        public Settings() {
             m_AutoDetect = true;
             m_ComPortIndex = 1;
             m_ActiveProfileIndex = 0;
