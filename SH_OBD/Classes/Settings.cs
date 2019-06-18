@@ -55,23 +55,24 @@ namespace SH_OBD {
         [XmlIgnore]
         public static string[] ProtocolNames = new string[]
         {
-            "Automatic",
-            "SAE J1850 PWM (41.6 Kbaud)",
-            "SAE J1850 VPW (10.4 Kbaud)",
-            "ISO 9141-2 (5 baud init, 10.4 Kbaud)",
-            "ISO 14230-4 KWP (5 baud init, 10.4 Kbaud)",
-            "ISO 14230-4 KWP (fast init, 10.4 Kbaud)",
-            "ISO 15765-4 CAN (11 bit ID, 500 Kbaud)",
-            "ISO 15765-4 CAN (29 bit ID, 500 Kbaud)",
-            "ISO 15765-4 CAN (11 bit ID, 250 Kbaud)",
-            "ISO 15765-4 CAN (29 bit ID, 250 Kbaud)"
+            "自动",
+            "SAE J1850 PWM (41.6K 波特率)",
+            "SAE J1850 VPW (10.4K 波特率)",
+            "ISO 9141-2 (5 波特率初始化, 10.4K 波特率)",
+            "ISO 14230-4 KWP (5 波特率初始化, 10.4K 波特率)",
+            "ISO 14230-4 KWP (快速初始化, 10.4K 波特率)",
+            "ISO 15765-4 CAN (11 位 CAN ID, 500K 波特率)",
+            "ISO 15765-4 CAN (29 位 CAN ID, 500K 波特率)",
+            "ISO 15765-4 CAN (11 位 CAN ID, 250K 波特率)",
+            "ISO 15765-4 CAN (29 位 CAN ID, 250K 波特率)"
         };
 
         [XmlIgnore]
         public string ProtocolName {
             get {
-                if (ProtocolIndexInt >= 0 && ProtocolIndexInt < ProtocolNames.Length)
+                if (ProtocolIndexInt >= 0 && ProtocolIndexInt < ProtocolNames.Length) {
                     return ProtocolNames[ProtocolIndexInt];
+                }
                 return "Unknown";
             }
         }

@@ -72,6 +72,7 @@ namespace SH_OBD {
             set { m_MinValueEnglish = value; }
         }
 
+        // OBD返回值中有效数据的位数
         public int ValueTypes {
             get { return m_ValueType; }
             set { m_ValueType = value; }
@@ -123,24 +124,25 @@ namespace SH_OBD {
         }
 
         public OBDParameter GetCopy() {
-            OBDParameter p = new OBDParameter();
-            p.Category = Category;
-            p.ValueTypes = ValueTypes;
-            p.EnglishMaxValue = EnglishMaxValue;
-            p.EnglishMinValue = EnglishMinValue;
-            p.EnglishUnitLabel = EnglishUnitLabel;
-            p.Manufacturer = Manufacturer;
-            p.MetricMaxValue = MetricMaxValue;
-            p.MetricMinValue = MetricMinValue;
-            p.MetricUnitLabel = MetricUnitLabel;
-            p.Name = Name;
-            p.OBDRequest = OBDRequest;
-            p.Parameter = Parameter;
-            p.PID = PID;
-            p.Priority = Priority;
-            p.Service = Service;
-            p.SubParameter = SubParameter;
-            p.Type = Type;
+            OBDParameter p = new OBDParameter {
+                Category = Category,
+                ValueTypes = ValueTypes,
+                EnglishMaxValue = EnglishMaxValue,
+                EnglishMinValue = EnglishMinValue,
+                EnglishUnitLabel = EnglishUnitLabel,
+                Manufacturer = Manufacturer,
+                MetricMaxValue = MetricMaxValue,
+                MetricMinValue = MetricMinValue,
+                MetricUnitLabel = MetricUnitLabel,
+                Name = Name,
+                OBDRequest = OBDRequest,
+                Parameter = Parameter,
+                PID = PID,
+                Priority = Priority,
+                Service = Service,
+                SubParameter = SubParameter,
+                Type = Type
+            };
             return p;
         }
 

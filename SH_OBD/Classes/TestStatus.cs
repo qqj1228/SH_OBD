@@ -8,8 +8,6 @@ namespace SH_OBD {
         private int m_iSupportID;
         private int m_iStatusID;
 
-        public TestStatus() {
-        }
         public TestStatus(string strName, string strStatus, int iSupportID, int iStatusID) {
             m_strName = strName;
             m_strStatus = strStatus;

@@ -63,7 +63,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblBattery.Location = new System.Drawing.Point(12, 20);
             this.lblBattery.Name = "lblBattery";
-            this.lblBattery.Size = new System.Drawing.Size(751, 30);
+            this.lblBattery.Size = new System.Drawing.Size(340, 30);
             this.lblBattery.TabIndex = 0;
             this.lblBattery.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -83,7 +83,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblOxygen.Location = new System.Drawing.Point(12, 20);
             this.lblOxygen.Name = "lblOxygen";
-            this.lblOxygen.Size = new System.Drawing.Size(380, 109);
+            this.lblOxygen.Size = new System.Drawing.Size(380, 175);
             this.lblOxygen.TabIndex = 0;
             this.lblOxygen.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -126,7 +126,7 @@
             this.groupBattery.Controls.Add(this.lblBattery);
             this.groupBattery.Location = new System.Drawing.Point(12, 483);
             this.groupBattery.Name = "groupBattery";
-            this.groupBattery.Size = new System.Drawing.Size(776, 60);
+            this.groupBattery.Size = new System.Drawing.Size(365, 60);
             this.groupBattery.TabIndex = 22;
             this.groupBattery.TabStop = false;
             this.groupBattery.Text = "电池电压";
@@ -204,7 +204,7 @@
             this.groupOxygen.Controls.Add(this.lblOxygen);
             this.groupOxygen.Location = new System.Drawing.Point(383, 338);
             this.groupOxygen.Name = "groupOxygen";
-            this.groupOxygen.Size = new System.Drawing.Size(405, 139);
+            this.groupOxygen.Size = new System.Drawing.Size(405, 205);
             this.groupOxygen.TabIndex = 19;
             this.groupOxygen.TabStop = false;
             this.groupOxygen.Text = "氧气传感器位置";
@@ -222,7 +222,7 @@
             // 
             // groupNonConTests
             // 
-            this.groupNonConTests.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.groupNonConTests.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.groupNonConTests.Controls.Add(this.gridNonConTests);
             this.groupNonConTests.Location = new System.Drawing.Point(383, 42);
             this.groupNonConTests.Name = "groupNonConTests";
@@ -269,8 +269,6 @@
             // 
             // groupConTests
             // 
-            this.groupConTests.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.groupConTests.Controls.Add(this.gridConTests);
             this.groupConTests.Location = new System.Drawing.Point(12, 42);
             this.groupConTests.Name = "groupConTests";

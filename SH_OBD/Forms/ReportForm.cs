@@ -30,7 +30,7 @@ namespace SH_OBD {
         }
 
         private void printDocument1_PrintPage(object sender, PrintPageEventArgs e) {
-            Image image = ReportPage1.getImage();
+            Image image = ReportPage1.GetImage();
             e.Graphics.DrawImage(image, 50, 50, 750, 1000);
             e.HasMorePages = false;
         }
@@ -52,13 +52,14 @@ namespace SH_OBD {
 
         private void btnSave_Click(object sender, EventArgs e) {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Title = "Save OBD-II Diagnostic Report";
-            saveFileDialog.Filter = "ProScan Report Files (*.obd)|*.obd";
+            saveFileDialog.Title = "保存 OBD-II 诊断报告";
+            saveFileDialog.Filter = "SH_OBD 报告文件 (*.obd)|*.obd";
             saveFileDialog.FilterIndex = 0;
             saveFileDialog.RestoreDirectory = true;
             int num = (int)saveFileDialog.ShowDialog();
-            if (saveFileDialog.FileName.Length <= 0)
+            if (saveFileDialog.FileName.Length <= 0) {
                 return;
+            }
             FileStream fileStream = File.Create(saveFileDialog.FileName);
             BinaryWriter binaryWriter = new BinaryWriter((Stream)fileStream);
             binaryWriter.Write(ReportPage1.ShopName);
@@ -77,48 +78,55 @@ namespace SH_OBD {
             int index1 = 0;
             do {
                 if (ReportPage1.DTCList != null) {
-                    if (index1 < ReportPage1.DTCList.Count)
+                    if (index1 < ReportPage1.DTCList.Count) {
                         binaryWriter.Write(ReportPage1.DTCList[index1]);
-                    else
+                    } else {
                         binaryWriter.Write("");
-                } else
+                    }
+                } else {
                     binaryWriter.Write("");
+                }
                 ++index1;
             }
             while (index1 < 25);
             int index2 = 0;
             do {
                 if (ReportPage1.DTCDefinitionList != null) {
-                    if (index2 < ReportPage1.DTCDefinitionList.Count)
+                    if (index2 < ReportPage1.DTCDefinitionList.Count) {
                         binaryWriter.Write(ReportPage1.DTCDefinitionList[index2]);
-                    else
+                    } else {
                         binaryWriter.Write("");
-                } else
+                    }
+                } else {
                     binaryWriter.Write("");
+                }
                 ++index2;
             }
             while (index2 < 25);
             int index3 = 0;
             do {
                 if (ReportPage1.PendingList != null) {
-                    if (index3 < ReportPage1.PendingList.Count)
+                    if (index3 < ReportPage1.PendingList.Count) {
                         binaryWriter.Write(ReportPage1.PendingList[index3]);
-                    else
+                    } else {
                         binaryWriter.Write("");
-                } else
+                    }
+                } else {
                     binaryWriter.Write("");
+                }
                 ++index3;
-            }
-            while (index3 < 25);
+            } while (index3 < 25);
             int index4 = 0;
             do {
                 if (ReportPage1.PendingDefinitionList != null) {
-                    if (index4 < ReportPage1.PendingDefinitionList.Count)
+                    if (index4 < ReportPage1.PendingDefinitionList.Count) {
                         binaryWriter.Write(ReportPage1.PendingDefinitionList[index4]);
-                    else
+                    } else {
                         binaryWriter.Write("");
-                } else
+                    }
+                } else {
                     binaryWriter.Write("");
+                }
                 ++index4;
             }
             while (index4 < 25);

@@ -31,14 +31,15 @@ namespace SH_OBD {
             set { m_IsValid = value; }
         }
 
-        public string getDataByte(int index) {
+        public string GetDataByte(int index) {
             index *= 2;
-            if (index + 2 > m_Data.Length)
+            if (index + 2 > m_Data.Length) {
                 return "";
+            }
             return m_Data.Substring(index, 2);
         }
 
-        public int getDataByteCount() {
+        public int GetDataByteCount() {
             return m_Data.Length / 2;
         }
     }

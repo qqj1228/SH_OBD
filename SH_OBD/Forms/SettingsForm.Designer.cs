@@ -69,8 +69,8 @@
             // 
             this.comboInitialize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboInitialize.Items.AddRange(new object[] {
-            "Initialize",
-            "Bypass Initialization"});
+            "初始化",
+            "旁路初始化"});
             this.comboInitialize.Location = new System.Drawing.Point(112, 86);
             this.comboInitialize.Name = "comboInitialize";
             this.comboInitialize.Size = new System.Drawing.Size(200, 20);
@@ -154,8 +154,8 @@
             // 
             this.comboHardware.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboHardware.Items.AddRange(new object[] {
-            "Automatic Detection",
-            "ELM327 (Universal)",
+            "自动探测",
+            "ELM327 (通用型)",
             "ELM320 (PWM)",
             "ELM322 (VPW)",
             "ELM323 (ISO)",

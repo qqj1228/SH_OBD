@@ -53,11 +53,11 @@ namespace SH_OBD {
             set { m_strValue = value; }
         }
 
-        public bool getBitFlag(int index) {
+        public bool GetBitFlag(int index) {
             return m_bBitFlags[index];
         }
 
-        public void setBitFlag(int index, bool status) {
+        public void SetBitFlag(int index, bool status) {
             m_bBitFlags[index] = status;
         }
     }

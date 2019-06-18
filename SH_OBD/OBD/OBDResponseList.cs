@@ -33,8 +33,9 @@ namespace SH_OBD {
         }
 
         public OBDResponse GetOBDResponse(int index) {
-            if (index < m_Responses.Count)
+            if (index < m_Responses.Count) {
                 return m_Responses[index];
+            }
             return null;
         }
     }

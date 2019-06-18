@@ -31,7 +31,6 @@
             this.StatusLabelPort = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.buttonReport = new System.Windows.Forms.Button();
-            this.buttonCommLog = new System.Windows.Forms.Button();
             this.buttonTerminal = new System.Windows.Forms.Button();
             this.buttonFuel = new System.Windows.Forms.Button();
             this.buttonDyno = new System.Windows.Forms.Button();
@@ -43,6 +42,7 @@
             this.buttonDTC = new System.Windows.Forms.Button();
             this.buttonTests = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.buttonDefaultFontStyle = new System.Windows.Forms.Button();
             this.picDiagram = new System.Windows.Forms.PictureBox();
             this.lblInstruction1 = new System.Windows.Forms.Label();
@@ -53,13 +53,12 @@
             this.toolStripBtnUserPrefs = new System.Windows.Forms.ToolStripButton();
             this.toolStripBtnVehicles = new System.Windows.Forms.ToolStripButton();
             this.toolStripBtnSettings = new System.Windows.Forms.ToolStripButton();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picDiagram)).BeginInit();
             this.toolStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -98,7 +97,7 @@
             this.StatusLabelDeviceName.Name = "StatusLabelDeviceName";
             this.StatusLabelDeviceName.Size = new System.Drawing.Size(229, 21);
             this.StatusLabelDeviceName.Spring = true;
-            this.StatusLabelDeviceName.Text = "设备名称";
+            this.StatusLabelDeviceName.Text = "未获取到设备名";
             // 
             // StatusLabelPort
             // 
@@ -113,7 +112,6 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.buttonReport);
-            this.panel1.Controls.Add(this.buttonCommLog);
             this.panel1.Controls.Add(this.buttonTerminal);
             this.panel1.Controls.Add(this.buttonFuel);
             this.panel1.Controls.Add(this.buttonDyno);
@@ -138,16 +136,6 @@
             this.buttonReport.Text = "buttonReport";
             this.buttonReport.UseVisualStyleBackColor = true;
             this.buttonReport.Click += new System.EventHandler(this.Button_Click);
-            // 
-            // buttonCommLog
-            // 
-            this.buttonCommLog.Location = new System.Drawing.Point(5, 324);
-            this.buttonCommLog.Name = "buttonCommLog";
-            this.buttonCommLog.Size = new System.Drawing.Size(110, 23);
-            this.buttonCommLog.TabIndex = 12;
-            this.buttonCommLog.Text = "buttonCommLog";
-            this.buttonCommLog.UseVisualStyleBackColor = true;
-            this.buttonCommLog.Click += new System.EventHandler(this.Button_Click);
             // 
             // buttonTerminal
             // 
@@ -264,6 +252,17 @@
             this.panel2.Size = new System.Drawing.Size(814, 553);
             this.panel2.TabIndex = 3;
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(260, 62);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(280, 140);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 22;
+            this.pictureBox1.TabStop = false;
+            // 
             // buttonDefaultFontStyle
             // 
             this.buttonDefaultFontStyle.Location = new System.Drawing.Point(196, 432);
@@ -362,17 +361,6 @@
             this.toolStripBtnSettings.Text = "通讯设置";
             this.toolStripBtnSettings.Click += new System.EventHandler(this.toolStripBtnSettings_Click);
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(260, 62);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(280, 140);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 22;
-            this.pictureBox1.TabStop = false;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -382,7 +370,7 @@
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.statusStrip1);
-            this.MinimumSize = new System.Drawing.Size(920, 600);
+            this.MinimumSize = new System.Drawing.Size(920, 650);
             this.Name = "MainForm";
             this.Text = "SH_OBD";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
@@ -391,10 +379,10 @@
             this.statusStrip1.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picDiagram)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -412,7 +400,6 @@
         private System.Windows.Forms.Button buttonO2;
         private System.Windows.Forms.Button buttonSensorGrid;
         private System.Windows.Forms.Button buttonSensorGraph;
-        private System.Windows.Forms.Button buttonCommLog;
         private System.Windows.Forms.Button buttonTerminal;
         private System.Windows.Forms.Button buttonFuel;
         private System.Windows.Forms.Button buttonDyno;

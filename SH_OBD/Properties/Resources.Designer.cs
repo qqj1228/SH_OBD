@@ -205,7 +205,7 @@ namespace SH_OBD.Properties {
         }
         
         /// <summary>
-        ///   查找类似 跟踪 的本地化字符串。
+        ///   查找类似 路试 的本地化字符串。
         /// </summary>
         internal static string buttonName_Track {
             get {

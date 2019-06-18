@@ -33,9 +33,10 @@ namespace SH_OBD {
                     m_CommELM.Close();
                     return false;
                 }
-                // 使用当前版本的obdsim不支持"ATCAF1"命令，故不判断该命令是否可用，只需成功执行即可
+                // 使用当前版本的obdsim不支持"ATCAF1"命令，故不判断该命令是否可用，只需执行过即可
                 ConfirmAT("ATCAF1");
 
+                base.m_DeviceDes = GetDeviceDes().Trim();
                 base.m_DeviceID = GetDeviceID().Trim();
                 if (m_iProtocol != ProtocolType.Unknown) {
                     if (!ConfirmAT("ATSP" + ((int)m_iProtocol).ToString())) {
@@ -191,11 +192,19 @@ namespace SH_OBD {
             return "";
         }
 
-        public string GetDeviceID() {
+        public string GetDeviceDes() {
             if (m_CommELM.Online) {
-                return m_CommELM.GetResponse("ATI");
+                return m_CommELM.GetResponse("AT@1");
             }
             return "";
         }
+
+        public string GetDeviceID() {
+            if (m_CommELM.Online) {
+                return m_CommELM.GetResponse("AT@2");
+            }
+            return "";
+        }
+
     }
 }

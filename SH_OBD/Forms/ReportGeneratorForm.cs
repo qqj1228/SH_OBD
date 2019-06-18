@@ -23,7 +23,7 @@ namespace SH_OBD {
 
         private void btnGenerate_Click(object sender, EventArgs e) {
             if (!m_obdInterface.ConnectedStatus) {
-                MessageBox.Show("A vehicle connection must first be established.", "Connection Required", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("必须首先与车辆进行连接，才能进行后续操作！", "连接请求", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             } else {
                 m_bReportForm = new ReportForm();
                 btnGenerate.Enabled = false;
@@ -41,7 +41,7 @@ namespace SH_OBD {
                 }
                 DateTime now1 = DateTime.Now;
                 DateTime now2 = DateTime.Now;
-                m_bReportForm.ReportPage1.GenerationDate = string.Format("{0} at {1}", DateTime.Now.ToString("MMMM dd, yyyy"), DateTime.Now.ToString("h:mm:ss tt"));
+                m_bReportForm.ReportPage1.GenerationDate = DateTime.Now.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss");
                 richTextStatus.Text = "";
                 progressBar.Value = 0;
                 progressBar.Maximum = 22;

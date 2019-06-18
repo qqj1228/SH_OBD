@@ -49,6 +49,7 @@ namespace SH_OBD {
 
             InitSubForm();
             StatusLabelConnStatus.ForeColor = Color.Red;
+            this.Text = "SH_OBD - Ver " + MainFileVersion.AssemblyVersion;
         }
 
         void InitSubForm() {
@@ -77,7 +78,6 @@ namespace SH_OBD {
             buttonFuel.Text = Properties.Resources.buttonName_FuelEconomy;
             buttonReport.Text = Properties.Resources.buttonName_Report;
             buttonTerminal.Text = Properties.Resources.buttonName_Terminal;
-            buttonCommLog.Text = Properties.Resources.buttonName_Log;
 
             dicSubForms.Add(Properties.Resources.buttonName_Tests, f_MonitorTests);
             dicSubForms.Add(Properties.Resources.buttonName_DTC, f_DTC);
@@ -111,9 +111,9 @@ namespace SH_OBD {
         private void On_OBD_Connect() {
             if (InvokeRequired) {
                 this.Invoke((EventHandler)delegate {
-                    StatusLabelDeviceName.Text = m_obdInterface.GetDeviceIDString();
                     StatusLabelConnStatus.Text = "OBD接口已连接";
                     StatusLabelConnStatus.ForeColor = Color.Green;
+                    StatusLabelDeviceName.Text = m_obdInterface.GetDeviceDesString();
                     StatusLabelVehicle.Text = m_obdInterface.ActiveProfile.Name;
                     toolStripBtnUserPrefs.Enabled = false;
                     toolStripBtnVehicles.Enabled = false;
@@ -126,6 +126,7 @@ namespace SH_OBD {
         private void On_OBD_Disconnect() {
             StatusLabelConnStatus.Text = "OBD接口未连接";
             StatusLabelConnStatus.ForeColor = Color.Red;
+            StatusLabelDeviceName.Text = "未获取到设备名";
             toolStripBtnUserPrefs.Enabled = true;
             toolStripBtnVehicles.Enabled = true;
             toolStripBtnSettings.Enabled = true;
@@ -193,7 +194,7 @@ namespace SH_OBD {
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
-            if (!m_obdInterface.LoadParameters(".\\configs\\generic.xml")) {
+            if (!m_obdInterface.LoadParameters(".\\configs\\generic.csv")) {
                 m_obdInterface.TraceError("Failed to load generic parameter definitions!");
                 MessageBox.Show("加载generic.xml配置文件失败!", "出错", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }

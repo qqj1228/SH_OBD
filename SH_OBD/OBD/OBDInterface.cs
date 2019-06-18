@@ -47,6 +47,10 @@ namespace SH_OBD {
             return m_iDevice;
         }
 
+        public string GetDeviceDesString() {
+            return m_obdDevice.DeviceDesString();
+        }
+
         public string GetDeviceIDString() {
             return m_obdDevice.DeviceIDString();
         }
@@ -57,7 +61,6 @@ namespace SH_OBD {
             SetDevice(device);
             if (m_obdDevice.Initialize(port, baud, protocol) && InitOBD()) {
                 OnConnect?.Invoke();
-                //OnConnect();
                 return true;
             }
             return false;
@@ -71,7 +74,6 @@ namespace SH_OBD {
             if (m_obdDevice.Initialize() && InitOBD()) {
                 flag = true;
                 OnConnect?.Invoke();
-                //OnConnect();
             }
             return flag;
         }
@@ -86,11 +88,11 @@ namespace SH_OBD {
             }
 
             foreach (OBDParameter param2 in m_listAllParameters) {
-                if (param2.Parameter > 0 && param2.Parameter <= 32 && value.getBitFlag(param2.Parameter - 1)) {
+                if (param2.Parameter > 0 && param2.Parameter <= 32 && value.GetBitFlag(param2.Parameter - 1)) {
                     m_listSupportedParameters.Add(param2);
                 }
             }
-            if (!value.getBitFlag(31)) {
+            if (!value.GetBitFlag(31)) {
                 return true;
             }
 
@@ -100,7 +102,7 @@ namespace SH_OBD {
                 return false;
             }
             foreach (OBDParameter param2 in m_listAllParameters) {
-                if (param2.Parameter > 32 && param2.Parameter <= 64 && value.getBitFlag(param2.Parameter - 33)) {
+                if (param2.Parameter > 32 && param2.Parameter <= 64 && value.GetBitFlag(param2.Parameter - 33)) {
                     m_listSupportedParameters.Add(param2);
                 }
             }
@@ -130,9 +132,9 @@ namespace SH_OBD {
 
         public OBDParameterValue GetValue(OBDParameter param, bool bEnglishUnits) {
             if (param.PID.Length > 0) {
-                m_log.TraceInfo("Requesting " + param.PID);
+                m_log.TraceInfo("Requesting: " + param.PID);
             } else {
-                m_log.TraceInfo("Requesting " + param.OBDRequest);
+                m_log.TraceInfo("Requesting: " + param.OBDRequest);
             }
 
             if (param.Service == 0) {
@@ -149,7 +151,7 @@ namespace SH_OBD {
                 } while (count < responses.ResponseCount);
             }
             m_log.TraceInfo(strItem1);
-            OBDParameterValue obdParameterValue = OBDInterpretter.getValue(param, responses, bEnglishUnits);
+            OBDParameterValue obdParameterValue = OBDInterpretter.GetValue(param, responses, bEnglishUnits);
             if (obdParameterValue.ErrorDetected) {
                 m_log.TraceError("Error Detected in obdParameterValue!");
                 return obdParameterValue;
@@ -174,9 +176,9 @@ namespace SH_OBD {
                 if ((param.ValueTypes & 0x20) == 0x20) {
                     values += "[BitFlags: ";
                     for (int idx = 0; idx < 32; idx++) {
-                        values += (obdParameterValue.getBitFlag(idx) ? "T" : "F");
+                        values += (obdParameterValue.GetBitFlag(idx) ? "T" : "F");
                     }
-                    values += " ]";
+                    values += "]";
                 }
                 m_log.TraceInfo(values);
                 return obdParameterValue;
@@ -210,7 +212,6 @@ namespace SH_OBD {
         public void Disconnect() {
             m_obdDevice.Disconnect();
             OnDisconnect?.Invoke();
-            //OnDisconnect();
         }
 
         public bool LoadParameters(string fileName) {
