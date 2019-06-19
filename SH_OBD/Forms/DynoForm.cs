@@ -37,15 +37,16 @@ namespace SH_OBD {
             m_dtDynoTime = DateTime.Now;
             btnStart.Enabled = false;
             btnReset.Enabled = false;
-            printDocument.DefaultPageSettings = new PageSettings();
-            printDocument.DefaultPageSettings.Margins = new Margins(100, 100, 100, 100);
-            printDocument.DefaultPageSettings.Landscape = true;
+            printDocument.DefaultPageSettings = new PageSettings {
+                Margins = new Margins(100, 100, 100, 100),
+                Landscape = true
+            };
             pageSetupDialog.Document = printDocument;
         }
 
         private void btnStart_Click(object sender, EventArgs e) {
             if (!m_obdInterface.ConnectedStatus) {
-                MessageBox.Show("A vehicle connection must first be established.", "Connection Required", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("必须首先与车辆进行连接，才能进行后续操作！", "连接请求", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             } else {
                 m_dtDynoTime = DateTime.Now;
                 m_dVehicleWeight = m_profile.Weight;
@@ -70,28 +71,34 @@ namespace SH_OBD {
             while (m_Capture) {
                 value = m_obdInterface.GetValue("SAE.RPM", true);
                 if (!value.ErrorDetected) {
-                    d_value = new DatedValue(value.DoubleValue);
-                    d_value.Date = DateTime.Now;
+                    d_value = new DatedValue(value.DoubleValue) {
+                        Date = DateTime.Now
+                    };
                     if (Convert.ToDecimal(d_value.Value) >= numFromRPM.Value && Convert.ToDecimal(d_value.Value) <= numToRPM.Value) {
                         m_RpmValues.Add(d_value);
                         value = m_obdInterface.GetValue("SAE.VSS", false);
                         if (!value.ErrorDetected) {
-                            d_value = new DatedValue(value.DoubleValue * (double)m_obdInterface.ActiveProfile.SpeedCalibrationFactor);
-                            d_value.Date = DateTime.Now;
+                            d_value = new DatedValue(value.DoubleValue * (double)m_obdInterface.ActiveProfile.SpeedCalibrationFactor) {
+                                Date = DateTime.Now
+                            };
                             m_KphValues.Add(d_value);
                         }
-                        m_Capture = false;
+                        //m_Capture = false;
                     }
                 }
             }
-            Calculate();
-            btnOpen.Enabled = true;
+            this.Invoke((EventHandler)delegate {
+                Calculate();
+                btnOpen.Enabled = true;
+            });
         }
 
         private void Calculate() {
+            if (m_RpmValues.Count < 1) {
+                return;
+            }
             m_TQMax = 0.0;
             m_HPMax = 0.0;
-
             m_HPValue = new double[m_RpmValues.Count - 1];
             m_TQValue = new double[m_RpmValues.Count - 1];
             m_SampleRPM = new double[m_RpmValues.Count - 1];
@@ -115,13 +122,15 @@ namespace SH_OBD {
                     double kw_value = m_dVehicleWeight * 0.45359237 * num5 * num5 * 0.5 / kph_date_1.Subtract(kph_date_0).TotalSeconds;
 
                     m_HPValue[idx] = kw_value * 0.00134102209;
-                    if (m_HPValue[idx] > m_HPMax)
+                    if (m_HPValue[idx] > m_HPMax) {
                         m_HPMax = m_HPValue[idx];
+                    }
 
                     m_TQValue[idx] = m_HPValue[idx] * 5252.0 / (m_SampleRPM[idx] * 1000.0);
 
-                    if (m_TQValue[idx] > m_TQMax)
+                    if (m_TQValue[idx] > m_TQMax) {
                         m_TQMax = m_TQValue[idx];
+                    }
                     idx = next;
                 } while (idx < m_RpmValues.Count - 1);
             }
@@ -129,12 +138,14 @@ namespace SH_OBD {
             dyno.YData1 = m_HPValue;
             dyno.XData2 = m_SampleRPM;
             dyno.YData2 = m_TQValue;
-            dyno.YRangeEnd = m_HPMax < m_TQMax ? m_TQMax : m_HPMax;
-            dyno.YRangeEnd = (double)Convert.ToInt32(dyno.YRangeEnd + 0.5);
-            if (Convert.ToInt32(dyno.YRangeEnd) % Convert.ToInt32(dyno.YGrid) != 0) {
-                do {
-                    dyno.YRangeEnd = dyno.YRangeEnd + 1.0;
-                } while (Convert.ToInt32(dyno.YRangeEnd) % Convert.ToInt32(dyno.YGrid) != 0);
+            if (m_HPMax != 0.0 && m_TQMax != 0.0) {
+                dyno.YRangeEnd = m_HPMax < m_TQMax ? m_TQMax : m_HPMax;
+                dyno.YRangeEnd = (double)Convert.ToInt32(dyno.YRangeEnd + 0.5);
+                if (Convert.ToInt32(dyno.YRangeEnd) % Convert.ToInt32(dyno.YGrid) != 0) {
+                    do {
+                        dyno.YRangeEnd = dyno.YRangeEnd + 1.0;
+                    } while (Convert.ToInt32(dyno.YRangeEnd) % Convert.ToInt32(dyno.YGrid) != 0);
+                }
             }
             dyno.ShowData1 = true;
             dyno.ShowData2 = true;
@@ -154,12 +165,12 @@ namespace SH_OBD {
             float num3 = (float)e.MarginBounds.Top;
             int bottom = e.MarginBounds.Bottom;
             float num4 = num2 - num1;
-            e.Graphics.DrawImage(dyno.getImage(), Convert.ToInt32(num1), Convert.ToInt32(num3), Convert.ToInt32(num4), Convert.ToInt32(num4 * 0.6666667f));
+            e.Graphics.DrawImage(dyno.GetImage(), Convert.ToInt32(num1), Convert.ToInt32(num3), Convert.ToInt32(num4), Convert.ToInt32(num4 * 0.6666667f));
         }
 
-        private Image getDynoImage() {
+        private Image GetDynoImage() {
             Bitmap bitmap = new Bitmap(dyno.Width, dyno.Height);
-            Graphics.FromImage((Image)bitmap).DrawImage(dyno.getImage(), 0, 0, dyno.Width, dyno.Height);
+            Graphics.FromImage((Image)bitmap).DrawImage(dyno.GetImage(), 0, 0, dyno.Width, dyno.Height);
             return (Image)bitmap;
         }
 
@@ -172,13 +183,13 @@ namespace SH_OBD {
 
         private void btnExportJPEG_Click(object sender, EventArgs e) {
             SaveFileDialog dialog = new SaveFileDialog();
-            dialog.Title = "Export as JPEG";
-            dialog.Filter = "JPEG files (*.jpg)|*.jpg";
+            dialog.Title = "作为JPEG图片输出";
+            dialog.Filter = "JPEG文件 (*.jpg)|*.jpg";
             dialog.FilterIndex = 0;
             dialog.RestoreDirectory = true;
             dialog.ShowDialog();
             if (dialog.FileName != "") {
-                getDynoImage().Save(dialog.FileName, ImageFormat.Jpeg);
+                GetDynoImage().Save(dialog.FileName, ImageFormat.Jpeg);
             }
         }
 
@@ -231,7 +242,7 @@ namespace SH_OBD {
 
             XmlSerializer xmlSerializer = new XmlSerializer(
                 typeof(DynoRecord),
-                new System.Type[] {typeof(List<DatedValue>), typeof(DatedValue)}
+                new System.Type[] { typeof(List<DatedValue>), typeof(DatedValue) }
                 );
             DynoRecord dynoRecord;
             using (FileStream reader = new FileStream(openFileDialog.FileName, FileMode.Open)) {

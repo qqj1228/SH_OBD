@@ -40,7 +40,7 @@ namespace SH_OBD {
             richTextPending.Text = "";
             if (!m_obdInterface.ConnectedStatus) {
                 m_obdInterface.TraceError("DTC Form, Attempted refresh without vehicle connection.");
-                MessageBox.Show("A vehicle connection must first be established.", "Connection Required", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("必须首先与车辆进行连接，才能进行后续操作！", "连接请求", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             } else {
                 ReadCodes();
                 RefreshDisplay();
@@ -114,77 +114,80 @@ namespace SH_OBD {
             richTextPermanent.Text = "";
             int idx;
             string text;
+            Font fontBigBold = new Font("Courier New", 10f, FontStyle.Bold);
+            Font fontSmallBold = new Font("Courier New", 8f, FontStyle.Bold);
+            Font fontSmallItalic = new Font("Courier New", 8f, FontStyle.Italic | FontStyle.Bold);
 
             if (m_ListDTC.Count > 0) {
                 for (idx = 1; idx <= m_ListDTC.Count; idx++) {
                     DTC dtc = m_ListDTC[idx - 1];
-                    richTextDTC.SelectionFont = new Font("Courier New", 12f, FontStyle.Bold);
+                    richTextDTC.SelectionFont = fontBigBold;
                     richTextDTC.SelectionColor = Color.Red;
                     richTextDTC.AppendText(string.Format("{0}. {1}\r\n", idx, dtc.Name));
 
                     if (string.IsNullOrEmpty(dtc.Description)) {
-                        richTextDTC.SelectionFont = new Font("Courier New", 10f, FontStyle.Italic | FontStyle.Bold);
+                        richTextDTC.SelectionFont = fontSmallItalic;
                         richTextDTC.SelectionColor = Color.Black;
-                        text = "    No definition found.\r\n\r\n";
+                        text = "    未发现定义\r\n\r\n";
                     } else {
-                        richTextDTC.SelectionFont = new Font("Courier New", 10f, FontStyle.Bold);
+                        richTextDTC.SelectionFont = fontSmallBold;
                         richTextDTC.SelectionColor = Color.Black;
                         text = string.Format("    {0}: {1}\r\n\r\n", dtc.Category, dtc.Description);
                     }
                     richTextDTC.AppendText(text);
                 }
             } else {
-                richTextDTC.SelectionFont = new Font("Courier New", 12f, FontStyle.Bold);
+                richTextDTC.SelectionFont = fontBigBold;
                 richTextDTC.SelectionColor = Color.Green;
-                richTextDTC.AppendText("No stored trouble codes found.");
+                richTextDTC.AppendText("无存储的故障码");
             }
 
             if (m_ListPending.Count > 0) {
                 for (idx = 1; idx <= m_ListPending.Count; idx++) {
                     DTC dtc = m_ListPending[idx - 1];
-                    richTextPending.SelectionFont = new Font("Courier New", 12f, FontStyle.Bold);
+                    richTextPending.SelectionFont = fontBigBold;
                     richTextPending.SelectionColor = Color.Red;
                     richTextPending.AppendText(string.Format("{0}. {1}\r\n", idx, dtc.Name));
 
                     if (string.IsNullOrEmpty(dtc.Description)) {
-                        richTextPending.SelectionFont = new Font("Courier New", 10f, FontStyle.Italic | FontStyle.Bold);
+                        richTextPending.SelectionFont = fontSmallItalic;
                         richTextPending.SelectionColor = Color.Black;
-                        text = "    No definition found.\r\n\r\n";
+                        text = "    未发现定义\r\n\r\n";
                     } else {
-                        richTextPending.SelectionFont = new Font("Courier New", 10f, FontStyle.Bold);
+                        richTextPending.SelectionFont = fontSmallBold;
                         richTextPending.SelectionColor = Color.Black;
                         text = string.Format("    {0}: {1}\r\n\r\n", dtc.Category, dtc.Description);
                     }
                     richTextPending.AppendText(text);
                 }
             } else {
-                richTextPending.SelectionFont = new Font("Courier New", 12f, FontStyle.Bold);
+                richTextPending.SelectionFont = fontBigBold;
                 richTextPending.SelectionColor = Color.Green;
-                richTextPending.AppendText("No pending trouble codes found.");
+                richTextPending.AppendText("无未决故障码");
             }
 
             if (m_ListPermanent.Count > 0) {
                 for (idx = 1; idx <= m_ListPermanent.Count; idx++) {
                     DTC dtc = (DTC)m_ListPermanent[idx - 1];
-                    richTextPermanent.SelectionFont = new Font("Courier New", 12f, FontStyle.Bold);
+                    richTextPermanent.SelectionFont = fontBigBold;
                     richTextPermanent.SelectionColor = Color.Red;
                     richTextPermanent.AppendText(string.Format("{0}. {1}\r\n", idx, dtc.Name));
 
                     if (string.IsNullOrEmpty(dtc.Description)) {
-                        richTextPermanent.SelectionFont = new Font("Courier New", 10f, FontStyle.Italic | FontStyle.Bold);
+                        richTextPermanent.SelectionFont = fontSmallItalic;
                         richTextPermanent.SelectionColor = Color.Black;
-                        text = "    No definition found.\r\n\r\n";
+                        text = "    未发现定义\r\n\r\n";
                     } else {
-                        richTextPermanent.SelectionFont = new Font("Courier New", 10f, FontStyle.Bold);
+                        richTextPermanent.SelectionFont = fontSmallBold;
                         richTextPermanent.SelectionColor = Color.Black;
                         text = string.Format("    {0}: {1}\r\n\r\n", dtc.Category, dtc.Description);
                     }
                     richTextPermanent.AppendText(text);
                 }
             } else {
-                richTextPermanent.SelectionFont = new Font("Courier New", 12f, FontStyle.Bold);
+                richTextPermanent.SelectionFont = fontBigBold;
                 richTextPermanent.SelectionColor = Color.Green;
-                richTextPermanent.AppendText("No permanent trouble codes found.");
+                richTextPermanent.AppendText("无永久故障码");
             }
         }
 
@@ -195,8 +198,8 @@ namespace SH_OBD {
         private void btnErase_Click(object sender, EventArgs e) {
             if (!m_obdInterface.ConnectedStatus) {
                 m_obdInterface.TraceError("DTC Form, Attempted to erase codes without vehicle connection.");
-                MessageBox.Show("A vehicle connection must first be established.", "Connection Required", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            } else if (MessageBox.Show("This will clear all trouble codes from your vehicle.\n\n" + "You should have repaired any problems indicated by these codes.\n\n" + "Also, your vehicle may run poorly for a short time while the system " + "recalibrates itself.\n\nAre you sure you want to reset your codes?", "Clear Trouble Codes?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == DialogResult.Yes) {
+                MessageBox.Show("必须首先与车辆进行连接，才能进行后续操作！", "连接请求", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            } else if (MessageBox.Show("将会清除车辆中的所有故障码，请确保对应的故障已经排除\n或者让车辆系统重新自我标定，在此期间车辆将会不安全的行驶一段时间\n是否确实要清除故障码？", "是否清除故障码？", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == DialogResult.Yes) {
                 m_obdInterface.ClearCodes();
                 RefreshDiagnosticData();
             }

@@ -118,9 +118,9 @@ namespace SH_OBD {
                     toolStripBtnUserPrefs.Enabled = false;
                     toolStripBtnVehicles.Enabled = false;
                     toolStripBtnSettings.Enabled = false;
+                    BroadcastConnectionUpdate();
                 });
             }
-            BroadcastConnectionUpdate();
         }
 
         private void On_OBD_Disconnect() {
@@ -168,14 +168,19 @@ namespace SH_OBD {
                 button.Font = m_boldFont;
                 button.ForeColor = Color.Red;
 
+                foreach (var control in panel2.Controls) {
+                    if (control is Form formLast) {
+                        formLast.Hide();
+                    }
+                }
                 Form form = dicSubForms[button.Text];
                 if (panel2.Controls.IndexOf(form) < 0) {
                     panel2.Controls.Clear();
                     form.TopLevel = false;
                     panel2.Controls.Add(form);
                     panel2.Resize += new EventHandler(panel2_Resize);
-                    //form.MdiParent = this;//指定当前窗体为顶级Mdi窗体
-                    //form.Parent = this.panel2;//指定子窗体的父容器为
+                    //form.MdiParent = this; // 指定当前窗体为顶级Mdi窗体
+                    //form.Parent = this.panel2; // 指定子窗体的父容器为
                     form.FormBorderStyle = FormBorderStyle.None;
                     form.Size = this.panel2.Size;
                     form.Show();
@@ -196,7 +201,7 @@ namespace SH_OBD {
         private void MainForm_Load(object sender, EventArgs e) {
             if (!m_obdInterface.LoadParameters(".\\configs\\generic.csv")) {
                 m_obdInterface.TraceError("Failed to load generic parameter definitions!");
-                MessageBox.Show("加载generic.xml配置文件失败!", "出错", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("加载generic.csv配置文件失败!", "出错", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             if (m_obdInterface.LoadDTCDefinitions(".\\configs\\dtc.xml") == 0) {
                 m_obdInterface.TraceError("Failed to load DTC definitions!");

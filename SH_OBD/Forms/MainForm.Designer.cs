@@ -43,9 +43,9 @@
             this.buttonTests = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.buttonDefaultFontStyle = new System.Windows.Forms.Button();
             this.picDiagram = new System.Windows.Forms.PictureBox();
             this.lblInstruction1 = new System.Windows.Forms.Label();
+            this.buttonDefaultFontStyle = new System.Windows.Forms.Button();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripBtnConnect = new System.Windows.Forms.ToolStripButton();
             this.toolStripBtnDisconnect = new System.Windows.Forms.ToolStripButton();
@@ -122,9 +122,9 @@
             this.panel1.Controls.Add(this.buttonFF);
             this.panel1.Controls.Add(this.buttonDTC);
             this.panel1.Controls.Add(this.buttonTests);
-            this.panel1.Location = new System.Drawing.Point(0, 58);
+            this.panel1.Location = new System.Drawing.Point(0, 55);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(120, 553);
+            this.panel1.Size = new System.Drawing.Size(120, 557);
             this.panel1.TabIndex = 1;
             // 
             // buttonReport
@@ -244,12 +244,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.pictureBox1);
-            this.panel2.Controls.Add(this.buttonDefaultFontStyle);
             this.panel2.Controls.Add(this.picDiagram);
             this.panel2.Controls.Add(this.lblInstruction1);
-            this.panel2.Location = new System.Drawing.Point(120, 58);
+            this.panel2.Controls.Add(this.buttonDefaultFontStyle);
+            this.panel2.Location = new System.Drawing.Point(120, 55);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(814, 553);
+            this.panel2.Size = new System.Drawing.Size(814, 557);
             this.panel2.TabIndex = 3;
             // 
             // pictureBox1
@@ -262,16 +262,6 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 22;
             this.pictureBox1.TabStop = false;
-            // 
-            // buttonDefaultFontStyle
-            // 
-            this.buttonDefaultFontStyle.Location = new System.Drawing.Point(196, 432);
-            this.buttonDefaultFontStyle.Name = "buttonDefaultFontStyle";
-            this.buttonDefaultFontStyle.Size = new System.Drawing.Size(75, 23);
-            this.buttonDefaultFontStyle.TabIndex = 21;
-            this.buttonDefaultFontStyle.Text = "DefaultFontStyle";
-            this.buttonDefaultFontStyle.UseVisualStyleBackColor = true;
-            this.buttonDefaultFontStyle.Visible = false;
             // 
             // picDiagram
             // 
@@ -293,6 +283,16 @@
             this.lblInstruction1.TabIndex = 16;
             this.lblInstruction1.Text = "1、请确认已使用了正确的通讯设置。\r\n\r\n2、请确认已使用了正确的车辆设置。\r\n\r\n3、使用OBD设备连接车辆OBD-II接口与电脑主机。\r\n\r\n4、打开车辆点火" +
     "按钮至“ON”位置，或者发动引擎使其处于运转状态。\r\n\r\n5、点击工具栏“建立连接”按钮。";
+            // 
+            // buttonDefaultFontStyle
+            // 
+            this.buttonDefaultFontStyle.Location = new System.Drawing.Point(221, 433);
+            this.buttonDefaultFontStyle.Name = "buttonDefaultFontStyle";
+            this.buttonDefaultFontStyle.Size = new System.Drawing.Size(75, 23);
+            this.buttonDefaultFontStyle.TabIndex = 21;
+            this.buttonDefaultFontStyle.Text = "DefaultFontStyle";
+            this.buttonDefaultFontStyle.UseVisualStyleBackColor = true;
+            this.buttonDefaultFontStyle.Visible = false;
             // 
             // toolStrip1
             // 

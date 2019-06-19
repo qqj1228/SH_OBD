@@ -171,6 +171,7 @@ namespace SH_OBD {
                     foreach (string strx in obdParameterValue.StringCollectionValue) {
                         values = string.Concat(values, strx + ", ");
                     }
+                    values = values.Substring(0, values.Length - 2);
                     values += "]";
                 }
                 if ((param.ValueTypes & 0x20) == 0x20) {
