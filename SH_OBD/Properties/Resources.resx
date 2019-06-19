@@ -127,7 +127,7 @@
     <value>开始(&amp;t)</value>
   </data>
   <data name="buttonName_DTC" xml:space="preserve">
-    <value>DTC</value>
+    <value>DTC 故障码</value>
   </data>
   <data name="buttonName_Dyno" xml:space="preserve">
     <value>测功机</value>
@@ -163,7 +163,7 @@
     <value>终端</value>
   </data>
   <data name="buttonName_Tests" xml:space="preserve">
-    <value>测试</value>
+    <value>故障诊断器</value>
   </data>
   <data name="buttonName_Track" xml:space="preserve">
     <value>路试</value>

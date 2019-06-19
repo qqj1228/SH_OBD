@@ -88,7 +88,7 @@ namespace SH_OBD.Properties {
         }
         
         /// <summary>
-        ///   查找类似 DTC 的本地化字符串。
+        ///   查找类似 DTC 故障码 的本地化字符串。
         /// </summary>
         internal static string buttonName_DTC {
             get {
@@ -196,7 +196,7 @@ namespace SH_OBD.Properties {
         }
         
         /// <summary>
-        ///   查找类似 测试 的本地化字符串。
+        ///   查找类似 故障诊断器 的本地化字符串。
         /// </summary>
         internal static string buttonName_Tests {
             get {

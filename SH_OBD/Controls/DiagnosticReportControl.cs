@@ -906,8 +906,9 @@ namespace SH_OBD {
             do {
                 layoutRectangle5.X = 115f;
                 layoutRectangle5.Y = (float)num6;
-                if (index1 % 2 == 0)
+                if (index1 % 2 == 0) {
                     g.FillRectangle(brush5, (int)layoutRectangle5.X, (int)layoutRectangle5.Y, (int)layoutRectangle5.Width, (int)layoutRectangle5.Height);
+                }
                 layoutRectangle5.X = layoutRectangle5.X + 5f;
                 if (DTCList != null && DTCDefinitionList != null && (index1 < DTCList.Count && index1 < DTCDefinitionList.Count)) {
                     string s2 = DTCList[index1] + " = " + DTCDefinitionList[index1];
@@ -915,8 +916,7 @@ namespace SH_OBD {
                 }
                 num6 = font3.Height + num6;
                 ++index1;
-            }
-            while (index1 < 5);
+            } while (index1 < 5);
             int num7 = num6 + 5;
             layoutRectangle5.Height = 20f;
             layoutRectangle5.Y = (float)num7;
@@ -932,8 +932,9 @@ namespace SH_OBD {
             do {
                 layoutRectangle5.X = 115f;
                 layoutRectangle5.Y = (float)y2;
-                if (index2 % 2 == 0)
+                if (index2 % 2 == 0) {
                     g.FillRectangle(brush5, (int)layoutRectangle5.X, (int)layoutRectangle5.Y, (int)layoutRectangle5.Width, (int)layoutRectangle5.Height);
+                }
                 layoutRectangle5.X = layoutRectangle5.X + 5f;
                 if (PendingList != null && PendingDefinitionList != null && (index2 < PendingList.Count && index2 < PendingDefinitionList.Count)) {
                     string s2 = PendingList[index2] + " = " + PendingDefinitionList[index2];
@@ -941,8 +942,7 @@ namespace SH_OBD {
                 }
                 y2 = font3.Height + y2;
                 ++index2;
-            }
-            while (index2 < 5);
+            } while (index2 < 5);
             g.DrawLine(pen2, 110, y1, 110, y2);
             int num8 = y2 + 5;
             g.DrawLine(pen2, 5, num8, 745, num8);
@@ -953,7 +953,7 @@ namespace SH_OBD {
             RectangleF layoutRectangle6 = new RectangleF();
             layoutRectangle6 = new RectangleF(5f, (float)num9, 740f, 20f);
             g.DrawRectangle(pen2, (int)layoutRectangle6.X, (int)layoutRectangle6.Y, (int)layoutRectangle6.Width, (int)layoutRectangle6.Height);
-            string s3 = !flag ? "冻结帧数据 (不可用)" : "冻结帧数据 (被: " + FreezeFrameDTC + " 触发)";
+            string s3 = !flag ? "冻结帧数据 (不可用)" : "冻结帧数据 (被: " + FreezeFrameDTC + " 帧触发)";
             g.DrawString(s3, font1, brush1, layoutRectangle6, format);
             int num10 = font1.Height + num9 + 10;
             format.LineAlignment = StringAlignment.Near;
@@ -1313,7 +1313,7 @@ namespace SH_OBD {
             RectangleF layoutRectangle12 = new RectangleF();
             layoutRectangle12 = new RectangleF(5f, (float)num12, 740f, 20f);
             g.DrawRectangle(pen2, (int)layoutRectangle12.X, (int)layoutRectangle12.Y, (int)layoutRectangle12.Width, (int)layoutRectangle12.Height);
-            g.DrawString("连续性与非连续性监测", font1, brush1, layoutRectangle12, format);
+            g.DrawString("连续诊断与非连续诊断", font1, brush1, layoutRectangle12, format);
             int num13 = font1.Height + num12 + 10;
             RectangleF layoutRectangle13 = new RectangleF();
             float y4 = (float)num13;
@@ -1325,7 +1325,7 @@ namespace SH_OBD {
             g.FillRectangle(brush5, (int)layoutRectangle13.X, (int)layoutRectangle13.Y, (int)layoutRectangle13.Width, (int)layoutRectangle13.Height);
             g.FillRectangle(brush5, (int)layoutRectangle14.X, (int)layoutRectangle14.Y, (int)layoutRectangle14.Width, (int)layoutRectangle14.Height);
             g.FillRectangle(brush5, (int)layoutRectangle15.X, (int)layoutRectangle15.Y, (int)layoutRectangle15.Width, (int)layoutRectangle15.Height);
-            g.DrawString("连续性监测", font4, brush4, layoutRectangle13, format);
+            g.DrawString("连续诊断", font4, brush4, layoutRectangle13, format);
             g.DrawString("支持?", font4, brush4, layoutRectangle14, format);
             g.DrawString("完成?", font4, brush4, layoutRectangle15, format);
             layoutRectangle13.Y = (float)font3.Height + layoutRectangle13.Y;
@@ -1334,12 +1334,13 @@ namespace SH_OBD {
             g.DrawString("失火", font3, brush4, layoutRectangle13);
             if (MisfireMonitorSupported) {
                 g.DrawString("支持", font3, brush2, layoutRectangle14, format);
-                if (MisfireMonitorCompleted)
-                    g.DrawString("已完成", font3, brush2, layoutRectangle15, format);
-                else
+                if (MisfireMonitorCompleted) {
+                    g.DrawString("完成", font3, brush2, layoutRectangle15, format);
+                } else {
                     g.DrawString("未完成", font3, brush3, layoutRectangle15, format);
+                }
             } else {
-                g.DrawString("不支持", font3, brush4, layoutRectangle14, format);
+                g.DrawString("不适用", font3, brush4, layoutRectangle14, format);
                 g.DrawString("-", font3, brush4, layoutRectangle15, format);
             }
             layoutRectangle13.Y = (float)font3.Height + layoutRectangle13.Y;
@@ -1351,26 +1352,28 @@ namespace SH_OBD {
             g.DrawString("燃油系统", font3, brush4, layoutRectangle13);
             if (FuelSystemMonitorSupported) {
                 g.DrawString("支持", font3, brush2, layoutRectangle14, format);
-                if (FuelSystemMonitorCompleted)
-                    g.DrawString("已完成", font3, brush2, layoutRectangle15, format);
-                else
+                if (FuelSystemMonitorCompleted) {
+                    g.DrawString("完成", font3, brush2, layoutRectangle15, format);
+                } else {
                     g.DrawString("未完成", font3, brush3, layoutRectangle15, format);
+                }
             } else {
-                g.DrawString("不支持", font3, brush4, layoutRectangle14, format);
+                g.DrawString("不适用", font3, brush4, layoutRectangle14, format);
                 g.DrawString("-", font3, brush4, layoutRectangle15, format);
             }
             layoutRectangle13.Y = (float)font3.Height + layoutRectangle13.Y;
             layoutRectangle14.Y = (float)font3.Height + layoutRectangle14.Y;
             layoutRectangle15.Y = (float)font3.Height + layoutRectangle15.Y;
-            g.DrawString("综合组件", font3, brush4, layoutRectangle13);
+            g.DrawString("综合部件", font3, brush4, layoutRectangle13);
             if (ComprehensiveMonitorSupported) {
                 g.DrawString("支持", font3, brush2, layoutRectangle14, format);
-                if (ComprehensiveMonitorCompleted)
-                    g.DrawString("已完成", font3, brush2, layoutRectangle15, format);
-                else
+                if (ComprehensiveMonitorCompleted) {
+                    g.DrawString("完成", font3, brush2, layoutRectangle15, format);
+                } else {
                     g.DrawString("未完成", font3, brush3, layoutRectangle15, format);
+                }
             } else {
-                g.DrawString("不支持", font3, brush4, layoutRectangle14, format);
+                g.DrawString("不适用", font3, brush4, layoutRectangle14, format);
                 g.DrawString("-", font3, brush4, layoutRectangle15, format);
             }
             layoutRectangle13.X = layoutRectangle15.Right + 7f;
@@ -1382,7 +1385,7 @@ namespace SH_OBD {
             g.FillRectangle(brush5, (int)layoutRectangle13.X, (int)layoutRectangle13.Y, (int)layoutRectangle13.Width, (int)layoutRectangle13.Height);
             g.FillRectangle(brush5, (int)layoutRectangle14.X, (int)layoutRectangle14.Y, (int)layoutRectangle14.Width, (int)layoutRectangle14.Height);
             g.FillRectangle(brush5, (int)layoutRectangle15.X, (int)layoutRectangle15.Y, (int)layoutRectangle15.Width, (int)layoutRectangle15.Height);
-            g.DrawString("非连续性监测", font4, brush4, layoutRectangle13, format);
+            g.DrawString("非连续诊断", font4, brush4, layoutRectangle13, format);
             g.DrawString("支持?", font4, brush4, layoutRectangle14, format);
             g.DrawString("完成?", font4, brush4, layoutRectangle15, format);
             layoutRectangle13.Y = (float)font3.Height + layoutRectangle13.Y;
@@ -1391,12 +1394,13 @@ namespace SH_OBD {
             g.DrawString("催化器", font3, brush4, layoutRectangle13);
             if (CatalystMonitorSupported) {
                 g.DrawString("支持", font3, brush2, layoutRectangle14, format);
-                if (CatalystMonitorCompleted)
-                    g.DrawString("已完成", font3, brush2, layoutRectangle15, format);
-                else
+                if (CatalystMonitorCompleted) {
+                    g.DrawString("完成", font3, brush2, layoutRectangle15, format);
+                } else {
                     g.DrawString("未完成", font3, brush3, layoutRectangle15, format);
+                }
             } else {
-                g.DrawString("不支持", font3, brush4, layoutRectangle14, format);
+                g.DrawString("不适用", font3, brush4, layoutRectangle14, format);
                 g.DrawString("-", font3, brush4, layoutRectangle15, format);
             }
             layoutRectangle13.Y = (float)font3.Height + layoutRectangle13.Y;
@@ -1408,12 +1412,13 @@ namespace SH_OBD {
             g.DrawString("加热催化器", font3, brush4, layoutRectangle13);
             if (HeatedCatalystMonitorSupported) {
                 g.DrawString("支持", font3, brush2, layoutRectangle14, format);
-                if (HeatedCatalystMonitorCompleted)
-                    g.DrawString("已完成", font3, brush2, layoutRectangle15, format);
-                else
+                if (HeatedCatalystMonitorCompleted) {
+                    g.DrawString("完成", font3, brush2, layoutRectangle15, format);
+                } else {
                     g.DrawString("未完成", font3, brush3, layoutRectangle15, format);
+                }
             } else {
-                g.DrawString("不支持", font3, brush4, layoutRectangle14, format);
+                g.DrawString("不适用", font3, brush4, layoutRectangle14, format);
                 g.DrawString("-", font3, brush4, layoutRectangle15, format);
             }
             layoutRectangle13.Y = (float)font3.Height + layoutRectangle13.Y;
@@ -1422,12 +1427,13 @@ namespace SH_OBD {
             g.DrawString("蒸发系统", font3, brush4, layoutRectangle13);
             if (EvapSystemMonitorSupported) {
                 g.DrawString("支持", font3, brush2, layoutRectangle14, format);
-                if (EvapSystemMonitorCompleted)
-                    g.DrawString("已完成", font3, brush2, layoutRectangle15, format);
-                else
+                if (EvapSystemMonitorCompleted) {
+                    g.DrawString("完成", font3, brush2, layoutRectangle15, format);
+                } else {
                     g.DrawString("未完成", font3, brush3, layoutRectangle15, format);
+                }
             } else {
-                g.DrawString("不支持", font3, brush4, layoutRectangle14, format);
+                g.DrawString("不适用", font3, brush4, layoutRectangle14, format);
                 g.DrawString("-", font3, brush4, layoutRectangle15, format);
             }
             layoutRectangle13.Y = (float)font3.Height + layoutRectangle13.Y;
@@ -1439,12 +1445,13 @@ namespace SH_OBD {
             g.DrawString("二次空气系统", font3, brush4, layoutRectangle13);
             if (SecondaryAirMonitorSupported) {
                 g.DrawString("支持", font3, brush2, layoutRectangle14, format);
-                if (SecondaryAirMonitorCompleted)
-                    g.DrawString("已完成", font3, brush2, layoutRectangle15, format);
-                else
+                if (SecondaryAirMonitorCompleted) {
+                    g.DrawString("完成", font3, brush2, layoutRectangle15, format);
+                } else {
                     g.DrawString("未完成", font3, brush3, layoutRectangle15, format);
+                }
             } else {
-                g.DrawString("不支持", font3, brush4, layoutRectangle14, format);
+                g.DrawString("不适用", font3, brush4, layoutRectangle14, format);
                 g.DrawString("-", font3, brush4, layoutRectangle15, format);
             }
             layoutRectangle13.Y = (float)font3.Height + layoutRectangle13.Y;
@@ -1453,12 +1460,13 @@ namespace SH_OBD {
             g.DrawString("A/C 系统制冷剂", font3, brush4, layoutRectangle13);
             if (RefrigerantMonitorSupported) {
                 g.DrawString("支持", font3, brush2, layoutRectangle14, format);
-                if (RefrigerantMonitorCompleted)
-                    g.DrawString("已完成", font3, brush2, layoutRectangle15, format);
-                else
+                if (RefrigerantMonitorCompleted) {
+                    g.DrawString("完成", font3, brush2, layoutRectangle15, format);
+                } else {
                     g.DrawString("未完成", font3, brush3, layoutRectangle15, format);
+                }
             } else {
-                g.DrawString("不支持", font3, brush4, layoutRectangle14, format);
+                g.DrawString("不适用", font3, brush4, layoutRectangle14, format);
                 g.DrawString("-", font3, brush4, layoutRectangle15, format);
             }
             layoutRectangle13.Y = (float)font3.Height + layoutRectangle13.Y;
@@ -1470,26 +1478,28 @@ namespace SH_OBD {
             g.DrawString("氧气传感器", font3, brush4, layoutRectangle13);
             if (OxygenSensorMonitorSupported) {
                 g.DrawString("支持", font3, brush2, layoutRectangle14, format);
-                if (OxygenSensorMonitorCompleted)
-                    g.DrawString("已完成", font3, brush2, layoutRectangle15, format);
-                else
+                if (OxygenSensorMonitorCompleted) {
+                    g.DrawString("完成", font3, brush2, layoutRectangle15, format);
+                } else {
                     g.DrawString("未完成", font3, brush3, layoutRectangle15, format);
+                }
             } else {
-                g.DrawString("不支持", font3, brush4, layoutRectangle14, format);
+                g.DrawString("不适用", font3, brush4, layoutRectangle14, format);
                 g.DrawString("-", font3, brush4, layoutRectangle15, format);
             }
             layoutRectangle13.Y = (float)font3.Height + layoutRectangle13.Y;
             layoutRectangle14.Y = (float)font3.Height + layoutRectangle14.Y;
             layoutRectangle15.Y = (float)font3.Height + layoutRectangle15.Y;
-            g.DrawString("氧气传感器加热装置", font3, brush4, layoutRectangle13);
+            g.DrawString("加热氧气传感器", font3, brush4, layoutRectangle13);
             if (OxygenSensorHeaterMonitorSupported) {
                 g.DrawString("支持", font3, brush2, layoutRectangle14, format);
-                if (OxygenSensorHeaterMonitorCompleted)
-                    g.DrawString("已完成", font3, brush2, layoutRectangle15, format);
-                else
+                if (OxygenSensorHeaterMonitorCompleted) {
+                    g.DrawString("完成", font3, brush2, layoutRectangle15, format);
+                } else {
                     g.DrawString("未完成", font3, brush3, layoutRectangle15, format);
+                }
             } else {
-                g.DrawString("不支持", font3, brush4, layoutRectangle14, format);
+                g.DrawString("不适用", font3, brush4, layoutRectangle14, format);
                 g.DrawString("-", font3, brush4, layoutRectangle15, format);
             }
             layoutRectangle13.Y = (float)font3.Height + layoutRectangle13.Y;
@@ -1501,12 +1511,13 @@ namespace SH_OBD {
             g.DrawString("EGR 系统", font3, brush4, layoutRectangle13);
             if (EGRSystemMonitorSupported) {
                 g.DrawString("支持", font3, brush2, layoutRectangle14, format);
-                if (EGRSystemMonitorCompleted)
-                    g.DrawString("已完成", font3, brush2, layoutRectangle15, format);
-                else
+                if (EGRSystemMonitorCompleted) {
+                    g.DrawString("完成", font3, brush2, layoutRectangle15, format);
+                } else {
                     g.DrawString("未完成", font3, brush3, layoutRectangle15, format);
+                }
             } else {
-                g.DrawString("不支持", font3, brush4, layoutRectangle14, format);
+                g.DrawString("不适用", font3, brush4, layoutRectangle14, format);
                 g.DrawString("-", font3, brush4, layoutRectangle15, format);
             }
             int num14 = (int)((double)layoutRectangle13.Bottom + 5.0);
