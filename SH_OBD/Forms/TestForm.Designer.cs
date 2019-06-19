@@ -229,7 +229,7 @@
             this.groupNonConTests.Size = new System.Drawing.Size(405, 224);
             this.groupNonConTests.TabIndex = 13;
             this.groupNonConTests.TabStop = false;
-            this.groupNonConTests.Text = "非持续性测试";
+            this.groupNonConTests.Text = "非连续诊断";
             // 
             // gridConTests
             // 
@@ -275,7 +275,7 @@
             this.groupConTests.Size = new System.Drawing.Size(365, 156);
             this.groupConTests.TabIndex = 12;
             this.groupConTests.TabStop = false;
-            this.groupConTests.Text = "持续性测试";
+            this.groupConTests.Text = "连续诊断";
             // 
             // TestForm
             // 
