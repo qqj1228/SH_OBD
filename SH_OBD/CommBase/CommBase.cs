@@ -74,6 +74,7 @@ namespace SH_OBD {
                 commBaseSettings.DataBits,
                 (StopBits)commBaseSettings.StopBits
             );
+            m_serial.WriteTimeout = 10000; // 发送超时设为10s
             m_checkSends = commBaseSettings.CheckAllSends;
             m_writeCount = 0;
             m_auto = false;

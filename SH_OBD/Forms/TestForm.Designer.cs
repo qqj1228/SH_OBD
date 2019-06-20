@@ -35,11 +35,11 @@
             this.lblFuel1 = new System.Windows.Forms.Label();
             this.groupAir = new System.Windows.Forms.GroupBox();
             this.groupFuel1 = new System.Windows.Forms.GroupBox();
-            this.gridNonConTests = new System.Windows.Forms.DataGrid();
+            this.gridNonConTests = new System.Windows.Forms.DataGridView();
             this.groupOxygen = new System.Windows.Forms.GroupBox();
             this.groupOBD = new System.Windows.Forms.GroupBox();
             this.groupNonConTests = new System.Windows.Forms.GroupBox();
-            this.gridConTests = new System.Windows.Forms.DataGrid();
+            this.gridConTests = new System.Windows.Forms.DataGridView();
             this.groupPTO = new System.Windows.Forms.GroupBox();
             this.groupFuel2 = new System.Windows.Forms.GroupBox();
             this.groupConTests = new System.Windows.Forms.GroupBox();
@@ -83,7 +83,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblOxygen.Location = new System.Drawing.Point(12, 20);
             this.lblOxygen.Name = "lblOxygen";
-            this.lblOxygen.Size = new System.Drawing.Size(380, 175);
+            this.lblOxygen.Size = new System.Drawing.Size(380, 103);
             this.lblOxygen.TabIndex = 0;
             this.lblOxygen.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -94,7 +94,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblOBD.Location = new System.Drawing.Point(12, 20);
             this.lblOBD.Name = "lblOBD";
-            this.lblOBD.Size = new System.Drawing.Size(380, 30);
+            this.lblOBD.Size = new System.Drawing.Size(380, 36);
             this.lblOBD.TabIndex = 0;
             this.lblOBD.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -189,22 +189,21 @@
             this.gridNonConTests.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.gridNonConTests.CaptionVisible = false;
-            this.gridNonConTests.DataMember = "";
-            this.gridNonConTests.HeaderForeColor = System.Drawing.SystemColors.ControlText;
+            this.gridNonConTests.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.gridNonConTests.Location = new System.Drawing.Point(12, 20);
             this.gridNonConTests.Name = "gridNonConTests";
+            this.gridNonConTests.ReadOnly = true;
             this.gridNonConTests.RowHeadersVisible = false;
-            this.gridNonConTests.Size = new System.Drawing.Size(380, 196);
+            this.gridNonConTests.Size = new System.Drawing.Size(380, 256);
             this.gridNonConTests.TabIndex = 1;
             // 
             // groupOxygen
             // 
             this.groupOxygen.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.groupOxygen.Controls.Add(this.lblOxygen);
-            this.groupOxygen.Location = new System.Drawing.Point(383, 338);
+            this.groupOxygen.Location = new System.Drawing.Point(383, 410);
             this.groupOxygen.Name = "groupOxygen";
-            this.groupOxygen.Size = new System.Drawing.Size(405, 205);
+            this.groupOxygen.Size = new System.Drawing.Size(405, 133);
             this.groupOxygen.TabIndex = 19;
             this.groupOxygen.TabStop = false;
             this.groupOxygen.Text = "氧气传感器位置";
@@ -213,9 +212,9 @@
             // 
             this.groupOBD.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.groupOBD.Controls.Add(this.lblOBD);
-            this.groupOBD.Location = new System.Drawing.Point(383, 272);
+            this.groupOBD.Location = new System.Drawing.Point(383, 338);
             this.groupOBD.Name = "groupOBD";
-            this.groupOBD.Size = new System.Drawing.Size(405, 60);
+            this.groupOBD.Size = new System.Drawing.Size(405, 66);
             this.groupOBD.TabIndex = 18;
             this.groupOBD.TabStop = false;
             this.groupOBD.Text = "车辆OBD要求";
@@ -226,7 +225,7 @@
             this.groupNonConTests.Controls.Add(this.gridNonConTests);
             this.groupNonConTests.Location = new System.Drawing.Point(383, 42);
             this.groupNonConTests.Name = "groupNonConTests";
-            this.groupNonConTests.Size = new System.Drawing.Size(405, 224);
+            this.groupNonConTests.Size = new System.Drawing.Size(405, 290);
             this.groupNonConTests.TabIndex = 13;
             this.groupNonConTests.TabStop = false;
             this.groupNonConTests.Text = "非连续诊断";
@@ -236,13 +235,12 @@
             this.gridConTests.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.gridConTests.CaptionVisible = false;
-            this.gridConTests.DataMember = "";
-            this.gridConTests.HeaderForeColor = System.Drawing.SystemColors.ControlText;
+            this.gridConTests.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.gridConTests.Location = new System.Drawing.Point(12, 20);
             this.gridConTests.Name = "gridConTests";
+            this.gridConTests.ReadOnly = true;
             this.gridConTests.RowHeadersVisible = false;
-            this.gridConTests.Size = new System.Drawing.Size(340, 126);
+            this.gridConTests.Size = new System.Drawing.Size(340, 122);
             this.gridConTests.TabIndex = 0;
             // 
             // groupPTO
@@ -326,11 +324,11 @@
         private System.Windows.Forms.Label lblFuel1;
         private System.Windows.Forms.GroupBox groupAir;
         private System.Windows.Forms.GroupBox groupFuel1;
-        private System.Windows.Forms.DataGrid gridNonConTests;
+        private System.Windows.Forms.DataGridView gridNonConTests;
         private System.Windows.Forms.GroupBox groupOxygen;
         private System.Windows.Forms.GroupBox groupOBD;
         private System.Windows.Forms.GroupBox groupNonConTests;
-        private System.Windows.Forms.DataGrid gridConTests;
+        private System.Windows.Forms.DataGridView gridConTests;
         private System.Windows.Forms.GroupBox groupPTO;
         private System.Windows.Forms.GroupBox groupFuel2;
         private System.Windows.Forms.GroupBox groupConTests;

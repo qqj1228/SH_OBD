@@ -164,7 +164,7 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(90, 22);
             this.label5.TabIndex = 10;
-            this.label5.Text = "轮胎比率(&a):";
+            this.label5.Text = "扁平比(&a):";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // txtCurrentTireWidth
@@ -259,7 +259,7 @@
             this.lblTireAspectRatio.Name = "lblTireAspectRatio";
             this.lblTireAspectRatio.Size = new System.Drawing.Size(90, 22);
             this.lblTireAspectRatio.TabIndex = 10;
-            this.lblTireAspectRatio.Text = "轮胎比率(&a):";
+            this.lblTireAspectRatio.Text = "扁平比(&a):";
             this.lblTireAspectRatio.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // groupWheels

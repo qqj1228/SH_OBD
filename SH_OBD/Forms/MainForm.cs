@@ -36,9 +36,12 @@ namespace SH_OBD {
             m_originFont = buttonDefaultFontStyle.Font;
             m_boldFont = new Font(m_originFont, FontStyle.Bold);
 
+            StatusLabelConnStatus.ForeColor = Color.Red;
+            StatusLabelConnStatus.Text = "OBD通讯接口未连接";
             if (m_obdInterface.ActiveProfile != null) {
                 StatusLabelVehicle.Text = m_obdInterface.ActiveProfile.ToString();
             }
+            StatusLabelDeviceName.Text = "未获取到设备名";
             if (m_obdInterface.CommSettings != null) {
                 if (m_obdInterface.CommSettings.AutoDetect) {
                     StatusLabelPort.Text = "自动探测";
@@ -48,7 +51,6 @@ namespace SH_OBD {
             }
 
             InitSubForm();
-            StatusLabelConnStatus.ForeColor = Color.Red;
             this.Text = "SH_OBD - Ver " + MainFileVersion.AssemblyVersion;
         }
 
@@ -111,7 +113,7 @@ namespace SH_OBD {
         private void On_OBD_Connect() {
             if (InvokeRequired) {
                 this.Invoke((EventHandler)delegate {
-                    StatusLabelConnStatus.Text = "OBD接口已连接";
+                    StatusLabelConnStatus.Text = "OBD通讯接口已连接";
                     StatusLabelConnStatus.ForeColor = Color.Green;
                     StatusLabelDeviceName.Text = m_obdInterface.GetDeviceDesString();
                     StatusLabelVehicle.Text = m_obdInterface.ActiveProfile.Name;
@@ -124,7 +126,7 @@ namespace SH_OBD {
         }
 
         private void On_OBD_Disconnect() {
-            StatusLabelConnStatus.Text = "OBD接口未连接";
+            StatusLabelConnStatus.Text = "OBD通讯接口未连接";
             StatusLabelConnStatus.ForeColor = Color.Red;
             StatusLabelDeviceName.Text = "未获取到设备名";
             toolStripBtnUserPrefs.Enabled = true;
@@ -336,7 +338,7 @@ namespace SH_OBD {
         private void ShowConnectedLabel() {
             this.Invoke((EventHandler)delegate {
                 StatusLabelConnStatus.ForeColor = Color.Green;
-                StatusLabelConnStatus.Text = "OBD接口已连接";
+                StatusLabelConnStatus.Text = "OBD通讯接口已连接";
             });
         }
 
@@ -345,7 +347,7 @@ namespace SH_OBD {
                 BeginInvoke((MethodInvoker)delegate { ShowConnectingLabel(); });
             } else {
                 StatusLabelConnStatus.ForeColor = Color.Black;
-                StatusLabelConnStatus.Text = "OBD接口连接中...";
+                StatusLabelConnStatus.Text = "OBD通讯接口连接中...";
             }
         }
 
@@ -354,7 +356,7 @@ namespace SH_OBD {
                 BeginInvoke((MethodInvoker)delegate { ShowDisconnectedLabel(); });
             } else {
                 StatusLabelConnStatus.ForeColor = Color.Red;
-                StatusLabelConnStatus.Text = "OBD接口已断开";
+                StatusLabelConnStatus.Text = "OBD通讯接口未连接";
                 toolStripBtnConnect.Enabled = true;
                 toolStripBtnDisconnect.Enabled = false;
             }

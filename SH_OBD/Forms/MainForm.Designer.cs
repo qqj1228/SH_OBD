@@ -79,15 +79,15 @@
             // 
             this.StatusLabelConnStatus.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.StatusLabelConnStatus.Name = "StatusLabelConnStatus";
-            this.StatusLabelConnStatus.Size = new System.Drawing.Size(229, 21);
+            this.StatusLabelConnStatus.Size = new System.Drawing.Size(222, 21);
             this.StatusLabelConnStatus.Spring = true;
-            this.StatusLabelConnStatus.Text = "OBD接口未连接";
+            this.StatusLabelConnStatus.Text = "OBD通讯接口状态";
             // 
             // StatusLabelVehicle
             // 
             this.StatusLabelVehicle.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.StatusLabelVehicle.Name = "StatusLabelVehicle";
-            this.StatusLabelVehicle.Size = new System.Drawing.Size(229, 21);
+            this.StatusLabelVehicle.Size = new System.Drawing.Size(222, 21);
             this.StatusLabelVehicle.Spring = true;
             this.StatusLabelVehicle.Text = "车辆配置";
             // 
@@ -95,14 +95,14 @@
             // 
             this.StatusLabelDeviceName.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.StatusLabelDeviceName.Name = "StatusLabelDeviceName";
-            this.StatusLabelDeviceName.Size = new System.Drawing.Size(229, 21);
+            this.StatusLabelDeviceName.Size = new System.Drawing.Size(222, 21);
             this.StatusLabelDeviceName.Spring = true;
-            this.StatusLabelDeviceName.Text = "未获取到设备名";
+            this.StatusLabelDeviceName.Text = "OBD设备名称";
             // 
             // StatusLabelPort
             // 
             this.StatusLabelPort.Name = "StatusLabelPort";
-            this.StatusLabelPort.Size = new System.Drawing.Size(229, 21);
+            this.StatusLabelPort.Size = new System.Drawing.Size(222, 21);
             this.StatusLabelPort.Spring = true;
             this.StatusLabelPort.Text = "端口";
             // 

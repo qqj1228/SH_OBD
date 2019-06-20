@@ -20,7 +20,7 @@ namespace SH_OBD {
 
         private void TestForm_Resize(object sender, EventArgs e) {
             const int bottomConTests = 357;
-            const int bottomNonConTests = 289;
+            const int bottomNonConTests = 223;
             int margin = groupConTests.Location.X;
             groupConTests.Width = (Width - margin * 3) / 2;
             groupConTests.Height = Height - bottomConTests - groupConTests.Location.Y;
@@ -43,10 +43,14 @@ namespace SH_OBD {
             m_ListNonConTests = GetNonContinuousTestList();
             gridConTests.DataSource = m_ListConTests;
             gridNonConTests.DataSource = m_ListNonConTests;
-            gridConTests.TableStyles.Clear();
-            gridConTests.TableStyles.Add(GetTableStyle());
-            gridNonConTests.TableStyles.Clear();
-            gridNonConTests.TableStyles.Add(GetTableStyle());
+            gridConTests.Columns[0].HeaderText = "名称";
+            gridConTests.Columns[1].HeaderText = "完成状态";
+            gridConTests.Columns[2].HeaderText = "支持ID";
+            gridConTests.Columns[3].HeaderText = "状态ID";
+            gridNonConTests.Columns[0].HeaderText = "名称";
+            gridNonConTests.Columns[1].HeaderText = "完成状态";
+            gridNonConTests.Columns[2].HeaderText = "支持ID";
+            gridNonConTests.Columns[3].HeaderText = "状态ID";
         }
 
         private List<TestStatus> GetContinuousTestList() {
@@ -78,52 +82,6 @@ namespace SH_OBD {
             }
             UpdateTests();
         }
-
-        #region GetTableStyle 
-        public DataGridTableStyle GetTableStyle() {
-            DataGridTableStyle style = new DataGridTableStyle {
-                MappingName = "List"
-            };
-
-            DataGridTextBoxColumn column = new DataGridTextBoxColumn {
-                MappingName = "Name",
-                HeaderText = "名称",
-                Format = "f4",
-                ReadOnly = true,
-                Width = 180
-            };
-            style.GridColumnStyles.Add(column);
-
-            column = new DataGridTextBoxColumn {
-                MappingName = "Status",
-                HeaderText = "完成状态",
-                Format = "f4",
-                ReadOnly = true,
-                Width = 85
-            };
-            style.GridColumnStyles.Add(column);
-
-            column = new DataGridTextBoxColumn {
-                MappingName = "SupportID",
-                HeaderText = "支持ID",
-                Format = "d",
-                ReadOnly = true,
-                Width = 25
-            };
-            style.GridColumnStyles.Add(column);
-
-            column = new DataGridTextBoxColumn {
-                MappingName = "StatusID",
-                HeaderText = "状态ID",
-                Format = "d",
-                ReadOnly = true,
-                Width = 25
-            };
-            style.GridColumnStyles.Add(column);
-
-            return style;
-        }
-        #endregion
 
         public void UpdateTests() {
             progressBar.Minimum = 0;
@@ -499,4 +457,41 @@ namespace SH_OBD {
         }
 
     }
+
+    [Serializable]
+    public class TestStatus {
+        private string m_strName;
+        private string m_strStatus;
+        private int m_iSupportID;
+        private int m_iStatusID;
+
+        public TestStatus(string strName, string strStatus, int iSupportID, int iStatusID) {
+            m_strName = strName;
+            m_strStatus = strStatus;
+            m_iSupportID = iSupportID;
+            m_iStatusID = iStatusID;
+        }
+
+        public string Name {
+            get { return m_strName; }
+            set { m_strName = value; }
+        }
+
+        public string Status {
+            get { return m_strStatus; }
+            set { m_strStatus = value; }
+        }
+
+        public int SupportID {
+            get { return m_iSupportID; }
+            set { m_iSupportID = value; }
+        }
+
+        public int StatusID {
+            get { return m_iStatusID; }
+            set { m_iStatusID = value; }
+        }
+
+    }
+
 }

@@ -59,7 +59,6 @@
     <Compile Include="Classes\SensorLogItem.cs" />
     <Compile Include="Classes\SensorValue.cs" />
     <Compile Include="Classes\SerialPort.cs" />
-    <Compile Include="Classes\TestStatus.cs" />
     <Compile Include="Classes\Timeslip.cs" />
     <Compile Include="Classes\UserPreferences.cs" />
     <Compile Include="Classes\Utility.cs" />
