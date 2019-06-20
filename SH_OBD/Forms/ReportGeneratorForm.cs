@@ -51,17 +51,17 @@ namespace SH_OBD {
 
         private void CollectData() {
             m_iRequestCount = 0;
-            DisplayStatusMessage("Requesting MIL Status & DTC Count");
+            DisplayStatusMessage("请求MIL状态和故障码数量");
             DisplayRequest("0101");
             OBDParameterValue value5 = m_obdInterface.GetValue("SAE.MIL", true);
             int num5 = progressBar.Value;
             progressBar.Value = num5 + 1;
             if (!value5.ErrorDetected) {
                 if (value5.BoolValue) {
-                    DisplayDetailMessage("MIL: On");
+                    DisplayDetailMessage("MIL状态: On");
                     m_bReportForm.ReportPage1.MilStatus = true;
                 } else {
-                    DisplayDetailMessage("MIL: Off");
+                    DisplayDetailMessage("MIL状态: Off");
                     m_bReportForm.ReportPage1.MilStatus = false;
                 }
             }
@@ -70,9 +70,9 @@ namespace SH_OBD {
             progressBar.Value = num4 + 1;
             if (!value3.ErrorDetected) {
                 m_bReportForm.ReportPage1.TotalCodes = (int)value3.DoubleValue;
-                DisplayDetailMessage("Stored DTCs: " + value3.DoubleValue.ToString());
+                DisplayDetailMessage("存储的故障码数量: " + value3.DoubleValue.ToString());
             }
-            DisplayStatusMessage("Requesting List of Stored DTCs");
+            DisplayStatusMessage("请求存储的故障码列表");
             OBDParameterValue value4 = m_obdInterface.GetValue("SAE.STORED_DTCS", true);
             int num3 = progressBar.Value;
             progressBar.Value = num3 + 1;
@@ -82,7 +82,7 @@ namespace SH_OBD {
                 if (enumerator2.MoveNext()) {
                     do {
                         m_bReportForm.ReportPage1.DTCList.Add(enumerator2.Current);
-                        DisplayDetailMessage("Stored DTC: " + enumerator2.Current);
+                        DisplayDetailMessage("存储的故障码: " + enumerator2.Current);
                         DTC dtc2 = m_obdInterface.GetDTC(enumerator2.Current);
                         if (dtc2 != null) {
                             m_bReportForm.ReportPage1.DTCDefinitionList.Add(dtc2.Description);
@@ -90,7 +90,7 @@ namespace SH_OBD {
                     } while (enumerator2.MoveNext());
                 }
             }
-            DisplayStatusMessage("Requesting List of Pending DTCs");
+            DisplayStatusMessage("请求未决故障码列表");
             OBDParameterValue value2 = m_obdInterface.GetValue("SAE.PENDING_DTCS", true);
             int num2 = progressBar.Value;
             progressBar.Value = num2 + 1;
@@ -100,7 +100,7 @@ namespace SH_OBD {
                 if (enumerator.MoveNext()) {
                     do {
                         m_bReportForm.ReportPage1.PendingList.Add(enumerator.Current);
-                        DisplayDetailMessage("Pending DTC: " + enumerator.Current);
+                        DisplayDetailMessage("未决故障码: " + enumerator.Current);
                         DTC dtc = m_obdInterface.GetDTC(enumerator.Current);
                         if (dtc != null) {
                             m_bReportForm.ReportPage1.PendingDefinitionList.Add(dtc.Description);
@@ -109,7 +109,7 @@ namespace SH_OBD {
                 }
             }
 
-            DisplayStatusMessage("Checking for Freeze Frame Data");
+            DisplayStatusMessage("检查冻结帧数据");
             OBDParameter parameter = m_obdInterface.LookupParameter("SAE.FF_DTC");
             if (parameter != null) {
                 OBDParameter freezeFrameCopy = parameter.GetFreezeFrameCopy(0);
@@ -118,11 +118,11 @@ namespace SH_OBD {
                 progressBar.Value = num + 1;
                 if (!value2.ErrorDetected) {
                     m_bReportForm.ReportPage1.FreezeFrameDTC = value2.StringValue;
-                    DisplayDetailMessage("Freeze freeze data found for " + value2.StringValue);
+                    DisplayDetailMessage("找到冻结帧数据 " + value2.StringValue);
                     CollectFreezeFrameData();
                 } else {
                     m_bReportForm.ReportPage1.FreezeFrameDTC = "P0000";
-                    DisplayDetailMessage("No freeze frame data found.");
+                    DisplayDetailMessage("未找到冻结帧数据");
                     m_iRequestCount += 11;
                 }
                 CollectMonitoringTestData();
@@ -142,7 +142,7 @@ namespace SH_OBD {
                 OBDParameterValue value17 = m_obdInterface.GetValue(param, true);
                 if (!value17.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowFuelSystemStatus = true;
-                    DisplayDetailMessage("Fuel System 1: " + value17.StringValue);
+                    DisplayDetailMessage("燃油系统 1: " + value17.StringValue);
                     m_bReportForm.ReportPage1.FuelSystem1Status = value17.StringValue;
                 }
             }
@@ -155,7 +155,7 @@ namespace SH_OBD {
                 OBDParameterValue value3 = m_obdInterface.GetValue(freezeFrameCopy, true);
                 if (!value3.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowFuelSystemStatus = true;
-                    DisplayDetailMessage("Fuel System 2: " + value3.StringValue);
+                    DisplayDetailMessage("燃油系统 2: " + value3.StringValue);
                     m_bReportForm.ReportPage1.FuelSystem2Status = value3.StringValue;
                 }
             }
@@ -168,7 +168,7 @@ namespace SH_OBD {
                 OBDParameterValue value2 = m_obdInterface.GetValue(parameter17, true);
                 if (!value2.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowCalculatedLoad = true;
-                    DisplayDetailMessage("Calculated Load: " + value2.DoubleValue.ToString());
+                    DisplayDetailMessage("计算负荷: " + value2.DoubleValue.ToString());
                     m_bReportForm.ReportPage1.CalculatedLoad = value2.DoubleValue;
                 }
             }
@@ -181,7 +181,7 @@ namespace SH_OBD {
                 OBDParameterValue value16 = m_obdInterface.GetValue(parameter14, true);
                 if (!value16.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowEngineCoolantTemp = true;
-                    DisplayDetailMessage("Engine Coolant Temp: " + value16.DoubleValue.ToString());
+                    DisplayDetailMessage("发动机冷却液温度: " + value16.DoubleValue.ToString());
                     m_bReportForm.ReportPage1.EngineCoolantTemp = value16.DoubleValue;
                 }
             }
@@ -298,7 +298,7 @@ namespace SH_OBD {
                 OBDParameterValue value7 = m_obdInterface.GetValue(parameter5, true);
                 if (!value7.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowIntakePressure = true;
-                    DisplayDetailMessage("Intake Pressure: " + value7.DoubleValue.ToString());
+                    DisplayDetailMessage("进气歧管压力: " + value7.DoubleValue.ToString());
                     m_bReportForm.ReportPage1.IntakePressure = value7.DoubleValue;
                 }
             }
@@ -311,7 +311,7 @@ namespace SH_OBD {
                 OBDParameterValue value6 = m_obdInterface.GetValue(parameter4, true);
                 if (!value6.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowEngineRPM = true;
-                    DisplayDetailMessage("Engine RPM: " + value6.DoubleValue.ToString());
+                    DisplayDetailMessage("发动机转数: " + value6.DoubleValue.ToString());
                     m_bReportForm.ReportPage1.EngineRPM = value6.DoubleValue;
                 }
             }
@@ -324,7 +324,7 @@ namespace SH_OBD {
                 OBDParameterValue value5 = m_obdInterface.GetValue(parameter3, true);
                 if (!value5.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowVehicleSpeed = true;
-                    DisplayDetailMessage("Vehicle Speed: " + value5.DoubleValue.ToString());
+                    DisplayDetailMessage("车辆速度: " + value5.DoubleValue.ToString());
                     m_bReportForm.ReportPage1.VehicleSpeed = value5.DoubleValue;
                 }
             }
@@ -337,234 +337,223 @@ namespace SH_OBD {
                 OBDParameterValue value4 = m_obdInterface.GetValue(parameter2, true);
                 if (!value4.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowSparkAdvance = true;
-                    DisplayDetailMessage("Spark Advance: " + value4.DoubleValue.ToString());
+                    DisplayDetailMessage("点火提前角: " + value4.DoubleValue.ToString());
                     m_bReportForm.ReportPage1.SparkAdvance = value4.DoubleValue;
                 }
             }
         }
 
         private void CollectMonitoringTestData() {
-            DisplayStatusMessage("Reading Monitor Test Results");
+            DisplayStatusMessage("读取故障诊断器结果");
             int num = progressBar.Value;
             progressBar.Value = num + 1;
             OBDParameterValue value23 = m_obdInterface.GetValue("SAE.MISFIRE_SUPPORT", true);
             if (!value23.ErrorDetected) {
                 if (value23.BoolValue) {
-                    DisplayDetailMessage("Misfire Monitoring Supported?: Yes");
                     m_bReportForm.ReportPage1.MisfireMonitorSupported = true;
+                    OBDParameterValue value22 = m_obdInterface.GetValue("SAE.MISFIRE_STATUS", true);
+                    if (!value22.ErrorDetected) {
+                        if (value22.BoolValue) {
+                            DisplayDetailMessage("失火就绪状态?: 完成");
+                            m_bReportForm.ReportPage1.MisfireMonitorCompleted = true;
+                        } else {
+                            DisplayDetailMessage("失火就绪状态?: 未完成");
+                            m_bReportForm.ReportPage1.MisfireMonitorCompleted = false;
+                        }
+                    }
                 } else {
-                    DisplayDetailMessage("Misfire Monitoring Supported?: No");
+                    DisplayDetailMessage("支持失火?: 不适用");
                     m_bReportForm.ReportPage1.MisfireMonitorSupported = false;
-                }
-            }
-            OBDParameterValue value22 = m_obdInterface.GetValue("SAE.MISFIRE_STATUS", true);
-            if (!value22.ErrorDetected) {
-                if (value22.BoolValue) {
-                    DisplayDetailMessage("Misfire Monitoring Completed?: Yes");
-                    m_bReportForm.ReportPage1.MisfireMonitorCompleted = true;
-                } else {
-                    DisplayDetailMessage("Misfire Monitoring Completed?: No");
-                    m_bReportForm.ReportPage1.MisfireMonitorCompleted = false;
                 }
             }
             OBDParameterValue value21 = m_obdInterface.GetValue("SAE.FUEL_SUPPORT", true);
             if (!value21.ErrorDetected) {
                 if (value21.BoolValue) {
-                    DisplayDetailMessage("Fuel System Monitoring Supported?: Yes");
                     m_bReportForm.ReportPage1.FuelSystemMonitorSupported = true;
+                    OBDParameterValue value20 = m_obdInterface.GetValue("SAE.FUEL_STATUS", true);
+                    if (!value20.ErrorDetected) {
+                        if (value20.BoolValue) {
+                            DisplayDetailMessage("燃油系统就绪状态?: 完成");
+                            m_bReportForm.ReportPage1.FuelSystemMonitorCompleted = true;
+                        } else {
+                            DisplayDetailMessage("燃油系统就绪状态?: 未完成");
+                            m_bReportForm.ReportPage1.FuelSystemMonitorCompleted = false;
+                        }
+                    }
                 } else {
-                    DisplayDetailMessage("Fuel System Monitoring Supported?: No");
+                    DisplayDetailMessage("支持燃油系统?: 不适用");
                     m_bReportForm.ReportPage1.FuelSystemMonitorSupported = false;
-                }
-            }
-            OBDParameterValue value20 = m_obdInterface.GetValue("SAE.FUEL_STATUS", true);
-            if (!value20.ErrorDetected) {
-                if (value20.BoolValue) {
-                    DisplayDetailMessage("Fuel System Monitoring Completed?: Yes");
-                    m_bReportForm.ReportPage1.FuelSystemMonitorCompleted = true;
-                } else {
-                    DisplayDetailMessage("Fuel System Monitoring Completed?: No");
-                    m_bReportForm.ReportPage1.FuelSystemMonitorCompleted = false;
                 }
             }
             OBDParameterValue value19 = m_obdInterface.GetValue("SAE.CCM_SUPPORT", true);
             if (!value19.ErrorDetected) {
                 if (value19.BoolValue) {
-                    DisplayDetailMessage("Comprehensive Component Monitoring Supported?: Yes");
                     m_bReportForm.ReportPage1.ComprehensiveMonitorSupported = true;
+                    OBDParameterValue value18 = m_obdInterface.GetValue("SAE.CCM_STATUS", true);
+                    if (!value18.ErrorDetected) {
+                        if (value18.BoolValue) {
+                            DisplayDetailMessage("综合部件就绪状态?: 完成");
+                            m_bReportForm.ReportPage1.ComprehensiveMonitorCompleted = true;
+                        } else {
+                            DisplayDetailMessage("综合部件就绪状态?: 未完成");
+                            m_bReportForm.ReportPage1.ComprehensiveMonitorCompleted = false;
+                        }
+                    }
                 } else {
-                    DisplayDetailMessage("Comprehensive Component Monitoring Supported?: No");
+                    DisplayDetailMessage("支持综合部件?: 不适用");
                     m_bReportForm.ReportPage1.ComprehensiveMonitorSupported = false;
-                }
-            }
-            OBDParameterValue value18 = m_obdInterface.GetValue("SAE.CCM_STATUS", true);
-            if (!value18.ErrorDetected) {
-                if (value18.BoolValue) {
-                    DisplayDetailMessage("Comprehensive Component Monitoring Completed?: Yes");
-                    m_bReportForm.ReportPage1.ComprehensiveMonitorCompleted = true;
-                } else {
-                    DisplayDetailMessage("Comprehensive Component Monitoring Completed?: No");
-                    m_bReportForm.ReportPage1.ComprehensiveMonitorCompleted = false;
                 }
             }
             OBDParameterValue value17 = m_obdInterface.GetValue("SAE.CAT_SUPPORT", true);
             if (!value17.ErrorDetected) {
                 if (value17.BoolValue) {
-                    DisplayDetailMessage("Catalyst Monitoring Supported?: Yes");
                     m_bReportForm.ReportPage1.CatalystMonitorSupported = true;
+                    OBDParameterValue value16 = m_obdInterface.GetValue("SAE.CAT_STATUS", true);
+                    if (!value16.ErrorDetected) {
+                        if (value16.BoolValue) {
+                            DisplayDetailMessage("催化器就绪状态?: 完成");
+                            m_bReportForm.ReportPage1.CatalystMonitorCompleted = true;
+                        } else {
+                            DisplayDetailMessage("催化器就绪状态?: 未完成");
+                            m_bReportForm.ReportPage1.CatalystMonitorCompleted = false;
+                        }
+                    }
                 } else {
-                    DisplayDetailMessage("Catalyst Monitoring Supported?: No");
+                    DisplayDetailMessage("支持催化器?: 不适用");
                     m_bReportForm.ReportPage1.CatalystMonitorSupported = false;
-                }
-            }
-            OBDParameterValue value16 = m_obdInterface.GetValue("SAE.CAT_STATUS", true);
-            if (!value16.ErrorDetected) {
-                if (value16.BoolValue) {
-                    DisplayDetailMessage("Catalyst Monitoring Completed?: Yes");
-                    m_bReportForm.ReportPage1.CatalystMonitorCompleted = true;
-                } else {
-                    DisplayDetailMessage("Catalyst Monitoring Completed?: No");
-                    m_bReportForm.ReportPage1.CatalystMonitorCompleted = false;
                 }
             }
             OBDParameterValue value15 = m_obdInterface.GetValue("SAE.HCAT_SUPPORT", true);
             if (!value15.ErrorDetected) {
                 if (value15.BoolValue) {
-                    DisplayDetailMessage("Heated Catalyst Monitoring Supported?: Yes");
                     m_bReportForm.ReportPage1.HeatedCatalystMonitorSupported = true;
+                    OBDParameterValue value14 = m_obdInterface.GetValue("SAE.HCAT_STATUS", true);
+                    if (!value14.ErrorDetected) {
+                        if (value14.BoolValue) {
+                            DisplayDetailMessage("加热催化器就绪状态?: 完成");
+                            m_bReportForm.ReportPage1.HeatedCatalystMonitorCompleted = true;
+                        } else {
+                            DisplayDetailMessage("加热催化器就绪状态?: 未完成");
+                            m_bReportForm.ReportPage1.HeatedCatalystMonitorCompleted = false;
+                        }
+                    }
                 } else {
-                    DisplayDetailMessage("Heated Catalyst Monitoring Supported?: No");
+                    DisplayDetailMessage("支持加热催化器?: 不适用");
                     m_bReportForm.ReportPage1.HeatedCatalystMonitorSupported = false;
-                }
-            }
-            OBDParameterValue value14 = m_obdInterface.GetValue("SAE.HCAT_STATUS", true);
-            if (!value14.ErrorDetected) {
-                if (value14.BoolValue) {
-                    DisplayDetailMessage("Heated Catalyst Monitoring Completed?: Yes");
-                    m_bReportForm.ReportPage1.HeatedCatalystMonitorCompleted = true;
-                } else {
-                    DisplayDetailMessage("Heated Catalyst Monitoring Completed?: No");
-                    m_bReportForm.ReportPage1.HeatedCatalystMonitorCompleted = false;
                 }
             }
             OBDParameterValue value13 = m_obdInterface.GetValue("SAE.EVAP_SUPPORT", true);
             if (!value13.ErrorDetected) {
                 if (value13.BoolValue) {
-                    DisplayDetailMessage("Evaporative System Monitoring Supported?: Yes");
                     m_bReportForm.ReportPage1.EvapSystemMonitorSupported = true;
+                    OBDParameterValue value12 = m_obdInterface.GetValue("SAE.EVAP_STATUS", true);
+                    if (!value12.ErrorDetected) {
+                        if (value12.BoolValue) {
+                            DisplayDetailMessage("蒸发系统就绪状态?: 完成");
+                            m_bReportForm.ReportPage1.EvapSystemMonitorCompleted = true;
+                        } else {
+                            DisplayDetailMessage("蒸发系统就绪状态?: 未完成");
+                            m_bReportForm.ReportPage1.EvapSystemMonitorCompleted = false;
+                        }
+                    }
                 } else {
-                    DisplayDetailMessage("Evaporative System Monitoring Supported?: No");
+                    DisplayDetailMessage("支持蒸发系统?: 不适用");
                     m_bReportForm.ReportPage1.EvapSystemMonitorSupported = false;
-                }
-            }
-            OBDParameterValue value12 = m_obdInterface.GetValue("SAE.EVAP_STATUS", true);
-            if (!value12.ErrorDetected) {
-                if (value12.BoolValue) {
-                    DisplayDetailMessage("Evaporative System Monitoring Completed?: Yes");
-                    m_bReportForm.ReportPage1.EvapSystemMonitorCompleted = true;
-                } else {
-                    DisplayDetailMessage("Evaporative System Monitoring Completed?: No");
-                    m_bReportForm.ReportPage1.EvapSystemMonitorCompleted = false;
                 }
             }
             OBDParameterValue value11 = m_obdInterface.GetValue("SAE.AIR_SUPPORT", true);
             if (!value11.ErrorDetected) {
                 if (value11.BoolValue) {
-                    DisplayDetailMessage("Secondary Air System Monitoring Supported?: Yes");
                     m_bReportForm.ReportPage1.SecondaryAirMonitorSupported = true;
+                    OBDParameterValue value10 = m_obdInterface.GetValue("SAE.AIR_STATUS", true);
+                    if (!value10.ErrorDetected) {
+                        if (value10.BoolValue) {
+                            DisplayDetailMessage("二次空气系统就绪状态?: 完成");
+                            m_bReportForm.ReportPage1.SecondaryAirMonitorCompleted = true;
+                        } else {
+                            DisplayDetailMessage("二次空气系统就绪状态?: 未完成");
+                            m_bReportForm.ReportPage1.SecondaryAirMonitorCompleted = false;
+                        }
+                    }
                 } else {
-                    DisplayDetailMessage("Secondary Air System Monitoring Supported?: No");
+                    DisplayDetailMessage("支持二次空气系统?: 不适用");
                     m_bReportForm.ReportPage1.SecondaryAirMonitorSupported = false;
-                }
-            }
-            OBDParameterValue value10 = m_obdInterface.GetValue("SAE.AIR_STATUS", true);
-            if (!value10.ErrorDetected) {
-                if (value10.BoolValue) {
-                    DisplayDetailMessage("Secondary Air System Monitoring Completed?: Yes");
-                    m_bReportForm.ReportPage1.SecondaryAirMonitorCompleted = true;
-                } else {
-                    DisplayDetailMessage("Secondary Air System Monitoring Completed?: No");
-                    m_bReportForm.ReportPage1.SecondaryAirMonitorCompleted = false;
                 }
             }
             OBDParameterValue value9 = m_obdInterface.GetValue("SAE.AC_SUPPORT", true);
             if (!value9.ErrorDetected) {
                 if (value9.BoolValue) {
-                    DisplayDetailMessage("A/C System Refrigerant Monitoring Supported?: Yes");
                     m_bReportForm.ReportPage1.RefrigerantMonitorSupported = true;
+                    OBDParameterValue value8 = m_obdInterface.GetValue("SAE.AC_STATUS", true);
+                    if (!value8.ErrorDetected) {
+                        if (value8.BoolValue) {
+                            DisplayDetailMessage("A/C系统制冷剂就绪状态?: 完成");
+                            m_bReportForm.ReportPage1.RefrigerantMonitorCompleted = true;
+                        } else {
+                            DisplayDetailMessage("A/C系统制冷剂就绪状态?: 未完成");
+                            m_bReportForm.ReportPage1.RefrigerantMonitorCompleted = false;
+                        }
+                    }
                 } else {
-                    DisplayDetailMessage("A/C System Refrigerant Monitoring Supported?: No");
+                    DisplayDetailMessage("支持A/C系统制冷剂?: 不适用");
                     m_bReportForm.ReportPage1.RefrigerantMonitorSupported = false;
-                }
-            }
-            OBDParameterValue value8 = m_obdInterface.GetValue("SAE.AC_STATUS", true);
-            if (!value8.ErrorDetected) {
-                if (value8.BoolValue) {
-                    DisplayDetailMessage("A/C System Refrigerant Monitoring Completed?: Yes");
-                    m_bReportForm.ReportPage1.RefrigerantMonitorCompleted = true;
-                } else {
-                    DisplayDetailMessage("A/C System Refrigerant Monitoring Completed?: No");
-                    m_bReportForm.ReportPage1.RefrigerantMonitorCompleted = false;
                 }
             }
             OBDParameterValue value7 = m_obdInterface.GetValue("SAE.O2_SUPPORT", true);
             if (!value7.ErrorDetected) {
                 if (value7.BoolValue) {
-                    DisplayDetailMessage("Oxygen Sensor Monitoring Supported?: Yes");
                     m_bReportForm.ReportPage1.OxygenSensorMonitorSupported = true;
+                    OBDParameterValue value6 = m_obdInterface.GetValue("SAE.O2_STATUS", true);
+                    if (!value6.ErrorDetected) {
+                        if (value6.BoolValue) {
+                            DisplayDetailMessage("氧气传感器就绪状态?: 完成");
+                            m_bReportForm.ReportPage1.OxygenSensorMonitorCompleted = true;
+                        } else {
+                            DisplayDetailMessage("氧气传感器就绪状态?: 未完成");
+                            m_bReportForm.ReportPage1.OxygenSensorMonitorCompleted = false;
+                        }
+                    }
                 } else {
-                    DisplayDetailMessage("Oxygen Sensor Monitoring Supported?: No");
+                    DisplayDetailMessage("支持氧气传感器?: 不适用");
                     m_bReportForm.ReportPage1.OxygenSensorMonitorSupported = false;
-                }
-            }
-            OBDParameterValue value6 = m_obdInterface.GetValue("SAE.O2_STATUS", true);
-            if (!value6.ErrorDetected) {
-                if (value6.BoolValue) {
-                    DisplayDetailMessage("Oxygen Sensor Monitoring Completed?: Yes");
-                    m_bReportForm.ReportPage1.OxygenSensorMonitorCompleted = true;
-                } else {
-                    DisplayDetailMessage("Oxygen Sensor Monitoring Completed?: No");
-                    m_bReportForm.ReportPage1.OxygenSensorMonitorCompleted = false;
                 }
             }
             OBDParameterValue value5 = m_obdInterface.GetValue("SAE.O2HTR_SUPPORT", true);
             if (!value5.ErrorDetected) {
                 if (value5.BoolValue) {
-                    DisplayDetailMessage("Oxygen Sensor Heater Monitoring Supported?: Yes");
                     m_bReportForm.ReportPage1.OxygenSensorHeaterMonitorSupported = true;
+                    OBDParameterValue value4 = m_obdInterface.GetValue("SAE.O2HTR_STATUS", true);
+                    if (!value4.ErrorDetected) {
+                        if (value4.BoolValue) {
+                            DisplayDetailMessage("加热氧气传感器就绪状态?: 完成");
+                            m_bReportForm.ReportPage1.OxygenSensorHeaterMonitorCompleted = true;
+                        } else {
+                            DisplayDetailMessage("加热氧气传感器就绪状态?: 未完成");
+                            m_bReportForm.ReportPage1.OxygenSensorHeaterMonitorCompleted = false;
+                        }
+                    }
                 } else {
-                    DisplayDetailMessage("Oxygen Sensor Heater Monitoring Supported?: No");
+                    DisplayDetailMessage("支持加热氧气传感器?: 不适用");
                     m_bReportForm.ReportPage1.OxygenSensorHeaterMonitorSupported = false;
-                }
-            }
-            OBDParameterValue value4 = m_obdInterface.GetValue("SAE.O2HTR_STATUS", true);
-            if (!value4.ErrorDetected) {
-                if (value4.BoolValue) {
-                    DisplayDetailMessage("Oxygen Sensor Heater Monitoring Completed?: Yes");
-                    m_bReportForm.ReportPage1.OxygenSensorHeaterMonitorCompleted = true;
-                } else {
-                    DisplayDetailMessage("Oxygen Sensor Heater Monitoring Completed?: No");
-                    m_bReportForm.ReportPage1.OxygenSensorHeaterMonitorCompleted = false;
                 }
             }
             OBDParameterValue value3 = m_obdInterface.GetValue("SAE.EGR_SUPPORT", true);
             if (!value3.ErrorDetected) {
                 if (value3.BoolValue) {
-                    DisplayDetailMessage("EGR System Monitoring Supported?: Yes");
                     m_bReportForm.ReportPage1.EGRSystemMonitorSupported = true;
+                    OBDParameterValue value2 = m_obdInterface.GetValue("SAE.EGR_STATUS", true);
+                    if (!value2.ErrorDetected) {
+                        if (value2.BoolValue) {
+                            DisplayDetailMessage("EGR系统就绪状态?: 完成");
+                            m_bReportForm.ReportPage1.EGRSystemMonitorCompleted = true;
+                        } else {
+                            DisplayDetailMessage("EGR系统就绪状态?: 未完成");
+                            m_bReportForm.ReportPage1.EGRSystemMonitorCompleted = false;
+                        }
+                    }
                 } else {
-                    DisplayDetailMessage("EGR System Monitoring Supported?: No");
+                    DisplayDetailMessage("支持EGR系统?: 不适用");
                     m_bReportForm.ReportPage1.EGRSystemMonitorSupported = false;
-                }
-            }
-            OBDParameterValue value2 = m_obdInterface.GetValue("SAE.EGR_STATUS", true);
-            if (!value2.ErrorDetected) {
-                if (value2.BoolValue) {
-                    DisplayDetailMessage("EGR System Monitoring Completed?: Yes");
-                    m_bReportForm.ReportPage1.EGRSystemMonitorCompleted = true;
-                } else {
-                    DisplayDetailMessage("EGR System Monitoring Completed?: No");
-                    m_bReportForm.ReportPage1.EGRSystemMonitorCompleted = false;
                 }
             }
         }
@@ -578,7 +567,7 @@ namespace SH_OBD {
         private void DisplayRequest(string str) {
             richTextStatus.SelectionFont = new Font("Times New Roman", 10f, FontStyle.Bold);
             richTextStatus.SelectionColor = Color.Black;
-            richTextStatus.AppendText("   TX: ");
+            richTextStatus.AppendText("   发送: ");
             richTextStatus.SelectionColor = Color.Green;
             richTextStatus.AppendText(str);
             richTextStatus.AppendText("\r\n");
@@ -588,7 +577,7 @@ namespace SH_OBD {
             richTextStatus.SelectionFont = new Font("Times New Roman", 10f, FontStyle.Bold);
             Color black = Color.Black;
             richTextStatus.SelectionColor = black;
-            richTextStatus.AppendText("   RX: ");
+            richTextStatus.AppendText("   接收: ");
             Color green = Color.Green;
             richTextStatus.SelectionColor = green;
             richTextStatus.AppendText(str);
@@ -599,7 +588,7 @@ namespace SH_OBD {
             richTextStatus.SelectionFont = new Font("Times New Roman", 10f, FontStyle.Bold);
             Color black = Color.Black;
             richTextStatus.SelectionColor = black;
-            richTextStatus.AppendText("   RX: ");
+            richTextStatus.AppendText("   接收: ");
             Color red = Color.Red;
             richTextStatus.SelectionColor = red;
             richTextStatus.AppendText(str);
@@ -620,8 +609,8 @@ namespace SH_OBD {
 
         private void btnOpen_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Title = "Open OBD-II Diagnostic Report";
-            openFileDialog.Filter = "ProScan Report Files (*.obd)|*.obd";
+            openFileDialog.Title = "打开 OBD-II 诊断报告";
+            openFileDialog.Filter = "SH_OBD 报告文件 (*.obd)|*.obd";
             openFileDialog.FilterIndex = 0;
             openFileDialog.RestoreDirectory = true;
             int num1 = (int)openFileDialog.ShowDialog();
@@ -648,8 +637,9 @@ namespace SH_OBD {
             uint num2 = 25U;
             do {
                 string str = binaryReader.ReadString();
-                if (str.Length > 0)
+                if (str.Length > 0) {
                     stringCollection1.Add(str);
+                }
                 --num2;
             } while (num2 > 0U);
             m_bReportForm.ReportPage1.DTCList = stringCollection1;
@@ -657,8 +647,9 @@ namespace SH_OBD {
             uint num3 = 25U;
             do {
                 string str = binaryReader.ReadString();
-                if (str.Length > 0)
+                if (str.Length > 0) {
                     stringCollection2.Add(str);
+                }
                 --num3;
             } while (num3 > 0U);
             m_bReportForm.ReportPage1.DTCDefinitionList = stringCollection2;
@@ -666,8 +657,9 @@ namespace SH_OBD {
             uint num4 = 25U;
             do {
                 string str = binaryReader.ReadString();
-                if (str.Length > 0)
+                if (str.Length > 0) {
                     stringCollection3.Add(str);
+                }
                 --num4;
             } while (num4 > 0U);
             m_bReportForm.ReportPage1.PendingList = stringCollection3;
@@ -675,8 +667,9 @@ namespace SH_OBD {
             uint num5 = 25U;
             do {
                 string str = binaryReader.ReadString();
-                if (str.Length > 0)
+                if (str.Length > 0) {
                     stringCollection4.Add(str);
+                }
                 --num5;
             } while (num5 > 0U);
             m_bReportForm.ReportPage1.PendingDefinitionList = stringCollection4;

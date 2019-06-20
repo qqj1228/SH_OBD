@@ -83,7 +83,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblOxygen.Location = new System.Drawing.Point(12, 20);
             this.lblOxygen.Name = "lblOxygen";
-            this.lblOxygen.Size = new System.Drawing.Size(380, 103);
+            this.lblOxygen.Size = new System.Drawing.Size(380, 175);
             this.lblOxygen.TabIndex = 0;
             this.lblOxygen.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -94,7 +94,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblOBD.Location = new System.Drawing.Point(12, 20);
             this.lblOBD.Name = "lblOBD";
-            this.lblOBD.Size = new System.Drawing.Size(380, 36);
+            this.lblOBD.Size = new System.Drawing.Size(380, 30);
             this.lblOBD.TabIndex = 0;
             this.lblOBD.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -190,20 +190,21 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gridNonConTests.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.gridNonConTests.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.gridNonConTests.Location = new System.Drawing.Point(12, 20);
             this.gridNonConTests.Name = "gridNonConTests";
             this.gridNonConTests.ReadOnly = true;
             this.gridNonConTests.RowHeadersVisible = false;
-            this.gridNonConTests.Size = new System.Drawing.Size(380, 256);
+            this.gridNonConTests.Size = new System.Drawing.Size(380, 190);
             this.gridNonConTests.TabIndex = 1;
             // 
             // groupOxygen
             // 
             this.groupOxygen.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.groupOxygen.Controls.Add(this.lblOxygen);
-            this.groupOxygen.Location = new System.Drawing.Point(383, 410);
+            this.groupOxygen.Location = new System.Drawing.Point(383, 338);
             this.groupOxygen.Name = "groupOxygen";
-            this.groupOxygen.Size = new System.Drawing.Size(405, 133);
+            this.groupOxygen.Size = new System.Drawing.Size(405, 205);
             this.groupOxygen.TabIndex = 19;
             this.groupOxygen.TabStop = false;
             this.groupOxygen.Text = "氧气传感器位置";
@@ -212,9 +213,9 @@
             // 
             this.groupOBD.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.groupOBD.Controls.Add(this.lblOBD);
-            this.groupOBD.Location = new System.Drawing.Point(383, 338);
+            this.groupOBD.Location = new System.Drawing.Point(383, 272);
             this.groupOBD.Name = "groupOBD";
-            this.groupOBD.Size = new System.Drawing.Size(405, 66);
+            this.groupOBD.Size = new System.Drawing.Size(405, 60);
             this.groupOBD.TabIndex = 18;
             this.groupOBD.TabStop = false;
             this.groupOBD.Text = "车辆OBD要求";
@@ -225,7 +226,7 @@
             this.groupNonConTests.Controls.Add(this.gridNonConTests);
             this.groupNonConTests.Location = new System.Drawing.Point(383, 42);
             this.groupNonConTests.Name = "groupNonConTests";
-            this.groupNonConTests.Size = new System.Drawing.Size(405, 290);
+            this.groupNonConTests.Size = new System.Drawing.Size(405, 224);
             this.groupNonConTests.TabIndex = 13;
             this.groupNonConTests.TabStop = false;
             this.groupNonConTests.Text = "非连续诊断";
@@ -236,6 +237,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gridConTests.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.gridConTests.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.gridConTests.Location = new System.Drawing.Point(12, 20);
             this.gridConTests.Name = "gridConTests";
             this.gridConTests.ReadOnly = true;

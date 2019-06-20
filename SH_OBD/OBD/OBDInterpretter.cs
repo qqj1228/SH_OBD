@@ -612,25 +612,54 @@ namespace SH_OBD {
                                     value2.ShortStringValue = "EOBD/OBD/OBDII";
                                     return value2;
 
-                                case 10:
+                                case 0x0A:
                                     value2.StringValue = "JOBD";
                                     value2.ShortStringValue = "JOBD";
                                     return value2;
 
-                                case 11:
+                                case 0x0B:
                                     value2.StringValue = "JOBD and OBD II";
                                     value2.ShortStringValue = "JOBD/OBDII";
                                     return value2;
 
-                                case 12:
+                                case 0x0C:
                                     value2.StringValue = "JOBD and EOBD";
                                     value2.ShortStringValue = "JOBD/EOBD";
                                     return value2;
 
-                                case 13:
+                                case 0x0D:
                                     value2.StringValue = "JOBD, EOBD, and OBD II";
                                     value2.ShortStringValue = "JOBD/EOBD/OBDII";
                                     return value2;
+
+                                case 0x0E:
+                                    value2.StringValue = "Heavy Duty Vehicles (EURO IV) B1";
+                                    value2.ShortStringValue = "EURO IV B1";
+                                    return value2;
+
+                                case 0x0F:
+                                    value2.StringValue = "Heavy Duty Vehicles (EURO V) B2";
+                                    value2.ShortStringValue = "EURO V B2";
+                                    return value2;
+
+                                case 0x10:
+                                    value2.StringValue = "Heavy Duty Vehicles (EURO EEC) C (gas engines)";
+                                    value2.ShortStringValue = "EURO C";
+                                    return value2;
+
+                                case 0x11:
+                                    value2.StringValue = "Engine Manufacturer Diagnostics (EMD)";
+                                    value2.ShortStringValue = "EMD";
+                                    return value2;
+                            }
+                            if (HexByteToInt(response.GetDataByte(0)) >= 0x12 && HexByteToInt(response.GetDataByte(0)) <= 0xFA) {
+                                value2.StringValue = "ISO/SAE reserved";
+                                value2.ShortStringValue = "---";
+                                return value2;
+                            } else if (HexByteToInt(response.GetDataByte(0)) >= 0xFB && HexByteToInt(response.GetDataByte(0)) <= 0xFF) {
+                                value2.StringValue = "ISO/SAE - Not available for assignment";
+                                value2.ShortStringValue = "SAE J1939 special meaning";
+                                return value2;
                             }
                             return value2;
 

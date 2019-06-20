@@ -170,11 +170,6 @@ namespace SH_OBD {
                 button.Font = m_boldFont;
                 button.ForeColor = Color.Red;
 
-                foreach (var control in panel2.Controls) {
-                    if (control is Form formLast) {
-                        formLast.Hide();
-                    }
-                }
                 Form form = dicSubForms[button.Text];
                 if (panel2.Controls.IndexOf(form) < 0) {
                     panel2.Controls.Clear();
