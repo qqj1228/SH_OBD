@@ -3,6 +3,8 @@
 namespace SH_OBD {
     public class OBDDeviceELM327 : OBDDevice {
         private ProtocolType m_iProtocol;
+        private int m_iBaudRateIndex;
+        private int m_iComPortIndex;
 
         public OBDDeviceELM327(Logger log) : base(log) {
             try {
@@ -54,10 +56,12 @@ namespace SH_OBD {
                     m_CommELM.SetTimeout(500);
                     return flag;
                 }
-                if (!ConfirmAT("ATM0")) {
-                    m_CommELM.Close();
-                    return false;
-                }
+                //if (!ConfirmAT("ATM0")) {
+                //    m_CommELM.Close();
+                //    return false;
+                //}
+                // 使用当前版本的obdsim不支持"ATM0"命令，故不判断该命令是否可用，只需执行过即可
+                ConfirmAT("ATM0");
 
                 m_CommELM.SetTimeout(5000);
                 int[] xattr = new int[] { 6, 7, 2, 3, 1, 8, 9, 4, 5 };
@@ -68,7 +72,8 @@ namespace SH_OBD {
                     }
                     if (GetOBDResponse("0100").IndexOf("4100") >= 0) {
                         SetProtocol((ProtocolType)xattr[idx]);
-
+                        SetBaudRateIndex(iBaud);
+                        m_iComPortIndex = iPort;
                         m_CommELM.SetTimeout(500);
                         ConfirmAT("ATM1");
                         return true;
@@ -77,23 +82,29 @@ namespace SH_OBD {
                 if (m_CommELM.Online) {
                     m_CommELM.Close();
                 }
-            } catch (Exception) {
+            } catch (Exception e) {
                 if (m_CommELM.Online) {
                     m_CommELM.Close();
                 }
+                m_log.TraceError("Initialize occur error: " + e.Message);
             }
             return false;
         }
 
-        public override bool Initialize() {
+        public override bool Initialize(Settings settings) {
             try {
                 if (m_CommELM.Online) {
                     return true;
                 }
+                if (CommBase.GetPortAvailable(settings.ComPort) == CommBase.PortStatus.Available && Initialize(settings.ComPort, settings.BaudRate)) {
+                    return true;
+                }
                 for (int iPort = 0; iPort < 100; ++iPort) {
-                    if (CommBase.GetPortAvailable(iPort) == CommBase.PortStatus.Available
-                        && (Initialize(iPort, 38400) || Initialize(iPort, 115200) || Initialize(iPort, 9600))) {
-                        return true;
+                    if (iPort != settings.ComPort) {
+                        if (CommBase.GetPortAvailable(iPort) == CommBase.PortStatus.Available
+                            && (Initialize(iPort, 38400) || Initialize(iPort, 115200) || Initialize(iPort, 9600))) {
+                            return true;
+                        }
                     }
                 }
             } catch { }
@@ -205,6 +216,26 @@ namespace SH_OBD {
             }
             return "";
         }
+
+        public override ProtocolType GetProtocolType() { return m_iProtocol; }
+        public override int GetBaudRateIndex() { return m_iBaudRateIndex; }
+        public void SetBaudRateIndex(int iBaud) {
+            switch (iBaud) {
+                case 9600:
+                    m_iBaudRateIndex = 0;
+                    break;
+                case 38400:
+                    m_iBaudRateIndex = 1;
+                    break;
+                case 115200:
+                    m_iBaudRateIndex = 2;
+                    break;
+                default:
+                    m_iBaudRateIndex = -1;
+                    break;
+            }
+        }
+        public override int GetComPortIndex() { return m_iComPortIndex; }
 
     }
 }

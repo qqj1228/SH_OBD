@@ -26,9 +26,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLabelConnStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.StatusLabelVehicle = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusLabelDeviceName = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusLabelPort = new System.Windows.Forms.ToolStripStatusLabel();
+            this.StatusLabelDeviceType = new System.Windows.Forms.ToolStripStatusLabel();
+            this.StatusLabelProtocol = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.buttonReport = new System.Windows.Forms.Button();
             this.buttonTerminal = new System.Windows.Forms.Button();
@@ -65,8 +66,9 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.StatusLabelConnStatus,
-            this.StatusLabelVehicle,
             this.StatusLabelDeviceName,
+            this.StatusLabelProtocol,
+            this.StatusLabelDeviceType,
             this.StatusLabelPort});
             this.statusStrip1.Location = new System.Drawing.Point(0, 611);
             this.statusStrip1.Name = "statusStrip1";
@@ -79,32 +81,39 @@
             // 
             this.StatusLabelConnStatus.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.StatusLabelConnStatus.Name = "StatusLabelConnStatus";
-            this.StatusLabelConnStatus.Size = new System.Drawing.Size(222, 21);
+            this.StatusLabelConnStatus.Size = new System.Drawing.Size(177, 21);
             this.StatusLabelConnStatus.Spring = true;
             this.StatusLabelConnStatus.Text = "OBD通讯接口状态";
-            // 
-            // StatusLabelVehicle
-            // 
-            this.StatusLabelVehicle.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
-            this.StatusLabelVehicle.Name = "StatusLabelVehicle";
-            this.StatusLabelVehicle.Size = new System.Drawing.Size(222, 21);
-            this.StatusLabelVehicle.Spring = true;
-            this.StatusLabelVehicle.Text = "车辆配置";
             // 
             // StatusLabelDeviceName
             // 
             this.StatusLabelDeviceName.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.StatusLabelDeviceName.Name = "StatusLabelDeviceName";
-            this.StatusLabelDeviceName.Size = new System.Drawing.Size(222, 21);
+            this.StatusLabelDeviceName.Size = new System.Drawing.Size(177, 21);
             this.StatusLabelDeviceName.Spring = true;
             this.StatusLabelDeviceName.Text = "OBD设备名称";
             // 
             // StatusLabelPort
             // 
+            this.StatusLabelPort.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.StatusLabelPort.Name = "StatusLabelPort";
-            this.StatusLabelPort.Size = new System.Drawing.Size(222, 21);
-            this.StatusLabelPort.Spring = true;
+            this.StatusLabelPort.Size = new System.Drawing.Size(36, 21);
             this.StatusLabelPort.Text = "端口";
+            // 
+            // StatusLabelDeviceType
+            // 
+            this.StatusLabelDeviceType.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
+            this.StatusLabelDeviceType.Name = "StatusLabelDeviceType";
+            this.StatusLabelDeviceType.Size = new System.Drawing.Size(87, 21);
+            this.StatusLabelDeviceType.Text = "OBD设备类型";
+            // 
+            // StatusLabelProtocol
+            // 
+            this.StatusLabelProtocol.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
+            this.StatusLabelProtocol.Name = "StatusLabelProtocol";
+            this.StatusLabelProtocol.Size = new System.Drawing.Size(177, 21);
+            this.StatusLabelProtocol.Spring = true;
+            this.StatusLabelProtocol.Text = "OBD连接协议";
             // 
             // panel1
             // 
@@ -405,7 +414,7 @@
         private System.Windows.Forms.Button buttonDyno;
         private System.Windows.Forms.Button buttonTrack;
         private System.Windows.Forms.Button buttonReport;
-        private System.Windows.Forms.ToolStripStatusLabel StatusLabelVehicle;
+        private System.Windows.Forms.ToolStripStatusLabel StatusLabelProtocol;
         private System.Windows.Forms.ToolStripStatusLabel StatusLabelPort;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton toolStripBtnConnect;
@@ -418,6 +427,7 @@
         private System.Windows.Forms.Label lblInstruction1;
         private System.Windows.Forms.Button buttonDefaultFontStyle;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.ToolStripStatusLabel StatusLabelDeviceType;
     }
 }
 

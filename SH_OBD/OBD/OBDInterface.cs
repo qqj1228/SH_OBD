@@ -17,7 +17,6 @@ namespace SH_OBD {
         public delegate void __Delegate_OnConnect();
         public delegate void __Delegate_OnDisconnect();
 
-        private HardwareType m_iDevice;
         private OBDDevice m_obdDevice;
         private List<DTC> m_listDTC;
         private List<OBDParameter> m_listAllParameters;
@@ -35,16 +34,17 @@ namespace SH_OBD {
 
         public OBDInterface() {
             m_log = new Logger("./log", EnumLogLevel.LogLevelAll, true, 100);
-            SetDevice(HardwareType.ELM327);
+            m_log.TraceInfo("==================== START ====================");
             m_listAllParameters = new List<OBDParameter>();
             m_listSupportedParameters = new List<OBDParameter>();
             m_userpreferences = LoadUserPreferences();
             m_settings = LoadCommSettings();
             m_VehicleProfiles = LoadVehicleProfiles();
+            SetDevice(HardwareType.ELM327);
         }
 
         public HardwareType GetDevice() {
-            return m_iDevice;
+            return m_settings.HardwareIndex;
         }
 
         public string GetDeviceDesString() {
@@ -53,6 +53,10 @@ namespace SH_OBD {
 
         public string GetDeviceIDString() {
             return m_obdDevice.DeviceIDString();
+        }
+
+        public ProtocolType GetProtocol() {
+            return m_settings.ProtocolIndex;
         }
 
         public bool InitDevice(HardwareType device, int port, int baud, ProtocolType protocol) {
@@ -71,7 +75,10 @@ namespace SH_OBD {
             m_log.TraceInfo("Beginning AUTO initialization...");
             bool flag = false;
             SetDevice(HardwareType.ELM327);
-            if (m_obdDevice.Initialize() && InitOBD()) {
+            if (m_obdDevice.Initialize(m_settings) && InitOBD()) {
+                m_settings.ProtocolIndex = m_obdDevice.GetProtocolType();
+                m_settings.ComPort = m_obdDevice.GetComPortIndex();
+                SaveCommSettings(m_settings);
                 flag = true;
                 OnConnect?.Invoke();
             }
@@ -151,7 +158,7 @@ namespace SH_OBD {
                 } while (count < responses.ResponseCount);
             }
             m_log.TraceInfo(strItem1);
-            OBDParameterValue obdParameterValue = OBDInterpretter.GetValue(param, responses, bEnglishUnits);
+            OBDParameterValue obdParameterValue = OBDInterpreter.GetValue(param, responses, bEnglishUnits);
             if (obdParameterValue.ErrorDetected) {
                 m_log.TraceError("Error Detected in obdParameterValue!");
                 return obdParameterValue;
@@ -232,98 +239,95 @@ namespace SH_OBD {
                             continue;
                         }
 
-                        try {
-                            tokens = line.Split(comma);
-                            for (int idx = 0; idx < tokens.Length; idx++) {
-                                tokens[idx] = (tokens[idx] ?? "").Trim();
-                            }
-
-                            param = new OBDParameter {
-                                PID = tokens[0],
-                                Name = tokens[1],
-                                OBDRequest = tokens[2],
-                                Service = int.Parse(tokens[3]),
-                                Parameter = int.Parse(tokens[4]),
-                                SubParameter = int.Parse(tokens[5])
-                            };
-
-                            switch (tokens[6]) {
-                                case "Airflow":
-                                    param.Category = 0; break;
-                                case "DTC":
-                                    param.Category = 1; break;
-                                case "Emissions":
-                                    param.Category = 2; break;
-                                case "Fuel":
-                                    param.Category = 3; break;
-                                case "General":
-                                    param.Category = 4; break;
-                                case "O2":
-                                    param.Category = 5; break;
-                                case "Powertrain":
-                                    param.Category = 6; break;
-                                case "Speed":
-                                    param.Category = 7; break;
-                                case "Temperature":
-                                    param.Category = 8; break;
-                            }
-                            switch (tokens[7]) {
-                                case "Generic":
-                                    param.Type = 0; break;
-                                case "Manufacturer":
-                                    param.Type = 1; break;
-                                case "Scripted":
-                                    param.Type = 2; break;
-                            }
-
-                            switch (tokens[8]) {
-                                case "SAE":
-                                    param.Manufacturer = 0; break;
-                                case "GM":
-                                    param.Manufacturer = 1; break;
-                                case "Ford":
-                                    param.Manufacturer = 2; break;
-                                case "ProScan":
-                                    param.Manufacturer = 3; break;
-                            }
-
-                            param.Priority = int.Parse(tokens[9]);
-                            param.EnglishUnitLabel = tokens[10];
-                            param.MetricUnitLabel = tokens[11];
-
-                            try {
-                                param.EnglishMinValue = Utility.Text2Double(tokens[12]);
-                                param.EnglishMaxValue = Utility.Text2Double(tokens[13]);
-                                param.MetricMinValue = Utility.Text2Double(tokens[14]);
-                                param.MetricMaxValue = Utility.Text2Double(tokens[15]);
-                            } catch { }
-
-                            int valueType = 0x00;
-                            if (int.Parse(tokens[16]) > 0) {
-                                valueType = 0x01;
-                            }
-                            if (int.Parse(tokens[17]) > 0) {
-                                valueType |= 0x02;
-                            }
-                            if (int.Parse(tokens[18]) > 0) {
-                                valueType |= 0x04;
-                            }
-                            if (int.Parse(tokens[19]) > 0) {
-                                valueType |= 0x08;
-                            }
-
-                            param.ValueTypes = valueType;
-                            m_listAllParameters.Add(param);
-                        } catch (Exception) {
-                            m_log.TraceError(string.Format("Failed to load parameters from {0}", fileName));
-                            return false;
+                        tokens = line.Split(comma);
+                        for (int idx = 0; idx < tokens.Length; idx++) {
+                            tokens[idx] = (tokens[idx] ?? "").Trim();
                         }
+
+                        param = new OBDParameter {
+                            PID = tokens[0],
+                            Name = tokens[1],
+                            OBDRequest = tokens[2],
+                            Service = int.Parse(tokens[3]),
+                            Parameter = int.Parse(tokens[4]),
+                            SubParameter = int.Parse(tokens[5])
+                        };
+
+                        switch (tokens[6]) {
+                            case "Airflow":
+                                param.Category = 0; break;
+                            case "DTC":
+                                param.Category = 1; break;
+                            case "Emissions":
+                                param.Category = 2; break;
+                            case "Fuel":
+                                param.Category = 3; break;
+                            case "General":
+                                param.Category = 4; break;
+                            case "O2":
+                                param.Category = 5; break;
+                            case "Powertrain":
+                                param.Category = 6; break;
+                            case "Speed":
+                                param.Category = 7; break;
+                            case "Temperature":
+                                param.Category = 8; break;
+                        }
+                        switch (tokens[7]) {
+                            case "Generic":
+                                param.Type = 0; break;
+                            case "Manufacturer":
+                                param.Type = 1; break;
+                            case "Scripted":
+                                param.Type = 2; break;
+                        }
+
+                        switch (tokens[8]) {
+                            case "SAE":
+                                param.Manufacturer = 0; break;
+                            case "GM":
+                                param.Manufacturer = 1; break;
+                            case "Ford":
+                                param.Manufacturer = 2; break;
+                            case "ProScan":
+                                param.Manufacturer = 3; break;
+                        }
+
+                        param.Priority = int.Parse(tokens[9]);
+                        param.EnglishUnitLabel = tokens[10];
+                        param.MetricUnitLabel = tokens[11];
+
+                        try {
+                            param.EnglishMinValue = Utility.Text2Double(tokens[12]);
+                            param.EnglishMaxValue = Utility.Text2Double(tokens[13]);
+                            param.MetricMinValue = Utility.Text2Double(tokens[14]);
+                            param.MetricMaxValue = Utility.Text2Double(tokens[15]);
+                        } catch (Exception e) {
+                            m_log.TraceError("Utility.Text2Double() occur error: " + e.Message);
+                        }
+
+                        int valueType = 0x00;
+                        if (int.Parse(tokens[16]) > 0) {
+                            valueType = 0x01;
+                        }
+                        if (int.Parse(tokens[17]) > 0) {
+                            valueType |= 0x02;
+                        }
+                        if (int.Parse(tokens[18]) > 0) {
+                            valueType |= 0x04;
+                        }
+                        if (int.Parse(tokens[19]) > 0) {
+                            valueType |= 0x08;
+                        }
+
+                        param.ValueTypes = valueType;
+                        m_listAllParameters.Add(param);
                     }
                 }
                 m_log.TraceInfo(string.Format("Loaded {0} parameters from {1}", lineNo, fileName));
                 return true;
-            } catch (Exception) {
-                m_log.TraceError(string.Format("Failed to locate parameter file: {0}", fileName));
+            } catch (Exception e) {
+                m_log.TraceError(string.Format("Failed to load parameters from: {0}, reason: {1}", fileName, e.Message));
                 return false;
             }
         }
@@ -357,7 +361,7 @@ namespace SH_OBD {
         }
 
         private void SetDevice(HardwareType device) {
-            m_iDevice = device;
+            m_settings.HardwareIndex = device;
             switch (device) {
                 case HardwareType.ELM327:
                     m_log.TraceInfo("Set device to ELM327");
@@ -383,14 +387,19 @@ namespace SH_OBD {
         }
 
         public int LoadDTCDefinitions(string fileName) {
-            if (File.Exists(fileName)) {
-                Type[] extraTypes = new Type[] { typeof(DTC) };
-                try {
+            try {
+                if (File.Exists(fileName)) {
+                    Type[] extraTypes = new Type[] { typeof(DTC) };
                     m_listDTC = new XmlSerializer(typeof(List<DTC>), extraTypes).Deserialize(new FileStream(fileName, FileMode.Open)) as List<DTC>;
                     return m_listDTC.Count;
-                } catch { }
+                } else {
+                    m_log.TraceError("Failed to locate DTC definitions file: " + fileName);
+                    return 0;
+                }
+            } catch (Exception e) {
+                m_log.TraceError("Failed to load parameters from: " + fileName + ", reason: " + e.Message);
+                return -1;
             }
-            return 0;
         }
 
         public void SaveCommSettings(Settings settings) {
@@ -426,7 +435,8 @@ namespace SH_OBD {
                     m_settings = (Settings)serializer.Deserialize(reader);
                     reader.Close();
                 }
-            } catch {
+            } catch (Exception e) {
+                m_log.TraceError("Using default communication settings because of failed to load them, reason: " + e.Message);
                 m_settings = new Settings();
             }
             return m_settings;
@@ -439,7 +449,8 @@ namespace SH_OBD {
                     m_userpreferences = (UserPreferences)serializer.Deserialize(reader);
                     reader.Close();
                 }
-            } catch {
+            } catch (Exception e) {
+                m_log.TraceError("Using default user preferences because of failed to load them, reason: " + e.Message);
                 m_userpreferences = new UserPreferences();
             }
             return m_userpreferences;
@@ -462,7 +473,9 @@ namespace SH_OBD {
                     VehicleProfile vehicleProfile = binaryFormatter.Deserialize(file) as VehicleProfile;
                     profiles.Add(vehicleProfile);
                 }
-            } catch (SerializationException) { } catch (Exception) { } finally {
+            } catch (Exception) {
+                // file读完以后会抛出异常，什么都不做继续执行finally块
+            } finally {
                 if (file != null) {
                     file.Close();
                 }
@@ -482,8 +495,10 @@ namespace SH_OBD {
                     m_settings.ActiveProfileIndex = 0;
 
                     return m_VehicleProfiles[0];
-                } catch { }
-                return null;
+                } catch (Exception e) {
+                    m_log.TraceError("Failed to get vehicle profile, reason: " + e.Message);
+                    return null;
+                }
             }
         }
 
@@ -509,27 +524,15 @@ namespace SH_OBD {
                 foreach (VehicleProfile profile in profiles) {
                     binaryFormatter.Serialize(file, profile);
                 }
-            } catch (Exception) { } finally {
+            } catch (Exception e) {
+                m_log.TraceError("Failed to save vehicle profile, reason: " + e.Message);
+            } finally {
                 if (file != null) {
                     file.Close();
                 }
             }
         }
 
-        public void TraceFatal(string strLog) {
-            m_log.TraceFatal(strLog);
-        }
-
-        public void TraceError(string strLog) {
-            m_log.TraceError(strLog);
-        }
-
-        public void TraceWarning(string strLog) {
-            m_log.TraceWarning(strLog);
-        }
-
-        public void TraceInfo(string strLog) {
-            m_log.TraceInfo(strLog);
-        }
+        public Logger GetLogger() { return m_log; }
     }
 }

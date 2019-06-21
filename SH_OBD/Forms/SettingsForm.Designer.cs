@@ -182,7 +182,7 @@
             this.checkBoxAutoDetect.Name = "checkBoxAutoDetect";
             this.checkBoxAutoDetect.Size = new System.Drawing.Size(476, 25);
             this.checkBoxAutoDetect.TabIndex = 12;
-            this.checkBoxAutoDetect.Text = "自动探测OBD连接设置";
+            this.checkBoxAutoDetect.Text = "使用ELM327设备自动探测OBD连接设置";
             this.checkBoxAutoDetect.CheckedChanged += new System.EventHandler(this.checkBoxAutoDetect_CheckedChanged);
             // 
             // SettingsForm

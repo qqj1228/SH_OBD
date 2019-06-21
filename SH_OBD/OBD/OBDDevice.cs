@@ -24,10 +24,13 @@ namespace SH_OBD {
 
         public abstract bool Initialize(int iPort, int iBaud, ProtocolType iProtocol);
         public abstract bool Initialize(int iPort, int iBaud);
-        public abstract bool Initialize();
+        public abstract bool Initialize(Settings settings);
         public abstract void Disconnect();
         public abstract bool Connected();
         public abstract OBDResponseList Query(OBDParameter param);
         public abstract string Query(string cmd);
+        public abstract ProtocolType GetProtocolType();
+        public abstract int GetComPortIndex();
+        public abstract int GetBaudRateIndex();
     }
 }

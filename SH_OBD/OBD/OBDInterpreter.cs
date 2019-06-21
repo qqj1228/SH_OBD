@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 using System.Runtime.InteropServices;
 
 namespace SH_OBD {
-    public class OBDInterpretter {
+    public class OBDInterpreter {
         private const string HexDigits = "0123456789abcdef";
 
         public static int HexByteToInt(string strHex) {

@@ -13,7 +13,7 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 
 namespace SH_OBD {
-    public partial class SensorMonitorForm : Form {
+    public partial class SensorGridForm : Form {
         private OBDInterface m_obdInterface;
         private DateTime m_dtStartTime;
 
@@ -25,7 +25,7 @@ namespace SH_OBD {
         public bool IsLogging;
         public bool IsRunThread;
 
-        public SensorMonitorForm(OBDInterface obd2) {
+        public SensorGridForm(OBDInterface obd2) {
             try {
                 InitializeComponent();
                 m_obdInterface = obd2;
@@ -108,7 +108,7 @@ namespace SH_OBD {
         }
 
         private void listSensors_ItemCheck(object sender, ItemCheckEventArgs e) {
-            SensorMonitorForm.m_ListSensors.Clear();
+            SensorGridForm.m_ListSensors.Clear();
             int index1 = 0;
             if (0 < listSensors.CheckedIndices.Count) {
                 do {
@@ -165,7 +165,7 @@ namespace SH_OBD {
         private void RebuildSensorGrid() {
             panelDisplay.Controls.Clear();
             int index = 0;
-            foreach (OBDParameter param in SensorMonitorForm.m_ListSensors) {
+            foreach (OBDParameter param in SensorGridForm.m_ListSensors) {
                 SensorDisplayControl control = new SensorDisplayControl {
                     Title = param.Name,
                     Size = new Size(panelDisplay.Width / 2 - 8, 65),
@@ -285,7 +285,7 @@ namespace SH_OBD {
             TimeSpan timeSpan = log_item.Time.Subtract(m_dtStartTime);
             lblTimeElapsed.Text = dateTime.Add(timeSpan).ToString("mm:ss.fff", DateTimeFormatInfo.InvariantInfo);
             int num = 0;
-            if (0 >= SensorMonitorForm.m_ListSensors.Count) {
+            if (0 >= SensorGridForm.m_ListSensors.Count) {
                 return;
             }
             int index2 = index1;
@@ -306,7 +306,7 @@ namespace SH_OBD {
                 }
                 ++num;
                 --index2;
-            } while (num < SensorMonitorForm.m_ListSensors.Count);
+            } while (num < SensorGridForm.m_ListSensors.Count);
         }
 
         private void SensorMonitorForm_Activated(object sender, EventArgs e) {

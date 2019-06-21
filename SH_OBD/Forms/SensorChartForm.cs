@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SH_OBD {
-    public partial class ScopeForm : Form {
+    public partial class SensorChartForm : Form {
         protected OBDInterface m_obdInterface;
         private List<DatedValue> m_arraySensor1Values;
         private List<DatedValue> m_arraySensor2Values;
@@ -34,7 +34,7 @@ namespace SH_OBD {
         private double[] dSensor4Times;
         public bool IsPlotting;
 
-        public ScopeForm(OBDInterface obd2) {
+        public SensorChartForm(OBDInterface obd2) {
             m_obdInterface = obd2;
             InitializeComponent();
         }

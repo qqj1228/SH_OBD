@@ -511,7 +511,7 @@ namespace SH_OBD {
 
         private void btnUpdate_Click(object sender, EventArgs e) {
             if (!m_obd2Interface.ConnectedStatus) {
-                m_obd2Interface.TraceError("Test Form, Attempted refresh without vehicle connection.");
+                m_obd2Interface.GetLogger().TraceError("Test Form, Attempted refresh without vehicle connection.");
                 MessageBox.Show("必须首先与车辆进行连接，才能进行后续操作！", "连接请求", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             } else {
                 btnUpdate.Enabled = false;

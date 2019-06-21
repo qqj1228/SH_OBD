@@ -73,8 +73,9 @@ namespace SH_OBD {
                 (Parity)commBaseSettings.Parity,
                 commBaseSettings.DataBits,
                 (StopBits)commBaseSettings.StopBits
-            );
-            m_serial.WriteTimeout = 10000; // 发送超时设为10s
+            ) {
+                WriteTimeout = 5000 // 发送超时设为5s
+            };
             m_checkSends = commBaseSettings.CheckAllSends;
             m_writeCount = 0;
             m_auto = false;
@@ -184,8 +185,6 @@ namespace SH_OBD {
             public int Parity = 0;
             public int DataBits = 8;
             public int StopBits = 1;
-            public CommBase.ASCII XonChar = CommBase.ASCII.DC1;
-            public CommBase.ASCII XoffChar = CommBase.ASCII.DC3;
             public bool AutoReopen = false;
             public bool CheckAllSends = true;
 

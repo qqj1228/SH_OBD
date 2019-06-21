@@ -39,7 +39,7 @@ namespace SH_OBD {
             richTextDTC.Text = "";
             richTextPending.Text = "";
             if (!m_obdInterface.ConnectedStatus) {
-                m_obdInterface.TraceError("DTC Form, Attempted refresh without vehicle connection.");
+                m_obdInterface.GetLogger().TraceError("DTC Form, Attempted refresh without vehicle connection.");
                 MessageBox.Show("必须首先与车辆进行连接，才能进行后续操作！", "连接请求", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             } else {
                 ReadCodes();
@@ -197,7 +197,7 @@ namespace SH_OBD {
 
         private void btnErase_Click(object sender, EventArgs e) {
             if (!m_obdInterface.ConnectedStatus) {
-                m_obdInterface.TraceError("DTC Form, Attempted to erase codes without vehicle connection.");
+                m_obdInterface.GetLogger().TraceError("DTC Form, Attempted to erase codes without vehicle connection.");
                 MessageBox.Show("必须首先与车辆进行连接，才能进行后续操作！", "连接请求", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             } else if (MessageBox.Show("将会清除车辆中的所有故障码，请确保对应的故障已经排除\n或者让车辆系统重新自我标定，在此期间车辆将会不安全的行驶一段时间\n是否确实要清除故障码？", "是否清除故障码？", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == DialogResult.Yes) {
                 m_obdInterface.ClearCodes();

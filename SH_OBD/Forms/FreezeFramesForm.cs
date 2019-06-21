@@ -27,7 +27,7 @@ namespace SH_OBD {
                 m_FrameNumber = Convert.ToInt32(numFrame.Value);
                 Task.Factory.StartNew(ReadFreezeFrameData);
             } else {
-                m_obdInterface.TraceError("Freeze Frame Form, Attempted to refresh without vehicle connection.");
+                m_obdInterface.GetLogger().TraceError("Freeze Frame Form, Attempted to refresh without vehicle connection.");
                 MessageBox.Show(
                     "A vehicle connection must first be established.",
                     "Connection Required",
@@ -53,7 +53,7 @@ namespace SH_OBD {
 
                 OBDParameterValue value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (value.ErrorDetected) {
-                    m_obdInterface.TraceError("Error while requesting SAE.FF_DTC");
+                    m_obdInterface.GetLogger().TraceError("Error while requesting SAE.FF_DTC");
                     MessageBox.Show(
                         "An error was encountered while requesting SAE.FF_DTC",
                         "Error",

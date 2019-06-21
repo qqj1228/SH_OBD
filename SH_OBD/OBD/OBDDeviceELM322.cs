@@ -1,6 +1,9 @@
 ﻿using System;
 namespace SH_OBD {
     public class OBDDeviceELM322 : OBDDevice {
+        private int m_iBaudRateIndex;
+        private int m_iComPortIndex;
+
         public OBDDeviceELM322(Logger log) : base(log) {
             try {
                 m_Parser = new OBDParser_J1850_VPW();
@@ -25,6 +28,8 @@ namespace SH_OBD {
                         m_DeviceID = GetDeviceID();
                         return true;
                     }
+                    SetBaudRateIndex(iBaud);
+                    m_iComPortIndex = iPort;
                     m_CommELM.Close();
                 }
             } catch { }
@@ -32,9 +37,12 @@ namespace SH_OBD {
         }
 
 
-        public override bool Initialize() {
+        public override bool Initialize(Settings settings) {
             try {
                 if (m_CommELM.Online) {
+                    return true;
+                }
+                if (CommBase.GetPortAvailable(settings.ComPort) == CommBase.PortStatus.Available && Initialize(settings.ComPort, settings.BaudRate)) {
                     return true;
                 }
                 for (int iPort = 0; iPort < 100; ++iPort) {
@@ -100,5 +108,25 @@ namespace SH_OBD {
             }
             return "";
         }
+
+        public override ProtocolType GetProtocolType() { return (ProtocolType)2; }
+        public override int GetBaudRateIndex() { return m_iBaudRateIndex; }
+        public void SetBaudRateIndex(int iBaud) {
+            switch (iBaud) {
+                case 9600:
+                    m_iBaudRateIndex = 0;
+                    break;
+                case 38400:
+                    m_iBaudRateIndex = 1;
+                    break;
+                case 115200:
+                    m_iBaudRateIndex = 2;
+                    break;
+                default:
+                    m_iBaudRateIndex = -1;
+                    break;
+            }
+        }
+        public override int GetComPortIndex() { return m_iComPortIndex; }
     }
 }

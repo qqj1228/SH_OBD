@@ -1,5 +1,5 @@
 ﻿namespace SH_OBD {
-    partial class ScopeForm {
+    partial class SensorChartForm {
         /// <summary>
         /// Required designer variable.
         /// </summary>

@@ -1,5 +1,5 @@
 ﻿namespace SH_OBD {
-    partial class SensorMonitorForm {
+    partial class SensorGridForm {
         /// <summary>
         /// Required designer variable.
         /// </summary>

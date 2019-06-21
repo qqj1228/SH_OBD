@@ -72,7 +72,6 @@ namespace SH_OBD {
             set { m_MinValueEnglish = value; }
         }
 
-        // OBD返回值中有效数据的位数
         public int ValueTypes {
             get { return m_ValueType; }
             set { m_ValueType = value; }
