@@ -34,7 +34,7 @@ namespace SH_OBD {
 
         public OBDInterface() {
             m_log = new Logger("./log", EnumLogLevel.LogLevelAll, true, 100);
-            m_log.TraceInfo("==================== START ====================");
+            m_log.TraceInfo("==================== START Ver: " + MainFileVersion.AssemblyVersion + " ====================");
             m_listAllParameters = new List<OBDParameter>();
             m_listSupportedParameters = new List<OBDParameter>();
             m_userpreferences = LoadUserPreferences();
