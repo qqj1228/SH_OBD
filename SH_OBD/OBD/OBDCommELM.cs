@@ -6,10 +6,14 @@ namespace SH_OBD {
         protected int m_BaudRate = 38400;
         protected int m_Timeout = 300;
         protected CommBase.ASCII m_asciiRxTerm = (CommBase.ASCII)62;
+        protected CommBase.ASCII[] m_RxFilterWithSpace;
+        protected CommBase.ASCII[] m_RxFilterNoSpace;
         protected Logger m_log;
 
         public OBDCommELM(Logger log) : base(log) {
             m_log = log;
+            m_RxFilterWithSpace = new ASCII[] { ASCII.LF, ASCII.SP, ASCII.GT, ASCII.NULL };
+            m_RxFilterNoSpace = new ASCII[] { ASCII.LF, ASCII.GT, ASCII.NULL };
         }
 
         public void SetPort(int iPort) {
@@ -38,6 +42,12 @@ namespace SH_OBD {
 
         public string GetResponse(string command) {
             string response;
+            bool bRxFilterNoSpace = false;
+            if (command.Contains("AT")) {
+                // 如果是发送AT命令的话，返回值就不过滤空格
+                SetRxFilter(m_RxFilterNoSpace);
+                bRxFilterNoSpace = true;
+            }
             try {
                 m_log.TraceInfo(string.Format("TX: {0}", command));
                 response = Transact(command);
@@ -49,6 +59,11 @@ namespace SH_OBD {
                 }
                 m_log.TraceError("RX: COMM TIMED OUT!");
                 response = "TIMEOUT";
+            } finally {
+                if (bRxFilterNoSpace) {
+                    // 将返回值重设为过滤空格
+                    SetRxFilter(m_RxFilterWithSpace);
+                }
             }
             return response;
         }
@@ -57,7 +72,7 @@ namespace SH_OBD {
             CommLine.CommLineSettings settings = new CommLine.CommLineSettings();
             settings.SetStandard(m_Port, m_BaudRate);
             settings.RxTerminator = m_asciiRxTerm;
-            settings.RxFilter = new ASCII[] { ASCII.LF, ASCII.SP, ASCII.GT, ASCII.NULL };
+            settings.RxFilter = m_RxFilterWithSpace;
             settings.TxTerminator = new ASCII[] { ASCII.CR };
             settings.TransactTimeout = m_Timeout;
             base.Setup(settings);

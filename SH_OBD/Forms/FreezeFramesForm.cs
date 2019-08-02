@@ -39,12 +39,14 @@ namespace SH_OBD {
 
         private void ReadFreezeFrameData() {
             while (true) {
-                freezeFrame.Reset();
+                this.BeginInvoke(new Action(() => {
+                    freezeFrame.Reset();
+                }));
                 OBDParameter parameter = m_obdInterface.LookupParameter("SAE.FF_DTC");
                 if (parameter == null) {
                     MessageBox.Show(
-                        "An error was encountered while requesting SAE.FF_DTC",
-                        "Error",
+                        "加载SAE.FF_DTC参数时发生错误",
+                        "出错",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Hand
                     );
@@ -55,26 +57,28 @@ namespace SH_OBD {
                 if (value.ErrorDetected) {
                     m_obdInterface.GetLogger().TraceError("Error while requesting SAE.FF_DTC");
                     MessageBox.Show(
-                        "An error was encountered while requesting SAE.FF_DTC",
-                        "Error",
+                        "请求SAE.FF_DTC命令时发生错误",
+                        "出错",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Hand
                     );
-                    break;
+                    //break;
                 }
 
                 if (string.Compare(value.StringValue, "P0000") == 0) {
                     MessageBox.Show(
-                        string.Format("No freeze frame information found at frame #{0}.", m_FrameNumber),
-                        "Information",
+                        string.Format("在 #{0} 帧中，没有发现冻结帧信息", m_FrameNumber),
+                        "信息",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Asterisk
                     );
                     break;
                 }
 
-                progressBar.Value = 0;
-                freezeFrame.DTC = value.StringValue;
+                this.BeginInvoke(new Action(() => {
+                    progressBar.Value = 0;
+                    freezeFrame.DTC = value.StringValue;
+                }));
 
                 parameter = m_obdInterface.LookupParameter("SAE.FUEL1_STATUS");
                 if (parameter == null) {
@@ -83,7 +87,9 @@ namespace SH_OBD {
 
                 value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
-                    freezeFrame.FuelSystem1Status = value.StringValue;
+                    this.BeginInvoke(new Action(() => {
+                        freezeFrame.FuelSystem1Status = value.StringValue;
+                    }));
                 }
 
                 parameter = m_obdInterface.LookupParameter("SAE.FUEL2_STATUS");
@@ -93,10 +99,14 @@ namespace SH_OBD {
 
                 value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
-                    freezeFrame.FuelSystem2Status = value.StringValue;
+                    this.BeginInvoke(new Action(() => {
+                        freezeFrame.FuelSystem2Status = value.StringValue;
+                    }));
                 }
 
-                progressBar.Increment(progressBar.Step);
+                this.BeginInvoke(new Action(() => {
+                    progressBar.Increment(progressBar.Step);
+                }));
                 if (!m_KeepReading) {
                     break;
                 }
@@ -108,10 +118,14 @@ namespace SH_OBD {
 
                 value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
-                    freezeFrame.CalculatedLoad = value.DoubleValue;
+                    this.BeginInvoke(new Action(() => {
+                        freezeFrame.CalculatedLoad = value.DoubleValue;
+                    }));
                 }
 
-                progressBar.Increment(progressBar.Step);
+                this.BeginInvoke(new Action(() => {
+                    progressBar.Increment(progressBar.Step);
+                }));
                 if (!m_KeepReading) {
                     break;
                 }
@@ -123,10 +137,14 @@ namespace SH_OBD {
 
                 value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
-                    freezeFrame.EngineCoolantTemp = value.DoubleValue;
+                    this.BeginInvoke(new Action(() => {
+                        freezeFrame.EngineCoolantTemp = value.DoubleValue;
+                    }));
                 }
 
-                progressBar.Increment(progressBar.Step);
+                this.BeginInvoke(new Action(() => {
+                    progressBar.Increment(progressBar.Step);
+                }));
                 if (!m_KeepReading) {
                     break;
                 }
@@ -138,7 +156,9 @@ namespace SH_OBD {
 
                 value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
-                    freezeFrame.STFT1 = value.DoubleValue;
+                    this.BeginInvoke(new Action(() => {
+                        freezeFrame.STFT1 = value.DoubleValue;
+                    }));
                 }
 
                 parameter = m_obdInterface.LookupParameter("SAE.STFT3");
@@ -148,10 +168,14 @@ namespace SH_OBD {
 
                 value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
-                    freezeFrame.STFT3 = value.DoubleValue;
+                    this.BeginInvoke(new Action(() => {
+                        freezeFrame.STFT3 = value.DoubleValue;
+                    }));
                 }
 
-                progressBar.Increment(progressBar.Step);
+                this.BeginInvoke(new Action(() => {
+                    progressBar.Increment(progressBar.Step);
+                }));
                 if (!m_KeepReading) {
                     break;
                 }
@@ -163,7 +187,9 @@ namespace SH_OBD {
 
                 value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
-                    freezeFrame.LTFT1 = value.DoubleValue;
+                    this.BeginInvoke(new Action(() => {
+                        freezeFrame.LTFT1 = value.DoubleValue;
+                    }));
                 }
 
                 parameter = m_obdInterface.LookupParameter("SAE.LTFT3");
@@ -173,10 +199,14 @@ namespace SH_OBD {
 
                 value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
-                    freezeFrame.LTFT3 = value.DoubleValue;
+                    this.BeginInvoke(new Action(() => {
+                        freezeFrame.LTFT3 = value.DoubleValue;
+                    }));
                 }
 
-                progressBar.Increment(progressBar.Step);
+                this.BeginInvoke(new Action(() => {
+                    progressBar.Increment(progressBar.Step);
+                }));
                 if (!m_KeepReading) {
                     break;
                 }
@@ -188,7 +218,9 @@ namespace SH_OBD {
 
                 value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
-                    freezeFrame.STFT2 = value.DoubleValue;
+                    this.BeginInvoke(new Action(() => {
+                        freezeFrame.STFT2 = value.DoubleValue;
+                    }));
                 }
 
                 parameter = m_obdInterface.LookupParameter("SAE.STFT4");
@@ -198,10 +230,14 @@ namespace SH_OBD {
 
                 value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
-                    freezeFrame.STFT4 = value.DoubleValue;
+                    this.BeginInvoke(new Action(() => {
+                        freezeFrame.STFT4 = value.DoubleValue;
+                    }));
                 }
 
-                progressBar.Increment(progressBar.Step);
+                this.BeginInvoke(new Action(() => {
+                    progressBar.Increment(progressBar.Step);
+                }));
                 if (!m_KeepReading) {
                     break;
 
@@ -214,7 +250,9 @@ namespace SH_OBD {
 
                 value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
-                    freezeFrame.LTFT2 = value.DoubleValue;
+                    this.BeginInvoke(new Action(() => {
+                        freezeFrame.LTFT2 = value.DoubleValue;
+                    }));
                 }
 
                 parameter = m_obdInterface.LookupParameter("SAE.LTFT4");
@@ -224,10 +262,14 @@ namespace SH_OBD {
 
                 value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
-                    freezeFrame.LTFT4 = value.DoubleValue;
+                    this.BeginInvoke(new Action(() => {
+                        freezeFrame.LTFT4 = value.DoubleValue;
+                    }));
                 }
 
-                progressBar.Increment(progressBar.Step);
+                this.BeginInvoke(new Action(() => {
+                    progressBar.Increment(progressBar.Step);
+                }));
                 if (!m_KeepReading) {
                     break;
                 }
@@ -239,10 +281,14 @@ namespace SH_OBD {
 
                 value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
-                    freezeFrame.IntakePressure = value.DoubleValue;
+                    this.BeginInvoke(new Action(() => {
+                        freezeFrame.IntakePressure = value.DoubleValue;
+                    }));
                 }
 
-                progressBar.Increment(progressBar.Step);
+                this.BeginInvoke(new Action(() => {
+                    progressBar.Increment(progressBar.Step);
+                }));
                 if (!m_KeepReading) {
                     break;
                 }
@@ -254,10 +300,14 @@ namespace SH_OBD {
 
                 value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
-                    freezeFrame.EngineRPM = value.DoubleValue;
+                    this.BeginInvoke(new Action(() => {
+                        freezeFrame.EngineRPM = value.DoubleValue;
+                    }));
                 }
 
-                progressBar.Increment(progressBar.Step);
+                this.BeginInvoke(new Action(() => {
+                    progressBar.Increment(progressBar.Step);
+                }));
                 if (!m_KeepReading) {
                     break;
                 }
@@ -269,10 +319,14 @@ namespace SH_OBD {
 
                 value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
-                    freezeFrame.VehicleSpeed = value.DoubleValue;
+                    this.BeginInvoke(new Action(() => {
+                        freezeFrame.VehicleSpeed = value.DoubleValue;
+                    }));
                 }
 
-                progressBar.Increment(progressBar.Step);
+                this.BeginInvoke(new Action(() => {
+                    progressBar.Increment(progressBar.Step);
+                }));
                 if (!m_KeepReading) {
                     break;
                 }
@@ -284,14 +338,18 @@ namespace SH_OBD {
 
                 value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
                 if (!value.ErrorDetected) {
-                    freezeFrame.SparkAdvance = value.DoubleValue;
+                    this.BeginInvoke(new Action(() => {
+                        freezeFrame.SparkAdvance = value.DoubleValue;
+                    }));
                 }
 
                 break;
             }
-            progressBar.Value = progressBar.Maximum;
-            btnRefresh.Enabled = true;
-            btnCancel.Enabled = false;
+            this.BeginInvoke(new Action(() => {
+                progressBar.Value = progressBar.Maximum;
+                btnRefresh.Enabled = true;
+                btnCancel.Enabled = false;
+            }));
         }
 
         private void btnCancel_Click(object sender, EventArgs e) {

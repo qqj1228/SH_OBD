@@ -39,7 +39,7 @@ namespace SH_OBD {
             InitializeComponent();
         }
 
-        private void ScopeForm_Resize(object sender, EventArgs e) {
+        private void SensorChartForm_Resize(object sender, EventArgs e) {
             DrawCharts();
         }
 
@@ -177,7 +177,7 @@ namespace SH_OBD {
             btnStop.Enabled = false;
         }
 
-        private void ScopeForm_Load(object sender, EventArgs e) {
+        private void SensorChartForm_Load(object sender, EventArgs e) {
             IsPlotting = false;
             CheckConnection();
             chart1.XRangeStart = -30.0;
@@ -211,8 +211,9 @@ namespace SH_OBD {
             if (m_obdInterface.ConnectedStatus) {
                 if (!isConnected) {
                     isConnected = true;
-                    if (!IsPlotting)
+                    if (!IsPlotting) {
                         btnStart.Enabled = true;
+                    }
                     comboSensor1.Items.Clear();
                     comboSensor2.Items.Clear();
                     comboSensor3.Items.Clear();
@@ -244,36 +245,39 @@ namespace SH_OBD {
             do {
                 if (CheckConnection()) {
                     bool bEnglishUnits = true;
-                    if (comboUnits1.SelectedIndex > 0)
-                        bEnglishUnits = false;
-                    if (chkSensor1.Checked) {
-                        OBDParameterValue obdParameterValue = m_obdInterface.GetValue(comboSensor1.Items[comboSensor1.SelectedIndex] as OBDParameter, bEnglishUnits);
-                        if (!obdParameterValue.ErrorDetected) {
-                            m_arraySensor1Values.Add(new DatedValue(obdParameterValue.DoubleValue));
-                            UpdateChart1();
+                    this.Invoke((EventHandler)delegate {
+                        if (comboUnits1.SelectedIndex > 0) {
+                            bEnglishUnits = false;
                         }
-                    }
-                    if (chkSensor2.Checked) {
-                        OBDParameterValue obdParameterValue = m_obdInterface.GetValue(comboSensor2.Items[comboSensor2.SelectedIndex] as OBDParameter, bEnglishUnits);
-                        if (!obdParameterValue.ErrorDetected) {
-                            m_arraySensor2Values.Add(new DatedValue(obdParameterValue.DoubleValue));
-                            UpdateChart2();
+                        if (chkSensor1.Checked) {
+                            OBDParameterValue obdParameterValue = m_obdInterface.GetValue(comboSensor1.Items[comboSensor1.SelectedIndex] as OBDParameter, bEnglishUnits);
+                            if (!obdParameterValue.ErrorDetected) {
+                                m_arraySensor1Values.Add(new DatedValue(obdParameterValue.DoubleValue));
+                                UpdateChart1();
+                            }
                         }
-                    }
-                    if (chkSensor3.Checked) {
-                        OBDParameterValue obdParameterValue = m_obdInterface.GetValue(comboSensor3.Items[comboSensor3.SelectedIndex] as OBDParameter, bEnglishUnits);
-                        if (!obdParameterValue.ErrorDetected) {
-                            m_arraySensor3Values.Add(new DatedValue(obdParameterValue.DoubleValue));
-                            UpdateChart3();
+                        if (chkSensor2.Checked) {
+                            OBDParameterValue obdParameterValue = m_obdInterface.GetValue(comboSensor2.Items[comboSensor2.SelectedIndex] as OBDParameter, bEnglishUnits);
+                            if (!obdParameterValue.ErrorDetected) {
+                                m_arraySensor2Values.Add(new DatedValue(obdParameterValue.DoubleValue));
+                                UpdateChart2();
+                            }
                         }
-                    }
-                    if (chkSensor4.Checked) {
-                        OBDParameterValue obdParameterValue = m_obdInterface.GetValue(comboSensor4.Items[comboSensor4.SelectedIndex] as OBDParameter, bEnglishUnits);
-                        if (!obdParameterValue.ErrorDetected) {
-                            m_arraySensor4Values.Add(new DatedValue(obdParameterValue.DoubleValue));
-                            UpdateChart4();
+                        if (chkSensor3.Checked) {
+                            OBDParameterValue obdParameterValue = m_obdInterface.GetValue(comboSensor3.Items[comboSensor3.SelectedIndex] as OBDParameter, bEnglishUnits);
+                            if (!obdParameterValue.ErrorDetected) {
+                                m_arraySensor3Values.Add(new DatedValue(obdParameterValue.DoubleValue));
+                                UpdateChart3();
+                            }
                         }
-                    }
+                        if (chkSensor4.Checked) {
+                            OBDParameterValue obdParameterValue = m_obdInterface.GetValue(comboSensor4.Items[comboSensor4.SelectedIndex] as OBDParameter, bEnglishUnits);
+                            if (!obdParameterValue.ErrorDetected) {
+                                m_arraySensor4Values.Add(new DatedValue(obdParameterValue.DoubleValue));
+                                UpdateChart4();
+                            }
+                        }
+                    });
                 }
             } while (IsPlotting);
         }
@@ -699,7 +703,7 @@ namespace SH_OBD {
             }
         }
 
-        private void ScopeForm_Activated(object sender, EventArgs e) {
+        private void SensorChartForm_Activated(object sender, EventArgs e) {
             CheckConnection();
         }
 

@@ -51,12 +51,13 @@ namespace SH_OBD {
         }
 
         private void btnSave_Click(object sender, EventArgs e) {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Title = "保存 OBD-II 诊断报告";
-            saveFileDialog.Filter = "SH_OBD 报告文件 (*.obd)|*.obd";
-            saveFileDialog.FilterIndex = 0;
-            saveFileDialog.RestoreDirectory = true;
-            int num = (int)saveFileDialog.ShowDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog {
+                Title = "保存 OBD-II 诊断报告",
+                Filter = "SH_OBD 报告文件 (*.obd)|*.obd",
+                FilterIndex = 0,
+                RestoreDirectory = true
+            };
+            saveFileDialog.ShowDialog();
             if (saveFileDialog.FileName.Length <= 0) {
                 return;
             }

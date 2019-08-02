@@ -153,7 +153,7 @@ namespace SH_OBD {
             if (responses.ResponseCount > 0) {
                 int count = 0;
                 do {
-                    strItem1 = strItem1 + string.Format("[{0}] ", responses.GetOBDResponse(count).Data);
+                    strItem1 += string.Format("[{0}] ", responses.GetOBDResponse(count).Data);
                     ++count;
                 } while (count < responses.ResponseCount);
             }
@@ -165,10 +165,10 @@ namespace SH_OBD {
             } else {
                 string values = "Values: ";
                 if ((param.ValueTypes & 0x01) == 0x01) {
-                    values = values + string.Format("[Double: {0}] ", obdParameterValue.DoubleValue.ToString());
+                    values += string.Format("[Double: {0}] ", obdParameterValue.DoubleValue.ToString());
                 }
                 if ((param.ValueTypes & 0x02) == 0x02) {
-                    values = values + string.Format("[Bool: {0}] ", obdParameterValue.BoolValue.ToString());
+                    values += string.Format("[Bool: {0}] ", obdParameterValue.BoolValue.ToString());
                 }
                 if ((param.ValueTypes & 0x04) == 0x04) {
                     values += string.Format("[String: {0} / {1}] ", obdParameterValue.StringValue, obdParameterValue.ShortStringValue);
@@ -473,8 +473,11 @@ namespace SH_OBD {
                     VehicleProfile vehicleProfile = binaryFormatter.Deserialize(file) as VehicleProfile;
                     profiles.Add(vehicleProfile);
                 }
-            } catch (Exception) {
-                // file读完以后会抛出异常，什么都不做继续执行finally块
+            } catch (SerializationException) {
+                // file读完以后会抛出SerializationException异常，什么都不做继续执行finally块
+            } catch (Exception e) {
+                // 发生其余异常的话就写log
+                m_log.TraceError("Failed to load vehicle profile. Reason: " + e.Message);
             } finally {
                 if (file != null) {
                     file.Close();

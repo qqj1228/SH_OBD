@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -54,8 +55,9 @@ namespace SH_OBD {
             DisplayStatusMessage("请求MIL状态和故障码数量");
             DisplayRequest("0101");
             OBDParameterValue value5 = m_obdInterface.GetValue("SAE.MIL", true);
-            int num5 = progressBar.Value;
-            progressBar.Value = num5 + 1;
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             if (!value5.ErrorDetected) {
                 if (value5.BoolValue) {
                     DisplayDetailMessage("MIL状态: On");
@@ -66,16 +68,18 @@ namespace SH_OBD {
                 }
             }
             OBDParameterValue value3 = m_obdInterface.GetValue("SAE.DTC_COUNT", true);
-            int num4 = progressBar.Value;
-            progressBar.Value = num4 + 1;
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             if (!value3.ErrorDetected) {
                 m_bReportForm.ReportPage1.TotalCodes = (int)value3.DoubleValue;
                 DisplayDetailMessage("存储的故障码数量: " + value3.DoubleValue.ToString());
             }
             DisplayStatusMessage("请求存储的故障码列表");
             OBDParameterValue value4 = m_obdInterface.GetValue("SAE.STORED_DTCS", true);
-            int num3 = progressBar.Value;
-            progressBar.Value = num3 + 1;
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             if (!value4.ErrorDetected) {
                 m_bReportForm.ReportPage1.DTCList.Clear();
                 StringEnumerator enumerator2 = value4.StringCollectionValue.GetEnumerator();
@@ -92,8 +96,9 @@ namespace SH_OBD {
             }
             DisplayStatusMessage("请求未决故障码列表");
             OBDParameterValue value2 = m_obdInterface.GetValue("SAE.PENDING_DTCS", true);
-            int num2 = progressBar.Value;
-            progressBar.Value = num2 + 1;
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             if (!value2.ErrorDetected) {
                 m_bReportForm.ReportPage1.PendingList.Clear();
                 StringEnumerator enumerator = value2.StringCollectionValue.GetEnumerator();
@@ -114,8 +119,9 @@ namespace SH_OBD {
             if (parameter != null) {
                 OBDParameter freezeFrameCopy = parameter.GetFreezeFrameCopy(0);
                 value2 = m_obdInterface.GetValue(freezeFrameCopy, true);
-                int num = progressBar.Value;
-                progressBar.Value = num + 1;
+                this.BeginInvoke((EventHandler)delegate {
+                    progressBar.Value += 1;
+                });
                 if (!value2.ErrorDetected) {
                     m_bReportForm.ReportPage1.FreezeFrameDTC = value2.StringValue;
                     DisplayDetailMessage("找到冻结帧数据 " + value2.StringValue);
@@ -126,16 +132,22 @@ namespace SH_OBD {
                     m_iRequestCount += 11;
                 }
                 CollectMonitoringTestData();
-                progressBar.Value = progressBar.Maximum;
-                btnGenerate.Enabled = true;
-                m_bReportForm.ShowDialog();
+                this.BeginInvoke((EventHandler)delegate {
+                    progressBar.Value = progressBar.Maximum;
+                    btnGenerate.Enabled = true;
+                    // ReportForm窗体类里需要调用SaveFileDialog.ShowDialog()
+                    // 该方法需要调用COM对象（系统中的打开文件通用对话框），故需要调用者线程具有STA模式（单线程单元模式）
+                    // 而Task无法显式设置线程模式为STA，故只能在主UI线程里调用ReportForm窗体类
+                    m_bReportForm.ShowDialog();
+                });
             }
         }
 
         private void CollectFreezeFrameData() {
             OBDParameter param = m_obdInterface.LookupParameter("SAE.FUEL1_STATUS");
-            int num16 = progressBar.Value;
-            progressBar.Value = num16 + 1;
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             m_bReportForm.ReportPage1.ShowFuelSystemStatus = false;
             if (param != null) {
                 param = param.GetFreezeFrameCopy(0);
@@ -147,8 +159,9 @@ namespace SH_OBD {
                 }
             }
             OBDParameter freezeFrameCopy = m_obdInterface.LookupParameter("SAE.FUEL2_STATUS");
-            int num2 = progressBar.Value;
-            progressBar.Value = num2 + 1;
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             m_bReportForm.ReportPage1.ShowFuelSystemStatus = false;
             if (freezeFrameCopy != null) {
                 freezeFrameCopy = freezeFrameCopy.GetFreezeFrameCopy(0);
@@ -160,8 +173,9 @@ namespace SH_OBD {
                 }
             }
             OBDParameter parameter16 = m_obdInterface.LookupParameter("SAE.LOAD_CALC");
-            int num = progressBar.Value;
-            progressBar.Value = num + 1;
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             m_bReportForm.ReportPage1.ShowCalculatedLoad = false;
             if (parameter16 != null) {
                 OBDParameter parameter17 = parameter16.GetFreezeFrameCopy(0);
@@ -173,8 +187,9 @@ namespace SH_OBD {
                 }
             }
             OBDParameter parameter14 = m_obdInterface.LookupParameter("SAE.ECT");
-            int num15 = progressBar.Value;
-            progressBar.Value = num15 + 1;
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             m_bReportForm.ReportPage1.ShowEngineCoolantTemp = false;
             if (parameter14 != null) {
                 parameter14 = parameter14.GetFreezeFrameCopy(0);
@@ -186,8 +201,9 @@ namespace SH_OBD {
                 }
             }
             OBDParameter parameter13 = m_obdInterface.LookupParameter("SAE.STFT1");
-            int num14 = progressBar.Value;
-            progressBar.Value = num14 + 1;
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             m_bReportForm.ReportPage1.ShowSTFT13 = false;
             if (parameter13 != null) {
                 parameter13 = parameter13.GetFreezeFrameCopy(0);
@@ -199,8 +215,9 @@ namespace SH_OBD {
                 }
             }
             OBDParameter parameter12 = m_obdInterface.LookupParameter("SAE.STFT3");
-            int num13 = progressBar.Value;
-            progressBar.Value = num13 + 1;
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             m_bReportForm.ReportPage1.ShowSTFT13 = false;
             if (parameter12 != null) {
                 parameter12 = parameter12.GetFreezeFrameCopy(0);
@@ -212,8 +229,9 @@ namespace SH_OBD {
                 }
             }
             OBDParameter parameter11 = m_obdInterface.LookupParameter("SAE.LTFT1");
-            int num12 = progressBar.Value;
-            progressBar.Value = num12 + 1;
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             m_bReportForm.ReportPage1.ShowLTFT13 = false;
             if (parameter11 != null) {
                 parameter11 = parameter11.GetFreezeFrameCopy(0);
@@ -225,8 +243,9 @@ namespace SH_OBD {
                 }
             }
             OBDParameter parameter10 = m_obdInterface.LookupParameter("SAE.LTFT3");
-            int num11 = progressBar.Value;
-            progressBar.Value = num11 + 1;
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             m_bReportForm.ReportPage1.ShowLTFT13 = false;
             if (parameter10 != null) {
                 parameter10 = parameter10.GetFreezeFrameCopy(0);
@@ -238,8 +257,9 @@ namespace SH_OBD {
                 }
             }
             OBDParameter parameter9 = m_obdInterface.LookupParameter("SAE.STFT2");
-            int num10 = progressBar.Value;
-            progressBar.Value = num10 + 1;
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             m_bReportForm.ReportPage1.ShowSTFT24 = false;
             if (parameter9 != null) {
                 parameter9 = parameter9.GetFreezeFrameCopy(0);
@@ -251,8 +271,9 @@ namespace SH_OBD {
                 }
             }
             OBDParameter parameter8 = m_obdInterface.LookupParameter("SAE.STFT4");
-            int num9 = progressBar.Value;
-            progressBar.Value = num9 + 1;
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             m_bReportForm.ReportPage1.ShowSTFT24 = false;
             if (parameter8 != null) {
                 parameter8 = parameter8.GetFreezeFrameCopy(0);
@@ -264,8 +285,9 @@ namespace SH_OBD {
                 }
             }
             OBDParameter parameter7 = m_obdInterface.LookupParameter("SAE.LTFT2");
-            int num8 = progressBar.Value;
-            progressBar.Value = num8 + 1;
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             m_bReportForm.ReportPage1.ShowLTFT24 = false;
             if (parameter7 != null) {
                 parameter7 = parameter7.GetFreezeFrameCopy(0);
@@ -277,8 +299,9 @@ namespace SH_OBD {
                 }
             }
             OBDParameter parameter6 = m_obdInterface.LookupParameter("SAE.LTFT4");
-            int num7 = progressBar.Value;
-            progressBar.Value = num7 + 1;
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             m_bReportForm.ReportPage1.ShowLTFT24 = false;
             if (parameter6 != null) {
                 parameter6 = parameter6.GetFreezeFrameCopy(0);
@@ -290,8 +313,9 @@ namespace SH_OBD {
                 }
             }
             OBDParameter parameter5 = m_obdInterface.LookupParameter("SAE.MAP");
-            int num6 = progressBar.Value;
-            progressBar.Value = num6 + 1;
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             m_bReportForm.ReportPage1.ShowIntakePressure = false;
             if (parameter5 != null) {
                 parameter5 = parameter5.GetFreezeFrameCopy(0);
@@ -303,8 +327,9 @@ namespace SH_OBD {
                 }
             }
             OBDParameter parameter4 = m_obdInterface.LookupParameter("SAE.RPM");
-            int num5 = progressBar.Value;
-            progressBar.Value = num5 + 1;
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             m_bReportForm.ReportPage1.ShowEngineRPM = false;
             if (parameter4 != null) {
                 parameter4 = parameter4.GetFreezeFrameCopy(0);
@@ -316,8 +341,9 @@ namespace SH_OBD {
                 }
             }
             OBDParameter parameter3 = m_obdInterface.LookupParameter("SAE.VSS");
-            int num4 = progressBar.Value;
-            progressBar.Value = num4 + 1;
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             m_bReportForm.ReportPage1.ShowVehicleSpeed = false;
             if (parameter3 != null) {
                 parameter3 = parameter3.GetFreezeFrameCopy(0);
@@ -329,8 +355,9 @@ namespace SH_OBD {
                 }
             }
             OBDParameter parameter2 = m_obdInterface.LookupParameter("SAE.SPARKADV");
-            int num3 = progressBar.Value;
-            progressBar.Value = num3 + 1;
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             m_bReportForm.ReportPage1.ShowSparkAdvance = false;
             if (parameter2 != null) {
                 parameter2 = parameter2.GetFreezeFrameCopy(0);
@@ -345,8 +372,9 @@ namespace SH_OBD {
 
         private void CollectMonitoringTestData() {
             DisplayStatusMessage("读取故障诊断器结果");
-            int num = progressBar.Value;
-            progressBar.Value = num + 1;
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             OBDParameterValue value23 = m_obdInterface.GetValue("SAE.MISFIRE_SUPPORT", true);
             if (!value23.ErrorDetected) {
                 if (value23.BoolValue) {
@@ -559,52 +587,64 @@ namespace SH_OBD {
         }
 
         private void DisplayStatusMessage(string str) {
-            richTextStatus.SelectionFont = new Font("Times New Roman", 12f, FontStyle.Bold);
-            richTextStatus.SelectionColor = Color.Blue;
-            richTextStatus.AppendText(str + "\r\n");
+            this.Invoke((EventHandler)delegate {
+                richTextStatus.SelectionFont = new Font("Times New Roman", 12f, FontStyle.Bold);
+                richTextStatus.SelectionColor = Color.Blue;
+                richTextStatus.AppendText(str + "\r\n");
+            });
         }
 
         private void DisplayRequest(string str) {
-            richTextStatus.SelectionFont = new Font("Times New Roman", 10f, FontStyle.Bold);
-            richTextStatus.SelectionColor = Color.Black;
-            richTextStatus.AppendText("   发送: ");
-            richTextStatus.SelectionColor = Color.Green;
-            richTextStatus.AppendText(str);
-            richTextStatus.AppendText("\r\n");
+            this.Invoke((EventHandler)delegate {
+                richTextStatus.SelectionFont = new Font("Times New Roman", 10f, FontStyle.Bold);
+                richTextStatus.SelectionColor = Color.Black;
+                richTextStatus.AppendText("   发送: ");
+                richTextStatus.SelectionColor = Color.Green;
+                richTextStatus.AppendText(str);
+                richTextStatus.AppendText("\r\n");
+            });
         }
 
         private void DisplayValidResponse(string str) {
-            richTextStatus.SelectionFont = new Font("Times New Roman", 10f, FontStyle.Bold);
-            Color black = Color.Black;
-            richTextStatus.SelectionColor = black;
-            richTextStatus.AppendText("   接收: ");
-            Color green = Color.Green;
-            richTextStatus.SelectionColor = green;
-            richTextStatus.AppendText(str);
-            richTextStatus.AppendText("\r\n");
+            this.Invoke((EventHandler)delegate {
+                richTextStatus.SelectionFont = new Font("Times New Roman", 10f, FontStyle.Bold);
+                Color black = Color.Black;
+                richTextStatus.SelectionColor = black;
+                richTextStatus.AppendText("   接收: ");
+                Color green = Color.Green;
+                richTextStatus.SelectionColor = green;
+                richTextStatus.AppendText(str);
+                richTextStatus.AppendText("\r\n");
+            });
         }
 
         private void DisplayInvalidResponse(string str) {
-            richTextStatus.SelectionFont = new Font("Times New Roman", 10f, FontStyle.Bold);
-            Color black = Color.Black;
-            richTextStatus.SelectionColor = black;
-            richTextStatus.AppendText("   接收: ");
-            Color red = Color.Red;
-            richTextStatus.SelectionColor = red;
-            richTextStatus.AppendText(str);
-            richTextStatus.AppendText("\r\n");
+            this.Invoke((EventHandler)delegate {
+                richTextStatus.SelectionFont = new Font("Times New Roman", 10f, FontStyle.Bold);
+                Color black = Color.Black;
+                richTextStatus.SelectionColor = black;
+                richTextStatus.AppendText("   接收: ");
+                Color red = Color.Red;
+                richTextStatus.SelectionColor = red;
+                richTextStatus.AppendText(str);
+                richTextStatus.AppendText("\r\n");
+            });
         }
 
         private void DisplayDetailMessage(string str) {
-            richTextStatus.SelectionFont = new Font("Times New Roman", 10f, FontStyle.Regular);
-            Color black = Color.Black;
-            richTextStatus.SelectionColor = black;
-            richTextStatus.AppendText("      " + str + "\r\n");
+            this.Invoke((EventHandler)delegate {
+                richTextStatus.SelectionFont = new Font("Times New Roman", 10f, FontStyle.Regular);
+                Color black = Color.Black;
+                richTextStatus.SelectionColor = black;
+                richTextStatus.AppendText("      " + str + "\r\n");
+            });
         }
 
         private void DisplayBlankLine() {
-            richTextStatus.SelectionFont = new Font("Times New Roman", 10f, FontStyle.Regular);
-            richTextStatus.AppendText("\r\n");
+            this.Invoke((EventHandler)delegate {
+                richTextStatus.SelectionFont = new Font("Times New Roman", 10f, FontStyle.Regular);
+                richTextStatus.AppendText("\r\n");
+            });
         }
 
         private void btnOpen_Click(object sender, EventArgs e) {

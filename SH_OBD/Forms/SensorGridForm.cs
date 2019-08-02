@@ -142,11 +142,15 @@ namespace SH_OBD {
                                 value.DoubleValue.ToString(),
                                 text);
                             m_ListLog.Add(sensorLogItem);
-                            scrollTime.Maximum = m_ListLog.Count - 1;
-                            scrollTime.Value = scrollTime.Maximum;
+                            this.Invoke((EventHandler)delegate {
+                                scrollTime.Maximum = m_ListLog.Count - 1;
+                                scrollTime.Value = scrollTime.Maximum;
+                            });
 
                             DateTime dateTime = new DateTime(0L);
-                            lblTimeElapsed.Text = dateTime.Add(sensorLogItem.Time.Subtract(m_dtStartTime)).ToString("mm:ss.fff", DateTimeFormatInfo.InvariantInfo);
+                            this.Invoke((EventHandler)delegate {
+                                lblTimeElapsed.Text = dateTime.Add(sensorLogItem.Time.Subtract(m_dtStartTime)).ToString("mm:ss.fff", DateTimeFormatInfo.InvariantInfo);
+                            });
 
                             text = value.DoubleValue.ToString();
                             if (radioDisplayEnglish.Checked) {

@@ -114,7 +114,7 @@ namespace SH_OBD {
                 this.Invoke((EventHandler)delegate {
                     StatusLabelConnStatus.Text = "OBD通讯接口已连接";
                     StatusLabelConnStatus.ForeColor = Color.Green;
-                    StatusLabelDeviceName.Text = m_obdInterface.GetDeviceDesString();
+                    StatusLabelDeviceName.Text = m_obdInterface.GetDeviceIDString();
                     StatusLabelProtocol.Text = m_obdInterface.GetProtocol().ToString();
                     toolStripBtnUserPrefs.Enabled = false;
                     toolStripBtnVehicles.Enabled = false;
@@ -207,12 +207,12 @@ namespace SH_OBD {
 
         private void toolStripBtnUserPrefs_Click(object sender, EventArgs e) {
             UserPreferences userPreferences = m_obdInterface.UserPreferences;
-            int num = (int)new UserPreferencesForm(userPreferences).ShowDialog();
+            new UserPreferencesForm(userPreferences).ShowDialog();
             m_obdInterface.SaveUserPreferences(userPreferences);
         }
 
         private void toolStripBtnVehicles_Click(object sender, EventArgs e) {
-            int num = (int)new VehicleForm(m_obdInterface).ShowDialog();
+            new VehicleForm(m_obdInterface).ShowDialog();
         }
 
         private void toolStripBtnSettings_Click(object sender, EventArgs e) {

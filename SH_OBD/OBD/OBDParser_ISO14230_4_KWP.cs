@@ -4,14 +4,15 @@ using System.Collections.Generic;
 
 namespace SH_OBD {
     public class OBDParser_ISO14230_4_KWP : OBDParser {
-        protected static int HEADER_LENGTH = 6;
+        protected const int HEADER_LENGTH = 6;
 
         static OBDParser_ISO14230_4_KWP() {
         }
 
         public override OBDResponseList Parse(OBDParameter param, string response) {
-            if (string.IsNullOrEmpty(response))
+            if (string.IsNullOrEmpty(response)) {
                 response = "";
+            }
 
             OBDResponseList responseList = new OBDResponseList(response);
             response = Strip(response);
@@ -36,17 +37,19 @@ namespace SH_OBD {
                         do {
                             string str2 = list1[index1];
                             if (str2.Length >= OBDParser_ISO14230_4_KWP.HEADER_LENGTH) {
-                                if (str2.Substring(0, OBDParser_ISO14230_4_KWP.HEADER_LENGTH).CompareTo(strB) == 0)
+                                if (str2.Substring(0, OBDParser_ISO14230_4_KWP.HEADER_LENGTH).CompareTo(strB) == 0) {
                                     list3.Add(str2);
-                                else {
-                                    list3 = new List<string>();
-                                    list3.Add(list1[index1]);
+                                } else {
+                                    list3 = new List<string> {
+                                        list1[index1]
+                                    };
                                     list2.Add(list3);
                                     strB = str2.Substring(0, OBDParser_ISO14230_4_KWP.HEADER_LENGTH);
                                 }
                                 ++index1;
-                            } else
+                            } else {
                                 goto label_14;
+                            }
                         }
                         while (index1 < list1.Count);
                         goto label_15;
@@ -60,7 +63,7 @@ namespace SH_OBD {
                         do {
                             OBDResponse response1 = new OBDResponse();
                             List<string> list4 = list2[index2];
-                            int dataStartIndex = getDataStartIndex(param);
+                            int dataStartIndex = GetDataStartIndex(param);
                             string str2 = list4[0];
                             int num1 = -2 - dataStartIndex;
                             int length1 = str2.Length + num1;
@@ -75,20 +78,18 @@ namespace SH_OBD {
                                     string str4 = length2 > 0 ? str3.Substring(dataStartIndex, length2) : "";
                                     response1.Data = response1.Data + str4;
                                     ++index3;
-                                }
-                                while (index3 < list4.Count);
+                                } while (index3 < list4.Count);
                             }
                             responseList.AddOBDResponse(response1);
                             ++index2;
-                        }
-                        while (index2 < list2.Count);
+                        } while (index2 < list2.Count);
                     }
                     return responseList;
                 }
             }
         }
 
-        protected int getDataStartIndex(OBDParameter param) {
+        protected int GetDataStartIndex(OBDParameter param) {
             switch (param.Service) {
                 case 1:
                     return 10;
@@ -102,10 +103,11 @@ namespace SH_OBD {
                 case 7:
                     return 8;
                 case 9:
-                    if (param.Parameter == 2)
+                    if (param.Parameter == 2) {
                         return 12;
-                    else
+                    } else {
                         break;
+                    }
             }
             return 10;
         }

@@ -8,9 +8,9 @@ namespace SH_OBD {
         public abstract OBDResponseList Parse(OBDParameter param, string response);
 
         protected string Strip(string input) {
-            if (input == null)
+            if (input == null) {
                 return "";
-            else
+            } else {
                 return input
                     .Replace("BUS", "")
                     .Replace("INIT", "")
@@ -20,9 +20,10 @@ namespace SH_OBD {
                     .Replace(".", "")
                     .Replace(" ", "")
                     .Trim();
+            }
         }
 
-        private static char[] CHAR_CR = new char[] { '\r' };
+        private static readonly char[] CHAR_CR = new char[] { '\r' };
         protected List<string> SplitByCR(string input) {
             string[] lines = (input ?? string.Empty).Split(CHAR_CR);
             List<string> list = new List<string>(lines.Length);

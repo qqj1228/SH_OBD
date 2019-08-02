@@ -31,12 +31,12 @@ namespace SH_OBD {
                 if (!m_CommELM.Open()) {
                     return false;
                 }
-                if (!ConfirmAT("ATWS") || !ConfirmAT("ATE0") || !ConfirmAT("ATL0") || !ConfirmAT("ATH1") /*|| !confirmAT("ATCAF1")*/) {
+                if (!ConfirmAT("ATWS") || !ConfirmAT("ATE0") || !ConfirmAT("ATL0") || !ConfirmAT("ATH1") || !ConfirmAT("ATCAF1")) {
                     m_CommELM.Close();
                     return false;
                 }
                 // 使用当前版本的obdsim不支持"ATCAF1"命令，故不判断该命令是否可用，只需执行过即可
-                ConfirmAT("ATCAF1");
+                //ConfirmAT("ATCAF1");
 
                 base.m_DeviceDes = GetDeviceDes().Trim();
                 base.m_DeviceID = GetDeviceID().Trim();
@@ -48,7 +48,7 @@ namespace SH_OBD {
 
                     m_CommELM.SetTimeout(5000);
                     bool flag = false;
-                    if (GetOBDResponse("0100").IndexOf("4100") >= 0) {
+                    if (GetOBDResponse("0100").Replace(" ", "").IndexOf("4100") >= 0) {
                         flag = true;
                         SetProtocol((ProtocolType)int.Parse(GetOBDResponse("ATDPN").Replace("A", "")));
                     }
@@ -70,7 +70,7 @@ namespace SH_OBD {
                         m_CommELM.Close();
                         return false;
                     }
-                    if (GetOBDResponse("0100").IndexOf("4100") >= 0) {
+                    if (GetOBDResponse("0100").Replace(" ", "").IndexOf("4100") >= 0) {
                         SetProtocol((ProtocolType)xattr[idx]);
                         SetBaudRateIndex(iBaud);
                         m_iComPortIndex = iPort;
@@ -212,7 +212,7 @@ namespace SH_OBD {
 
         public string GetDeviceID() {
             if (m_CommELM.Online) {
-                return m_CommELM.GetResponse("AT@2");
+                return m_CommELM.GetResponse("ATI");
             }
             return "";
         }
