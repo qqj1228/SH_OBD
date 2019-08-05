@@ -112,15 +112,17 @@ namespace SH_OBD {
         private void On_OBD_Connect() {
             if (InvokeRequired) {
                 this.Invoke((EventHandler)delegate {
-                    StatusLabelConnStatus.Text = "OBD通讯接口已连接";
-                    StatusLabelConnStatus.ForeColor = Color.Green;
-                    StatusLabelDeviceName.Text = m_obdInterface.GetDeviceIDString();
-                    StatusLabelProtocol.Text = m_obdInterface.GetProtocol().ToString();
-                    toolStripBtnUserPrefs.Enabled = false;
-                    toolStripBtnVehicles.Enabled = false;
-                    toolStripBtnSettings.Enabled = false;
-                    BroadcastConnectionUpdate();
+                    On_OBD_Connect();
                 });
+            } else {
+                StatusLabelConnStatus.Text = "OBD通讯接口已连接";
+                StatusLabelConnStatus.ForeColor = Color.Green;
+                StatusLabelDeviceName.Text = m_obdInterface.GetDeviceIDString();
+                StatusLabelProtocol.Text = m_obdInterface.GetProtocol().ToString();
+                toolStripBtnUserPrefs.Enabled = false;
+                toolStripBtnVehicles.Enabled = false;
+                toolStripBtnSettings.Enabled = false;
+                BroadcastConnectionUpdate();
             }
         }
 
@@ -340,7 +342,7 @@ namespace SH_OBD {
 
         private void ShowConnectingLabel() {
             if (InvokeRequired) {
-                BeginInvoke((MethodInvoker)delegate { ShowConnectingLabel(); });
+                BeginInvoke((EventHandler)delegate { ShowConnectingLabel(); });
             } else {
                 StatusLabelConnStatus.ForeColor = Color.Black;
                 StatusLabelConnStatus.Text = "OBD通讯接口连接中...";
@@ -349,7 +351,7 @@ namespace SH_OBD {
 
         private void ShowDisconnectedLabel() {
             if (InvokeRequired) {
-                BeginInvoke((MethodInvoker)delegate { ShowDisconnectedLabel(); });
+                BeginInvoke((EventHandler)delegate { ShowDisconnectedLabel(); });
             } else {
                 StatusLabelConnStatus.ForeColor = Color.Red;
                 StatusLabelConnStatus.Text = "OBD通讯接口未连接";

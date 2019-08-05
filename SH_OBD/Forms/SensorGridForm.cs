@@ -16,12 +16,11 @@ namespace SH_OBD {
     public partial class SensorGridForm : Form {
         private OBDInterface m_obdInterface;
         private DateTime m_dtStartTime;
-
-        private const int _margin = 5;
-
+        private const int controlMargin = 5;
+        private const int controlHeight = 65;
+        private const int controlWidth = 420;
         private static List<OBDParameter> m_ListSensors;
         private static List<SensorLogItem> m_ListLog;
-
         public bool IsLogging;
         public bool IsRunThread;
 
@@ -80,11 +79,16 @@ namespace SH_OBD {
             Control control;
             for (int i = 0; i < panelDisplay.Controls.Count; i++) {
                 control = panelDisplay.Controls[i];
-                control.Width = (panelDisplay.Width - _margin * 3) / 2;
-                if (i % 2 == 0) {
-                    control.Location = new Point(_margin, (control.Height + _margin) * (i / 2) + _margin);
+                if (panelDisplay.Width > controlWidth) {
+                    control.Width = (panelDisplay.Width - 3 * controlMargin) / 2;
+                    if (i % 2 == 0) {
+                        control.Location = new Point(controlMargin, (control.Height + controlMargin) * (i / 2) + controlMargin);
+                    } else {
+                        control.Location = new Point(control.Width + controlMargin * 2, (control.Height + controlMargin) * (i / 2) + controlMargin);
+                    }
                 } else {
-                    control.Location = new Point(control.Width + _margin * 2, (control.Height + _margin) * (i / 2) + _margin);
+                    control.Width = panelDisplay.Width - 2 * controlMargin;
+                    control.Location = new Point(controlMargin, (control.Height + controlMargin) * i + controlMargin);
                 }
             }
             panelDisplay.Refresh();
@@ -168,11 +172,17 @@ namespace SH_OBD {
 
         private void RebuildSensorGrid() {
             panelDisplay.Controls.Clear();
+            Size controlSize = new Size(controlWidth, controlHeight);
             int index = 0;
             foreach (OBDParameter param in SensorGridForm.m_ListSensors) {
+                if (panelDisplay.Width > controlWidth) {
+                    controlSize.Width = (panelDisplay.Width - 3 * controlMargin) / 2;
+                } else {
+                    controlSize.Width = panelDisplay.Width - 2 * controlMargin;
+                }
                 SensorDisplayControl control = new SensorDisplayControl {
                     Title = param.Name,
-                    Size = new Size(panelDisplay.Width / 2 - 8, 65),
+                    Size = controlSize,
                     Tag = param
                 };
                 if (radioDisplayEnglish.Checked) {
@@ -180,15 +190,16 @@ namespace SH_OBD {
                 } else {
                     control.SetDisplayMode(2);
                 }
-
                 control.Refresh();
-
-                if (index % 2 == 0) {
-                    control.Location = new Point(_margin, (control.Height + _margin) * (index / 2) + _margin);
+                if (panelDisplay.Width > controlWidth) {
+                    if (index % 2 == 0) {
+                        control.Location = new Point(controlMargin, (control.Height + controlMargin) * (index / 2) + controlMargin);
+                    } else {
+                        control.Location = new Point(control.Width + controlMargin * 2, (control.Height + controlMargin) * (index / 2) + controlMargin);
+                    }
                 } else {
-                    control.Location = new Point(control.Width + _margin * 2, (control.Height + _margin) * (index / 2) + _margin);
+                    control.Location = new Point(controlMargin, (control.Height + controlMargin) * index + controlMargin);
                 }
-
                 panelDisplay.Controls.Add((Control)control);
                 ++index;
             }
@@ -324,6 +335,5 @@ namespace SH_OBD {
             btnReset.Enabled = true;
             btnSave.Enabled = true;
         }
-
     }
 }

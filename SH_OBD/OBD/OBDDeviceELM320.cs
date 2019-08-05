@@ -4,10 +4,12 @@ namespace SH_OBD {
     public class OBDDeviceELM320 : OBDDevice {
         private int m_iBaudRateIndex;
         private int m_iComPortIndex;
+        private bool m_bConnected;
 
         public OBDDeviceELM320(Logger log) : base(log) {
             try {
                 m_Parser = new OBDParser_J1850_PWM();
+                m_bConnected = false;
             } catch (Exception ex) {
                 throw ex;
             }
@@ -73,10 +75,13 @@ namespace SH_OBD {
             }
         }
 
-        public override bool Connected() {
-            return m_CommELM.Online;
+        public override bool GetConnected() {
+            return m_bConnected;
         }
 
+        public override void SetConnected(bool status) {
+            m_bConnected = status;
+        }
 
         public bool ConfirmAT(string command) {
             return ConfirmAT(command, 3);

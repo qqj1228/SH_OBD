@@ -5,10 +5,12 @@ namespace SH_OBD {
         private ProtocolType m_iProtocol;
         private int m_iBaudRateIndex;
         private int m_iComPortIndex;
+        private bool m_bConnected;
 
         public OBDDeviceELM327(Logger log) : base(log) {
             try {
                 m_iProtocol = ProtocolType.Unknown;
+                m_bConnected = false;
             } catch (Exception ex) {
                 throw ex;
             }
@@ -128,8 +130,12 @@ namespace SH_OBD {
             }
         }
 
-        public override bool Connected() {
-            return m_CommELM.Online;
+        public override bool GetConnected() {
+            return m_bConnected;
+        }
+
+        public override void SetConnected(bool status) {
+            m_bConnected = status;
         }
 
         public void SetProtocol(ProtocolType iProtocol) {

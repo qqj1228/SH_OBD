@@ -62,7 +62,7 @@ namespace SH_OBD {
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Hand
                     );
-                    //break;
+                    break;
                 }
 
                 if (string.Compare(value.StringValue, "P0000") == 0) {

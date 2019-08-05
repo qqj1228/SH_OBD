@@ -6,37 +6,37 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SH_OBD {
     public partial class SensorChartForm : Form {
         protected OBDInterface m_obdInterface;
-        private List<DatedValue> m_arraySensor1Values;
-        private List<DatedValue> m_arraySensor2Values;
-        private List<DatedValue> m_arraySensor3Values;
-        private List<DatedValue> m_arraySensor4Values;
-        private double m_dSensor1Max;
-        private double m_dSensor2Max;
-        private double m_dSensor3Max;
-        private double m_dSensor4Max;
-        private double m_dSensor1Min;
-        private double m_dSensor2Min;
-        private double m_dSensor3Min;
-        private double m_dSensor4Min;
-        private double[] dSensor1Values;
-        private double[] dSensor1Times;
-        private double[] dSensor2Values;
-        private double[] dSensor2Times;
-        private double[] dSensor3Values;
-        private double[] dSensor3Times;
-        private double[] dSensor4Values;
-        private double[] dSensor4Times;
+        private readonly List<DatedValue>[] m_arraySensorValues;
+        private readonly double[] m_dSensorMax;
+        private readonly double[] m_dSensorMin;
+        private readonly double[][] dSensorValues;
+        private readonly double[][] dSensorTimes;
+        private readonly bool[] sensorsEnable;
+        private readonly int[] sensorsIndex;
+        private readonly int[] unitsIndex;
         public bool IsPlotting;
 
         public SensorChartForm(OBDInterface obd2) {
             m_obdInterface = obd2;
             InitializeComponent();
+            m_arraySensorValues = new List<DatedValue>[4];
+            for (int i = 0; i < m_arraySensorValues.Length; i++) {
+                m_arraySensorValues[i] = new List<DatedValue>();
+            }
+            m_dSensorMax = new double[4];
+            m_dSensorMin = new double[4];
+            dSensorValues = new double[4][];
+            dSensorTimes = new double[4][];
+            sensorsEnable = new bool[4];
+            sensorsIndex = new int[4];
+            unitsIndex = new int[4];
         }
 
         private void SensorChartForm_Resize(object sender, EventArgs e) {
@@ -126,8 +126,10 @@ namespace SH_OBD {
         }
 
         private void btnStart_Click(object sender, EventArgs e) {
-            if (!chkSensor1.Checked) {
-                MessageBox.Show("You must configure at least one sensor to monitor.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            if (!m_obdInterface.ConnectedStatus) {
+                MessageBox.Show("必须首先与车辆进行连接，才能进行后续操作！", "连接请求", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            } else if (!chkSensor1.Checked) {
+                MessageBox.Show("必须至少设置一个用于监测的传感器", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             } else {
                 chkSensor1.Enabled = false;
                 chkSensor2.Enabled = false;
@@ -149,6 +151,18 @@ namespace SH_OBD {
                 btnStart.Enabled = false;
                 btnStop.Enabled = true;
                 IsPlotting = true;
+                sensorsEnable[0] = chkSensor1.Checked;
+                sensorsEnable[1] = chkSensor2.Checked;
+                sensorsEnable[2] = chkSensor3.Checked;
+                sensorsEnable[3] = chkSensor4.Checked;
+                sensorsIndex[0] = comboSensor1.SelectedIndex;
+                sensorsIndex[1] = comboSensor2.SelectedIndex;
+                sensorsIndex[2] = comboSensor3.SelectedIndex;
+                sensorsIndex[3] = comboSensor4.SelectedIndex;
+                unitsIndex[0] = comboUnits1.SelectedIndex;
+                unitsIndex[1] = comboUnits2.SelectedIndex;
+                unitsIndex[2] = comboUnits3.SelectedIndex;
+                unitsIndex[3] = comboUnits4.SelectedIndex;
                 Task.Factory.StartNew(UpdateThread);
             }
         }
@@ -192,10 +206,6 @@ namespace SH_OBD {
             comboSensor1.Enabled = true;
             comboStyle1.Enabled = true;
             comboUnits1.Enabled = true;
-            m_arraySensor1Values = new List<DatedValue>();
-            m_arraySensor2Values = new List<DatedValue>();
-            m_arraySensor3Values = new List<DatedValue>();
-            m_arraySensor4Values = new List<DatedValue>();
             comboUnits1.SelectedIndex = 0;
             comboUnits2.SelectedIndex = 0;
             comboUnits3.SelectedIndex = 0;
@@ -206,35 +216,28 @@ namespace SH_OBD {
             comboStyle4.SelectedIndex = 0;
         }
 
-        static bool isConnected;
-        public bool CheckConnection() {
+        public void CheckConnection() {
             if (m_obdInterface.ConnectedStatus) {
-                if (!isConnected) {
-                    isConnected = true;
-                    if (!IsPlotting) {
-                        btnStart.Enabled = true;
-                    }
-                    comboSensor1.Items.Clear();
-                    comboSensor2.Items.Clear();
-                    comboSensor3.Items.Clear();
-                    comboSensor4.Items.Clear();
-                    foreach (OBDParameter obdParameter in m_obdInterface.SupportedParameterList(1)) {
-                        comboSensor1.Items.Add((object)obdParameter);
-                        comboSensor2.Items.Add((object)obdParameter);
-                        comboSensor3.Items.Add((object)obdParameter);
-                        comboSensor4.Items.Add((object)obdParameter);
-                    }
+                if (!IsPlotting) {
+                    btnStart.Enabled = true;
                 }
-                return true;
+                comboSensor1.Items.Clear();
+                comboSensor2.Items.Clear();
+                comboSensor3.Items.Clear();
+                comboSensor4.Items.Clear();
+                foreach (OBDParameter obdParameter in m_obdInterface.SupportedParameterList(1)) {
+                    comboSensor1.Items.Add((object)obdParameter);
+                    comboSensor2.Items.Add((object)obdParameter);
+                    comboSensor3.Items.Add((object)obdParameter);
+                    comboSensor4.Items.Add((object)obdParameter);
+                }
             } else {
-                isConnected = false;
                 IsPlotting = false;
                 btnStart.Enabled = false;
                 comboSensor1.Items.Clear();
                 comboSensor2.Items.Clear();
                 comboSensor3.Items.Clear();
                 comboSensor4.Items.Clear();
-                return false;
             }
         }
 
@@ -243,237 +246,88 @@ namespace SH_OBD {
                 return;
             }
             do {
-                if (CheckConnection()) {
-                    bool bEnglishUnits = true;
-                    this.Invoke((EventHandler)delegate {
-                        if (comboUnits1.SelectedIndex > 0) {
-                            bEnglishUnits = false;
+                if (m_obdInterface.ConnectedStatus) {
+                    if (sensorsEnable[0]) {
+                        OBDParameterValue obdParameterValue = m_obdInterface.GetValue(comboSensor1.Items[sensorsIndex[0]] as OBDParameter, unitsIndex[0] == 0);
+                        if (!obdParameterValue.ErrorDetected) {
+                            m_arraySensorValues[0].Add(new DatedValue(obdParameterValue.DoubleValue));
+                            UpdateChart(0, chart1);
                         }
-                        if (chkSensor1.Checked) {
-                            OBDParameterValue obdParameterValue = m_obdInterface.GetValue(comboSensor1.Items[comboSensor1.SelectedIndex] as OBDParameter, bEnglishUnits);
-                            if (!obdParameterValue.ErrorDetected) {
-                                m_arraySensor1Values.Add(new DatedValue(obdParameterValue.DoubleValue));
-                                UpdateChart1();
-                            }
+                    }
+                    if (sensorsEnable[1]) {
+                        OBDParameterValue obdParameterValue = m_obdInterface.GetValue(comboSensor2.Items[sensorsIndex[1]] as OBDParameter, unitsIndex[1] == 0);
+                        if (!obdParameterValue.ErrorDetected) {
+                            m_arraySensorValues[1].Add(new DatedValue(obdParameterValue.DoubleValue));
+                            UpdateChart(1, chart2);
                         }
-                        if (chkSensor2.Checked) {
-                            OBDParameterValue obdParameterValue = m_obdInterface.GetValue(comboSensor2.Items[comboSensor2.SelectedIndex] as OBDParameter, bEnglishUnits);
-                            if (!obdParameterValue.ErrorDetected) {
-                                m_arraySensor2Values.Add(new DatedValue(obdParameterValue.DoubleValue));
-                                UpdateChart2();
-                            }
+                    }
+                    if (sensorsEnable[2]) {
+                        OBDParameterValue obdParameterValue = m_obdInterface.GetValue(comboSensor3.Items[sensorsIndex[2]] as OBDParameter, unitsIndex[2] == 0);
+                        if (!obdParameterValue.ErrorDetected) {
+                            m_arraySensorValues[2].Add(new DatedValue(obdParameterValue.DoubleValue));
+                            UpdateChart(2, chart3);
                         }
-                        if (chkSensor3.Checked) {
-                            OBDParameterValue obdParameterValue = m_obdInterface.GetValue(comboSensor3.Items[comboSensor3.SelectedIndex] as OBDParameter, bEnglishUnits);
-                            if (!obdParameterValue.ErrorDetected) {
-                                m_arraySensor3Values.Add(new DatedValue(obdParameterValue.DoubleValue));
-                                UpdateChart3();
-                            }
+                    }
+                    if (sensorsEnable[3]) {
+                        OBDParameterValue obdParameterValue = m_obdInterface.GetValue(comboSensor4.Items[sensorsIndex[3]] as OBDParameter, unitsIndex[3] == 0);
+                        if (!obdParameterValue.ErrorDetected) {
+                            m_arraySensorValues[3].Add(new DatedValue(obdParameterValue.DoubleValue));
+                            UpdateChart(3, chart4);
                         }
-                        if (chkSensor4.Checked) {
-                            OBDParameterValue obdParameterValue = m_obdInterface.GetValue(comboSensor4.Items[comboSensor4.SelectedIndex] as OBDParameter, bEnglishUnits);
-                            if (!obdParameterValue.ErrorDetected) {
-                                m_arraySensor4Values.Add(new DatedValue(obdParameterValue.DoubleValue));
-                                UpdateChart4();
-                            }
-                        }
-                    });
+                    }
+                } else {
+                    Thread.Sleep(300);
                 }
             } while (IsPlotting);
         }
 
-        public void UpdateChart1() {
-            int index1 = 0;
-            if (0 < m_arraySensor1Values.Count) {
-                do {
-                    if (DateTime.Now.Subtract(m_arraySensor1Values[index1].Date).TotalSeconds > (double)Convert.ToInt32(numHistory.Value)) {
-                        m_arraySensor1Values.RemoveAt(index1);
-                        --index1;
-                    }
-                    ++index1;
-                } while (index1 < m_arraySensor1Values.Count);
-            }
-            if (m_arraySensor1Values.Count == 0) {
+        public void UpdateChart(int index, DGChartControl chart) {
+            if (index < 0 || index > 3) {
                 return;
             }
-            double[] numArray1 = new double[m_arraySensor1Values.Count];
-            numArray1.Initialize();
-            dSensor1Values = numArray1;
-            double[] numArray2 = new double[m_arraySensor1Values.Count];
-            numArray2.Initialize();
-            dSensor1Times = numArray2;
-            m_dSensor1Max = m_arraySensor1Values[0].Value;
-            m_dSensor1Min = m_arraySensor1Values[0].Value;
-            int index2 = 0;
-            if (0 < m_arraySensor1Values.Count) {
-                do {
-                    DatedValue datedValue = m_arraySensor1Values[index2];
-                    if (datedValue.Value > m_dSensor1Max) {
-                        m_dSensor1Max = datedValue.Value;
+            if (0 < m_arraySensorValues[index].Count) {
+                for (int i = 0; i < m_arraySensorValues[index].Count; i++) {
+                    if (DateTime.Now.Subtract(m_arraySensorValues[index][i].Date).TotalSeconds > (double)Convert.ToInt32(numHistory.Value)) {
+                        m_arraySensorValues[index].RemoveAt(i);
+                        i--;
                     }
-                    if (datedValue.Value < m_dSensor1Min) {
-                        m_dSensor1Min = datedValue.Value;
-                    }
-                    dSensor1Values[index2] = datedValue.Value;
-                    TimeSpan timeSpan = DateTime.Now.Subtract(datedValue.Date);
-                    dSensor1Times[index2] = timeSpan.TotalSeconds * -1.0;
-                    ++index2;
-                } while (index2 < m_arraySensor1Values.Count);
+                }
             }
-            if (chart1.YRangeEnd < m_dSensor1Max) {
-                chart1.YRangeEnd = Math.Ceiling(m_dSensor1Max);
-                chart1.YGrid = (chart1.YRangeEnd - chart1.YRangeStart) * 0.1;
-            }
-            if (chart1.YRangeStart > m_dSensor1Min) {
-                chart1.YRangeStart = Math.Floor(m_dSensor1Min);
-                chart1.YGrid = (chart1.YRangeEnd - chart1.YRangeStart) * 0.1;
-            }
-            chart1.XData1 = dSensor1Times;
-            chart1.YData1 = dSensor1Values;
-        }
-
-        public void UpdateChart2() {
-            int index1 = 0;
-            if (0 < m_arraySensor2Values.Count) {
-                do {
-                    if (DateTime.Now.Subtract(m_arraySensor2Values[index1].Date).TotalSeconds > (double)Convert.ToInt32(numHistory.Value)) {
-                        m_arraySensor2Values.RemoveAt(index1);
-                        --index1;
-                    }
-                    ++index1;
-                } while (index1 < m_arraySensor2Values.Count);
-            }
-            if (m_arraySensor2Values.Count == 0) {
+            if (m_arraySensorValues[index].Count == 0) {
                 return;
             }
-            double[] numArray1 = new double[m_arraySensor2Values.Count];
+            double[] numArray1 = new double[m_arraySensorValues[index].Count];
             numArray1.Initialize();
-            dSensor2Values = numArray1;
-            double[] numArray2 = new double[m_arraySensor2Values.Count];
+            dSensorValues[index] = numArray1;
+            double[] numArray2 = new double[m_arraySensorValues[index].Count];
             numArray2.Initialize();
-            dSensor2Times = numArray2;
-            m_dSensor2Max = m_arraySensor2Values[0].Value;
-            m_dSensor2Min = m_arraySensor2Values[0].Value;
-            int index2 = 0;
-            if (0 < m_arraySensor2Values.Count) {
-                do {
-                    DatedValue datedValue = m_arraySensor2Values[index2];
-                    if (datedValue.Value > m_dSensor2Max)
-                        m_dSensor2Max = datedValue.Value;
-                    if (datedValue.Value < m_dSensor2Min)
-                        m_dSensor2Min = datedValue.Value;
-                    dSensor2Values[index2] = datedValue.Value;
-                    TimeSpan timeSpan = DateTime.Now.Subtract(datedValue.Date);
-                    dSensor2Times[index2] = timeSpan.TotalSeconds * -1.0;
-                    ++index2;
-                } while (index2 < m_arraySensor2Values.Count);
-            }
-            if (chart2.YRangeEnd < m_dSensor2Max) {
-                chart2.YRangeEnd = Math.Ceiling(m_dSensor2Max);
-                chart2.YGrid = (chart2.YRangeEnd - chart2.YRangeStart) * 0.1;
-            }
-            if (chart2.YRangeStart > m_dSensor2Min) {
-                chart2.YRangeStart = Math.Floor(m_dSensor2Min);
-                chart2.YGrid = (chart2.YRangeEnd - chart2.YRangeStart) * 0.1;
-            }
-            chart2.XData1 = dSensor2Times;
-            chart2.YData1 = dSensor2Values;
-        }
-
-        public void UpdateChart3() {
-            int index1 = 0;
-            if (0 < m_arraySensor3Values.Count) {
-                do {
-                    if (DateTime.Now.Subtract(m_arraySensor3Values[index1].Date).TotalSeconds > (double)Convert.ToInt32(numHistory.Value)) {
-                        m_arraySensor3Values.RemoveAt(index1);
-                        --index1;
+            dSensorTimes[index] = numArray2;
+            m_dSensorMax[index] = m_arraySensorValues[index][0].Value;
+            m_dSensorMin[index] = m_arraySensorValues[index][0].Value;
+            if (0 < m_arraySensorValues[index].Count) {
+                for (int i = 0; i < m_arraySensorValues[index].Count; i++) {
+                    DatedValue datedValue = m_arraySensorValues[index][i];
+                    if (datedValue.Value > m_dSensorMax[index]) {
+                        m_dSensorMax[index] = datedValue.Value;
                     }
-                    ++index1;
-                } while (index1 < m_arraySensor3Values.Count);
-            }
-            if (m_arraySensor3Values.Count == 0) {
-                return;
-            }
-            double[] numArray1 = new double[m_arraySensor3Values.Count];
-            numArray1.Initialize();
-            dSensor3Values = numArray1;
-            double[] numArray2 = new double[m_arraySensor3Values.Count];
-            numArray2.Initialize();
-            dSensor3Times = numArray2;
-            m_dSensor3Max = m_arraySensor3Values[0].Value;
-            m_dSensor3Min = m_arraySensor3Values[0].Value;
-            int index2 = 0;
-            if (0 < m_arraySensor3Values.Count) {
-                do {
-                    DatedValue datedValue = m_arraySensor3Values[index2];
-                    if (datedValue.Value > m_dSensor3Max)
-                        m_dSensor3Max = datedValue.Value;
-                    if (datedValue.Value < m_dSensor3Min)
-                        m_dSensor3Min = datedValue.Value;
-                    dSensor3Values[index2] = datedValue.Value;
-                    TimeSpan timeSpan = DateTime.Now.Subtract(datedValue.Date);
-                    dSensor3Times[index2] = timeSpan.TotalSeconds * -1.0;
-                    ++index2;
-                } while (index2 < m_arraySensor3Values.Count);
-            }
-            if (chart3.YRangeEnd < m_dSensor3Max) {
-                chart3.YRangeEnd = Math.Ceiling(m_dSensor3Max);
-                chart3.YGrid = (chart3.YRangeEnd - chart3.YRangeStart) * 0.1;
-            }
-            if (chart3.YRangeStart > m_dSensor3Min) {
-                chart3.YRangeStart = Math.Floor(m_dSensor3Min);
-                chart3.YGrid = (chart3.YRangeEnd - chart3.YRangeStart) * 0.1;
-            }
-            chart3.XData1 = dSensor3Times;
-            chart3.YData1 = dSensor3Values;
-        }
-
-        public void UpdateChart4() {
-            int index1 = 0;
-            if (0 < m_arraySensor4Values.Count) {
-                do {
-                    if (DateTime.Now.Subtract(m_arraySensor4Values[index1].Date).TotalSeconds > (double)Convert.ToInt32(numHistory.Value)) {
-                        m_arraySensor4Values.RemoveAt(index1);
-                        --index1;
+                    if (datedValue.Value < m_dSensorMin[index]) {
+                        m_dSensorMin[index] = datedValue.Value;
                     }
-                    ++index1;
-                } while (index1 < m_arraySensor4Values.Count);
-            }
-            if (m_arraySensor4Values.Count == 0) {
-                return;
-            }
-            double[] numArray1 = new double[m_arraySensor4Values.Count];
-            numArray1.Initialize();
-            dSensor4Values = numArray1;
-            double[] numArray2 = new double[m_arraySensor4Values.Count];
-            numArray2.Initialize();
-            dSensor4Times = numArray2;
-            m_dSensor4Max = m_arraySensor4Values[0].Value;
-            m_dSensor4Min = m_arraySensor4Values[0].Value;
-            int index2 = 0;
-            if (0 < m_arraySensor4Values.Count) {
-                do {
-                    DatedValue datedValue = m_arraySensor4Values[index2];
-                    if (datedValue.Value > m_dSensor4Max)
-                        m_dSensor4Max = datedValue.Value;
-                    if (datedValue.Value < m_dSensor4Min)
-                        m_dSensor4Min = datedValue.Value;
-                    dSensor4Values[index2] = datedValue.Value;
+                    dSensorValues[index][i] = datedValue.Value;
                     TimeSpan timeSpan = DateTime.Now.Subtract(datedValue.Date);
-                    dSensor4Times[index2] = timeSpan.TotalSeconds * -1.0;
-                    ++index2;
-                } while (index2 < m_arraySensor4Values.Count);
+                    dSensorTimes[index][i] = timeSpan.TotalSeconds * -1.0;
+                }
             }
-            if (chart4.YRangeEnd < m_dSensor4Max) {
-                chart4.YRangeEnd = Math.Ceiling(m_dSensor4Max);
-                chart4.YGrid = (chart4.YRangeEnd - chart4.YRangeStart) * 0.1;
+            if (chart.YRangeEnd < m_dSensorMax[index]) {
+                chart.YRangeEnd = Math.Ceiling(m_dSensorMax[index]);
+                chart.YGrid = (chart.YRangeEnd - chart.YRangeStart) * 0.1;
             }
-            if (chart4.YRangeStart > m_dSensor4Min) {
-                chart4.YRangeStart = Math.Floor(m_dSensor4Min);
-                chart4.YGrid = (chart4.YRangeEnd - chart4.YRangeStart) * 0.1;
+            if (chart.YRangeStart > m_dSensorMin[index]) {
+                chart.YRangeStart = Math.Floor(m_dSensorMin[index]);
+                chart.YGrid = (chart.YRangeEnd - chart.YRangeStart) * 0.1;
             }
-            chart4.XData1 = dSensor4Times;
-            chart4.YData1 = dSensor4Values;
+            chart.XData1 = dSensorTimes[index];
+            chart.YData1 = dSensorValues[index];
         }
 
         private void numHistory_ValueChanged(object sender, EventArgs e) {
@@ -483,229 +337,129 @@ namespace SH_OBD {
             chart4.XRangeStart = (double)Convert.ToSingle(numHistory.Value) * -1.0;
         }
 
-        private void comboStyle1_SelectedIndexChanged(object sender, EventArgs e) {
-            if (comboStyle1.SelectedIndex == 0) {
-                chart1.DrawMode = DGChartControl.DrawModeType.Line;
-            } else if (comboStyle1.SelectedIndex == 1) {
-                chart1.DrawMode = DGChartControl.DrawModeType.Dot;
-            } else {
-                chart1.DrawMode = DGChartControl.DrawModeType.Bar;
+        private void ComboStyle_SelectedIndexChanged(object sender, EventArgs e) {
+            if (sender is ComboBox comboStyle) {
+                if (comboStyle == comboStyle1) {
+                    ComboStyle_Update(comboStyle1, chart1);
+                } else if (comboStyle == comboStyle2) {
+                    ComboStyle_Update(comboStyle2, chart2);
+                } else if (comboStyle == comboStyle3) {
+                    ComboStyle_Update(comboStyle3, chart3);
+                } else if (comboStyle == comboStyle4) {
+                    ComboStyle_Update(comboStyle4, chart4);
+                }
             }
         }
 
-        private void comboStyle2_SelectedIndexChanged(object sender, EventArgs e) {
-            if (comboStyle2.SelectedIndex == 0) {
-                chart2.DrawMode = DGChartControl.DrawModeType.Line;
-            } else if (comboStyle2.SelectedIndex == 1) {
-                chart2.DrawMode = DGChartControl.DrawModeType.Dot;
+        private void ComboStyle_Update(ComboBox comboStyle, DGChartControl chart) {
+            if (comboStyle.SelectedIndex == 0) {
+                chart.DrawMode = DGChartControl.DrawModeType.Line;
+            } else if (comboStyle.SelectedIndex == 1) {
+                chart.DrawMode = DGChartControl.DrawModeType.Dot;
             } else {
-                chart2.DrawMode = DGChartControl.DrawModeType.Bar;
+                chart.DrawMode = DGChartControl.DrawModeType.Bar;
             }
         }
 
-        private void comboStyle3_SelectedIndexChanged(object sender, EventArgs e) {
-            if (comboStyle3.SelectedIndex == 0) {
-                chart3.DrawMode = DGChartControl.DrawModeType.Line;
-            } else if (comboStyle3.SelectedIndex == 1) {
-                chart3.DrawMode = DGChartControl.DrawModeType.Dot;
-            } else {
-                chart3.DrawMode = DGChartControl.DrawModeType.Bar;
-            }
-        }
-
-        private void comboStyle4_SelectedIndexChanged(object sender, EventArgs e) {
-            if (comboStyle4.SelectedIndex == 0) {
-                chart4.DrawMode = DGChartControl.DrawModeType.Line;
-            } else if (comboStyle4.SelectedIndex == 1) {
-                chart4.DrawMode = DGChartControl.DrawModeType.Dot;
-            } else {
-                chart4.DrawMode = DGChartControl.DrawModeType.Bar;
-            }
-        }
-
-        private void chkSensor1_CheckedChanged(object sender, EventArgs e) {
+        private void ChkSensor_CheckedChanged(object sender, EventArgs e) {
             DrawCharts();
-            if (chkSensor1.Checked) {
-                chkSensor2.Enabled = true;
-            } else {
-                chkSensor2.Checked = false;
-                chkSensor3.Checked = false;
-                chkSensor4.Checked = false;
-                chkSensor2.Enabled = false;
-                chkSensor3.Enabled = false;
-                chkSensor4.Enabled = false;
+            if (sender is CheckBox chkSensor) {
+                if (chkSensor == chkSensor1) {
+                    if (chkSensor1.Checked) {
+                        chkSensor2.Enabled = true;
+                    } else {
+                        chkSensor2.Checked = false;
+                        chkSensor3.Checked = false;
+                        chkSensor4.Checked = false;
+                        chkSensor2.Enabled = false;
+                        chkSensor3.Enabled = false;
+                        chkSensor4.Enabled = false;
+                    }
+                } else if (chkSensor == chkSensor2) {
+                    if (chkSensor2.Checked) {
+                        chkSensor3.Enabled = true;
+                    } else {
+                        chkSensor3.Checked = false;
+                        chkSensor4.Checked = false;
+                        chkSensor3.Enabled = false;
+                        chkSensor4.Enabled = false;
+                    }
+                } else if (chkSensor == chkSensor3) {
+                    if (chkSensor3.Checked) {
+                        chkSensor4.Enabled = true;
+                    } else {
+                        chkSensor4.Checked = false;
+                        chkSensor4.Enabled = false;
+                    }
+                }
             }
         }
 
-        private void chkSensor2_CheckedChanged(object sender, EventArgs e) {
-            DrawCharts();
-            if (chkSensor2.Checked) {
-                chkSensor3.Enabled = true;
-            } else {
-                chkSensor3.Checked = false;
-                chkSensor4.Checked = false;
-                chkSensor3.Enabled = false;
-                chkSensor4.Enabled = false;
+        private void ChkSensor_EnabledChanged(object sender, EventArgs e) {
+            if (sender is CheckBox chkSensor) {
+                if (chkSensor == chkSensor1) {
+                    ChkSensor_Update(chkSensor1, comboSensor1, comboUnits1, comboStyle1);
+                } else if (chkSensor == chkSensor2) {
+                    ChkSensor_Update(chkSensor2, comboSensor2, comboUnits2, comboStyle2);
+                } else if (chkSensor == chkSensor3) {
+                    ChkSensor_Update(chkSensor3, comboSensor3, comboUnits3, comboStyle3);
+                } else if (chkSensor == chkSensor4) {
+                    ChkSensor_Update(chkSensor4, comboSensor4, comboUnits4, comboStyle4);
+                }
             }
         }
 
-        private void chkSensor3_CheckedChanged(object sender, EventArgs e) {
-            DrawCharts();
-            if (chkSensor3.Checked) {
-                chkSensor4.Enabled = true;
+        private void ChkSensor_Update(CheckBox chkSensor, ComboBox comboSensor, ComboBox comboUnits, ComboBox comboStyle) {
+            if (chkSensor.Enabled) {
+                comboSensor.Enabled = true;
+                comboUnits.Enabled = true;
+                comboStyle.Enabled = true;
             } else {
-                chkSensor4.Checked = false;
-                chkSensor4.Enabled = false;
+                comboSensor.Enabled = false;
+                comboUnits.Enabled = false;
+                comboStyle.Enabled = false;
             }
         }
 
-        private void chkSensor4_CheckedChanged(object sender, EventArgs e) {
-            DrawCharts();
-        }
-
-        private void chkSensor1_EnabledChanged(object sender, EventArgs e) {
-            if (chkSensor1.Enabled) {
-                comboSensor1.Enabled = true;
-                comboUnits1.Enabled = true;
-                comboStyle1.Enabled = true;
-            } else {
-                comboSensor1.Enabled = false;
-                comboUnits1.Enabled = false;
-                comboStyle1.Enabled = false;
+        private void ComboSensorOrUnits_SelectedIndexChanged(object sender, EventArgs e) {
+            if (sender is ComboBox comboBox) {
+                if (comboBox == this.comboSensor1 || comboBox == this.comboUnits1) {
+                    ComboSensorOrUnits_Update(m_arraySensorValues[0], chart1, comboSensor1, comboUnits1);
+                } else if (comboBox == this.comboSensor2 || comboBox == this.comboUnits2) {
+                    ComboSensorOrUnits_Update(m_arraySensorValues[1], chart2, comboSensor2, comboUnits2);
+                } else if (comboBox == this.comboSensor3 || comboBox == this.comboUnits3) {
+                    ComboSensorOrUnits_Update(m_arraySensorValues[2], chart3, comboSensor3, comboUnits3);
+                } else if (comboBox == this.comboSensor4 || comboBox == this.comboUnits4) {
+                    ComboSensorOrUnits_Update(m_arraySensorValues[3], chart4, comboSensor4, comboUnits4);
+                }
             }
         }
 
-        private void chkSensor2_EnabledChanged(object sender, EventArgs e) {
-            if (chkSensor2.Enabled) {
-                comboSensor2.Enabled = true;
-                comboUnits2.Enabled = true;
-                comboStyle2.Enabled = true;
-            } else {
-                comboSensor2.Enabled = false;
-                comboUnits2.Enabled = false;
-                comboStyle2.Enabled = false;
-            }
-        }
-
-        private void chkSensor3_EnabledChanged(object sender, EventArgs e) {
-            if (chkSensor3.Enabled) {
-                comboSensor3.Enabled = true;
-                comboUnits3.Enabled = true;
-                comboStyle3.Enabled = true;
-            } else {
-                comboSensor3.Enabled = false;
-                comboUnits3.Enabled = false;
-                comboStyle3.Enabled = false;
-            }
-        }
-
-        private void chkSensor4_EnabledChanged(object sender, EventArgs e) {
-            if (chkSensor4.Enabled) {
-                comboSensor4.Enabled = true;
-                comboUnits4.Enabled = true;
-                comboStyle4.Enabled = true;
-            } else {
-                comboSensor4.Enabled = false;
-                comboUnits4.Enabled = false;
-                comboStyle4.Enabled = false;
-            }
-        }
-
-        private void comboSensorOrUnits1_SelectedIndexChanged(object sender, EventArgs e) {
-            m_arraySensor1Values.Clear();
-            chart1.XData1 = (double[])null;
-            chart1.YData1 = (double[])null;
-            if (comboSensor1.Items.Count == 0) {
+        private void ComboSensorOrUnits_Update(List<DatedValue> arraySensorValues, DGChartControl chart, ComboBox comboSensor, ComboBox comboUnits) {
+            arraySensorValues.Clear();
+            chart.XData1 = (double[])null;
+            chart.YData1 = (double[])null;
+            if (comboSensor.Items.Count == 0) {
                 return;
             }
-            int selectedIndex = comboSensor1.SelectedIndex;
+            int selectedIndex = comboSensor.SelectedIndex;
             if (selectedIndex < 0) {
                 return;
             }
-            OBDParameter obdParameter = (OBDParameter)comboSensor1.Items[selectedIndex];
-            if (comboUnits1.SelectedIndex == 0) {
-                chart1.Text = obdParameter.Name + " (" + obdParameter.EnglishUnitLabel + ")";
-                chart1.YRangeStart = Math.Floor(obdParameter.EnglishMinValue);
-                chart1.YRangeEnd = obdParameter.EnglishMinValue + 1.0;
+            OBDParameter obdParameter = (OBDParameter)comboSensor.Items[selectedIndex];
+            if (comboUnits.SelectedIndex == 0) {
+                chart.Text = obdParameter.Name + " (" + obdParameter.EnglishUnitLabel + ")";
+                chart.YRangeStart = Math.Floor(obdParameter.EnglishMinValue);
+                chart.YRangeEnd = obdParameter.EnglishMinValue + 1.0;
             } else {
-                chart1.Text = obdParameter.Name + " (" + obdParameter.MetricUnitLabel + ")";
-                chart1.YRangeStart = Math.Floor(obdParameter.MetricMinValue);
-                chart1.YRangeEnd = obdParameter.MetricMinValue + 1.0;
-            }
-        }
-
-        private void comboSensorOrUnits2_SelectedIndexChanged(object sender, EventArgs e) {
-            m_arraySensor2Values.Clear();
-            chart2.XData1 = (double[])null;
-            chart2.YData1 = (double[])null;
-            if (comboSensor2.Items.Count == 0) {
-                return;
-            }
-            int selectedIndex = comboSensor2.SelectedIndex;
-            if (selectedIndex < 0) {
-                return;
-            }
-            OBDParameter obdParameter = comboSensor2.Items[selectedIndex] as OBDParameter;
-            if (comboUnits2.SelectedIndex == 0) {
-                chart2.Text = obdParameter.Name + " (" + obdParameter.EnglishUnitLabel + ")";
-                chart2.YRangeStart = Math.Floor(obdParameter.EnglishMinValue);
-                chart2.YRangeEnd = obdParameter.EnglishMinValue + 1.0;
-            } else {
-                chart2.Text = obdParameter.Name + " (" + obdParameter.MetricUnitLabel + ")";
-                chart2.YRangeStart = Math.Floor(obdParameter.MetricMinValue);
-                chart2.YRangeEnd = obdParameter.MetricMinValue + 1.0;
-            }
-        }
-
-        private void comboSensorOrUnits3_SelectedIndexChanged(object sender, EventArgs e) {
-            m_arraySensor3Values.Clear();
-            chart3.XData1 = (double[])null;
-            chart3.YData1 = (double[])null;
-            if (comboSensor3.Items.Count == 0) {
-                return;
-            }
-            int selectedIndex = comboSensor3.SelectedIndex;
-            if (selectedIndex < 0) {
-                return;
-            }
-            OBDParameter obdParameter = comboSensor3.Items[selectedIndex] as OBDParameter;
-            if (comboUnits3.SelectedIndex == 0) {
-                chart3.Text = obdParameter.Name + " (" + obdParameter.EnglishUnitLabel + ")";
-                chart3.YRangeStart = Math.Floor(obdParameter.EnglishMinValue);
-                chart3.YRangeEnd = obdParameter.EnglishMinValue + 1.0;
-            } else {
-                chart3.Text = obdParameter.Name + " (" + obdParameter.MetricUnitLabel + ")";
-                chart3.YRangeStart = Math.Floor(obdParameter.MetricMinValue);
-                chart3.YRangeEnd = obdParameter.MetricMinValue + 1.0;
-            }
-        }
-
-        private void comboSensorOrUnits4_SelectedIndexChanged(object sender, EventArgs e) {
-            m_arraySensor4Values.Clear();
-            chart4.XData1 = (double[])null;
-            chart4.YData1 = (double[])null;
-            if (comboSensor4.Items.Count == 0) {
-                return;
-            }
-            int selectedIndex = comboSensor4.SelectedIndex;
-            if (selectedIndex < 0) {
-                return;
-            }
-            OBDParameter obdParameter = comboSensor4.Items[selectedIndex] as OBDParameter;
-            if (comboUnits4.SelectedIndex == 0) {
-                chart4.Text = obdParameter.Name + " (" + obdParameter.EnglishUnitLabel + ")";
-                chart4.YRangeStart = Math.Floor(obdParameter.EnglishMinValue);
-                chart4.YRangeEnd = obdParameter.EnglishMinValue + 1.0;
-            } else {
-                chart4.Text = obdParameter.Name + " (" + obdParameter.MetricUnitLabel + ")";
-                chart4.YRangeStart = Math.Floor(obdParameter.MetricMinValue);
-                chart4.YRangeEnd = obdParameter.MetricMinValue + 1.0;
+                chart.Text = obdParameter.Name + " (" + obdParameter.MetricUnitLabel + ")";
+                chart.YRangeStart = Math.Floor(obdParameter.MetricMinValue);
+                chart.YRangeEnd = obdParameter.MetricMinValue + 1.0;
             }
         }
 
         private void SensorChartForm_Activated(object sender, EventArgs e) {
             CheckConnection();
         }
-
     }
 }

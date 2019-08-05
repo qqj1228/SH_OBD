@@ -139,7 +139,7 @@
             this.comboStyle4.Name = "comboStyle4";
             this.comboStyle4.Size = new System.Drawing.Size(90, 20);
             this.comboStyle4.TabIndex = 20;
-            this.comboStyle4.SelectedIndexChanged += new System.EventHandler(this.comboStyle4_SelectedIndexChanged);
+            this.comboStyle4.SelectedIndexChanged += new System.EventHandler(this.ComboStyle_SelectedIndexChanged);
             // 
             // comboStyle3
             // 
@@ -154,7 +154,7 @@
             this.comboStyle3.Name = "comboStyle3";
             this.comboStyle3.Size = new System.Drawing.Size(90, 20);
             this.comboStyle3.TabIndex = 19;
-            this.comboStyle3.SelectedIndexChanged += new System.EventHandler(this.comboStyle3_SelectedIndexChanged);
+            this.comboStyle3.SelectedIndexChanged += new System.EventHandler(this.ComboStyle_SelectedIndexChanged);
             // 
             // comboStyle2
             // 
@@ -169,7 +169,7 @@
             this.comboStyle2.Name = "comboStyle2";
             this.comboStyle2.Size = new System.Drawing.Size(90, 20);
             this.comboStyle2.TabIndex = 18;
-            this.comboStyle2.SelectedIndexChanged += new System.EventHandler(this.comboStyle2_SelectedIndexChanged);
+            this.comboStyle2.SelectedIndexChanged += new System.EventHandler(this.ComboStyle_SelectedIndexChanged);
             // 
             // comboStyle1
             // 
@@ -184,7 +184,7 @@
             this.comboStyle1.Name = "comboStyle1";
             this.comboStyle1.Size = new System.Drawing.Size(90, 20);
             this.comboStyle1.TabIndex = 17;
-            this.comboStyle1.SelectedIndexChanged += new System.EventHandler(this.comboStyle1_SelectedIndexChanged);
+            this.comboStyle1.SelectedIndexChanged += new System.EventHandler(this.ComboStyle_SelectedIndexChanged);
             // 
             // comboUnits4
             // 
@@ -198,7 +198,7 @@
             this.comboUnits4.Name = "comboUnits4";
             this.comboUnits4.Size = new System.Drawing.Size(120, 20);
             this.comboUnits4.TabIndex = 16;
-            this.comboUnits4.SelectedIndexChanged += new System.EventHandler(this.comboSensorOrUnits4_SelectedIndexChanged);
+            this.comboUnits4.SelectedIndexChanged += new System.EventHandler(this.ComboSensorOrUnits_SelectedIndexChanged);
             // 
             // comboUnits3
             // 
@@ -212,7 +212,7 @@
             this.comboUnits3.Name = "comboUnits3";
             this.comboUnits3.Size = new System.Drawing.Size(120, 20);
             this.comboUnits3.TabIndex = 15;
-            this.comboUnits3.SelectedIndexChanged += new System.EventHandler(this.comboSensorOrUnits3_SelectedIndexChanged);
+            this.comboUnits3.SelectedIndexChanged += new System.EventHandler(this.ComboSensorOrUnits_SelectedIndexChanged);
             // 
             // comboUnits2
             // 
@@ -226,7 +226,7 @@
             this.comboUnits2.Name = "comboUnits2";
             this.comboUnits2.Size = new System.Drawing.Size(120, 20);
             this.comboUnits2.TabIndex = 14;
-            this.comboUnits2.SelectedIndexChanged += new System.EventHandler(this.comboSensorOrUnits2_SelectedIndexChanged);
+            this.comboUnits2.SelectedIndexChanged += new System.EventHandler(this.ComboSensorOrUnits_SelectedIndexChanged);
             // 
             // comboUnits1
             // 
@@ -240,7 +240,7 @@
             this.comboUnits1.Name = "comboUnits1";
             this.comboUnits1.Size = new System.Drawing.Size(120, 20);
             this.comboUnits1.TabIndex = 13;
-            this.comboUnits1.SelectedIndexChanged += new System.EventHandler(this.comboSensorOrUnits1_SelectedIndexChanged);
+            this.comboUnits1.SelectedIndexChanged += new System.EventHandler(this.ComboSensorOrUnits_SelectedIndexChanged);
             // 
             // chkSensor4
             // 
@@ -250,8 +250,8 @@
             this.chkSensor4.Size = new System.Drawing.Size(90, 22);
             this.chkSensor4.TabIndex = 12;
             this.chkSensor4.Text = "传感器 &4:";
-            this.chkSensor4.CheckedChanged += new System.EventHandler(this.chkSensor4_CheckedChanged);
-            this.chkSensor4.EnabledChanged += new System.EventHandler(this.chkSensor4_EnabledChanged);
+            this.chkSensor4.CheckedChanged += new System.EventHandler(this.ChkSensor_CheckedChanged);
+            this.chkSensor4.EnabledChanged += new System.EventHandler(this.ChkSensor_EnabledChanged);
             // 
             // chkSensor3
             // 
@@ -261,8 +261,8 @@
             this.chkSensor3.Size = new System.Drawing.Size(90, 22);
             this.chkSensor3.TabIndex = 11;
             this.chkSensor3.Text = "传感器 &3:";
-            this.chkSensor3.CheckedChanged += new System.EventHandler(this.chkSensor3_CheckedChanged);
-            this.chkSensor3.EnabledChanged += new System.EventHandler(this.chkSensor3_EnabledChanged);
+            this.chkSensor3.CheckedChanged += new System.EventHandler(this.ChkSensor_CheckedChanged);
+            this.chkSensor3.EnabledChanged += new System.EventHandler(this.ChkSensor_EnabledChanged);
             // 
             // chkSensor2
             // 
@@ -272,8 +272,8 @@
             this.chkSensor2.Size = new System.Drawing.Size(90, 22);
             this.chkSensor2.TabIndex = 10;
             this.chkSensor2.Text = "传感器 &2:";
-            this.chkSensor2.CheckedChanged += new System.EventHandler(this.chkSensor2_CheckedChanged);
-            this.chkSensor2.EnabledChanged += new System.EventHandler(this.chkSensor2_EnabledChanged);
+            this.chkSensor2.CheckedChanged += new System.EventHandler(this.ChkSensor_CheckedChanged);
+            this.chkSensor2.EnabledChanged += new System.EventHandler(this.ChkSensor_EnabledChanged);
             // 
             // chkSensor1
             // 
@@ -282,8 +282,8 @@
             this.chkSensor1.Size = new System.Drawing.Size(90, 22);
             this.chkSensor1.TabIndex = 9;
             this.chkSensor1.Text = "传感器 &1:";
-            this.chkSensor1.CheckedChanged += new System.EventHandler(this.chkSensor1_CheckedChanged);
-            this.chkSensor1.EnabledChanged += new System.EventHandler(this.chkSensor1_EnabledChanged);
+            this.chkSensor1.CheckedChanged += new System.EventHandler(this.ChkSensor_CheckedChanged);
+            this.chkSensor1.EnabledChanged += new System.EventHandler(this.ChkSensor_EnabledChanged);
             // 
             // comboSensor4
             // 
@@ -295,7 +295,7 @@
             this.comboSensor4.Name = "comboSensor4";
             this.comboSensor4.Size = new System.Drawing.Size(271, 20);
             this.comboSensor4.TabIndex = 7;
-            this.comboSensor4.SelectedIndexChanged += new System.EventHandler(this.comboSensorOrUnits4_SelectedIndexChanged);
+            this.comboSensor4.SelectedIndexChanged += new System.EventHandler(this.ComboSensorOrUnits_SelectedIndexChanged);
             // 
             // comboSensor3
             // 
@@ -307,7 +307,7 @@
             this.comboSensor3.Name = "comboSensor3";
             this.comboSensor3.Size = new System.Drawing.Size(271, 20);
             this.comboSensor3.TabIndex = 5;
-            this.comboSensor3.SelectedIndexChanged += new System.EventHandler(this.comboSensorOrUnits3_SelectedIndexChanged);
+            this.comboSensor3.SelectedIndexChanged += new System.EventHandler(this.ComboSensorOrUnits_SelectedIndexChanged);
             // 
             // comboSensor2
             // 
@@ -319,7 +319,7 @@
             this.comboSensor2.Name = "comboSensor2";
             this.comboSensor2.Size = new System.Drawing.Size(271, 20);
             this.comboSensor2.TabIndex = 3;
-            this.comboSensor2.SelectedIndexChanged += new System.EventHandler(this.comboSensorOrUnits2_SelectedIndexChanged);
+            this.comboSensor2.SelectedIndexChanged += new System.EventHandler(this.ComboSensorOrUnits_SelectedIndexChanged);
             // 
             // comboSensor1
             // 
@@ -331,7 +331,7 @@
             this.comboSensor1.Name = "comboSensor1";
             this.comboSensor1.Size = new System.Drawing.Size(271, 20);
             this.comboSensor1.TabIndex = 1;
-            this.comboSensor1.SelectedIndexChanged += new System.EventHandler(this.comboSensorOrUnits1_SelectedIndexChanged);
+            this.comboSensor1.SelectedIndexChanged += new System.EventHandler(this.ComboSensorOrUnits_SelectedIndexChanged);
             // 
             // groupSetup
             // 
@@ -532,7 +532,7 @@
             this.chart4.YRangeEnd = 100D;
             this.chart4.YRangeStart = 0D;
             // 
-            // ScopeForm
+            // SensorChartForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -543,7 +543,7 @@
             this.Controls.Add(this.chart2);
             this.Controls.Add(this.groupSetup);
             this.Controls.Add(this.chart1);
-            this.Name = "ScopeForm";
+            this.Name = "SensorChartForm";
             this.Text = "ScopeForm";
             this.Activated += new System.EventHandler(this.SensorChartForm_Activated);
             this.Load += new System.EventHandler(this.SensorChartForm_Load);

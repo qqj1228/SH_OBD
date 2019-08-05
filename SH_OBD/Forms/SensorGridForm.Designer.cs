@@ -43,22 +43,22 @@
             // 
             // listSensors
             // 
-            this.listSensors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listSensors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.listSensors.CheckOnClick = true;
-            this.listSensors.Location = new System.Drawing.Point(14, 27);
+            this.listSensors.Location = new System.Drawing.Point(14, 19);
             this.listSensors.Name = "listSensors";
-            this.listSensors.Size = new System.Drawing.Size(376, 68);
+            this.listSensors.Size = new System.Drawing.Size(334, 276);
             this.listSensors.TabIndex = 0;
             this.listSensors.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.listSensors_ItemCheck);
             // 
             // groupDisplay
             // 
-            this.groupDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupDisplay.Controls.Add(this.radioDisplayBoth);
             this.groupDisplay.Controls.Add(this.radioDisplayMetric);
             this.groupDisplay.Controls.Add(this.radioDisplayEnglish);
-            this.groupDisplay.Location = new System.Drawing.Point(423, 12);
+            this.groupDisplay.Location = new System.Drawing.Point(12, 325);
             this.groupDisplay.Name = "groupDisplay";
             this.groupDisplay.Size = new System.Drawing.Size(100, 113);
             this.groupDisplay.TabIndex = 5;
@@ -98,25 +98,25 @@
             // 
             // groupSelections
             // 
-            this.groupSelections.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupSelections.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.groupSelections.Controls.Add(this.listSensors);
             this.groupSelections.Location = new System.Drawing.Point(12, 12);
             this.groupSelections.Name = "groupSelections";
-            this.groupSelections.Size = new System.Drawing.Size(405, 113);
+            this.groupSelections.Size = new System.Drawing.Size(365, 307);
             this.groupSelections.TabIndex = 4;
             this.groupSelections.TabStop = false;
             this.groupSelections.Text = "传感器数据流(&S)";
             // 
             // groupLogging
             // 
-            this.groupLogging.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupLogging.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupLogging.Controls.Add(this.lblTimeElapsed);
             this.groupLogging.Controls.Add(this.scrollTime);
             this.groupLogging.Controls.Add(this.btnReset);
             this.groupLogging.Controls.Add(this.btnStart);
             this.groupLogging.Controls.Add(this.btnSave);
-            this.groupLogging.Location = new System.Drawing.Point(529, 12);
+            this.groupLogging.Location = new System.Drawing.Point(118, 325);
             this.groupLogging.Name = "groupLogging";
             this.groupLogging.Size = new System.Drawing.Size(259, 113);
             this.groupLogging.TabIndex = 6;
@@ -147,7 +147,7 @@
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(72, 25);
             this.btnReset.TabIndex = 2;
-            this.btnReset.Text = "重启(&R)";
+            this.btnReset.Text = "重置(&R)";
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
             // btnStart
@@ -176,12 +176,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelDisplay.AutoScroll = true;
             this.panelDisplay.BackColor = System.Drawing.Color.Black;
-            this.panelDisplay.Location = new System.Drawing.Point(12, 135);
+            this.panelDisplay.Location = new System.Drawing.Point(383, 12);
             this.panelDisplay.Name = "panelDisplay";
-            this.panelDisplay.Size = new System.Drawing.Size(776, 303);
+            this.panelDisplay.Size = new System.Drawing.Size(405, 426);
             this.panelDisplay.TabIndex = 7;
             // 
-            // SensorMonitorForm
+            // SensorGridForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -190,7 +190,7 @@
             this.Controls.Add(this.groupSelections);
             this.Controls.Add(this.groupLogging);
             this.Controls.Add(this.panelDisplay);
-            this.Name = "SensorMonitorForm";
+            this.Name = "SensorGridForm";
             this.Text = "SensorMonitorForm";
             this.Activated += new System.EventHandler(this.SensorMonitorForm_Activated);
             this.Load += new System.EventHandler(this.SensorMonitorForm_Load);

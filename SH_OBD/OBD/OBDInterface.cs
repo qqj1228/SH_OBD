@@ -26,7 +26,7 @@ namespace SH_OBD {
         private Settings m_settings;
         private List<VehicleProfile> m_VehicleProfiles;
         public bool ConnectedStatus {
-            get { return m_obdDevice.Connected(); }
+            get { return m_obdDevice.GetConnected(); }
         }
 
         public event OBDInterface.__Delegate_OnDisconnect OnDisconnect;
@@ -64,25 +64,28 @@ namespace SH_OBD {
 
             SetDevice(device);
             if (m_obdDevice.Initialize(port, baud, protocol) && InitOBD()) {
+                m_obdDevice.SetConnected(true);
                 OnConnect?.Invoke();
                 return true;
             }
+            m_obdDevice.SetConnected(false);
             return false;
         }
 
 
         public bool InitDeviceAuto() {
             m_log.TraceInfo("Beginning AUTO initialization...");
-            bool flag = false;
             SetDevice(HardwareType.ELM327);
             if (m_obdDevice.Initialize(m_settings) && InitOBD()) {
                 m_settings.ProtocolIndex = m_obdDevice.GetProtocolType();
                 m_settings.ComPort = m_obdDevice.GetComPortIndex();
                 SaveCommSettings(m_settings);
-                flag = true;
+                m_obdDevice.SetConnected(true);
                 OnConnect?.Invoke();
+                return true;
             }
-            return flag;
+            m_obdDevice.SetConnected(false);
+            return false;
         }
 
         public bool InitOBD() {
@@ -219,6 +222,7 @@ namespace SH_OBD {
 
         public void Disconnect() {
             m_obdDevice.Disconnect();
+            m_obdDevice.SetConnected(false);
             OnDisconnect?.Invoke();
         }
 

@@ -25,7 +25,7 @@ namespace SH_OBD {
 
         private void btnRead_Click(object sender, EventArgs e) {
             if (!m_obdInterface.ConnectedStatus) {
-                MessageBox.Show("OBD成功连接后才能进行操作", "OBD连接请求", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("成功连接车辆OBD接口后才能进行操作", "车辆OBD接口连接请求", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             } else {
                 btnRead.Enabled = false;
                 ReadTestResults();
@@ -42,7 +42,7 @@ namespace SH_OBD {
                 value = m_obdInterface.GetValue("SAE.O2_STATUS", true);
                 if (!value.ErrorDetected && value.BoolValue) {
                     progressBar.Increment(1);
-                    int selectedSensorId = getSelectedSensorID();
+                    int selectedSensorId = GetSelectedSensorID();
                     progressBar.Increment(1);
 
                     value = m_obdInterface.GetValue(new OBDParameter(5, 1, 0, selectedSensorId), true);
@@ -188,15 +188,10 @@ namespace SH_OBD {
                     return;
                 }
             }
-            MessageBox.Show(
-                "This vehicle either does not support oxygen sensor monitoring, or the monitoring test has not yet been completed.",
-                "Unsupported",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Asterisk
-                );
+            MessageBox.Show("该辆车不适用氧气传感器监测或者监测未完成", "不适用", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
-        private int getSelectedSensorID() {
+        private int GetSelectedSensorID() {
             string item = comboOxygenSensor.SelectedItem as string;
             if (string.Compare(item, "Bank 1, Sensor 1 (O2B1S1)") == 0) {
                 return 1;
