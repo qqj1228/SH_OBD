@@ -216,7 +216,7 @@
             this.Controls.Add(this.picTrack);
             this.Name = "TrackForm";
             this.Text = "TrackForm";
-            this.Activated += new System.EventHandler(this.TrackForm_Activated);
+            this.VisibleChanged += new System.EventHandler(this.TrackForm_VisibleChanged);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.TrackForm_Paint);
             this.Resize += new System.EventHandler(this.TrackForm_Resize);
             this.groupTimeslipControls.ResumeLayout(false);

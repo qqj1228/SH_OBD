@@ -13,19 +13,18 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 
 namespace SH_OBD {
-    public partial class SensorMonitorForm : Form {
+    public partial class SensorGridForm : Form {
         private OBDInterface m_obdInterface;
         private DateTime m_dtStartTime;
-
-        private const int _margin = 5;
-
+        private const int controlMargin = 5;
+        private const int controlHeight = 65;
+        private const int controlWidth = 420;
         private static List<OBDParameter> m_ListSensors;
         private static List<SensorLogItem> m_ListLog;
-
         public bool IsLogging;
         public bool IsRunThread;
 
-        public SensorMonitorForm(OBDInterface obd2) {
+        public SensorGridForm(OBDInterface obd2) {
             try {
                 InitializeComponent();
                 m_obdInterface = obd2;
@@ -80,11 +79,16 @@ namespace SH_OBD {
             Control control;
             for (int i = 0; i < panelDisplay.Controls.Count; i++) {
                 control = panelDisplay.Controls[i];
-                control.Width = (panelDisplay.Width - _margin * 3) / 2;
-                if (i % 2 == 0) {
-                    control.Location = new Point(_margin, (control.Height + _margin) * (i / 2) + _margin);
+                if (panelDisplay.Width > controlWidth) {
+                    control.Width = (panelDisplay.Width - 3 * controlMargin) / 2;
+                    if (i % 2 == 0) {
+                        control.Location = new Point(controlMargin, (control.Height + controlMargin) * (i / 2) + controlMargin);
+                    } else {
+                        control.Location = new Point(control.Width + controlMargin * 2, (control.Height + controlMargin) * (i / 2) + controlMargin);
+                    }
                 } else {
-                    control.Location = new Point(control.Width + _margin * 2, (control.Height + _margin) * (i / 2) + _margin);
+                    control.Width = panelDisplay.Width - 2 * controlMargin;
+                    control.Location = new Point(controlMargin, (control.Height + controlMargin) * i + controlMargin);
                 }
             }
             panelDisplay.Refresh();
@@ -108,15 +112,12 @@ namespace SH_OBD {
         }
 
         private void listSensors_ItemCheck(object sender, ItemCheckEventArgs e) {
-            SensorMonitorForm.m_ListSensors.Clear();
-            int index1 = 0;
-            if (0 < listSensors.CheckedIndices.Count) {
-                do {
-                    int index2 = listSensors.CheckedIndices[index1];
-                    if (index2 != e.Index)
-                        m_ListSensors.Add((OBDParameter)listSensors.Items[index2]);
-                    ++index1;
-                } while (index1 < listSensors.CheckedIndices.Count);
+            SensorGridForm.m_ListSensors.Clear();
+            for (int i = 0; i < listSensors.CheckedIndices.Count; i++) {
+                int index = listSensors.CheckedIndices[i];
+                if (index != e.Index) {
+                    m_ListSensors.Add((OBDParameter)listSensors.Items[index]);
+                }
             }
             if (e.CurrentValue == CheckState.Unchecked) {
                 m_ListSensors.Add((OBDParameter)listSensors.Items[e.Index]);
@@ -142,11 +143,15 @@ namespace SH_OBD {
                                 value.DoubleValue.ToString(),
                                 text);
                             m_ListLog.Add(sensorLogItem);
-                            scrollTime.Maximum = m_ListLog.Count - 1;
-                            scrollTime.Value = scrollTime.Maximum;
+                            this.Invoke((EventHandler)delegate {
+                                scrollTime.Maximum = m_ListLog.Count - 1;
+                                scrollTime.Value = scrollTime.Maximum;
+                            });
 
                             DateTime dateTime = new DateTime(0L);
-                            lblTimeElapsed.Text = dateTime.Add(sensorLogItem.Time.Subtract(m_dtStartTime)).ToString("mm:ss.fff", DateTimeFormatInfo.InvariantInfo);
+                            this.Invoke((EventHandler)delegate {
+                                lblTimeElapsed.Text = dateTime.Add(sensorLogItem.Time.Subtract(m_dtStartTime)).ToString("mm:ss.fff", DateTimeFormatInfo.InvariantInfo);
+                            });
 
                             text = value.DoubleValue.ToString();
                             if (radioDisplayEnglish.Checked) {
@@ -164,11 +169,17 @@ namespace SH_OBD {
 
         private void RebuildSensorGrid() {
             panelDisplay.Controls.Clear();
+            Size controlSize = new Size(controlWidth, controlHeight);
             int index = 0;
-            foreach (OBDParameter param in SensorMonitorForm.m_ListSensors) {
+            foreach (OBDParameter param in SensorGridForm.m_ListSensors) {
+                if (panelDisplay.Width > controlWidth) {
+                    controlSize.Width = (panelDisplay.Width - 3 * controlMargin) / 2;
+                } else {
+                    controlSize.Width = panelDisplay.Width - 2 * controlMargin;
+                }
                 SensorDisplayControl control = new SensorDisplayControl {
                     Title = param.Name,
-                    Size = new Size(panelDisplay.Width / 2 - 8, 65),
+                    Size = controlSize,
                     Tag = param
                 };
                 if (radioDisplayEnglish.Checked) {
@@ -176,15 +187,16 @@ namespace SH_OBD {
                 } else {
                     control.SetDisplayMode(2);
                 }
-
                 control.Refresh();
-
-                if (index % 2 == 0) {
-                    control.Location = new Point(_margin, (control.Height + _margin) * (index / 2) + _margin);
+                if (panelDisplay.Width > controlWidth) {
+                    if (index % 2 == 0) {
+                        control.Location = new Point(controlMargin, (control.Height + controlMargin) * (index / 2) + controlMargin);
+                    } else {
+                        control.Location = new Point(control.Width + controlMargin * 2, (control.Height + controlMargin) * (index / 2) + controlMargin);
+                    }
                 } else {
-                    control.Location = new Point(control.Width + _margin * 2, (control.Height + _margin) * (index / 2) + _margin);
+                    control.Location = new Point(controlMargin, (control.Height + controlMargin) * index + controlMargin);
                 }
-
                 panelDisplay.Controls.Add((Control)control);
                 ++index;
             }
@@ -285,7 +297,7 @@ namespace SH_OBD {
             TimeSpan timeSpan = log_item.Time.Subtract(m_dtStartTime);
             lblTimeElapsed.Text = dateTime.Add(timeSpan).ToString("mm:ss.fff", DateTimeFormatInfo.InvariantInfo);
             int num = 0;
-            if (0 >= SensorMonitorForm.m_ListSensors.Count) {
+            if (0 >= SensorGridForm.m_ListSensors.Count) {
                 return;
             }
             int index2 = index1;
@@ -306,11 +318,7 @@ namespace SH_OBD {
                 }
                 ++num;
                 --index2;
-            } while (num < SensorMonitorForm.m_ListSensors.Count);
-        }
-
-        private void SensorMonitorForm_Activated(object sender, EventArgs e) {
-            CheckConnection();
+            } while (num < SensorGridForm.m_ListSensors.Count);
         }
 
         public void PauseLogging() {
@@ -321,5 +329,10 @@ namespace SH_OBD {
             btnSave.Enabled = true;
         }
 
+        private void SensorGridForm_VisibleChanged(object sender, EventArgs e) {
+            if (this.Visible) {
+                CheckConnection();
+            }
+        }
     }
 }

@@ -231,8 +231,8 @@
             this.Controls.Add(this.groupPending);
             this.Name = "DTCForm";
             this.Text = "DTCForm";
-            this.Activated += new System.EventHandler(this.DTCForm_Activated);
             this.Load += new System.EventHandler(this.DTCForm_Load);
+            this.VisibleChanged += new System.EventHandler(this.DTCForm_VisibleChanged);
             this.Resize += new System.EventHandler(this.DTCForm_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.picMilOn)).EndInit();
             this.groupMIL.ResumeLayout(false);

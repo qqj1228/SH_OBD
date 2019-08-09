@@ -35,11 +35,11 @@
             this.lblFuel1 = new System.Windows.Forms.Label();
             this.groupAir = new System.Windows.Forms.GroupBox();
             this.groupFuel1 = new System.Windows.Forms.GroupBox();
-            this.gridNonConTests = new System.Windows.Forms.DataGrid();
+            this.gridNonConTests = new System.Windows.Forms.DataGridView();
             this.groupOxygen = new System.Windows.Forms.GroupBox();
             this.groupOBD = new System.Windows.Forms.GroupBox();
             this.groupNonConTests = new System.Windows.Forms.GroupBox();
-            this.gridConTests = new System.Windows.Forms.DataGrid();
+            this.gridConTests = new System.Windows.Forms.DataGridView();
             this.groupPTO = new System.Windows.Forms.GroupBox();
             this.groupFuel2 = new System.Windows.Forms.GroupBox();
             this.groupConTests = new System.Windows.Forms.GroupBox();
@@ -189,13 +189,13 @@
             this.gridNonConTests.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.gridNonConTests.CaptionVisible = false;
-            this.gridNonConTests.DataMember = "";
-            this.gridNonConTests.HeaderForeColor = System.Drawing.SystemColors.ControlText;
+            this.gridNonConTests.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.gridNonConTests.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.gridNonConTests.Location = new System.Drawing.Point(12, 20);
             this.gridNonConTests.Name = "gridNonConTests";
+            this.gridNonConTests.ReadOnly = true;
             this.gridNonConTests.RowHeadersVisible = false;
-            this.gridNonConTests.Size = new System.Drawing.Size(380, 196);
+            this.gridNonConTests.Size = new System.Drawing.Size(380, 190);
             this.gridNonConTests.TabIndex = 1;
             // 
             // groupOxygen
@@ -236,13 +236,13 @@
             this.gridConTests.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.gridConTests.CaptionVisible = false;
-            this.gridConTests.DataMember = "";
-            this.gridConTests.HeaderForeColor = System.Drawing.SystemColors.ControlText;
+            this.gridConTests.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.gridConTests.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.gridConTests.Location = new System.Drawing.Point(12, 20);
             this.gridConTests.Name = "gridConTests";
+            this.gridConTests.ReadOnly = true;
             this.gridConTests.RowHeadersVisible = false;
-            this.gridConTests.Size = new System.Drawing.Size(340, 126);
+            this.gridConTests.Size = new System.Drawing.Size(340, 122);
             this.gridConTests.TabIndex = 0;
             // 
             // groupPTO
@@ -326,11 +326,11 @@
         private System.Windows.Forms.Label lblFuel1;
         private System.Windows.Forms.GroupBox groupAir;
         private System.Windows.Forms.GroupBox groupFuel1;
-        private System.Windows.Forms.DataGrid gridNonConTests;
+        private System.Windows.Forms.DataGridView gridNonConTests;
         private System.Windows.Forms.GroupBox groupOxygen;
         private System.Windows.Forms.GroupBox groupOBD;
         private System.Windows.Forms.GroupBox groupNonConTests;
-        private System.Windows.Forms.DataGrid gridConTests;
+        private System.Windows.Forms.DataGridView gridConTests;
         private System.Windows.Forms.GroupBox groupPTO;
         private System.Windows.Forms.GroupBox groupFuel2;
         private System.Windows.Forms.GroupBox groupConTests;

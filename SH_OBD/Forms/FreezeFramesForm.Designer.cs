@@ -43,6 +43,7 @@
             this.btnCancel.Size = new System.Drawing.Size(90, 23);
             this.btnCancel.TabIndex = 13;
             this.btnCancel.Text = "取消(&C)";
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // progressBar
             // 
@@ -73,6 +74,7 @@
             this.btnRefresh.Size = new System.Drawing.Size(90, 23);
             this.btnRefresh.TabIndex = 10;
             this.btnRefresh.Text = "读取(&R)";
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // numFrame
             // 

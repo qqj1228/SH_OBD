@@ -310,9 +310,10 @@ namespace SH_OBD {
             }
         }
 
-        private void TrackForm_Activated(object sender, EventArgs e) {
-            CheckConnection();
+        private void TrackForm_VisibleChanged(object sender, EventArgs e) {
+            if (this.Visible) {
+                CheckConnection();
+            }
         }
-
     }
 }

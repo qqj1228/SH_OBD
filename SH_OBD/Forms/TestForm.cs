@@ -43,10 +43,14 @@ namespace SH_OBD {
             m_ListNonConTests = GetNonContinuousTestList();
             gridConTests.DataSource = m_ListConTests;
             gridNonConTests.DataSource = m_ListNonConTests;
-            gridConTests.TableStyles.Clear();
-            gridConTests.TableStyles.Add(GetTableStyle());
-            gridNonConTests.TableStyles.Clear();
-            gridNonConTests.TableStyles.Add(GetTableStyle());
+            gridConTests.Columns[0].HeaderText = "名称";
+            gridConTests.Columns[1].HeaderText = "完成状态";
+            gridConTests.Columns[2].HeaderText = "支持ID";
+            gridConTests.Columns[3].HeaderText = "状态ID";
+            gridNonConTests.Columns[0].HeaderText = "名称";
+            gridNonConTests.Columns[1].HeaderText = "完成状态";
+            gridNonConTests.Columns[2].HeaderText = "支持ID";
+            gridNonConTests.Columns[3].HeaderText = "状态ID";
         }
 
         private List<TestStatus> GetContinuousTestList() {
@@ -79,57 +83,9 @@ namespace SH_OBD {
             UpdateTests();
         }
 
-        #region GetTableStyle 
-        public DataGridTableStyle GetTableStyle() {
-            DataGridTableStyle style = new DataGridTableStyle {
-                MappingName = "List"
-            };
-
-            DataGridTextBoxColumn column = new DataGridTextBoxColumn {
-                MappingName = "Name",
-                HeaderText = "名称",
-                Format = "f4",
-                ReadOnly = true,
-                Width = 180
-            };
-            style.GridColumnStyles.Add(column);
-
-            column = new DataGridTextBoxColumn {
-                MappingName = "Status",
-                HeaderText = "完成状态",
-                Format = "f4",
-                ReadOnly = true,
-                Width = 85
-            };
-            style.GridColumnStyles.Add(column);
-
-            column = new DataGridTextBoxColumn {
-                MappingName = "SupportID",
-                HeaderText = "支持ID",
-                Format = "d",
-                ReadOnly = true,
-                Width = 25
-            };
-            style.GridColumnStyles.Add(column);
-
-            column = new DataGridTextBoxColumn {
-                MappingName = "StatusID",
-                HeaderText = "状态ID",
-                Format = "d",
-                ReadOnly = true,
-                Width = 25
-            };
-            style.GridColumnStyles.Add(column);
-
-            return style;
-        }
-        #endregion
-
         public void UpdateTests() {
             progressBar.Minimum = 0;
             progressBar.Maximum = 35;
-            gridConTests.Visible = false;
-            gridNonConTests.Visible = false;
             OBDParameterValue value;
             value = m_obd2Interface.GetValue("SAE.MISFIRE_SUPPORT", true);
             progressBar.Value = 1;
@@ -184,6 +140,7 @@ namespace SH_OBD {
             } else {
                 status.Status = "出错";
             }
+            gridConTests.Refresh();
 
             value = m_obd2Interface.GetValue("SAE.CAT_SUPPORT", true);
             progressBar.Value = 4;
@@ -331,9 +288,8 @@ namespace SH_OBD {
             } else {
                 status.Status = "出错";
             }
+            gridNonConTests.Refresh();
 
-            gridConTests.Visible = true;
-            gridNonConTests.Visible = true;
             if (m_obd2Interface.IsParameterSupported("SAE.FUEL1_STATUS")) {
                 value = m_obd2Interface.GetValue("SAE.FUEL1_STATUS", true);
                 progressBar.Value++;
@@ -374,107 +330,173 @@ namespace SH_OBD {
                 lblOBD.Text = "不适用";
             }
 
-            string str = "";
+            string strContent = "";
+            string strHeader = "";
+            int counter = 0;
             if (m_obd2Interface.IsParameterSupported("SAE.O2B1S1A_PRESENT")) {
+                strHeader = "PID $13 Bank 1: ";
+                strContent += strHeader;
+                counter = 0;
                 value = m_obd2Interface.GetValue("SAE.O2B1S1A_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    str = str + "Bank 1 传感器 1\n";
+                    strContent = strContent + "传感器 1, ";
+                    ++counter;
                 }
 
                 value = m_obd2Interface.GetValue("SAE.O2B1S2A_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    str = str + "Bank 1 传感器 2\n";
+                    strContent = strContent + "传感器 2, ";
+                    ++counter;
                 }
 
                 value = m_obd2Interface.GetValue("SAE.O2B1S3A_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    str = str + "Bank 1 传感器 3\n";
+                    strContent = strContent + "传感器 3, ";
+                    ++counter;
                 }
 
                 value = m_obd2Interface.GetValue("SAE.O2B1S4A_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    str = str + "Bank 1 传感器 4\n";
+                    strContent = strContent + "传感器 4, ";
+                    ++counter;
+                }
+                if (counter == 0) {
+                    strContent = strContent.Substring(0, strContent.Length - strHeader.Length);
+                } else {
+                    strContent = strContent.Substring(0, strContent.Length - 2);
                 }
 
+                strHeader = "\n\r\nPID $13 Bank 2: ";
+                strContent += strHeader;
+                counter = 0;
                 value = m_obd2Interface.GetValue("SAE.O2B2S1A_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    str = str + "Bank 2 传感器 1\n";
+                    strContent = strContent + "传感器 1, ";
+                    ++counter;
                 }
 
                 value = m_obd2Interface.GetValue("SAE.O2B2S2A_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    str = str + "Bank 2 传感器 2\n";
+                    strContent = strContent + "传感器 2, ";
+                    ++counter;
                 }
 
                 value = m_obd2Interface.GetValue("SAE.O2B2S3A_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    str = str + "Bank 2 传感器 3\n";
+                    strContent = strContent + "传感器 3, ";
+                    ++counter;
                 }
 
                 value = m_obd2Interface.GetValue("SAE.O2B2S4A_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    str = str + "Bank 2 传感器 4\n";
+                    strContent = strContent + "传感器 4, ";
+                    ++counter;
+                }
+                if (counter == 0) {
+                    strContent = strContent.Substring(0, strContent.Length - strHeader.Length);
+                } else {
+                    strContent = strContent.Substring(0, strContent.Length - 2);
                 }
             }
 
             if (m_obd2Interface.IsParameterSupported("SAE.O2B1S1B_PRESENT")) {
+                strHeader = "\n\r\nPID $1D Bank 1: ";
+                strContent += strHeader;
+                counter = 0;
                 value = m_obd2Interface.GetValue("SAE.O2B1S1B_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    str = str + "Bank 1 传感器 1\n";
+                    strContent = strContent + "传感器 1, ";
+                    ++counter;
                 }
 
                 value = m_obd2Interface.GetValue("SAE.O2B1S2B_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    str = str + "Bank 1 传感器 2\n";
+                    strContent = strContent + "传感器 2, ";
+                    ++counter;
+                }
+                if (counter == 0) {
+                    strContent = strContent.Substring(0, strContent.Length - strHeader.Length);
+                } else {
+                    strContent = strContent.Substring(0, strContent.Length - 2);
                 }
 
+                strHeader = "\n\r\nPID $1D Bank 2: ";
+                strContent += strHeader;
+                counter = 0;
                 value = m_obd2Interface.GetValue("SAE.O2B2S1B_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    str = str + "Bank 2 传感器 1\n";
+                    strContent = strContent + "传感器 1, ";
+                    ++counter;
                 }
 
                 value = m_obd2Interface.GetValue("SAE.O2B2S2B_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    str = str + "Bank 2 传感器 2\n";
+                    strContent = strContent + "传感器 2, ";
+                    ++counter;
+                }
+                if (counter == 0) {
+                    strContent = strContent.Substring(0, strContent.Length - strHeader.Length);
+                } else {
+                    strContent = strContent.Substring(0, strContent.Length - 2);
                 }
 
+                strHeader = "\n\r\nPID $1D Bank 3: ";
+                strContent += strHeader;
+                counter = 0;
                 value = m_obd2Interface.GetValue("SAE.O2B3S1B_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    str = str + "Bank 3 传感器 1\n";
+                    strContent = strContent + "传感器 1, ";
+                    ++counter;
                 }
 
                 value = m_obd2Interface.GetValue("SAE.O2B3S2B_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    str = str + "Bank 3 传感器 2\n";
+                    strContent = strContent + "传感器 2, ";
+                    ++counter;
+                }
+                if (counter == 0) {
+                    strContent = strContent.Substring(0, strContent.Length - strHeader.Length);
+                } else {
+                    strContent = strContent.Substring(0, strContent.Length - 2);
                 }
 
+                strHeader = "\n\r\nPID $1D Bank 4: ";
+                strContent += strHeader;
+                counter = 0;
                 value = m_obd2Interface.GetValue("SAE.O2B4S1B_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    str = str + "Bank 4 传感器 1\n";
+                    strContent = strContent + "传感器 1, ";
+                    ++counter;
                 }
 
                 value = m_obd2Interface.GetValue("SAE.O2B4S2B_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    str = str + "Bank 4 传感器 2\n";
+                    strContent = strContent + "传感器 2, ";
+                    ++counter;
+                }
+                if (counter == 0) {
+                    strContent = strContent.Substring(0, strContent.Length - strHeader.Length);
+                } else {
+                    strContent = strContent.Substring(0, strContent.Length - 2);
                 }
             }
-            lblOxygen.Text = str;
+            lblOxygen.Text = strContent;
             progressBar.Value++;
             if (m_obd2Interface.GetDevice() == HardwareType.ELM327) {
                 value = m_obd2Interface.GetValue("ELM.BATTERY_VOLTAGE", true);
@@ -489,7 +511,7 @@ namespace SH_OBD {
 
         private void btnUpdate_Click(object sender, EventArgs e) {
             if (!m_obd2Interface.ConnectedStatus) {
-                m_obd2Interface.TraceError("Test Form, Attempted refresh without vehicle connection.");
+                m_obd2Interface.GetLogger().TraceError("Test Form, Attempted refresh without vehicle connection.");
                 MessageBox.Show("必须首先与车辆进行连接，才能进行后续操作！", "连接请求", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             } else {
                 btnUpdate.Enabled = false;
@@ -499,4 +521,41 @@ namespace SH_OBD {
         }
 
     }
+
+    [Serializable]
+    public class TestStatus {
+        private string m_strName;
+        private string m_strStatus;
+        private int m_iSupportID;
+        private int m_iStatusID;
+
+        public TestStatus(string strName, string strStatus, int iSupportID, int iStatusID) {
+            m_strName = strName;
+            m_strStatus = strStatus;
+            m_iSupportID = iSupportID;
+            m_iStatusID = iStatusID;
+        }
+
+        public string Name {
+            get { return m_strName; }
+            set { m_strName = value; }
+        }
+
+        public string Status {
+            get { return m_strStatus; }
+            set { m_strStatus = value; }
+        }
+
+        public int SupportID {
+            get { return m_iSupportID; }
+            set { m_iSupportID = value; }
+        }
+
+        public int StatusID {
+            get { return m_iStatusID; }
+            set { m_iStatusID = value; }
+        }
+
+    }
+
 }

@@ -1,126 +1,69 @@
 ﻿using System;
 namespace SH_OBD {
+    /// <summary>
+    /// 用于发送命令的OBD参数
+    /// </summary>
     public class OBDParameter {
-        private string m_PID = "";
-        private string m_Name = "";
-        private string m_EnglishUnit = "";
-        private string m_MetricUnit = "";
-        private int m_Service;
-        private int m_Parameter;
-        private int m_SubParameter;
+        private int m_parameter;
+        public int Parameter {
+            get { return m_parameter; }
+            set {
+                m_parameter = value;
+                if (m_OBDRequest.Length > 4) {
+                    m_OBDRequest = m_OBDRequest.Substring(0, 2) + Utility.Int2Hex2(m_parameter) + m_OBDRequest.Substring(4, 2);
+                } else if (m_OBDRequest.Length > 2) {
+                    m_OBDRequest = m_OBDRequest.Substring(0, 2) + Utility.Int2Hex2(m_parameter);
+                }
+            }
+        }
         private string m_OBDRequest;
-        private int m_ValueType;
-        private int m_Category;
-        private int m_Type;
-        private int m_Manufacturer;
-        private int m_Priority;
-        private double m_MinValueEnglish;
-        private double m_MaxValueEnglish;
-        private double m_MinValueMetric;
-        private double m_MaxValueMetric;
+        public string OBDRequest {
+            get { return m_OBDRequest; }
+            set {
+                m_OBDRequest = value;
+                if (m_OBDRequest.Length >= 4) {
+                    int.TryParse(m_OBDRequest.Substring(0, 2), out int result);
+                    Service = result;
+                    int.TryParse(m_OBDRequest.Substring(2, 2), out m_parameter);
+                } else if (m_OBDRequest.Length >= 2) {
+                    int.TryParse(m_OBDRequest.Substring(0, 2), out int result);
+                    Service = result;
+                    m_parameter = 0;
+                }
+            }
+        }
+        public int Service { get; set; }
+        public int SubParameter { get; set; }
+        public double MetricMaxValue { get; set; }
+        public double MetricMinValue { get; set; }
+        public double EnglishMaxValue { get; set; }
+        public double EnglishMinValue { get; set; }
+        public int ValueTypes { get; set; }
+        public int Priority { get; set; }
+        public int Manufacturer { get; set; }
+        public int Type { get; set; }
+        public int Category { get; set; }
+        public string MetricUnitLabel { get; set; } = "";
+        public string EnglishUnitLabel { get; set; } = "";
+        public string Name { get; set; } = "";
+        public string PID { get; set; } = "";
 
         public OBDParameter(int service, int parameter, int subParameter, int frame) {
-            OBDRequest = Utility.Int2Hex2(service) + Utility.Int2Hex2(parameter) + Utility.Int2Hex2(frame);
+            m_OBDRequest = Utility.Int2Hex2(service) + Utility.Int2Hex2(parameter) + Utility.Int2Hex2(frame);
             Service = service;
-            Parameter = parameter;
+            m_parameter = parameter;
             SubParameter = subParameter;
         }
 
         public OBDParameter(int service, int parameter, int subParameter) {
-            OBDRequest = Utility.Int2Hex2(service) + Utility.Int2Hex2(parameter);
+            m_OBDRequest = Utility.Int2Hex2(service) + Utility.Int2Hex2(parameter);
             Service = service;
-            Parameter = parameter;
+            m_parameter = parameter;
             SubParameter = subParameter;
         }
 
         public OBDParameter() {
             m_OBDRequest = "";
-        }
-
-        public int SubParameter {
-            get { return m_SubParameter; }
-            set { m_SubParameter = value; }
-        }
-
-        public int Parameter {
-            get { return m_Parameter; }
-            set { m_Parameter = value; }
-        }
-
-        public int Service {
-            get { return m_Service; }
-            set { m_Service = value; }
-        }
-
-        public double MetricMaxValue {
-            get { return m_MaxValueMetric; }
-            set { m_MaxValueMetric = value; }
-        }
-
-        public double MetricMinValue {
-            get { return m_MinValueMetric; }
-            set { m_MinValueMetric = value; }
-        }
-
-        public double EnglishMaxValue {
-            get { return m_MaxValueEnglish; }
-            set { m_MaxValueEnglish = value; }
-        }
-
-        public double EnglishMinValue {
-            get { return m_MinValueEnglish; }
-            set { m_MinValueEnglish = value; }
-        }
-
-        // OBD返回值中有效数据的位数
-        public int ValueTypes {
-            get { return m_ValueType; }
-            set { m_ValueType = value; }
-        }
-
-        public int Priority {
-            get { return m_Priority; }
-            set { m_Priority = value; }
-        }
-
-        public int Manufacturer {
-            get { return m_Manufacturer; }
-            set { m_Manufacturer = value; }
-        }
-
-        public int Type {
-            get { return m_Type; }
-            set { m_Type = value; }
-        }
-
-        public int Category {
-            get { return m_Category; }
-            set { m_Category = value; }
-        }
-
-        public string MetricUnitLabel {
-            get { return m_MetricUnit; }
-            set { m_MetricUnit = value; }
-        }
-
-        public string EnglishUnitLabel {
-            get { return m_EnglishUnit; }
-            set { m_EnglishUnit = value; }
-        }
-
-        public string Name {
-            get { return m_Name; }
-            set { m_Name = value; }
-        }
-
-        public string PID {
-            get { return m_PID; }
-            set { m_PID = value; }
-        }
-
-        public string OBDRequest {
-            get { return m_OBDRequest; }
-            set { m_OBDRequest = value; }
         }
 
         public OBDParameter GetCopy() {
@@ -135,8 +78,8 @@ namespace SH_OBD {
                 MetricMinValue = MetricMinValue,
                 MetricUnitLabel = MetricUnitLabel,
                 Name = Name,
-                OBDRequest = OBDRequest,
-                Parameter = Parameter,
+                m_OBDRequest = OBDRequest,
+                m_parameter = Parameter,
                 PID = PID,
                 Priority = Priority,
                 Service = Service,

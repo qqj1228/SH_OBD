@@ -26,8 +26,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLabelConnStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.StatusLabelVehicle = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusLabelDeviceName = new System.Windows.Forms.ToolStripStatusLabel();
+            this.StatusLabelProtocol = new System.Windows.Forms.ToolStripStatusLabel();
+            this.StatusLabelDeviceType = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusLabelPort = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.buttonReport = new System.Windows.Forms.Button();
@@ -65,10 +66,11 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.StatusLabelConnStatus,
-            this.StatusLabelVehicle,
             this.StatusLabelDeviceName,
+            this.StatusLabelProtocol,
+            this.StatusLabelDeviceType,
             this.StatusLabelPort});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 611);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 585);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.statusStrip1.Size = new System.Drawing.Size(934, 26);
@@ -79,31 +81,38 @@
             // 
             this.StatusLabelConnStatus.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.StatusLabelConnStatus.Name = "StatusLabelConnStatus";
-            this.StatusLabelConnStatus.Size = new System.Drawing.Size(229, 21);
+            this.StatusLabelConnStatus.Size = new System.Drawing.Size(265, 21);
             this.StatusLabelConnStatus.Spring = true;
-            this.StatusLabelConnStatus.Text = "OBD接口未连接";
-            // 
-            // StatusLabelVehicle
-            // 
-            this.StatusLabelVehicle.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
-            this.StatusLabelVehicle.Name = "StatusLabelVehicle";
-            this.StatusLabelVehicle.Size = new System.Drawing.Size(229, 21);
-            this.StatusLabelVehicle.Spring = true;
-            this.StatusLabelVehicle.Text = "车辆配置";
+            this.StatusLabelConnStatus.Text = "OBD通讯接口状态";
             // 
             // StatusLabelDeviceName
             // 
             this.StatusLabelDeviceName.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.StatusLabelDeviceName.Name = "StatusLabelDeviceName";
-            this.StatusLabelDeviceName.Size = new System.Drawing.Size(229, 21);
+            this.StatusLabelDeviceName.Size = new System.Drawing.Size(265, 21);
             this.StatusLabelDeviceName.Spring = true;
-            this.StatusLabelDeviceName.Text = "未获取到设备名";
+            this.StatusLabelDeviceName.Text = "OBD设备名称";
+            // 
+            // StatusLabelProtocol
+            // 
+            this.StatusLabelProtocol.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
+            this.StatusLabelProtocol.Name = "StatusLabelProtocol";
+            this.StatusLabelProtocol.Size = new System.Drawing.Size(265, 21);
+            this.StatusLabelProtocol.Spring = true;
+            this.StatusLabelProtocol.Text = "OBD连接协议";
+            // 
+            // StatusLabelDeviceType
+            // 
+            this.StatusLabelDeviceType.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
+            this.StatusLabelDeviceType.Name = "StatusLabelDeviceType";
+            this.StatusLabelDeviceType.Size = new System.Drawing.Size(87, 21);
+            this.StatusLabelDeviceType.Text = "OBD设备类型";
             // 
             // StatusLabelPort
             // 
+            this.StatusLabelPort.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.StatusLabelPort.Name = "StatusLabelPort";
-            this.StatusLabelPort.Size = new System.Drawing.Size(229, 21);
-            this.StatusLabelPort.Spring = true;
+            this.StatusLabelPort.Size = new System.Drawing.Size(36, 21);
             this.StatusLabelPort.Text = "端口";
             // 
             // panel1
@@ -124,7 +133,7 @@
             this.panel1.Controls.Add(this.buttonTests);
             this.panel1.Location = new System.Drawing.Point(0, 55);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(120, 557);
+            this.panel1.Size = new System.Drawing.Size(120, 531);
             this.panel1.TabIndex = 1;
             // 
             // buttonReport
@@ -249,7 +258,7 @@
             this.panel2.Controls.Add(this.buttonDefaultFontStyle);
             this.panel2.Location = new System.Drawing.Point(120, 55);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(814, 557);
+            this.panel2.Size = new System.Drawing.Size(814, 531);
             this.panel2.TabIndex = 3;
             // 
             // pictureBox1
@@ -365,12 +374,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(934, 637);
+            this.ClientSize = new System.Drawing.Size(934, 611);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.statusStrip1);
-            this.MinimumSize = new System.Drawing.Size(920, 650);
+            this.IsMdiContainer = true;
+            this.MinimumSize = new System.Drawing.Size(920, 640);
             this.Name = "MainForm";
             this.Text = "SH_OBD";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
@@ -405,7 +415,7 @@
         private System.Windows.Forms.Button buttonDyno;
         private System.Windows.Forms.Button buttonTrack;
         private System.Windows.Forms.Button buttonReport;
-        private System.Windows.Forms.ToolStripStatusLabel StatusLabelVehicle;
+        private System.Windows.Forms.ToolStripStatusLabel StatusLabelProtocol;
         private System.Windows.Forms.ToolStripStatusLabel StatusLabelPort;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton toolStripBtnConnect;
@@ -418,6 +428,7 @@
         private System.Windows.Forms.Label lblInstruction1;
         private System.Windows.Forms.Button buttonDefaultFontStyle;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.ToolStripStatusLabel StatusLabelDeviceType;
     }
 }
 

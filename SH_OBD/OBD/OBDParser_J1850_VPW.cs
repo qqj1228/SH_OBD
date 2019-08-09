@@ -4,14 +4,15 @@ using System.Collections.Generic;
 
 namespace SH_OBD {
     public class OBDParser_J1850_VPW : OBDParser {
-        protected static int HEADER_LENGTH = 6;
+        protected const int HEADER_LENGTH = 6;
 
         static OBDParser_J1850_VPW() {
         }
 
         public override OBDResponseList Parse(OBDParameter param, string response) {
-            if (string.IsNullOrEmpty(response))
+            if (string.IsNullOrEmpty(response)) {
                 response = "";
+            }
 
             OBDResponseList responseList = new OBDResponseList(response);
             response = Strip(response);
@@ -39,11 +40,12 @@ namespace SH_OBD {
             while (idx < lines.Count) {
                 string line = lines[idx];
                 if (line.Length >= OBDParser_J1850_VPW.HEADER_LENGTH) {
-                    if (line.Substring(0, OBDParser_J1850_VPW.HEADER_LENGTH).CompareTo(header) == 0)
+                    if (line.Substring(0, OBDParser_J1850_VPW.HEADER_LENGTH).CompareTo(header) == 0) {
                         group.Add(line);
-                    else {
-                        group = new List<string>();
-                        group.Add(lines[idx]);
+                    } else {
+                        group = new List<string> {
+                            lines[idx]
+                        };
                         groups.Add(group);
                         header = line.Substring(0, OBDParser_J1850_VPW.HEADER_LENGTH);
                     }
@@ -58,7 +60,7 @@ namespace SH_OBD {
             while (idx < groups.Count) {
                 OBDResponse obd_response = new OBDResponse();
                 group = groups[idx];
-                int dataStartIndex = getDataStartIndex(param);
+                int dataStartIndex = GetDataStartIndex(param);
                 header = group[0];
                 int num1 = -2 - dataStartIndex;
                 int data_length = header.Length + num1;
@@ -77,7 +79,7 @@ namespace SH_OBD {
             return responseList;
         }
 
-        protected int getDataStartIndex(OBDParameter param) {
+        protected int GetDataStartIndex(OBDParameter param) {
             switch (param.Service) {
                 case 1:
                     return 10;
@@ -91,10 +93,11 @@ namespace SH_OBD {
                 case 7:
                     return 8;
                 case 9:
-                    if (param.Parameter == 2)
+                    if (param.Parameter == 2) {
                         return 12;
-                    else
+                    } else {
                         break;
+                    }
             }
             return 10;
         }

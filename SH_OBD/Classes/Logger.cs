@@ -52,7 +52,7 @@ namespace SH_OBD {
             if (strLog.Length == 0) {
                 return;
             }
-            string strLineHead = GetLineHead("[Fatal]");
+            string strLineHead = GetLineHead("[ Fatal ]");
             Trace(strLineHead + strLog);
         }
 
@@ -60,7 +60,7 @@ namespace SH_OBD {
             if (strLog.Length == 0 || LogLevel >= EnumLogLevel.LogLevelStop) {
                 return;
             }
-            string strLineHead = GetLineHead("[Error]");
+            string strLineHead = GetLineHead("[ Error ]");
             Trace(strLineHead + strLog);
         }
 
@@ -76,7 +76,7 @@ namespace SH_OBD {
             if (strLog.Length == 0 || LogLevel >= EnumLogLevel.LogLevelMid) {
                 return;
             }
-            string strLineHead = GetLineHead("[Info]");
+            string strLineHead = GetLineHead("[ Info  ]");
             Trace(strLineHead + strLog);
         }
 

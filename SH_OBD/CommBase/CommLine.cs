@@ -19,6 +19,10 @@ namespace SH_OBD {
             m_TransTimeout = iTimeOut;
         }
 
+        protected void SetRxFilter(CommBase.ASCII[] RxFilter) {
+            m_RxFilter = RxFilter;
+        }
+
         protected void Send(string data) {
             int len_data = Encoding.ASCII.GetByteCount(data);
 

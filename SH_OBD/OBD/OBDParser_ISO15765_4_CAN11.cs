@@ -5,11 +5,12 @@ using System.Runtime.InteropServices;
 
 namespace SH_OBD {
     public class OBDParser_ISO15765_4_CAN11 : OBDParser {
-        protected static int HEADER_LENGTH = 3;
+        protected const int HEADER_LENGTH = 3;
 
         public override OBDResponseList Parse(OBDParameter param, string response) {
-            if (string.IsNullOrEmpty(response))
+            if (string.IsNullOrEmpty(response)) {
                 response = "";
+            }
 
             OBDResponseList responseList = new OBDResponseList(response);
             response = Strip(response);
@@ -38,8 +39,9 @@ namespace SH_OBD {
                     if (line.Substring(0, OBDParser_ISO15765_4_CAN11.HEADER_LENGTH).CompareTo(header) == 0)
                         group.Add(line);
                     else {
-                        group = new List<string>();
-                        group.Add(lines[idx]);
+                        group = new List<string> {
+                            lines[idx]
+                        };
                         groups.Add(group);
                         header = line.Substring(0, OBDParser_ISO15765_4_CAN11.HEADER_LENGTH);
                     }
@@ -57,12 +59,12 @@ namespace SH_OBD {
                 group = groups[idx];
                 if (group.Count > 1)
                     bIsMultiline = true;
-                int dataStartIndex1 = getDataStartIndex(param, bIsMultiline, false);
+                int dataStartIndex1 = GetDataStartIndex(param, bIsMultiline, false);
                 string str2 = group[0];
                 int length1 = str2.Length - dataStartIndex1;
                 obd_response.Header = str2.Substring(0, OBDParser_ISO15765_4_CAN11.HEADER_LENGTH);
                 obd_response.Data = length1 > 0 ? str2.Substring(dataStartIndex1, length1) : "";
-                int dataStartIndex2 = getDataStartIndex(param, bIsMultiline, true);
+                int dataStartIndex2 = GetDataStartIndex(param, bIsMultiline, true);
                 int sub_idx = 1;
                 while (sub_idx < group.Count) {
                     string str3 = group[sub_idx];
@@ -76,9 +78,10 @@ namespace SH_OBD {
             return responseList;
         }
 
-        protected int getDataStartIndex(OBDParameter param, bool bIsMultiline, bool bConsecutiveLine) {
-            if (bConsecutiveLine)
+        protected int GetDataStartIndex(OBDParameter param, bool bIsMultiline, bool bConsecutiveLine) {
+            if (bConsecutiveLine) {
                 return 5;
+            }
             switch (param.Service) {
                 case 1:
                     return 9;

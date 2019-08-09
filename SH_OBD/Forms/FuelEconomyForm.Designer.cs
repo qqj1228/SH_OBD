@@ -33,14 +33,14 @@
             this.radioMetricUnits = new System.Windows.Forms.RadioButton();
             this.radioEnglishUnits = new System.Windows.Forms.RadioButton();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.sensorInstantFuelConsumption = new SH_OBD.SensorDisplayControl();
-            this.sensorInstantFuelEconomy = new SH_OBD.SensorDisplayControl();
-            this.sensorAvgFuelConsumption = new SH_OBD.SensorDisplayControl();
-            this.sensorAvgFuelEconomy = new SH_OBD.SensorDisplayControl();
-            this.sensorDistance = new SH_OBD.SensorDisplayControl();
-            this.sensorCostPerMile = new SH_OBD.SensorDisplayControl();
-            this.sensorTotalConsumed = new SH_OBD.SensorDisplayControl();
             this.sensorTotalCost = new SH_OBD.SensorDisplayControl();
+            this.sensorTotalConsumed = new SH_OBD.SensorDisplayControl();
+            this.sensorCostPerMile = new SH_OBD.SensorDisplayControl();
+            this.sensorDistance = new SH_OBD.SensorDisplayControl();
+            this.sensorAvgFuelEconomy = new SH_OBD.SensorDisplayControl();
+            this.sensorAvgFuelConsumption = new SH_OBD.SensorDisplayControl();
+            this.sensorInstantFuelEconomy = new SH_OBD.SensorDisplayControl();
+            this.sensorInstantFuelConsumption = new SH_OBD.SensorDisplayControl();
             this.groupControl.SuspendLayout();
             this.groupSetup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericFuelCost)).BeginInit();
@@ -169,71 +169,16 @@
             this.panel1.Size = new System.Drawing.Size(774, 329);
             this.panel1.TabIndex = 21;
             // 
-            // sensorInstantFuelConsumption
+            // sensorTotalCost
             // 
-            this.sensorInstantFuelConsumption.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.sensorInstantFuelConsumption.EnglishDisplay = null;
-            this.sensorInstantFuelConsumption.Location = new System.Drawing.Point(13, 14);
-            this.sensorInstantFuelConsumption.MetricDisplay = null;
-            this.sensorInstantFuelConsumption.Name = "sensorInstantFuelConsumption";
-            this.sensorInstantFuelConsumption.Size = new System.Drawing.Size(370, 70);
-            this.sensorInstantFuelConsumption.TabIndex = 0;
-            this.sensorInstantFuelConsumption.Title = "Instantaneous Fuel Consumption";
-            // 
-            // sensorInstantFuelEconomy
-            // 
-            this.sensorInstantFuelEconomy.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.sensorInstantFuelEconomy.EnglishDisplay = null;
-            this.sensorInstantFuelEconomy.Location = new System.Drawing.Point(389, 14);
-            this.sensorInstantFuelEconomy.MetricDisplay = null;
-            this.sensorInstantFuelEconomy.Name = "sensorInstantFuelEconomy";
-            this.sensorInstantFuelEconomy.Size = new System.Drawing.Size(370, 70);
-            this.sensorInstantFuelEconomy.TabIndex = 1;
-            this.sensorInstantFuelEconomy.Title = "Instantaneous Fuel Economy";
-            // 
-            // sensorAvgFuelConsumption
-            // 
-            this.sensorAvgFuelConsumption.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.sensorAvgFuelConsumption.EnglishDisplay = null;
-            this.sensorAvgFuelConsumption.Location = new System.Drawing.Point(13, 90);
-            this.sensorAvgFuelConsumption.MetricDisplay = null;
-            this.sensorAvgFuelConsumption.Name = "sensorAvgFuelConsumption";
-            this.sensorAvgFuelConsumption.Size = new System.Drawing.Size(370, 70);
-            this.sensorAvgFuelConsumption.TabIndex = 2;
-            this.sensorAvgFuelConsumption.Title = "Average Fuel Consumption";
-            // 
-            // sensorAvgFuelEconomy
-            // 
-            this.sensorAvgFuelEconomy.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.sensorAvgFuelEconomy.EnglishDisplay = null;
-            this.sensorAvgFuelEconomy.Location = new System.Drawing.Point(389, 90);
-            this.sensorAvgFuelEconomy.MetricDisplay = null;
-            this.sensorAvgFuelEconomy.Name = "sensorAvgFuelEconomy";
-            this.sensorAvgFuelEconomy.Size = new System.Drawing.Size(370, 70);
-            this.sensorAvgFuelEconomy.TabIndex = 3;
-            this.sensorAvgFuelEconomy.Title = "Average Fuel Economy";
-            // 
-            // sensorDistance
-            // 
-            this.sensorDistance.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.sensorDistance.EnglishDisplay = null;
-            this.sensorDistance.Location = new System.Drawing.Point(13, 166);
-            this.sensorDistance.MetricDisplay = null;
-            this.sensorDistance.Name = "sensorDistance";
-            this.sensorDistance.Size = new System.Drawing.Size(370, 70);
-            this.sensorDistance.TabIndex = 4;
-            this.sensorDistance.Title = "Distance Traveled";
-            // 
-            // sensorCostPerMile
-            // 
-            this.sensorCostPerMile.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.sensorCostPerMile.EnglishDisplay = null;
-            this.sensorCostPerMile.Location = new System.Drawing.Point(389, 166);
-            this.sensorCostPerMile.MetricDisplay = null;
-            this.sensorCostPerMile.Name = "sensorCostPerMile";
-            this.sensorCostPerMile.Size = new System.Drawing.Size(370, 70);
-            this.sensorCostPerMile.TabIndex = 5;
-            this.sensorCostPerMile.Title = "Average Cost Per Mile";
+            this.sensorTotalCost.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.sensorTotalCost.EnglishDisplay = null;
+            this.sensorTotalCost.Location = new System.Drawing.Point(389, 242);
+            this.sensorTotalCost.MetricDisplay = null;
+            this.sensorTotalCost.Name = "sensorTotalCost";
+            this.sensorTotalCost.Size = new System.Drawing.Size(370, 70);
+            this.sensorTotalCost.TabIndex = 7;
+            this.sensorTotalCost.Title = "总行程成本";
             // 
             // sensorTotalConsumed
             // 
@@ -244,18 +189,73 @@
             this.sensorTotalConsumed.Name = "sensorTotalConsumed";
             this.sensorTotalConsumed.Size = new System.Drawing.Size(370, 70);
             this.sensorTotalConsumed.TabIndex = 6;
-            this.sensorTotalConsumed.Title = "Total Fuel Consumed";
+            this.sensorTotalConsumed.Title = "总油耗";
             // 
-            // sensorTotalCost
+            // sensorCostPerMile
             // 
-            this.sensorTotalCost.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.sensorTotalCost.EnglishDisplay = null;
-            this.sensorTotalCost.Location = new System.Drawing.Point(389, 242);
-            this.sensorTotalCost.MetricDisplay = null;
-            this.sensorTotalCost.Name = "sensorTotalCost";
-            this.sensorTotalCost.Size = new System.Drawing.Size(370, 70);
-            this.sensorTotalCost.TabIndex = 7;
-            this.sensorTotalCost.Title = "Total Trip Cost";
+            this.sensorCostPerMile.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.sensorCostPerMile.EnglishDisplay = null;
+            this.sensorCostPerMile.Location = new System.Drawing.Point(389, 166);
+            this.sensorCostPerMile.MetricDisplay = null;
+            this.sensorCostPerMile.Name = "sensorCostPerMile";
+            this.sensorCostPerMile.Size = new System.Drawing.Size(370, 70);
+            this.sensorCostPerMile.TabIndex = 5;
+            this.sensorCostPerMile.Title = "每英里的平均成本";
+            // 
+            // sensorDistance
+            // 
+            this.sensorDistance.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.sensorDistance.EnglishDisplay = null;
+            this.sensorDistance.Location = new System.Drawing.Point(13, 166);
+            this.sensorDistance.MetricDisplay = null;
+            this.sensorDistance.Name = "sensorDistance";
+            this.sensorDistance.Size = new System.Drawing.Size(370, 70);
+            this.sensorDistance.TabIndex = 4;
+            this.sensorDistance.Title = "行驶距离";
+            // 
+            // sensorAvgFuelEconomy
+            // 
+            this.sensorAvgFuelEconomy.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.sensorAvgFuelEconomy.EnglishDisplay = null;
+            this.sensorAvgFuelEconomy.Location = new System.Drawing.Point(389, 90);
+            this.sensorAvgFuelEconomy.MetricDisplay = null;
+            this.sensorAvgFuelEconomy.Name = "sensorAvgFuelEconomy";
+            this.sensorAvgFuelEconomy.Size = new System.Drawing.Size(370, 70);
+            this.sensorAvgFuelEconomy.TabIndex = 3;
+            this.sensorAvgFuelEconomy.Title = "平均燃油经济性";
+            // 
+            // sensorAvgFuelConsumption
+            // 
+            this.sensorAvgFuelConsumption.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.sensorAvgFuelConsumption.EnglishDisplay = null;
+            this.sensorAvgFuelConsumption.Location = new System.Drawing.Point(13, 90);
+            this.sensorAvgFuelConsumption.MetricDisplay = null;
+            this.sensorAvgFuelConsumption.Name = "sensorAvgFuelConsumption";
+            this.sensorAvgFuelConsumption.Size = new System.Drawing.Size(370, 70);
+            this.sensorAvgFuelConsumption.TabIndex = 2;
+            this.sensorAvgFuelConsumption.Title = "平均油耗";
+            // 
+            // sensorInstantFuelEconomy
+            // 
+            this.sensorInstantFuelEconomy.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.sensorInstantFuelEconomy.EnglishDisplay = null;
+            this.sensorInstantFuelEconomy.Location = new System.Drawing.Point(389, 14);
+            this.sensorInstantFuelEconomy.MetricDisplay = null;
+            this.sensorInstantFuelEconomy.Name = "sensorInstantFuelEconomy";
+            this.sensorInstantFuelEconomy.Size = new System.Drawing.Size(370, 70);
+            this.sensorInstantFuelEconomy.TabIndex = 1;
+            this.sensorInstantFuelEconomy.Title = "瞬时燃油经济性";
+            // 
+            // sensorInstantFuelConsumption
+            // 
+            this.sensorInstantFuelConsumption.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.sensorInstantFuelConsumption.EnglishDisplay = null;
+            this.sensorInstantFuelConsumption.Location = new System.Drawing.Point(13, 14);
+            this.sensorInstantFuelConsumption.MetricDisplay = null;
+            this.sensorInstantFuelConsumption.Name = "sensorInstantFuelConsumption";
+            this.sensorInstantFuelConsumption.Size = new System.Drawing.Size(370, 70);
+            this.sensorInstantFuelConsumption.TabIndex = 0;
+            this.sensorInstantFuelConsumption.Title = "瞬时油耗";
             // 
             // FuelEconomyForm
             // 

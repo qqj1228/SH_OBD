@@ -16,16 +16,9 @@ namespace SH_OBD {
             InitializeComponent();
         }
 
-        public new void Update() {
-            if (!m_obdInterface.ConnectedStatus) {
-                return;
-            }
-            PopulateO2Locations();
-        }
-
         private void btnRead_Click(object sender, EventArgs e) {
             if (!m_obdInterface.ConnectedStatus) {
-                MessageBox.Show("OBD成功连接后才能进行操作", "OBD连接请求", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("成功连接车辆OBD接口后才能进行操作", "车辆OBD接口连接请求", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             } else {
                 btnRead.Enabled = false;
                 ReadTestResults();
@@ -42,7 +35,7 @@ namespace SH_OBD {
                 value = m_obdInterface.GetValue("SAE.O2_STATUS", true);
                 if (!value.ErrorDetected && value.BoolValue) {
                     progressBar.Increment(1);
-                    int selectedSensorId = getSelectedSensorID();
+                    int selectedSensorId = GetSelectedSensorID();
                     progressBar.Increment(1);
 
                     value = m_obdInterface.GetValue(new OBDParameter(5, 1, 0, selectedSensorId), true);
@@ -188,38 +181,33 @@ namespace SH_OBD {
                     return;
                 }
             }
-            MessageBox.Show(
-                "This vehicle either does not support oxygen sensor monitoring, or the monitoring test has not yet been completed.",
-                "Unsupported",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Asterisk
-                );
+            MessageBox.Show("该辆车不适用氧气传感器监测或者监测未完成", "不适用", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
-        private int getSelectedSensorID() {
+        private int GetSelectedSensorID() {
             string item = comboOxygenSensor.SelectedItem as string;
-            if (string.Compare(item, "Bank 1, Sensor 1 (O2B1S1)") == 0) {
+            if (string.Compare(item, "组 1, 传感器 1 (O2B1S1)") == 0) {
                 return 1;
             }
-            if (string.Compare(item, "Bank 1, Sensor 2 (O2B1S2)") == 0) {
+            if (string.Compare(item, "组 1, 传感器 2 (O2B1S2)") == 0) {
                 return 2;
             }
-            if (string.Compare(item, "Bank 1, Sensor 3 (O2B1S3)") == 0) {
+            if (string.Compare(item, "组 1, 传感器 3 (O2B1S3)") == 0) {
                 return 3;
             }
-            if (string.Compare(item, "Bank 1, Sensor 4 (O2B1S4)") == 0) {
+            if (string.Compare(item, "组 1, 传感器 4 (O2B1S4)") == 0) {
                 return 4;
             }
-            if (string.Compare(item, "Bank 2, Sensor 1 (O2B2S1)") == 0) {
+            if (string.Compare(item, "组 2, 传感器 1 (O2B2S1)") == 0) {
                 return 16;
             }
-            if (string.Compare(item, "Bank 2, Sensor 2 (O2B2S2)") == 0) {
+            if (string.Compare(item, "组 2, 传感器 2 (O2B2S2)") == 0) {
                 return 32;
             }
-            if (string.Compare(item, "Bank 2, Sensor 3 (O2B2S3)") == 0) {
+            if (string.Compare(item, "组 2, 传感器 3 (O2B2S3)") == 0) {
                 return 7;
             }
-            if (string.Compare(item, "Bank 2, Sensor 4 (O2B2S4)") == 0) {
+            if (string.Compare(item, "组 2, 传感器 4 (O2B2S4)") == 0) {
                 return 0;
             }
             return -1;
@@ -231,42 +219,42 @@ namespace SH_OBD {
 
             value = m_obdInterface.GetValue("SAE.O2B1S1A_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("Bank 1, Sensor 1 (O2B1S1)");
+                comboOxygenSensor.Items.Add("组 1, 传感器 1 (O2B1S1)");
             }
 
             value = m_obdInterface.GetValue("SAE.O2B1S2A_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("Bank 1, Sensor 2 (O2B1S2)");
+                comboOxygenSensor.Items.Add("组 1, 传感器 2 (O2B1S2)");
             }
 
             value = m_obdInterface.GetValue("SAE.O2B1S3A_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("Bank 1, Sensor 3 (O2B1S3)");
+                comboOxygenSensor.Items.Add("组 1, 传感器 3 (O2B1S3)");
             }
 
             value = m_obdInterface.GetValue("SAE.O2B1S4A_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("Bank 1, Sensor 4 (O2B1S4)");
+                comboOxygenSensor.Items.Add("组 1, 传感器 4 (O2B1S4)");
             }
 
             value = m_obdInterface.GetValue("SAE.O2B2S1A_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("Bank 2, Sensor 1 (O2B2S1)");
+                comboOxygenSensor.Items.Add("组 2, 传感器 1 (O2B2S1)");
             }
 
             value = m_obdInterface.GetValue("SAE.O2B2S2A_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("Bank 2, Sensor 2 (O2B2S2)");
+                comboOxygenSensor.Items.Add("组 2, 传感器 2 (O2B2S2)");
             }
 
             value = m_obdInterface.GetValue("SAE.O2B2S3A_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("Bank 2, Sensor 3 (O2B2S3)");
+                comboOxygenSensor.Items.Add("组 2, 传感器 3 (O2B2S3)");
             }
 
             value = m_obdInterface.GetValue("SAE.O2B2S4A_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("Bank 2, Sensor 4 (O2B2S4)");
+                comboOxygenSensor.Items.Add("组 2, 传感器 4 (O2B2S4)");
             }
 
             if (comboOxygenSensor.Items.Count > 0) {
@@ -275,22 +263,42 @@ namespace SH_OBD {
 
             value = m_obdInterface.GetValue("SAE.O2B1S1B_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("Bank 1, Sensor 1 (O2B1S1)");
+                comboOxygenSensor.Items.Add("组 1, 传感器 1 (O2B1S1)");
             }
 
             value = m_obdInterface.GetValue("SAE.O2B1S2B_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("Bank 1, Sensor 2 (O2B1S2)");
+                comboOxygenSensor.Items.Add("组 1, 传感器 2 (O2B1S2)");
             }
 
             value = m_obdInterface.GetValue("SAE.O2B2S1B_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("Bank 2, Sensor 1 (O2B2S1)");
+                comboOxygenSensor.Items.Add("组 2, 传感器 1 (O2B2S1)");
             }
 
             value = m_obdInterface.GetValue("SAE.O2B2S2B_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("Bank 2, Sensor 2 (O2B2S2)");
+                comboOxygenSensor.Items.Add("组 2, 传感器 2 (O2B2S2)");
+            }
+
+            value = m_obdInterface.GetValue("SAE.O2B3S1B_PRESENT", true);
+            if (!value.ErrorDetected && value.BoolValue) {
+                comboOxygenSensor.Items.Add("组 3, 传感器 1 (O2B3S1)");
+            }
+
+            value = m_obdInterface.GetValue("SAE.O2B3S2B_PRESENT", true);
+            if (!value.ErrorDetected && value.BoolValue) {
+                comboOxygenSensor.Items.Add("组 3, 传感器 2 (O2B3S2)");
+            }
+
+            value = m_obdInterface.GetValue("SAE.O2B4S1B_PRESENT", true);
+            if (!value.ErrorDetected && value.BoolValue) {
+                comboOxygenSensor.Items.Add("组 4, 传感器 1 (O2B4S1)");
+            }
+
+            value = m_obdInterface.GetValue("SAE.O2B4S2B_PRESENT", true);
+            if (!value.ErrorDetected && value.BoolValue) {
+                comboOxygenSensor.Items.Add("组 4, 传感器 2 (O2B4S2)");
             }
 
             if (comboOxygenSensor.Items.Count > 0) {
@@ -298,5 +306,13 @@ namespace SH_OBD {
             }
         }
 
+        private void OxygenSensorsForm_VisibleChanged(object sender, EventArgs e) {
+            if (this.Visible) {
+                if (!m_obdInterface.ConnectedStatus) {
+                    return;
+                }
+                PopulateO2Locations();
+            }
+        }
     }
 }

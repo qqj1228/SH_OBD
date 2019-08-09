@@ -348,7 +348,7 @@
             this.lblTireAspectRatio.Name = "lblTireAspectRatio";
             this.lblTireAspectRatio.Size = new System.Drawing.Size(90, 21);
             this.lblTireAspectRatio.TabIndex = 10;
-            this.lblTireAspectRatio.Text = "轮胎比率(&a):";
+            this.lblTireAspectRatio.Text = "扁平比(&a):";
             this.lblTireAspectRatio.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // groupBox1

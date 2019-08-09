@@ -9,6 +9,22 @@ namespace SH_OBD {
 
         SerialPort _serialPort = null;
 
+        /// <summary>
+        /// 发送数据超时时间，单位ms
+        /// </summary>
+        public int WriteTimeout {
+            get { return _serialPort.WriteTimeout; }
+            set { _serialPort.WriteTimeout = value; }
+        }
+
+        /// <summary>
+        /// 接收数据超时时间，单位ms
+        /// </summary>
+        public int ReadTimeout {
+            get { return _serialPort.ReadTimeout; }
+            set { _serialPort.ReadTimeout = value; }
+        }
+
         //定义委托
         public delegate void SerialPortDataReceiveEventArgs(object sender, SerialDataReceivedEventArgs e, byte[] bits);
         //定义接收数据事件

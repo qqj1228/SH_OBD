@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 using System.Runtime.InteropServices;
 
 namespace SH_OBD {
-    public class OBDInterpretter {
+    public class OBDInterpreter {
         private const string HexDigits = "0123456789abcdef";
 
         public static int HexByteToInt(string strHex) {
@@ -17,15 +17,13 @@ namespace SH_OBD {
 
         public static string HexStringToASCIIString(string strHex) {
             string str = "";
-            int startIndex = 0;
             if (strHex.Length > 0) {
-                do {
-                    int num2 = HexByteToInt(strHex.Substring(startIndex, 2));
+                for (int i = 0; i < strHex.Length; i += 2) {
+                    int num2 = HexByteToInt(strHex.Substring(i, 2));
                     if (num2 != 0) {
-                        str = str + new string((char)num2, 1);
+                        str += new string((char)num2, 1);
                     }
-                    startIndex += 2;
-                } while (startIndex < strHex.Length);
+                }
             }
             return str;
         }
@@ -612,25 +610,54 @@ namespace SH_OBD {
                                     value2.ShortStringValue = "EOBD/OBD/OBDII";
                                     return value2;
 
-                                case 10:
+                                case 0x0A:
                                     value2.StringValue = "JOBD";
                                     value2.ShortStringValue = "JOBD";
                                     return value2;
 
-                                case 11:
+                                case 0x0B:
                                     value2.StringValue = "JOBD and OBD II";
                                     value2.ShortStringValue = "JOBD/OBDII";
                                     return value2;
 
-                                case 12:
+                                case 0x0C:
                                     value2.StringValue = "JOBD and EOBD";
                                     value2.ShortStringValue = "JOBD/EOBD";
                                     return value2;
 
-                                case 13:
+                                case 0x0D:
                                     value2.StringValue = "JOBD, EOBD, and OBD II";
                                     value2.ShortStringValue = "JOBD/EOBD/OBDII";
                                     return value2;
+
+                                case 0x0E:
+                                    value2.StringValue = "Heavy Duty Vehicles (EURO IV) B1";
+                                    value2.ShortStringValue = "EURO IV B1";
+                                    return value2;
+
+                                case 0x0F:
+                                    value2.StringValue = "Heavy Duty Vehicles (EURO V) B2";
+                                    value2.ShortStringValue = "EURO V B2";
+                                    return value2;
+
+                                case 0x10:
+                                    value2.StringValue = "Heavy Duty Vehicles (EURO EEC) C (gas engines)";
+                                    value2.ShortStringValue = "EURO C";
+                                    return value2;
+
+                                case 0x11:
+                                    value2.StringValue = "Engine Manufacturer Diagnostics (EMD)";
+                                    value2.ShortStringValue = "EMD";
+                                    return value2;
+                            }
+                            if (HexByteToInt(response.GetDataByte(0)) >= 0x12 && HexByteToInt(response.GetDataByte(0)) <= 0xFA) {
+                                value2.StringValue = "ISO/SAE reserved";
+                                value2.ShortStringValue = "---";
+                                return value2;
+                            } else if (HexByteToInt(response.GetDataByte(0)) >= 0xFB && HexByteToInt(response.GetDataByte(0)) <= 0xFF) {
+                                value2.StringValue = "ISO/SAE - Not available for assignment";
+                                value2.ShortStringValue = "SAE J1939 special meaning";
+                                return value2;
                             }
                             return value2;
 
@@ -1571,7 +1598,6 @@ namespace SH_OBD {
             return value2;
         }
 
-
         public static OBDParameterValue GetValue(OBDParameter param, OBDResponseList responses, bool bEnglishUnits) {
             if (responses.ResponseCount == 1) {
                 return GetValue(param, responses.GetOBDResponse(0), bEnglishUnits);
@@ -1579,23 +1605,14 @@ namespace SH_OBD {
             if ((param.Service == 1) || (param.Service == 2)) {
                 if (((param.Parameter == 0) || (param.Parameter == 0x20)) || ((param.Parameter == 0x40) || (param.Parameter == 0x60))) {
                     OBDParameterValue value7 = new OBDParameterValue();
-                    int num2 = 0;
-                    if (0 < responses.ResponseCount) {
-                        do {
-                            OBDParameterValue value4 = GetValue(param, responses.GetOBDResponse(num2), bEnglishUnits);
-                            if (value4.ErrorDetected) {
-                                return value4;
-                            }
-                            int num = 0;
-                            do {
-                                if (value4.GetBitFlag(num)) {
-                                    value7.SetBitFlag(num, true);
-                                }
-                                num++;
-                            }
-                            while (num < 0x20);
-                            num2++;
-                        } while (num2 < responses.ResponseCount);
+                    for (int i = 0; i < responses.ResponseCount; i++) {
+                        OBDParameterValue value4 = GetValue(param, responses.GetOBDResponse(i), bEnglishUnits);
+                        if (value4.ErrorDetected) {
+                            return value4;
+                        }
+                        for (int j = 0; j < 0x20; j++) {
+                            value7.SetBitFlag(j, value4.GetBitFlag(j));
+                        }
                     }
                     return value7;
                 }
@@ -1603,18 +1620,14 @@ namespace SH_OBD {
                     OBDParameterValue value2 = new OBDParameterValue {
                         BoolValue = false
                     };
-                    int num5 = 0;
-                    if (0 < responses.ResponseCount) {
-                        do {
-                            OBDParameterValue value6 = GetValue(param, responses.GetOBDResponse(num5), bEnglishUnits);
-                            if (value6.ErrorDetected) {
-                                return value6;
-                            }
-                            if (value6.BoolValue) {
-                                value2.BoolValue = true;
-                            }
-                            num5++;
-                        } while (num5 < responses.ResponseCount);
+                    for (int i = 0; i < responses.ResponseCount; i++) {
+                        OBDParameterValue value6 = GetValue(param, responses.GetOBDResponse(i), bEnglishUnits);
+                        if (value6.ErrorDetected) {
+                            return value6;
+                        }
+                        if (value6.BoolValue) {
+                            value2.BoolValue = true;
+                        }
                     }
                     if (value2.BoolValue) {
                         value2.DoubleValue = 1.0;
@@ -1631,16 +1644,12 @@ namespace SH_OBD {
                     OBDParameterValue value3 = new OBDParameterValue {
                         DoubleValue = 0.0
                     };
-                    int num4 = 0;
-                    if (0 < responses.ResponseCount) {
-                        do {
-                            OBDParameterValue value5 = GetValue(param, responses.GetOBDResponse(num4), bEnglishUnits);
-                            if (value5.ErrorDetected) {
-                                return value5;
-                            }
-                            value3.DoubleValue = value5.DoubleValue + value3.DoubleValue;
-                            num4++;
-                        } while (num4 < responses.ResponseCount);
+                    for (int i = 0; i < responses.ResponseCount; i++) {
+                        OBDParameterValue value5 = GetValue(param, responses.GetOBDResponse(i), bEnglishUnits);
+                        if (value5.ErrorDetected) {
+                            return value5;
+                        }
+                        value3.DoubleValue = value5.DoubleValue + value3.DoubleValue;
                     }
                     return value3;
                 }
@@ -1650,18 +1659,10 @@ namespace SH_OBD {
             }
             OBDParameterValue value8 = new OBDParameterValue();
             StringCollection strings = new StringCollection();
-            int index = 0;
-            if (0 < responses.ResponseCount) {
-                do {
-                    StringEnumerator enumerator = GetValue(param, responses.GetOBDResponse(index), bEnglishUnits).StringCollectionValue.GetEnumerator();
-                    if (enumerator.MoveNext()) {
-                        do {
-                            strings.Add(enumerator.Current);
-                        }
-                        while (enumerator.MoveNext());
-                    }
-                    index++;
-                } while (index < responses.ResponseCount);
+            for (int i = 0; i < responses.ResponseCount; i++) {
+                foreach (string str in GetValue(param, responses.GetOBDResponse(i), bEnglishUnits).StringCollectionValue) {
+                    strings.Add(str);
+                }
             }
             value8.StringCollectionValue = strings;
             return value8;
@@ -1676,59 +1677,61 @@ namespace SH_OBD {
         }
 
         private static string GetDTCSystem(string strSysId) {
-            if (string.Compare(strSysId, "0") == 0) {
-                return "P0";
+            string strSys;
+            switch (strSysId) {
+                case "0":
+                    strSys = "P0";
+                    break;
+                case "1":
+                    strSys = "P1";
+                    break;
+                case "2":
+                    strSys = "P2";
+                    break;
+                case "3":
+                    strSys = "P3";
+                    break;
+                case "4":
+                    strSys = "C0";
+                    break;
+                case "5":
+                    strSys = "C1";
+                    break;
+                case "6":
+                    strSys = "C2";
+                    break;
+                case "7":
+                    strSys = "C3";
+                    break;
+                case "8":
+                    strSys = "B0";
+                    break;
+                case "9":
+                    strSys = "B1";
+                    break;
+                case "A":
+                    strSys = "B2";
+                    break;
+                case "B":
+                    strSys = "B3";
+                    break;
+                case "C":
+                    strSys = "U0";
+                    break;
+                case "D":
+                    strSys = "U1";
+                    break;
+                case "E":
+                    strSys = "U2";
+                    break;
+                case "F":
+                    strSys = "U3";
+                    break;
+                default:
+                    strSys = "ER";
+                    break;
             }
-            if (string.Compare(strSysId, "1") == 0) {
-                return "P1";
-            }
-            if (string.Compare(strSysId, "2") == 0) {
-                return "P2";
-            }
-            if (string.Compare(strSysId, "3") == 0) {
-                return "P3";
-            }
-
-            if (string.Compare(strSysId, "4") == 0) {
-                return "C0";
-            }
-            if (string.Compare(strSysId, "5") == 0) {
-                return "C1";
-            }
-            if (string.Compare(strSysId, "6") == 0) {
-                return "C2";
-            }
-            if (string.Compare(strSysId, "7") == 0) {
-                return "C3";
-            }
-
-            if (string.Compare(strSysId, "8") == 0) {
-                return "B0";
-            }
-            if (string.Compare(strSysId, "9") == 0) {
-                return "B1";
-            }
-            if (string.Compare(strSysId, "A") == 0) {
-                return "B2";
-            }
-            if (string.Compare(strSysId, "B") == 0) {
-                return "B3";
-            }
-
-            if (string.Compare(strSysId, "C") == 0) {
-                return "U0";
-            }
-            if (string.Compare(strSysId, "D") == 0) {
-                return "U1";
-            }
-            if (string.Compare(strSysId, "E") == 0) {
-                return "U2";
-            }
-            if (string.Compare(strSysId, "F") == 0) {
-                return "U3";
-            }
-
-            return "ER";
+            return strSys;
         }
     }
 }

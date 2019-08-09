@@ -136,7 +136,7 @@
     <value>冻结帧</value>
   </data>
   <data name="buttonName_FuelEconomy" xml:space="preserve">
-    <value>油耗</value>
+    <value>燃油经济性</value>
   </data>
   <data name="buttonName_Log" xml:space="preserve">
     <value>日志</value>
