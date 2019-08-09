@@ -214,9 +214,10 @@ namespace SH_OBD {
             groupPermanent.Location = new Point(groupPermanent.Location.X, groupPending.Location.Y + groupPending.Height + margin);
         }
 
-        private void DTCForm_Activated(object sender, EventArgs e) {
-            CheckConnection();
+        private void DTCForm_VisibleChanged(object sender, EventArgs e) {
+            if (this.Visible) {
+                CheckConnection();
+            }
         }
-
     }
 }

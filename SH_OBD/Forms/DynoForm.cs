@@ -275,9 +275,10 @@ namespace SH_OBD {
             }
         }
 
-        private void DynoForm_Activated(object sender, EventArgs e) {
-            CheckConnection();
+        private void DynoForm_VisibleChanged(object sender, EventArgs e) {
+            if (this.Visible) {
+                CheckConnection();
+            }
         }
-
     }
 }

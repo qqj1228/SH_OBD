@@ -11,8 +11,7 @@ using System.Windows.Forms;
 
 namespace SH_OBD {
     public partial class FuelEconomyForm : Form {
-        private FuelEconomyForm m_FuelEconomyForm;
-        private OBDInterface m_obdInterface;
+        private readonly OBDInterface m_obdInterface;
         private double m_TotalFuelConsumption;
         private double m_TotalDistance;
         public bool m_RunThread;
@@ -21,20 +20,19 @@ namespace SH_OBD {
         private DateTime m_PrevTime;
 
         public FuelEconomyForm(OBDInterface obd) {
-            m_FuelEconomyForm = this;
             InitializeComponent();
             m_obdInterface = obd;
             m_RunThread = true;
             IsWorking = false;
 
-            sensorInstantFuelConsumption.SetDisplayMode(1);
-            sensorAvgFuelConsumption.SetDisplayMode(1);
-            sensorAvgFuelEconomy.SetDisplayMode(1);
-            sensorInstantFuelEconomy.SetDisplayMode(1);
-            sensorTotalConsumed.SetDisplayMode(1);
-            sensorDistance.SetDisplayMode(1);
-            sensorTotalCost.SetDisplayMode(1);
-            sensorCostPerMile.SetDisplayMode(1);
+            this.sensorInstantFuelConsumption.SetDisplayMode(1);
+            this.sensorAvgFuelConsumption.SetDisplayMode(1);
+            this.sensorAvgFuelEconomy.SetDisplayMode(1);
+            this.sensorInstantFuelEconomy.SetDisplayMode(1);
+            this.sensorTotalConsumed.SetDisplayMode(1);
+            this.sensorDistance.SetDisplayMode(1);
+            this.sensorTotalCost.SetDisplayMode(1);
+            this.sensorCostPerMile.SetDisplayMode(1);
         }
 
         public void CheckConnection() {
@@ -93,52 +91,56 @@ namespace SH_OBD {
                         double fuel_gallons_hour = fuel_liters_hour * 0.264172052;
 
                         DateTime now = DateTime.Now;
-                        double hours_start = now.Subtract(m_FuelEconomyForm.m_StartTime).TotalSeconds * 0.00027777777777777778;
-                        double hours_prev = now.Subtract(m_FuelEconomyForm.m_PrevTime).TotalSeconds * 0.00027777777777777778;
-                        m_FuelEconomyForm.m_PrevTime = now;
+                        double hours_start = now.Subtract(this.m_StartTime).TotalSeconds * 0.00027777777777777778;
+                        double hours_prev = now.Subtract(this.m_PrevTime).TotalSeconds * 0.00027777777777777778;
+                        this.m_PrevTime = now;
 
-                        if (m_FuelEconomyForm.radioEnglishUnits.Checked) {
-                            m_FuelEconomyForm.sensorInstantFuelConsumption.EnglishDisplay = fuel_gallons_hour.ToString("0.000") + " gallons/hour";
-                            m_FuelEconomyForm.m_TotalFuelConsumption += hours_prev * fuel_gallons_hour;
-                            double total = m_FuelEconomyForm.m_TotalFuelConsumption;
-                            sensorTotalConsumed.EnglishDisplay = total.ToString("0.00") + " gallons";
-                            m_FuelEconomyForm.sensorAvgFuelConsumption.EnglishDisplay = ((m_FuelEconomyForm.m_TotalFuelConsumption / hours_start)).ToString("0.00") + " gallons/hour";
-                            m_FuelEconomyForm.m_TotalDistance += hours_prev * speed_miles;
-                            m_FuelEconomyForm.sensorDistance.EnglishDisplay = m_TotalDistance.ToString("0.00") + " miles";
-                            m_FuelEconomyForm.sensorInstantFuelEconomy.EnglishDisplay = (((1.0 / fuel_gallons_hour) * speed_miles)).ToString("0.00") + " miles/gallon";
+                        if (this.radioEnglishUnits.Checked) {
+                            this.sensorInstantFuelConsumption.EnglishDisplay = fuel_gallons_hour.ToString("0.000") + " 加仑 / 小时";
+                            this.m_TotalFuelConsumption += hours_prev * fuel_gallons_hour;
+                            double total = this.m_TotalFuelConsumption;
+                            sensorTotalConsumed.EnglishDisplay = total.ToString("0.00") + " 加仑";
+                            this.sensorAvgFuelConsumption.EnglishDisplay = ((this.m_TotalFuelConsumption / hours_start)).ToString("0.00") + " 加仑 / 小时";
+                            this.m_TotalDistance += hours_prev * speed_miles;
+                            this.sensorDistance.EnglishDisplay = m_TotalDistance.ToString("0.00") + " 英里";
+                            this.sensorInstantFuelEconomy.EnglishDisplay = (((1.0 / fuel_gallons_hour) * speed_miles)).ToString("0.00") + " 英里 / 加仑";
                             double miles_gallon = 0.0;
-                            if (m_FuelEconomyForm.m_TotalDistance > 0.0)
-                                miles_gallon = m_FuelEconomyForm.m_TotalDistance / m_FuelEconomyForm.m_TotalFuelConsumption;
+                            if (this.m_TotalDistance > 0.0) {
+                                miles_gallon = this.m_TotalDistance / this.m_TotalFuelConsumption;
+                            }
 
-                            m_FuelEconomyForm.sensorAvgFuelEconomy.EnglishDisplay = miles_gallon.ToString("0.00") + " miles/gallon";
+                            this.sensorAvgFuelEconomy.EnglishDisplay = miles_gallon.ToString("0.00") + " 英里 / 加仑";
                             double cost_per_mile = 0.0;
-                            if (miles_gallon > 0.0)
+                            if (miles_gallon > 0.0) {
                                 cost_per_mile = ((double)numericFuelCost.Value) * (1.0 / miles_gallon);
+                            }
 
-                            m_FuelEconomyForm.sensorCostPerMile.Title = "Average Cost Per Mile";
-                            m_FuelEconomyForm.sensorCostPerMile.EnglishDisplay = "$" + cost_per_mile.ToString("0.00");
-                            m_FuelEconomyForm.sensorTotalCost.EnglishDisplay = "$" + ((((double)numericFuelCost.Value) * m_TotalFuelConsumption)).ToString("0.00");
+                            this.sensorCostPerMile.Title = "每英里的平均成本";
+                            this.sensorCostPerMile.EnglishDisplay = "$" + cost_per_mile.ToString("0.00");
+                            this.sensorTotalCost.EnglishDisplay = "$" + ((((double)numericFuelCost.Value) * m_TotalFuelConsumption)).ToString("0.00");
                         } else {
-                            m_FuelEconomyForm.sensorInstantFuelConsumption.EnglishDisplay = fuel_liters_hour.ToString("0.000") + " liters/hour";
-                            m_FuelEconomyForm.m_TotalFuelConsumption += hours_prev * fuel_liters_hour;
-                            double total = m_FuelEconomyForm.m_TotalFuelConsumption;
-                            sensorTotalConsumed.EnglishDisplay = total.ToString("0.00") + " liters";
-                            m_FuelEconomyForm.sensorAvgFuelConsumption.EnglishDisplay = ((m_FuelEconomyForm.m_TotalFuelConsumption / hours_start)).ToString("0.00") + " liters/hour";
-                            m_FuelEconomyForm.m_TotalDistance += hours_prev * sae_vss_double;
-                            m_FuelEconomyForm.sensorDistance.EnglishDisplay = m_TotalDistance.ToString("0.00") + " kilometers";
-                            m_FuelEconomyForm.sensorInstantFuelEconomy.EnglishDisplay = (((1.0 / fuel_liters_hour) * sae_vss_double)).ToString("0.00") + " kilometers/liter";
+                            this.sensorInstantFuelConsumption.EnglishDisplay = fuel_liters_hour.ToString("0.000") + " 升 / 小时";
+                            this.m_TotalFuelConsumption += hours_prev * fuel_liters_hour;
+                            double total = this.m_TotalFuelConsumption;
+                            sensorTotalConsumed.EnglishDisplay = total.ToString("0.00") + " 升";
+                            this.sensorAvgFuelConsumption.EnglishDisplay = ((this.m_TotalFuelConsumption / hours_start)).ToString("0.00") + " 升 / 小时";
+                            this.m_TotalDistance += hours_prev * sae_vss_double;
+                            this.sensorDistance.EnglishDisplay = m_TotalDistance.ToString("0.00") + " 千米";
+                            this.sensorInstantFuelEconomy.EnglishDisplay = (((1.0 / fuel_liters_hour) * sae_vss_double)).ToString("0.00") + " 千米 / 升";
                             double kilometers_liter = 0.0;
-                            if (m_FuelEconomyForm.m_TotalDistance > 0.0)
-                                kilometers_liter = m_FuelEconomyForm.m_TotalDistance / m_FuelEconomyForm.m_TotalFuelConsumption;
+                            if (this.m_TotalDistance > 0.0) {
+                                kilometers_liter = this.m_TotalDistance / this.m_TotalFuelConsumption;
+                            }
 
-                            m_FuelEconomyForm.sensorAvgFuelEconomy.EnglishDisplay = kilometers_liter.ToString("0.00") + " kilometers/liter";
+                            this.sensorAvgFuelEconomy.EnglishDisplay = kilometers_liter.ToString("0.00") + " 千米 / 升";
                             double cost_per_kilometer = 0.0;
-                            if (kilometers_liter > 0.0)
+                            if (kilometers_liter > 0.0) {
                                 cost_per_kilometer = ((double)numericFuelCost.Value) * (1.0 / kilometers_liter);
+                            }
 
-                            m_FuelEconomyForm.sensorCostPerMile.Title = "Average Cost Per Kilometer";
-                            m_FuelEconomyForm.sensorCostPerMile.EnglishDisplay = cost_per_kilometer.ToString("0.00");
-                            m_FuelEconomyForm.sensorTotalCost.EnglishDisplay = (((double)numericFuelCost.Value) * m_TotalFuelConsumption).ToString("0.00");
+                            this.sensorCostPerMile.Title = "每千米的平均成本";
+                            this.sensorCostPerMile.EnglishDisplay = cost_per_kilometer.ToString("0.00");
+                            this.sensorTotalCost.EnglishDisplay = (((double)numericFuelCost.Value) * m_TotalFuelConsumption).ToString("0.00");
                         }
                     }
                 } else {

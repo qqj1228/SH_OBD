@@ -105,6 +105,8 @@ namespace SH_OBD {
                     (dicSubForms[key] as TrackForm).CheckConnection();
                 } else if (key == Properties.Resources.buttonName_Dyno) {
                     (dicSubForms[key] as DynoForm).CheckConnection();
+                } else if (key == Properties.Resources.buttonName_FuelEconomy) {
+                    (dicSubForms[key] as FuelEconomyForm).CheckConnection();
                 }
             }
         }
@@ -161,6 +163,7 @@ namespace SH_OBD {
                             return;
                         }
                     }
+                    activeForm.Hide();
                 }
                 foreach (var item in panel1.Controls) {
                     if (item is Button btn) {

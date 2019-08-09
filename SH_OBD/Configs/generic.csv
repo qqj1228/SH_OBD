@@ -1,4 +1,4 @@
-# PID,Name,OBDRequest,Service,Parameter,SubParameter,Category,Type,Manufacturer,Priority,EnglishUnitLabel,MetricUnitLabel,EnglishMinValue,EnglishMaxValue,MetricMinValue,MetricMaxValue,ValueTypes(Double,Bool,String,StringCollection)
+# PID,Name,OBDRequest(HEX),Service(DEC),Parameter(DEC),SubParameter,Category,Type,Manufacturer,Priority,EnglishUnitLabel,MetricUnitLabel,EnglishMinValue,EnglishMaxValue,MetricMinValue,MetricMaxValue,ValueTypes(Double,Bool,String,StringCollection)
 SAE.MIL,故障指示灯 (MIL) 状态,0101,1,1,0,DTC,Generic,SAE,3,,,0,1,0,1,1,1,1,0
 SAE.DTC_COUNT,与排放相关的DTC码数量,0101,1,1,1,DTC,Generic,SAE,3,,,0,128,0,128,1,0,0,0
 SAE.STORED_DTCS,存储DTC码列表,03,3,0,0,DTC,Generic,SAE,3,,,,,,,0,0,1,1
@@ -27,144 +27,156 @@ SAE.O2_STATUS,氧传感器监测已完成,0101,1,1,21,Emissions,Generic,SAE,3,,,
 SAE.O2HTR_STATUS,加热的氧传感器监测已完成,0101,1,1,22,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
 SAE.EGR_STATUS,EGR系统监测已完成,0101,1,1,23,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
 SAE.FF_DTC,引起冻结帧存储的DTC,0202,2,2,0,DTC,Generic,SAE,3,,,,,,,0,0,1,0
-SAE.FUEL1_STATUS,燃油系统 1 状态,0103,1,3,0,Fuel,Generic,SAE,3,,,,,,,0,0,1,0
-SAE.FUEL2_STATUS,燃油系统 2 状态,0103,1,3,1,Fuel,Generic,SAE,3,,,,,,,0,0,1,0
-SAE.LOAD_CALC,计算引擎负荷,0104,1,4,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
-SAE.ECT,发动机冷却液温度,0105,1,5,0,Temperature,Generic,SAE,2,F,C,-40,419,-40,215,1,0,0,0
-SAE.STFT1,短时燃油修正 - 组 1,0106,1,6,0,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
-SAE.STFT2,短时燃油修正 - 组 2,0108,1,8,0,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
-SAE.STFT3,短时燃油修正 - 组 3,0106,1,6,1,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
-SAE.STFT4,短时燃油修正 - 组 4,0108,1,8,1,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
-SAE.LTFT1,长时燃油修正 - 组 1,0107,1,7,0,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
-SAE.LTFT2,长时燃油修正 - 组 2,0109,1,9,0,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
-SAE.LTFT3,长时燃油修正 - 组 3,0107,1,7,1,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
-SAE.LTFT4,长时燃油修正 - 组 4,0109,1,9,1,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
-SAE.FUEL_PRES,燃油导轨压力,010A,1,10,0,Fuel,Generic,SAE,1,psi,kPa,0,111,0,765,1,0,0,0
-SAE.MAP,进气歧管绝对压力,010B,1,11,0,Fuel,Generic,SAE,1,psi,kPa,0,37,0,255,1,0,0,0
-SAE.RPM,发动机转速,010C,1,12,0,Speed,Generic,SAE,1,rpm,rpm,0,16384,0,16384,1,0,0,0
-SAE.VSS,车辆速度,010D,1,13,0,Speed,Generic,SAE,1,mph,km/h,0,159,0,255,1,0,0,0
-SAE.SPARKADV,1号气缸点火提前角,010E,1,14,0,Spark,Generic,SAE,1,,,-64,64.5,-64,63.5,1,0,0,0
-SAE.IAT,进气温度,010F,1,15,0,Temperature,Generic,SAE,1,F,C,-40,419,-40,215,1,0,0,0
-SAE.MAF,质量空气流量率,0110,1,16,0,Airflow,Generic,SAE,1,lb/min,g/s,0,86.69,0,655.35,1,0,0,0
-SAE.TP,节气门位置,0111,1,17,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
-SAE.SECAIR_STATUS,指令的二次空气状态,0112,1,18,0,O2,Generic,SAE,1,,,,,,,0,0,1,0
-SAE.O2B1S1A_PRESENT,氧传感器存在 (组 1 传感器 1),0113,1,19,0,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.O2B1S2A_PRESENT,氧传感器存在 (组 1 传感器 2),0113,1,19,1,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.O2B1S3A_PRESENT,氧传感器存在 (组 1 传感器 3),0113,1,19,2,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.O2B1S4A_PRESENT,氧传感器存在 (组 1 传感器 4),0113,1,19,3,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.O2B2S1A_PRESENT,氧传感器存在 (组 2 传感器 1),0113,1,19,4,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.O2B2S2A_PRESENT,氧传感器存在 (组 2 传感器 2),0113,1,19,5,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.O2B2S3A_PRESENT,氧传感器存在 (组 2 传感器 3),0113,1,19,6,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.O2B2S4A_PRESENT,氧传感器存在 (组 2 传感器 4),0113,1,19,7,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.O2B1S1_VOLTS,氧传感器电压 (组 1 传感器 1),0114,1,20,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
-SAE.O2B1S1_STFT,氧传感器短时燃油修正 (组 1 传感器 1),0114,1,20,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
-SAE.O2B1S2_VOLTS,氧传感器电压 (组 1 传感器 2),0115,1,21,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
-SAE.O2B1S2_STFT,氧传感器短时燃油修正 (组 1 传感器 2),0115,1,21,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
-SAE.O2B1S3_VOLTS,氧传感器电压 (组 1 传感器 3),0116,1,22,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
-SAE.O2B1S3_STFT,氧传感器短时燃油修正 (组 1 传感器 3),0116,1,22,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
-SAE.O2B1S4_VOLTS,氧传感器电压 (组 1 传感器 4),0117,1,23,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
-SAE.O2B1S4_STFT,氧传感器短时燃油修正 (组 1 传感器 4),0117,1,23,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
-SAE.O2B2S1_VOLTS,氧传感器电压 (组 2 传感器 1),0118,1,24,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
-SAE.O2B2S1_STFT,氧传感器短时燃油修正 (组 2 传感器 1),0118,1,24,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
-SAE.O2B2S2_VOLTS,氧传感器电压 (组 2 传感器 2),0119,1,25,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
-SAE.O2B2S2_STFT,氧传感器短时燃油修正 (组 2 传感器 2),0119,1,25,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
-SAE.O2B2S3_VOLTS,氧传感器电压 (组 2 传感器 3),011A,1,26,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
-SAE.O2B2S3_STFT,氧传感器短时燃油修正 (组 2 传感器 3),011A,1,26,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
-SAE.O2B2S4_VOLTS,氧传感器电压 (组 2 传感器 4),011B,1,27,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
-SAE.O2B2S4_STFT,氧传感器短时燃油修正 (组 2 传感器 4),011B,1,27,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
-SAE.OBD_TYPE,OBD 标准车辆符合类型,011C,1,28,0,Emissions,Generic,SAE,3,,,,,,,0,0,1,0
-SAE.O2B1S1B_PRESENT,氧传感器存在 (组 1 传感器 1),011D,1,29,0,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.O2B1S2B_PRESENT,氧传感器存在 (组 1 传感器 2),011D,1,29,1,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.O2B2S1B_PRESENT,氧传感器存在 (组 2 传感器 1),011D,1,29,2,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.O2B2S2B_PRESENT,氧传感器存在 (组 2 传感器 2),011D,1,29,3,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.O2B3S1B_PRESENT,氧传感器存在 (组 3 传感器 1),011D,1,29,4,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.O2B3S2B_PRESENT,氧传感器存在 (组 3 传感器 2),011D,1,29,5,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.O2B4S1B_PRESENT,氧传感器存在 (组 4 传感器 1),011D,1,29,6,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.O2B4S2B_PRESENT,氧传感器存在 (组 4 传感器 2),011D,1,29,7,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.PTO_STATUS,动力输出 (PTO) 状态,011E,1,30,0,General,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.RUN_TIME,发动机点火后运行时间,011F,1,31,0,General,Generic,SAE,3,sec,sec,0,65535,0,65535,1,0,0,0
-SAE.MIL_DISTANCE,MIL亮灯后行驶距离,0121,1,33,0,DTC,Generic,SAE,3,miles,km,0,65535,0,65535,1,0,0,0
-SAE.FRP_VAC,燃油导轨压力 (相对于歧管真空压力),0122,1,34,0,Fuel,Generic,SAE,1,psi,kPa,0,751,0,5177.265,1,0,0,0
-SAE.FRP_DIESEL,燃油导轨压力 (柴油),0123,1,35,0,Fuel,Generic,SAE,1,psi,kPa,0,95050.5,0,655350,1,0,0,0
-SAE.O2B1S1A_LAMBDA,宽量程氧传感器当量率 (组 1 传感器 1),0124,1,36,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
-SAE.O2B1S2A_LAMBDA,宽量程氧传感器当量率 (组 1 传感器 2),0125,1,37,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
-SAE.O2B1S3A_LAMBDA,宽量程氧传感器当量率 (组 1 传感器 3),0126,1,38,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
-SAE.O2B1S4A_LAMBDA,宽量程氧传感器当量率 (组 1 传感器 4),0127,1,39,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
-SAE.O2B2S1A_LAMBDA,宽量程氧传感器当量率 (组 2 传感器 1),0128,1,40,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
-SAE.O2B2S2A_LAMBDA,宽量程氧传感器当量率 (组 2 传感器 2),0129,1,41,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
-SAE.O2B2S3A_LAMBDA,宽量程氧传感器当量率 (组 2 传感器 3),012A,1,42,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
-SAE.O2B2S4A_LAMBDA,宽量程氧传感器当量率 (组 2 传感器 4),012B,1,43,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
-SAE.O2B1S1_VOLTS,宽量程氧传感器电压 (组 1 传感器 1),0124,1,36,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
-SAE.O2B1S2_VOLTS,宽量程氧传感器电压 (组 1 传感器 2),0125,1,37,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
-SAE.O2B1S3_VOLTS,宽量程氧传感器电压 (组 1 传感器 3),0126,1,38,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
-SAE.O2B1S4_VOLTS,宽量程氧传感器电压 (组 1 传感器 4),0127,1,39,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
-SAE.O2B2S1_VOLTS,宽量程氧传感器电压 (组 2 传感器 1),0128,1,40,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
-SAE.O2B2S2_VOLTS,宽量程氧传感器电压 (组 2 传感器 2),0129,1,41,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
-SAE.O2B2S3_VOLTS,宽量程氧传感器电压 (组 2 传感器 3),012A,1,42,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
-SAE.O2B2S4_VOLTS,宽量程氧传感器电压 (组 2 传感器 4),012B,1,43,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
-SAE.EGR_CMDED,指令的EGR,012C,1,44,0,Emissions,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
-SAE.EGR_ERROR,EGR错误,012D,1,45,0,Emissions,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
-SAE.EVAP_PURGE,指令的燃油蒸发排出,012E,1,46,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
-SAE.FUEL_LEVEL,燃油量输入,012F,1,47,0,Fuel,Generic,SAE,2,%,%,0,100,0,100,1,0,0,0
-SAE.WARM_UPS,清除DTC码后热车次数,0130,1,48,0,DTC,Generic,SAE,3,,,,,,,1,0,0,0
-SAE.CLEAR_DIST,清除DTC码后行驶距离,0131,1,49,0,DTC,Generic,SAE,3,miles,km,0,40722,0,65535,1,0,0,0
-SAE.EVAP_PRESSURE,蒸发排放系统 (EVAP) 燃油蒸汽压力,0132,1,50,0,General,Generic,SAE,1,psi,Pa,-1.2,1.2,-8192,8192,1,0,0,0
-SAE.BARO,大气压力,0133,1,51,0,General,Generic,SAE,2,psi,kPa,0,37,0,255,1,0,0,0
-SAE.O2B1S1B_LAMBDA,宽量程氧传感器当量率 (组 1 传感器 1),0134,1,52,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
-SAE.O2B1S2B_LAMBDA,宽量程氧传感器当量率 (组 1 传感器 2),0135,1,53,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
-SAE.O2B1S3B_LAMBDA,宽量程氧传感器当量率 (组 1 传感器 3),0136,1,54,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
-SAE.O2B1S4B_LAMBDA,宽量程氧传感器当量率 (组 1 传感器 4),0137,1,55,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
-SAE.O2B2S1B_LAMBDA,宽量程氧传感器当量率 (组 2 传感器 1),0138,1,56,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
-SAE.O2B2S2B_LAMBDA,宽量程氧传感器当量率 (组 2 传感器 2),0139,1,57,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
-SAE.O2B2S3B_LAMBDA,宽量程氧传感器当量率 (组 2 传感器 3),013A,1,58,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
-SAE.O2B2S4B_LAMBDA,宽量程氧传感器当量率 (组 2 传感器 4),013B,1,59,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
-SAE.O2B1S1_CURRENT,宽量程氧传感器电流 (组 1 传感器 1),0134,1,52,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
-SAE.O2B1S2_CURRENT,宽量程氧传感器电流 (组 1 传感器 2),0135,1,53,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
-SAE.O2B1S3_CURRENT,宽量程氧传感器电流 (组 1 传感器 3),0136,1,54,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
-SAE.O2B1S4_CURRENT,宽量程氧传感器电流 (组 1 传感器 4),0137,1,55,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
-SAE.O2B2S1_CURRENT,宽量程氧传感器电流 (组 2 传感器 1),0138,1,56,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
-SAE.O2B2S2_CURRENT,宽量程氧传感器电流 (组 2 传感器 2),0139,1,57,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
-SAE.O2B2S3_CURRENT,宽量程氧传感器电流 (组 2 传感器 3),013A,1,58,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
-SAE.O2B2S4_CURRENT,宽量程氧传感器电流 (组 2 传感器 4),013B,1,59,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
-SAE.CATB1S1_TEMP,催化器温度 (组 1 传感器 1),013C,1,60,0,Temperature,Generic,SAE,2,F,C,-40,11756.3,-40,6513.5,1,0,0,0
-SAE.CATB1S2_TEMP,催化器温度 (组 1 传感器 2),013D,1,61,0,Temperature,Generic,SAE,2,F,C,-40,11756.3,-40,6513.5,1,0,0,0
-SAE.CATB2S1_TEMP,催化器温度 (组 2 传感器 1),013E,1,62,0,Temperature,Generic,SAE,2,F,C,-40,11756.3,-40,6513.5,1,0,0,0
-SAE.CATB2S2_TEMP,催化器温度 (组 2 传感器 2),013F,1,63,0,Temperature,Generic,SAE,2,F,C,-40,11756.3,-40,6513.5,1,0,0,0
-SAE.MISFIRE_ENABLED,失火监测已启用 (本次驾驶循环),0141,1,65,0,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.FUEL_ENABLED,燃油系统监测已启用 (本次驾驶循环),0141,1,65,1,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.CCM_ENABLED,综合组件监测已启用 (本次驾驶循环),0141,1,65,2,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.MISFIRE_COMPL,失火监测已完成 (本次驾驶循环),0141,1,65,3,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.FUEL_COMPL,燃油系统监测已完成 (本次驾驶循环),0141,1,65,4,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.CCM_COMPL,综合组件监测已完成 (本次驾驶循环),0141,1,65,5,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.CAT_ENABLED,催化器监测已启用 (本次驾驶循环),0141,1,65,6,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.HCAT_ENABLED,加热催化器监测已启用 (本次驾驶循环),0141,1,65,7,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.EVAP_ENABLED,燃油蒸发系统监测已启用 (本次驾驶循环),0141,1,65,8,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.AIR_ENABLED,二次空气系统检测已启用 (本次驾驶循环),0141,1,65,9,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.AC_ENABLED,空调 (A/C) 系统制冷剂监测已启用 (本次驾驶循环),0141,1,65,10,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.O2_ENABLED,氧传感器监测已启用 (本次驾驶循环),0141,1,65,11,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.O2HTR_ENABLED,氧传感器加热器监测已启用 (本次驾驶循环),0141,1,65,12,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.EGR_ENABLED,EGR系统监测已启用 (本次驾驶循环),0141,1,65,13,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.CAT_COMPL,催化器监测已完成 (本次驾驶循环),0141,1,65,14,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.HCAT_COMPL,加热催化器监测已完成 (本次驾驶循环),0141,1,65,15,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.EVAP_COMPL,燃油蒸发系统监测已完成 (本次驾驶循环),0141,1,65,16,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.AIR_COMPL,二次空气系统检测已完成 (本次驾驶循环),0141,1,65,17,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.AC_COMPL,空调 (A/C) 系统制冷剂监测已完成 (本次驾驶循环),0141,1,65,18,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.O2_COMPL,氧传感器监测已完成 (本次驾驶循环),0141,1,65,19,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.O2HTR_COMPL,氧传感器加热器监测已完成 (本次驾驶循环),0141,1,65,20,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.EGR_COMPL,EGR系统监测已完成 (本次驾驶循环),0141,1,65,21,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.ECM_VOLTS,控制模块电压,0142,1,66,0,General,Generic,SAE,2,V,V,0,65.535,0,65.535,1,0,0,0
-SAE.LOAD_ABS,绝对负荷,0143,1,67,0,General,Generic,SAE,1,%,%,0,25700,0,25700,1,0,0,0
-SAE.LAMBDA,指令的当量率,0144,1,68,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
-SAE.TPS_RELATIVE,节气门相对位置,0145,1,69,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
-SAE.AAT,环境空气温度,0146,1,70,0,Temperature,Generic,SAE,1,F,C,-40,419,-40,215,1,0,0,0
-SAE.TPS_B,节气门绝对位置 B,0147,1,71,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
-SAE.TPS_C,节气门绝对位置 C,0148,1,72,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
-SAE.APP_D,油门踏板位置 D,0149,1,73,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
-SAE.APP_E,油门踏板位置 E,014A,1,74,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
-SAE.APP_F,油门踏板位置 F,014B,1,75,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
-SAE.CTA,指令的节气门执行器,014C,1,76,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
-SAE.MIL_TIME,MIL亮灯后发动机运行时间,014D,1,77,0,General,Generic,SAE,3,min,min,0,65535,0,65535,1,0,0,0
-SAE.CLEAR_TIME,清除DTC码后发动机运行时间,014E,1,78,0,General,Generic,SAE,3,min,min,0,65535,0,65535,1,0,0,0
-SAE.FUEL_TYPE,燃油类型,0151,1,81,0,Fuel,Generic,SAE,3,,,,,,,0,0,1,0
-SAE.ETHANOL_PCT,酒精燃油百分比,0152,1,82,0,Fuel,Generic,SAE,3,%,%,0,100,0,100,1,0,0,0
+SAE.FUEL1_STATUS,$03: 燃油系统 1 状态,0103,1,3,0,Fuel,Generic,SAE,3,,,,,,,0,0,1,0
+SAE.FUEL2_STATUS,$03: 燃油系统 2 状态,0103,1,3,1,Fuel,Generic,SAE,3,,,,,,,0,0,1,0
+SAE.LOAD_CALC,$04: 计算引擎负荷,0104,1,4,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
+SAE.ECT,$05: 发动机冷却液温度,0105,1,5,0,Temperature,Generic,SAE,2,F,C,-40,419,-40,215,1,0,0,0
+SAE.STFT1,$06: 短时燃油修正 - 组 1,0106,1,6,0,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.STFT2,$08: 短时燃油修正 - 组 2,0108,1,8,0,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.STFT3,$06: 短时燃油修正 - 组 3,0106,1,6,1,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.STFT4,$08: 短时燃油修正 - 组 4,0108,1,8,1,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.LTFT1,$07: 长时燃油修正 - 组 1,0107,1,7,0,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.LTFT2,$09: 长时燃油修正 - 组 2,0109,1,9,0,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.LTFT3,$07: 长时燃油修正 - 组 3,0107,1,7,1,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.LTFT4,$09: 长时燃油修正 - 组 4,0109,1,9,1,Fuel,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.FUEL_PRES,$0A: 燃油导轨压力,010A,1,10,0,Fuel,Generic,SAE,1,psi,kPa,0,111,0,765,1,0,0,0
+SAE.MAP,$0B: 进气歧管绝对压力,010B,1,11,0,Fuel,Generic,SAE,1,psi,kPa,0,37,0,255,1,0,0,0
+SAE.RPM,$0C: 发动机转速,010C,1,12,0,Speed,Generic,SAE,1,rpm,rpm,0,16384,0,16384,1,0,0,0
+SAE.VSS,$0D: 车辆速度,010D,1,13,0,Speed,Generic,SAE,1,mph,km/h,0,159,0,255,1,0,0,0
+SAE.SPARKADV,$0E: 1号气缸点火提前角,010E,1,14,0,Spark,Generic,SAE,1,,,-64,64.5,-64,63.5,1,0,0,0
+SAE.IAT,$0F: 进气温度,010F,1,15,0,Temperature,Generic,SAE,1,F,C,-40,419,-40,215,1,0,0,0
+SAE.MAF,$10: 质量空气流量率,0110,1,16,0,Airflow,Generic,SAE,1,lb/min,g/s,0,86.69,0,655.35,1,0,0,0
+SAE.TP,$11: 节气门位置,0111,1,17,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
+SAE.SECAIR_STATUS,$12: 指令的二次空气状态,0112,1,18,0,O2,Generic,SAE,1,,,,,,,0,0,1,0
+SAE.O2B1S1A_PRESENT,$13: 氧传感器存在 (组 1 传感器 1),0113,1,19,0,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B1S2A_PRESENT,$13: 氧传感器存在 (组 1 传感器 2),0113,1,19,1,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B1S3A_PRESENT,$13: 氧传感器存在 (组 1 传感器 3),0113,1,19,2,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B1S4A_PRESENT,$13: 氧传感器存在 (组 1 传感器 4),0113,1,19,3,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B2S1A_PRESENT,$13: 氧传感器存在 (组 2 传感器 1),0113,1,19,4,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B2S2A_PRESENT,$13: 氧传感器存在 (组 2 传感器 2),0113,1,19,5,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B2S3A_PRESENT,$13: 氧传感器存在 (组 2 传感器 3),0113,1,19,6,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B2S4A_PRESENT,$13: 氧传感器存在 (组 2 传感器 4),0113,1,19,7,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B1S1_VOLTS,$14: 氧传感器电压 (组 1 传感器 1),0114,1,20,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
+SAE.O2B1S1_STFT,$14: 氧传感器短时燃油修正 (组 1 传感器 1),0114,1,20,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
+SAE.O2B1S2_VOLTS,$15: 氧传感器电压 (组 1 传感器 2),0115,1,21,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
+SAE.O2B1S2_STFT,$15: 氧传感器短时燃油修正 (组 1 传感器 2),0115,1,21,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
+SAE.O2B1S3_VOLTS,$16: 氧传感器电压 (组 1 传感器 3),0116,1,22,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
+SAE.O2B1S3_STFT,$16: 氧传感器短时燃油修正 (组 1 传感器 3),0116,1,22,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
+SAE.O2B1S4_VOLTS,$17: 氧传感器电压 (组 1 传感器 4),0117,1,23,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
+SAE.O2B1S4_STFT,$17: 氧传感器短时燃油修正 (组 1 传感器 4),0117,1,23,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
+SAE.O2B2S1_VOLTS,$18: 氧传感器电压 (组 2 传感器 1),0118,1,24,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
+SAE.O2B2S1_STFT,$18: 氧传感器短时燃油修正 (组 2 传感器 1),0118,1,24,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
+SAE.O2B2S2_VOLTS,$19: 氧传感器电压 (组 2 传感器 2),0119,1,25,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
+SAE.O2B2S2_STFT,$19: 氧传感器短时燃油修正 (组 2 传感器 2),0119,1,25,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
+SAE.O2B2S3_VOLTS,$1A: 氧传感器电压 (组 2 传感器 3),011A,1,26,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
+SAE.O2B2S3_STFT,$1A: 氧传感器短时燃油修正 (组 2 传感器 3),011A,1,26,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
+SAE.O2B2S4_VOLTS,$1B: 氧传感器电压 (组 2 传感器 4),011B,1,27,0,O2,Generic,SAE,1,V,V,0,1.275,0,1.275,1,0,0,0
+SAE.O2B2S4_STFT,$1B: 氧传感器短时燃油修正 (组 2 传感器 4),011B,1,27,1,O2,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
+SAE.OBD_TYPE,$1C: OBD标准车辆符合类型,011C,1,28,0,Emissions,Generic,SAE,3,,,,,,,0,0,1,0
+SAE.O2B1S1B_PRESENT,$1D: 氧传感器存在 (组 1 传感器 1),011D,1,29,0,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B1S2B_PRESENT,$1D: 氧传感器存在 (组 1 传感器 2),011D,1,29,1,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B2S1B_PRESENT,$1D: 氧传感器存在 (组 2 传感器 1),011D,1,29,2,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B2S2B_PRESENT,$1D: 氧传感器存在 (组 2 传感器 2),011D,1,29,3,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B3S1B_PRESENT,$1D: 氧传感器存在 (组 3 传感器 1),011D,1,29,4,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B3S2B_PRESENT,$1D: 氧传感器存在 (组 3 传感器 2),011D,1,29,5,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B4S1B_PRESENT,$1D: 氧传感器存在 (组 4 传感器 1),011D,1,29,6,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2B4S2B_PRESENT,$1D: 氧传感器存在 (组 4 传感器 2),011D,1,29,7,O2,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.PTO_STATUS,$1E: 动力输出 (PTO) 状态,011E,1,30,0,General,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.RUN_TIME,$1F: 发动机点火后运行时间,011F,1,31,0,General,Generic,SAE,3,sec,sec,0,65535,0,65535,1,0,0,0
+SAE.MIL_DISTANCE,$21: MIL亮灯后行驶距离,0121,1,33,0,DTC,Generic,SAE,3,miles,km,0,65535,0,65535,1,0,0,0
+SAE.FRP_VAC,$22: 燃油导轨压力 (相对于歧管真空压力),0122,1,34,0,Fuel,Generic,SAE,1,psi,kPa,0,751,0,5177.265,1,0,0,0
+SAE.FRP_DIESEL,$23: 燃油导轨压力 (柴油),0123,1,35,0,Fuel,Generic,SAE,1,psi,kPa,0,95050.5,0,655350,1,0,0,0
+SAE.O2B1S1A_LAMBDA,$24: 宽量程氧传感器当量率 (组 1 传感器 1),0124,1,36,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B1S2A_LAMBDA,$25: 宽量程氧传感器当量率 (组 1 传感器 2),0125,1,37,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B1S3A_LAMBDA,$26: 宽量程氧传感器当量率 (组 1 传感器 3),0126,1,38,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B1S4A_LAMBDA,$27: 宽量程氧传感器当量率 (组 1 传感器 4),0127,1,39,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B2S1A_LAMBDA,$28: 宽量程氧传感器当量率 (组 2 传感器 1),0128,1,40,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B2S2A_LAMBDA,$29: 宽量程氧传感器当量率 (组 2 传感器 2),0129,1,41,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B2S3A_LAMBDA,$2A: 宽量程氧传感器当量率 (组 2 传感器 3),012A,1,42,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B2S4A_LAMBDA,$2B: 宽量程氧传感器当量率 (组 2 传感器 4),012B,1,43,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B1S1_VOLTS,$24: 宽量程氧传感器电压 (组 1 传感器 1),0124,1,36,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
+SAE.O2B1S2_VOLTS,$25: 宽量程氧传感器电压 (组 1 传感器 2),0125,1,37,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
+SAE.O2B1S3_VOLTS,$26: 宽量程氧传感器电压 (组 1 传感器 3),0126,1,38,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
+SAE.O2B1S4_VOLTS,$27: 宽量程氧传感器电压 (组 1 传感器 4),0127,1,39,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
+SAE.O2B2S1_VOLTS,$28: 宽量程氧传感器电压 (组 2 传感器 1),0128,1,40,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
+SAE.O2B2S2_VOLTS,$29: 宽量程氧传感器电压 (组 2 传感器 2),0129,1,41,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
+SAE.O2B2S3_VOLTS,$2A: 宽量程氧传感器电压 (组 2 传感器 3),012A,1,42,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
+SAE.O2B2S4_VOLTS,$2B: 宽量程氧传感器电压 (组 2 传感器 4),012B,1,43,1,O2,Generic,SAE,1,V,V,0,8,0,2,1,0,0,0
+SAE.EGR_CMDED,$2C: 指令的EGR,012C,1,44,0,Emissions,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
+SAE.EGR_ERROR,$2D: EGR错误,012D,1,45,0,Emissions,Generic,SAE,1,%,%,-100,99.2,-100,99.2,1,0,0,0
+SAE.EVAP_PURGE,$2E: 指令的燃油蒸发排出,012E,1,46,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
+SAE.FUEL_LEVEL,$2F: 燃油量输入,012F,1,47,0,Fuel,Generic,SAE,2,%,%,0,100,0,100,1,0,0,0
+SAE.WARM_UPS,$30: 清除DTC码后热车次数,0130,1,48,0,DTC,Generic,SAE,3,,,,,,,1,0,0,0
+SAE.CLEAR_DIST,$31: 清除DTC码后行驶距离,0131,1,49,0,DTC,Generic,SAE,3,miles,km,0,40722,0,65535,1,0,0,0
+SAE.EVAP_PRESSURE,$32: 蒸发排放系统 (EVAP) 燃油蒸汽压力,0132,1,50,0,General,Generic,SAE,1,psi,Pa,-1.2,1.2,-8192,8192,1,0,0,0
+SAE.BARO,$33: 大气压力,0133,1,51,0,General,Generic,SAE,2,psi,kPa,0,37,0,255,1,0,0,0
+SAE.O2B1S1B_LAMBDA,$34: 宽量程氧传感器当量率 (组 1 传感器 1),0134,1,52,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B1S2B_LAMBDA,$35: 宽量程氧传感器当量率 (组 1 传感器 2),0135,1,53,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B1S3B_LAMBDA,$36: 宽量程氧传感器当量率 (组 1 传感器 3),0136,1,54,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B1S4B_LAMBDA,$37: 宽量程氧传感器当量率 (组 1 传感器 4),0137,1,55,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B2S1B_LAMBDA,$38: 宽量程氧传感器当量率 (组 2 传感器 1),0138,1,56,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B2S2B_LAMBDA,$39: 宽量程氧传感器当量率 (组 2 传感器 2),0139,1,57,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B2S3B_LAMBDA,$3A: 宽量程氧传感器当量率 (组 2 传感器 3),013A,1,58,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B2S4B_LAMBDA,$3B: 宽量程氧传感器当量率 (组 2 传感器 4),013B,1,59,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.O2B1S1_CURRENT,$34: 宽量程氧传感器电流 (组 1 传感器 1),0134,1,52,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
+SAE.O2B1S2_CURRENT,$35: 宽量程氧传感器电流 (组 1 传感器 2),0135,1,53,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
+SAE.O2B1S3_CURRENT,$36: 宽量程氧传感器电流 (组 1 传感器 3),0136,1,54,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
+SAE.O2B1S4_CURRENT,$37: 宽量程氧传感器电流 (组 1 传感器 4),0137,1,55,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
+SAE.O2B2S1_CURRENT,$38: 宽量程氧传感器电流 (组 2 传感器 1),0138,1,56,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
+SAE.O2B2S2_CURRENT,$39: 宽量程氧传感器电流 (组 2 传感器 2),0139,1,57,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
+SAE.O2B2S3_CURRENT,$3A: 宽量程氧传感器电流 (组 2 传感器 3),013A,1,58,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
+SAE.O2B2S4_CURRENT,$3B: 宽量程氧传感器电流 (组 2 传感器 4),013B,1,59,1,O2,Generic,SAE,1,mA,mA,-128,128,-128,128,1,0,0,0
+SAE.CATB1S1_TEMP,$3C: 催化器温度 (组 1 传感器 1),013C,1,60,0,Temperature,Generic,SAE,2,F,C,-40,11756.3,-40,6513.5,1,0,0,0
+SAE.CATB1S2_TEMP,$3D: 催化器温度 (组 1 传感器 2),013D,1,61,0,Temperature,Generic,SAE,2,F,C,-40,11756.3,-40,6513.5,1,0,0,0
+SAE.CATB2S1_TEMP,$3E: 催化器温度 (组 2 传感器 1),013E,1,62,0,Temperature,Generic,SAE,2,F,C,-40,11756.3,-40,6513.5,1,0,0,0
+SAE.CATB2S2_TEMP,$3F: 催化器温度 (组 2 传感器 2),013F,1,63,0,Temperature,Generic,SAE,2,F,C,-40,11756.3,-40,6513.5,1,0,0,0
+SAE.MISFIRE_ENABLED,$41: 失火监测已启用 (本次驾驶循环),0141,1,65,0,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.FUEL_ENABLED,$41: 燃油系统监测已启用 (本次驾驶循环),0141,1,65,1,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.CCM_ENABLED,$41: 综合组件监测已启用 (本次驾驶循环),0141,1,65,2,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.MISFIRE_COMPL,$41: 失火监测已完成 (本次驾驶循环),0141,1,65,3,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.FUEL_COMPL,$41: 燃油系统监测已完成 (本次驾驶循环),0141,1,65,4,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.CCM_COMPL,$41: 综合组件监测已完成 (本次驾驶循环),0141,1,65,5,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.CAT_ENABLED,$41: 催化器监测已启用 (本次驾驶循环),0141,1,65,6,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.HCAT_ENABLED,$41: 加热催化器监测已启用 (本次驾驶循环),0141,1,65,7,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.EVAP_ENABLED,$41: 燃油蒸发系统监测已启用 (本次驾驶循环),0141,1,65,8,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.AIR_ENABLED,$41: 二次空气系统检测已启用 (本次驾驶循环),0141,1,65,9,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.AC_ENABLED,$41: 空调 (A/C) 系统制冷剂监测已启用 (本次驾驶循环),0141,1,65,10,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.O2_ENABLED,$41: 氧传感器监测已启用 (本次驾驶循环),0141,1,65,11,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.O2HTR_ENABLED,$41: 氧传感器加热器监测已启用 (本次驾驶循环),0141,1,65,12,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.EGR_ENABLED,$41: EGR系统监测已启用 (本次驾驶循环),0141,1,65,13,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.CAT_COMPL,$41: 催化器监测已完成 (本次驾驶循环),0141,1,65,14,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.HCAT_COMPL,$41: 加热催化器监测已完成 (本次驾驶循环),0141,1,65,15,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.EVAP_COMPL,$41: 燃油蒸发系统监测已完成 (本次驾驶循环),0141,1,65,16,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.AIR_COMPL,$41: 二次空气系统检测已完成 (本次驾驶循环),0141,1,65,17,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.AC_COMPL,$41: 空调 (A/C) 系统制冷剂监测已完成 (本次驾驶循环),0141,1,65,18,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.O2_COMPL,$41: 氧传感器监测已完成 (本次驾驶循环),0141,1,65,19,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.O2HTR_COMPL,$41: 氧传感器加热器监测已完成 (本次驾驶循环),0141,1,65,20,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.EGR_COMPL,$41: EGR系统监测已完成 (本次驾驶循环),0141,1,65,21,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.ECM_VOLTS,$42: 控制模块电压,0142,1,66,0,General,Generic,SAE,2,V,V,0,65.535,0,65.535,1,0,0,0
+SAE.LOAD_ABS,$43: 绝对负荷,0143,1,67,0,General,Generic,SAE,1,%,%,0,25700,0,25700,1,0,0,0
+SAE.LAMBDA,$44: 指令的当量率,0144,1,68,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
+SAE.TPS_RELATIVE,$45: 节气门相对位置,0145,1,69,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
+SAE.AAT,$46: 环境空气温度,0146,1,70,0,Temperature,Generic,SAE,1,F,C,-40,419,-40,215,1,0,0,0
+SAE.TPS_B,$47: 节气门绝对位置 B,0147,1,71,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
+SAE.TPS_C,$48: 节气门绝对位置 C,0148,1,72,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
+SAE.APP_D,$49: 油门踏板位置 D,0149,1,73,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
+SAE.APP_E,$4A: 油门踏板位置 E,014A,1,74,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
+SAE.APP_F,$4B: 油门踏板位置 F,014B,1,75,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
+SAE.CTA,$4C: 指令的节气门执行器,014C,1,76,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
+SAE.MIL_TIME,$4D: MIL亮灯后发动机运行时间,014D,1,77,0,General,Generic,SAE,3,min,min,0,65535,0,65535,1,0,0,0
+SAE.CLEAR_TIME,$4E: 清除DTC码后发动机运行时间,014E,1,78,0,General,Generic,SAE,3,min,min,0,65535,0,65535,1,0,0,0
+SAE.FUEL_TYPE,$51: 燃油类型,0151,1,81,0,Fuel,Generic,SAE,3,,,,,,,0,0,1,0
+SAE.ETHANOL_PCT,$52: 酒精燃油百分比,0152,1,82,0,Fuel,Generic,SAE,3,%,%,0,100,0,100,1,0,0,0
+SAE.EVAP_VPA,$53: 蒸发排放系统 (EVAP) 燃油蒸汽绝对压力,0153,1,83,0,General,Generic,SAE,1,psi,kPa,0,47525.24,0,327675,1,0,0,0
+SAE.EVAP_VP,$54: 蒸发排放系统 (EVAP) 燃油蒸汽压力,0154,1,84,0,General,Generic,SAE,1,psi,Pa,-4.75,4.75,-32767,32768,1,0,0,0
+SAE.STSO2FT1,$55: 短时第二氧传感器燃油修正 - 组 1,0155,1,85,0,O2,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.STSO2FT3,$55: 短时第二氧传感器燃油修正 - 组 3,0155,1,85,1,O2,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.LGSO2FT1,$56: 长时第二氧传感器燃油修正 - 组 1,0156,1,86,0,O2,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.LGSO2FT3,$56: 长时第二氧传感器燃油修正 - 组 3,0156,1,86,1,O2,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.STSO2FT2,$57: 短时第二氧传感器燃油修正 - 组 2,0157,1,87,0,O2,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.STSO2FT4,$57: 短时第二氧传感器燃油修正 - 组 4,0157,1,87,1,O2,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.LGSO2FT2,$58: 长时第二氧传感器燃油修正 - 组 2,0158,1,88,0,O2,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.LGSO2FT4,$58: 长时第二氧传感器燃油修正 - 组 4,0158,1,88,1,O2,Generic,SAE,1,%,%,-100,99.22,-100,99.22,1,0,0,0
+SAE.FRP_ABS,$59: 燃油导轨绝对压力,0159,1,89,0,Fuel,Generic,SAE,1,psi,kPa,0,95050.5,0,655350,1,0,0,0
+SAE.APP_R,$5A: 油门踏板相对位置,015A,1,90,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
 ELM.BATTERY_VOLTAGE,电池电压,ATRV,0,0,0,General,Generic,ELM,3,V,V,0,100,0,100,1,0,0,0

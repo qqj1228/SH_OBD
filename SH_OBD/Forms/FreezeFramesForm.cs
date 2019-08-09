@@ -29,8 +29,8 @@ namespace SH_OBD {
             } else {
                 m_obdInterface.GetLogger().TraceError("Freeze Frame Form, Attempted to refresh without vehicle connection.");
                 MessageBox.Show(
-                    "A vehicle connection must first be established.",
-                    "Connection Required",
+                    "必须先与车辆进行连接，才能进行后续操作",
+                    "连接请求",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Exclamation
                 );
@@ -357,6 +357,5 @@ namespace SH_OBD {
             btnRefresh.Enabled = true;
             btnCancel.Enabled = false;
         }
-
     }
 }

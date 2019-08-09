@@ -27,8 +27,8 @@
             this.btnRead = new System.Windows.Forms.Button();
             this.comboOxygenSensor = new System.Windows.Forms.ComboBox();
             this.lblOxygenSensor = new System.Windows.Forms.Label();
-            this.o2WaveformControl1 = new O2Waveform.O2WaveformControl();
             this.o2TestResultsControl1 = new SH_OBD.O2TestResultsControl();
+            this.o2WaveformControl1 = new O2Waveform.O2WaveformControl();
             this.SuspendLayout();
             // 
             // progressBar
@@ -69,6 +69,15 @@
             this.lblOxygenSensor.Text = "氧气传感器(&O):";
             this.lblOxygenSensor.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // o2TestResultsControl1
+            // 
+            this.o2TestResultsControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.o2TestResultsControl1.Location = new System.Drawing.Point(14, 35);
+            this.o2TestResultsControl1.Name = "o2TestResultsControl1";
+            this.o2TestResultsControl1.Size = new System.Drawing.Size(774, 232);
+            this.o2TestResultsControl1.TabIndex = 11;
+            // 
             // o2WaveformControl1
             // 
             this.o2WaveformControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -88,15 +97,6 @@
             this.o2WaveformControl1.TitleFont = new System.Drawing.Font("Arial", 10F);
             this.o2WaveformControl1.WaveColor = System.Drawing.Color.White;
             // 
-            // o2TestResultsControl1
-            // 
-            this.o2TestResultsControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.o2TestResultsControl1.Location = new System.Drawing.Point(14, 35);
-            this.o2TestResultsControl1.Name = "o2TestResultsControl1";
-            this.o2TestResultsControl1.Size = new System.Drawing.Size(774, 232);
-            this.o2TestResultsControl1.TabIndex = 11;
-            // 
             // OxygenSensorsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -110,6 +110,7 @@
             this.Controls.Add(this.o2WaveformControl1);
             this.Name = "OxygenSensorsForm";
             this.Text = "OxygenSensorsForm";
+            this.VisibleChanged += new System.EventHandler(this.OxygenSensorsForm_VisibleChanged);
             this.ResumeLayout(false);
 
         }

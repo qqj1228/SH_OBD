@@ -379,6 +379,7 @@
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.statusStrip1);
+            this.IsMdiContainer = true;
             this.MinimumSize = new System.Drawing.Size(920, 640);
             this.Name = "MainForm";
             this.Text = "SH_OBD";

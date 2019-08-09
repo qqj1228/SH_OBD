@@ -458,8 +458,10 @@ namespace SH_OBD {
             }
         }
 
-        private void SensorChartForm_Activated(object sender, EventArgs e) {
-            CheckConnection();
+        private void SensorChartForm_VisibleChanged(object sender, EventArgs e) {
+            if (this.Visible) {
+                CheckConnection();
+            }
         }
     }
 }

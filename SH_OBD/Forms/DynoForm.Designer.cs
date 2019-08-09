@@ -322,7 +322,7 @@
             this.Controls.Add(this.groupControl);
             this.Name = "DynoForm";
             this.Text = "DynoForm";
-            this.Activated += new System.EventHandler(this.DynoForm_Activated);
+            this.VisibleChanged += new System.EventHandler(this.DynoForm_VisibleChanged);
             ((System.ComponentModel.ISupportInitialize)(this.numToRPM)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numFromRPM)).EndInit();
             this.groupSetup.ResumeLayout(false);

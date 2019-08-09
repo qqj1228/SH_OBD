@@ -89,6 +89,7 @@ namespace SH_OBD {
         }
 
         public bool InitOBD() {
+            // 获取PID 0100支持情况
             OBDParameter param = new OBDParameter(1, 0, 0) {
                 ValueTypes = 32
             };
@@ -97,8 +98,9 @@ namespace SH_OBD {
                 return false;
             }
 
+            m_listSupportedParameters.Clear();
             foreach (OBDParameter param2 in m_listAllParameters) {
-                if (param2.Parameter > 0 && param2.Parameter <= 32 && value.GetBitFlag(param2.Parameter - 1)) {
+                if (param2.Parameter > 2 && param2.Parameter <= 0x20 && value.GetBitFlag(param2.Parameter - 1)) {
                     m_listSupportedParameters.Add(param2);
                 }
             }
@@ -106,16 +108,33 @@ namespace SH_OBD {
                 return true;
             }
 
-            param.Parameter = 32;
+            // 获取PID 0120支持情况
+            param.Parameter = 0x20;
             value = GetValue(param, true);
             if (value.ErrorDetected) {
                 return false;
             }
             foreach (OBDParameter param2 in m_listAllParameters) {
-                if (param2.Parameter > 32 && param2.Parameter <= 64 && value.GetBitFlag(param2.Parameter - 33)) {
+                if (param2.Parameter > 0x20 && param2.Parameter <= 0x40 && value.GetBitFlag(param2.Parameter - param.Parameter -1)) {
                     m_listSupportedParameters.Add(param2);
                 }
             }
+            if (!value.GetBitFlag(31)) {
+                return true;
+            }
+
+            // 获取PID 0140支持情况
+            param.Parameter = 0x40;
+            value = GetValue(param, true);
+            if (value.ErrorDetected) {
+                return false;
+            }
+            foreach (OBDParameter param2 in m_listAllParameters) {
+                if (param2.Parameter > 0x40 && param2.Parameter <= 0x60 && value.GetBitFlag(param2.Parameter - param.Parameter - 1)) {
+                    m_listSupportedParameters.Add(param2);
+                }
+            }
+
             return true;
         }
 
@@ -148,17 +167,13 @@ namespace SH_OBD {
             }
 
             if (param.Service == 0) {
-                return SpecialValue(param, bEnglishUnits);
+                return SpecialValue(param);
             }
 
             OBDResponseList responses = m_obdDevice.Query(param);
             string strItem1 = "Responses: ";
-            if (responses.ResponseCount > 0) {
-                int count = 0;
-                do {
-                    strItem1 += string.Format("[{0}] ", responses.GetOBDResponse(count).Data);
-                    ++count;
-                } while (count < responses.ResponseCount);
+            for (int i = 0; i < responses.ResponseCount; i++) {
+                strItem1 += string.Format("[{0}] ", responses.GetOBDResponse(i).Data);
             }
             m_log.TraceInfo(strItem1);
             OBDParameterValue obdParameterValue = OBDInterpreter.GetValue(param, responses, bEnglishUnits);
@@ -196,7 +211,7 @@ namespace SH_OBD {
             }
         }
 
-        public OBDParameterValue SpecialValue(OBDParameter param, bool bEnglishUnits) {
+        public OBDParameterValue SpecialValue(OBDParameter param) {
             if (param.Parameter != 0) {
                 return null;
             }

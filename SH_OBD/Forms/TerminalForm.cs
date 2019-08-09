@@ -17,7 +17,6 @@ namespace SH_OBD {
             InitializeComponent();
 
             m_strID = m_obdInterface.GetDeviceIDString();
-            Update();
             richText.SelectionFont = new Font("Microsoft Sans Serif", 9f, FontStyle.Regular);
             richText.SelectionColor = Color.Black;
             addPrompt();
@@ -28,14 +27,6 @@ namespace SH_OBD {
                 richText.AppendText("ELM > ");
             } else {
                 richText.AppendText(m_strID + " > ");
-            }
-        }
-
-        public new void Update() {
-            if (string.IsNullOrEmpty(m_strID)) {
-                lblPrompt.Text = "ELM >";
-            } else {
-                lblPrompt.Text = m_strID + " > ";
             }
         }
 
@@ -64,5 +55,14 @@ namespace SH_OBD {
             addPrompt();
         }
 
+        private void TerminalForm_VisibleChanged(object sender, EventArgs e) {
+            if (this.Visible) {
+                if (string.IsNullOrEmpty(m_strID)) {
+                    lblPrompt.Text = "ELM >";
+                } else {
+                    lblPrompt.Text = m_strID + " > ";
+                }
+            }
+        }
     }
 }

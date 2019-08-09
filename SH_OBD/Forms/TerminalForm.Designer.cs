@@ -82,6 +82,7 @@
             this.Controls.Add(this.richText);
             this.Name = "TerminalForm";
             this.Text = "TerminalForm";
+            this.VisibleChanged += new System.EventHandler(this.TerminalForm_VisibleChanged);
             this.ResumeLayout(false);
             this.PerformLayout();
 

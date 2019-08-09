@@ -376,8 +376,8 @@
             this.Controls.Add(this.panel);
             this.Name = "ReportGeneratorForm";
             this.Text = "ReportGeneratorForm";
-            this.Activated += new System.EventHandler(this.ReportGeneratorForm_Activated);
             this.Load += new System.EventHandler(this.ReportGeneratorForm_Load);
+            this.VisibleChanged += new System.EventHandler(this.ReportGeneratorForm_VisibleChanged);
             this.groupVehicle.ResumeLayout(false);
             this.groupVehicle.PerformLayout();
             this.groupStatus.ResumeLayout(false);

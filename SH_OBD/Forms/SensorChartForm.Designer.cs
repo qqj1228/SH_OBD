@@ -545,8 +545,8 @@
             this.Controls.Add(this.chart1);
             this.Name = "SensorChartForm";
             this.Text = "ScopeForm";
-            this.Activated += new System.EventHandler(this.SensorChartForm_Activated);
             this.Load += new System.EventHandler(this.SensorChartForm_Load);
+            this.VisibleChanged += new System.EventHandler(this.SensorChartForm_VisibleChanged);
             this.Resize += new System.EventHandler(this.SensorChartForm_Resize);
             this.groupControl.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numHistory)).EndInit();

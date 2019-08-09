@@ -113,14 +113,11 @@ namespace SH_OBD {
 
         private void listSensors_ItemCheck(object sender, ItemCheckEventArgs e) {
             SensorGridForm.m_ListSensors.Clear();
-            int index1 = 0;
-            if (0 < listSensors.CheckedIndices.Count) {
-                do {
-                    int index2 = listSensors.CheckedIndices[index1];
-                    if (index2 != e.Index)
-                        m_ListSensors.Add((OBDParameter)listSensors.Items[index2]);
-                    ++index1;
-                } while (index1 < listSensors.CheckedIndices.Count);
+            for (int i = 0; i < listSensors.CheckedIndices.Count; i++) {
+                int index = listSensors.CheckedIndices[i];
+                if (index != e.Index) {
+                    m_ListSensors.Add((OBDParameter)listSensors.Items[index]);
+                }
             }
             if (e.CurrentValue == CheckState.Unchecked) {
                 m_ListSensors.Add((OBDParameter)listSensors.Items[e.Index]);
@@ -324,16 +321,18 @@ namespace SH_OBD {
             } while (num < SensorGridForm.m_ListSensors.Count);
         }
 
-        private void SensorMonitorForm_Activated(object sender, EventArgs e) {
-            CheckConnection();
-        }
-
         public void PauseLogging() {
             IsLogging = false;
             btnStart.Text = Properties.Resources.btnStart_Name_Resume;
             scrollTime.Enabled = true;
             btnReset.Enabled = true;
             btnSave.Enabled = true;
+        }
+
+        private void SensorGridForm_VisibleChanged(object sender, EventArgs e) {
+            if (this.Visible) {
+                CheckConnection();
+            }
         }
     }
 }

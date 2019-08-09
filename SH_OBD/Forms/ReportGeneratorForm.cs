@@ -774,11 +774,13 @@ namespace SH_OBD {
             txtByTelephone.Text = m_obdInterface.UserPreferences.Telephone;
         }
 
-        private void ReportGeneratorForm_Activated(object sender, EventArgs e) {
-            txtByName.Text = m_obdInterface.UserPreferences.Name;
-            txtByAddress1.Text = m_obdInterface.UserPreferences.Address1;
-            txtByAddress2.Text = m_obdInterface.UserPreferences.Address2;
-            txtByTelephone.Text = m_obdInterface.UserPreferences.Telephone;
+        private void ReportGeneratorForm_VisibleChanged(object sender, EventArgs e) {
+            if (this.Visible) {
+                txtByName.Text = m_obdInterface.UserPreferences.Name;
+                txtByAddress1.Text = m_obdInterface.UserPreferences.Address1;
+                txtByAddress2.Text = m_obdInterface.UserPreferences.Address2;
+                txtByTelephone.Text = m_obdInterface.UserPreferences.Telephone;
+            }
         }
 
     }

@@ -192,8 +192,8 @@
             this.Controls.Add(this.panelDisplay);
             this.Name = "SensorGridForm";
             this.Text = "SensorMonitorForm";
-            this.Activated += new System.EventHandler(this.SensorMonitorForm_Activated);
             this.Load += new System.EventHandler(this.SensorMonitorForm_Load);
+            this.VisibleChanged += new System.EventHandler(this.SensorGridForm_VisibleChanged);
             this.Resize += new System.EventHandler(this.SensorMonitorForm_Resize);
             this.groupDisplay.ResumeLayout(false);
             this.groupSelections.ResumeLayout(false);
