@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace SH_OBD {
@@ -9,7 +9,7 @@ namespace SH_OBD {
     /// </summary>
     public class OBDParameterValue {
         public bool ErrorDetected { get; set; }
-        public StringCollection StringCollectionValue { get; set; }
+        public List<string> ListStringValue { get; set; }
         public bool BoolValue { get; set; }
         public double DoubleValue { get; set; }
         public string StringValue { get; set; }

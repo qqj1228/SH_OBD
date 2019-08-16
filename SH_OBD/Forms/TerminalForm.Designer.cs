@@ -33,9 +33,10 @@
             // 
             this.btnSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSend.AutoSize = true;
-            this.btnSend.Location = new System.Drawing.Point(500, 8);
+            this.btnSend.Location = new System.Drawing.Point(667, 10);
+            this.btnSend.Margin = new System.Windows.Forms.Padding(4);
             this.btnSend.Name = "btnSend";
-            this.btnSend.Size = new System.Drawing.Size(72, 26);
+            this.btnSend.Size = new System.Drawing.Size(96, 32);
             this.btnSend.TabIndex = 7;
             this.btnSend.Text = "发送(&S)";
             this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
@@ -44,17 +45,19 @@
             // 
             this.txtCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCommand.Location = new System.Drawing.Point(71, 10);
+            this.txtCommand.Location = new System.Drawing.Point(95, 12);
+            this.txtCommand.Margin = new System.Windows.Forms.Padding(4);
             this.txtCommand.Name = "txtCommand";
-            this.txtCommand.Size = new System.Drawing.Size(423, 21);
+            this.txtCommand.Size = new System.Drawing.Size(563, 25);
             this.txtCommand.TabIndex = 6;
-            this.txtCommand.Text = "01 01";
+            this.txtCommand.Text = "09 02";
             // 
             // lblPrompt
             // 
-            this.lblPrompt.Location = new System.Drawing.Point(12, 10);
+            this.lblPrompt.Location = new System.Drawing.Point(16, 12);
+            this.lblPrompt.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblPrompt.Name = "lblPrompt";
-            this.lblPrompt.Size = new System.Drawing.Size(53, 22);
+            this.lblPrompt.Size = new System.Drawing.Size(71, 28);
             this.lblPrompt.TabIndex = 5;
             this.lblPrompt.Text = "Prompt";
             this.lblPrompt.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -64,22 +67,24 @@
             this.richText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.richText.Location = new System.Drawing.Point(12, 42);
+            this.richText.Location = new System.Drawing.Point(16, 52);
+            this.richText.Margin = new System.Windows.Forms.Padding(4);
             this.richText.Name = "richText";
             this.richText.ReadOnly = true;
-            this.richText.Size = new System.Drawing.Size(560, 396);
+            this.richText.Size = new System.Drawing.Size(745, 494);
             this.richText.TabIndex = 4;
             this.richText.Text = "";
             // 
             // TerminalForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 450);
+            this.ClientSize = new System.Drawing.Size(779, 562);
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.txtCommand);
             this.Controls.Add(this.lblPrompt);
             this.Controls.Add(this.richText);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "TerminalForm";
             this.Text = "TerminalForm";
             this.VisibleChanged += new System.EventHandler(this.TerminalForm_VisibleChanged);

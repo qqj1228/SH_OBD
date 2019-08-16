@@ -25,7 +25,7 @@
         private void InitializeComponent() {
             this.lblBattery = new System.Windows.Forms.Label();
             this.progressBar = new System.Windows.Forms.ProgressBar();
-            this.lblOxygen = new System.Windows.Forms.Label();
+            this.lblVehicleInfo = new System.Windows.Forms.Label();
             this.lblOBD = new System.Windows.Forms.Label();
             this.lblAir = new System.Windows.Forms.Label();
             this.lblPTO = new System.Windows.Forms.Label();
@@ -76,16 +76,16 @@
             this.progressBar.Size = new System.Drawing.Size(680, 24);
             this.progressBar.TabIndex = 21;
             // 
-            // lblOxygen
+            // lblVehicleInfo
             // 
-            this.lblOxygen.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.lblVehicleInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblOxygen.Location = new System.Drawing.Point(12, 20);
-            this.lblOxygen.Name = "lblOxygen";
-            this.lblOxygen.Size = new System.Drawing.Size(380, 175);
-            this.lblOxygen.TabIndex = 0;
-            this.lblOxygen.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblVehicleInfo.Location = new System.Drawing.Point(12, 20);
+            this.lblVehicleInfo.Name = "lblVehicleInfo";
+            this.lblVehicleInfo.Size = new System.Drawing.Size(380, 175);
+            this.lblVehicleInfo.TabIndex = 0;
+            this.lblVehicleInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblOBD
             // 
@@ -201,13 +201,13 @@
             // groupOxygen
             // 
             this.groupOxygen.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.groupOxygen.Controls.Add(this.lblOxygen);
+            this.groupOxygen.Controls.Add(this.lblVehicleInfo);
             this.groupOxygen.Location = new System.Drawing.Point(383, 338);
             this.groupOxygen.Name = "groupOxygen";
             this.groupOxygen.Size = new System.Drawing.Size(405, 205);
             this.groupOxygen.TabIndex = 19;
             this.groupOxygen.TabStop = false;
-            this.groupOxygen.Text = "氧气传感器位置";
+            this.groupOxygen.Text = "车辆信息";
             // 
             // groupOBD
             // 
@@ -316,7 +316,7 @@
 
         private System.Windows.Forms.Label lblBattery;
         private System.Windows.Forms.ProgressBar progressBar;
-        private System.Windows.Forms.Label lblOxygen;
+        private System.Windows.Forms.Label lblVehicleInfo;
         private System.Windows.Forms.Label lblOBD;
         private System.Windows.Forms.Label lblAir;
         private System.Windows.Forms.Label lblPTO;

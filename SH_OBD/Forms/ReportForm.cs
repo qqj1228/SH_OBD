@@ -13,10 +13,10 @@ namespace SH_OBD {
     public partial class ReportForm : Form {
         public ReportForm() {
             InitializeComponent();
-            ReportPage1.DTCList = new System.Collections.Specialized.StringCollection();
-            ReportPage1.DTCDefinitionList = new System.Collections.Specialized.StringCollection();
-            ReportPage1.PendingList = new System.Collections.Specialized.StringCollection();
-            ReportPage1.PendingDefinitionList = new System.Collections.Specialized.StringCollection();
+            ReportPage1.DTCList = new List<string>();
+            ReportPage1.DTCDefinitionList = new List<string>();
+            ReportPage1.PendingList = new List<string>();
+            ReportPage1.PendingDefinitionList = new List<string>();
         }
 
         private void btnPrint_Click(object sender, EventArgs e) {
@@ -36,7 +36,7 @@ namespace SH_OBD {
         }
 
         private void PrintPreview() {
-            int num = (int)printPreviewDialog1.ShowDialog();
+            printPreviewDialog1.ShowDialog();
         }
 
         private void Print() {
@@ -53,7 +53,7 @@ namespace SH_OBD {
         private void btnSave_Click(object sender, EventArgs e) {
             SaveFileDialog saveFileDialog = new SaveFileDialog {
                 Title = "保存 OBD-II 诊断报告",
-                Filter = "SH_OBD 报告文件 (*.obd)|*.obd",
+                Filter = "报告文件 (*.obd)|*.obd",
                 FilterIndex = 0,
                 RestoreDirectory = true
             };
@@ -76,61 +76,50 @@ namespace SH_OBD {
             binaryWriter.Write(ReportPage1.MilStatus);
             binaryWriter.Write(ReportPage1.TotalCodes);
             binaryWriter.Write(ReportPage1.FreezeFrameDTC);
-            int index1 = 0;
-            do {
+            for (int i = 0; i < 25; i++) {
                 if (ReportPage1.DTCList != null) {
-                    if (index1 < ReportPage1.DTCList.Count) {
-                        binaryWriter.Write(ReportPage1.DTCList[index1]);
+                    if (i < ReportPage1.DTCList.Count) {
+                        binaryWriter.Write(ReportPage1.DTCList[i]);
                     } else {
                         binaryWriter.Write("");
                     }
                 } else {
                     binaryWriter.Write("");
                 }
-                ++index1;
             }
-            while (index1 < 25);
-            int index2 = 0;
-            do {
+            for (int i = 0; i < 25; i++) {
                 if (ReportPage1.DTCDefinitionList != null) {
-                    if (index2 < ReportPage1.DTCDefinitionList.Count) {
-                        binaryWriter.Write(ReportPage1.DTCDefinitionList[index2]);
+                    if (i < ReportPage1.DTCDefinitionList.Count) {
+                        binaryWriter.Write(ReportPage1.DTCDefinitionList[i]);
                     } else {
                         binaryWriter.Write("");
                     }
                 } else {
                     binaryWriter.Write("");
                 }
-                ++index2;
             }
-            while (index2 < 25);
-            int index3 = 0;
-            do {
+            for (int i = 0; i < 25; i++) {
                 if (ReportPage1.PendingList != null) {
-                    if (index3 < ReportPage1.PendingList.Count) {
-                        binaryWriter.Write(ReportPage1.PendingList[index3]);
+                    if (i < ReportPage1.PendingList.Count) {
+                        binaryWriter.Write(ReportPage1.PendingList[i]);
                     } else {
                         binaryWriter.Write("");
                     }
                 } else {
                     binaryWriter.Write("");
                 }
-                ++index3;
-            } while (index3 < 25);
-            int index4 = 0;
-            do {
-                if (ReportPage1.PendingDefinitionList != null) {
-                    if (index4 < ReportPage1.PendingDefinitionList.Count) {
-                        binaryWriter.Write(ReportPage1.PendingDefinitionList[index4]);
-                    } else {
-                        binaryWriter.Write("");
-                    }
-                } else {
-                    binaryWriter.Write("");
-                }
-                ++index4;
             }
-            while (index4 < 25);
+            for (int i = 0; i < 25; i++) {
+                if (ReportPage1.PendingDefinitionList != null) {
+                    if (i < ReportPage1.PendingDefinitionList.Count) {
+                        binaryWriter.Write(ReportPage1.PendingDefinitionList[i]);
+                    } else {
+                        binaryWriter.Write("");
+                    }
+                } else {
+                    binaryWriter.Write("");
+                }
+            }
             binaryWriter.Write(ReportPage1.FuelSystem1Status);
             binaryWriter.Write(ReportPage1.FuelSystem2Status);
             binaryWriter.Write(ReportPage1.CalculatedLoad);

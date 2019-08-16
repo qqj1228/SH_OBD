@@ -1,4 +1,4 @@
-# PID,Name,OBDRequest(HEX),Service(DEC),Parameter(DEC),SubParameter,Category,Type,Manufacturer,Priority,EnglishUnitLabel,MetricUnitLabel,EnglishMinValue,EnglishMaxValue,MetricMinValue,MetricMaxValue,ValueTypes(Double,Bool,String,StringCollection)
+# PID,Name,OBDRequest(HEX),Service(DEC),Parameter(DEC),SubParameter,Category,Type,Manufacturer,Priority,EnglishUnitLabel,MetricUnitLabel,EnglishMinValue,EnglishMaxValue,MetricMinValue,MetricMaxValue,ValueTypes(Double,Bool,String,ListString)
 SAE.MIL,故障指示灯 (MIL) 状态,0101,1,1,0,DTC,Generic,SAE,3,,,0,1,0,1,1,1,1,0
 SAE.DTC_COUNT,与排放相关的DTC码数量,0101,1,1,1,DTC,Generic,SAE,3,,,0,128,0,128,1,0,0,0
 SAE.STORED_DTCS,存储DTC码列表,03,3,0,0,DTC,Generic,SAE,3,,,,,,,0,0,1,1

@@ -130,7 +130,7 @@
     <value>DTC 故障码</value>
   </data>
   <data name="buttonName_Dyno" xml:space="preserve">
-    <value>测功机</value>
+    <value>功率测试</value>
   </data>
   <data name="buttonName_FreezeFrames" xml:space="preserve">
     <value>冻结帧</value>
@@ -166,7 +166,7 @@
     <value>故障诊断器</value>
   </data>
   <data name="buttonName_Track" xml:space="preserve">
-    <value>路试</value>
+    <value>加速性能</value>
   </data>
   <data name="buttonName_UserPrefs" xml:space="preserve">
     <value>用户设置</value>

@@ -4,27 +4,25 @@ using System.Xml.Serialization;
 namespace SH_OBD {
     [Serializable]
     public class Settings {
-        private bool m_AutoDetect;
-        private int m_BaudRateIndex;
-        private int m_ComPortIndex;
-        private HardwareType m_HardwareIndex;
-        private ProtocolType m_ProtocolIndex;
-        private int m_ActiveProfileIndex;
-        private bool m_Initialize;
+        public bool DoInitialization { get; set; }
+        public int ActiveProfileIndex { get; set; }
+        public int BaudRateIndex { get; set; }
+        public int ComPort { get; set; }
+        public bool AutoDetect { get; set; }
 
         public Settings() {
-            m_AutoDetect = true;
-            m_ComPortIndex = 1;
-            m_ActiveProfileIndex = 0;
-            m_BaudRateIndex = 0;
-            m_HardwareIndex = HardwareType.Automatic;
-            m_ProtocolIndex = ProtocolType.Automatic;
-            m_Initialize = true;
+            AutoDetect = true;
+            ComPort = 1;
+            ActiveProfileIndex = 0;
+            BaudRateIndex = 0;
+            HardwareIndex = HardwareType.Automatic;
+            ProtocolIndex = ProtocolType.Automatic;
+            DoInitialization = true;
         }
 
         public int BaudRate {
             get {
-                switch (m_BaudRateIndex) {
+                switch (BaudRateIndex) {
                     case 0: return 9600;
                     case 1: return 38400;
                     case 2: return 115200;
@@ -34,22 +32,7 @@ namespace SH_OBD {
         }
 
         public string ComPortName {
-            get { return "COM" + Convert.ToString(m_ComPortIndex); }
-        }
-
-        public bool DoInitialization {
-            get { return m_Initialize; }
-            set { m_Initialize = value; }
-        }
-
-        public int ActiveProfileIndex {
-            get { return m_ActiveProfileIndex; }
-            set { m_ActiveProfileIndex = value; }
-        }
-
-        public int BaudRateIndex {
-            get { return m_BaudRateIndex; }
-            set { m_BaudRateIndex = value; }
+            get { return "COM" + Convert.ToString(ComPort); }
         }
 
         [XmlIgnore]
@@ -78,37 +61,24 @@ namespace SH_OBD {
         }
 
         [XmlIgnore]
-        public ProtocolType ProtocolIndex {
-            get { return m_ProtocolIndex; }
-            set { m_ProtocolIndex = value; }
-        }
+        public ProtocolType ProtocolIndex { get; set; }
+
         [XmlElement("ProtocolIndex")]
         public int ProtocolIndexInt {
-            get { return (int)m_ProtocolIndex; }
-            set { m_ProtocolIndex = (ProtocolType)value; }
+            get { return (int)ProtocolIndex; }
+            set { ProtocolIndex = (ProtocolType)value; }
         }
 
         [XmlIgnore]
-        public HardwareType HardwareIndex {
-            get { return m_HardwareIndex; }
-            set { m_HardwareIndex = value; }
-        }
+        public HardwareType HardwareIndex { get; set; }
+
         [XmlElement("HardwareIndex")]
         public int HardwareIndexInt {
-            get { return (int)m_HardwareIndex; }
-            set { m_HardwareIndex = (HardwareType)value; }
-        }
-
-        public int ComPort {
-            get { return m_ComPortIndex; }
-            set { m_ComPortIndex = value; }
-        }
-
-        public bool AutoDetect {
-            get { return m_AutoDetect; }
-            set { m_AutoDetect = value; }
+            get { return (int)HardwareIndex; }
+            set { HardwareIndex = (HardwareType)value; }
         }
     }
+
     public enum ProtocolType : int {
         Unknown = -1,
         Automatic = 0,
@@ -131,4 +101,81 @@ namespace SH_OBD {
         ELM323 = 4,
         CANtact = 5
     }
+
+    [Serializable]
+    public class UserPreferences {
+        public string Telephone { get; set; }
+        public string Address2 { get; set; }
+        public string Address1 { get; set; }
+        public string Name { get; set; }
+    }
+
+    [Serializable]
+    public class VehicleProfile {
+        public string Name;
+        public bool AutoTransmission;
+        public float FirstGearRatio;
+        public float SecondGearRatio;
+        public float ThirdGearRatio;
+        public float FourthGearRatio;
+        public float FifthGearRatio;
+        public float SixthGearRatio;
+        public float DynoDriveRatio;
+        public float AxleGearRatio;
+        public float Weight;
+        public float DragCoefficient;
+        public int ElmTimeout;
+        public float SpeedCalibrationFactor;
+        public WheelStruc Wheel;
+        public string Notes;
+
+        public VehicleProfile() {
+            Name = "New Vehicle";
+            AutoTransmission = false;
+            FirstGearRatio = 2.66f;
+            SecondGearRatio = 1.78f;
+            ThirdGearRatio = 1.3f;
+            FourthGearRatio = 1f;
+            FifthGearRatio = 0.74f;
+            SixthGearRatio = 0.5f;
+            AxleGearRatio = 3.73f;
+            DynoDriveRatio = 0.022f;
+            SpeedCalibrationFactor = 1f;
+            Weight = 3500f;
+            DragCoefficient = 0.13f;
+            Wheel = new WheelStruc {
+                Width = 255,
+                AspectRatio = 40,
+                RimDiameter = 16
+            };
+            ElmTimeout = 200;
+            Notes = "";
+        }
+
+        public override string ToString() {
+            return Name;
+        }
+
+        public bool Equals(VehicleProfile p) {
+            return (
+                Name.Equals(p.Name) &&
+                AutoTransmission == p.AutoTransmission &&
+                Weight == p.Weight &&
+                DynoDriveRatio == p.DynoDriveRatio &&
+                DragCoefficient == p.DragCoefficient &&
+                Wheel.Width == p.Wheel.Width &&
+                Wheel.AspectRatio == p.Wheel.AspectRatio &&
+                Wheel.RimDiameter == p.Wheel.RimDiameter &&
+                ElmTimeout == p.ElmTimeout && Notes.Equals(p.Notes)
+            );
+        }
+    }
+
+    [Serializable]
+    public class WheelStruc {
+        public int Width;
+        public int AspectRatio;
+        public int RimDiameter;
+    }
+
 }

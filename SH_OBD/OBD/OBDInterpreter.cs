@@ -1,25 +1,14 @@
 ﻿using System;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace SH_OBD {
     public class OBDInterpreter {
-        private const string HexDigits = "0123456789abcdef";
-
-        public static int HexByteToInt(string strHex) {
-            if (strHex.Length >= 2) {
-                int num2 = HexDigits.IndexOf(Char.ToLower(strHex[0])) & 0xF;
-                int num = HexDigits.IndexOf(Char.ToLower(strHex[1])) & 0xF;
-                return ((num2 * 0x10) + num);
-            }
-            return -1;
-        }
-
         public static string HexStringToASCIIString(string strHex) {
             string str = "";
             if (strHex.Length > 0) {
                 for (int i = 0; i < strHex.Length; i += 2) {
-                    int num2 = HexByteToInt(strHex.Substring(i, 2));
+                    int num2 = Utility.Hex2Int(strHex.Substring(i, 2));
                     if (num2 != 0) {
                         str += new string((char)num2, 1);
                     }
@@ -29,7 +18,7 @@ namespace SH_OBD {
         }
 
         public static OBDParameterValue GetValue(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
-            StringCollection strings;
+            List<string> strings;
             OBDParameterValue value2 = new OBDParameterValue();
             if (response == null) {
                 value2.ErrorDetected = true;
@@ -44,49 +33,48 @@ namespace SH_OBD {
                         case 0x20:
                         case 0x40:
                         case 0x60:
-                        case 0x80: {
-                                if (response.GetDataByteCount() < 4) {
-                                    value2.ErrorDetected = true;
-                                    return value2;
-                                }
-                                int num8 = HexByteToInt(response.GetDataByte(0));
-                                int num7 = HexByteToInt(response.GetDataByte(1));
-                                int num6 = HexByteToInt(response.GetDataByte(2));
-                                int num5 = HexByteToInt(response.GetDataByte(3));
-                                value2.SetBitFlag(0, ((num8 >> 7) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(1, ((num8 >> 6) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(2, ((num8 >> 5) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(3, ((num8 >> 4) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(4, ((num8 >> 3) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(5, ((num8 >> 2) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(6, ((num8 >> 1) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(7, (num8 & 1) == 1 ? true : false);
-                                value2.SetBitFlag(8, ((num7 >> 7) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(9, ((num7 >> 6) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(10, ((num7 >> 5) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(11, ((num7 >> 4) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(12, ((num7 >> 3) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(13, ((num7 >> 2) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(14, ((num7 >> 1) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(15, (num7 & 1) == 1 ? true : false);
-                                value2.SetBitFlag(16, ((num6 >> 7) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(17, ((num6 >> 6) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(18, ((num6 >> 5) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(19, ((num6 >> 4) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(20, ((num6 >> 3) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(21, ((num6 >> 2) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(22, ((num6 >> 1) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(23, (num6 & 1) == 1 ? true : false);
-                                value2.SetBitFlag(24, ((num5 >> 7) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(25, ((num5 >> 6) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(26, ((num5 >> 5) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(27, ((num5 >> 4) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(28, ((num5 >> 3) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(29, ((num5 >> 2) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(30, ((num5 >> 1) & 1) == 1 ? true : false);
-                                value2.SetBitFlag(31, (num5 & 1) == 1 ? true : false);
+                        case 0x80:
+                            if (response.GetDataByteCount() < 4) {
+                                value2.ErrorDetected = true;
                                 return value2;
                             }
+                            int num8 = Utility.Hex2Int(response.GetDataByte(0));
+                            int num7 = Utility.Hex2Int(response.GetDataByte(1));
+                            int num6 = Utility.Hex2Int(response.GetDataByte(2));
+                            int num5 = Utility.Hex2Int(response.GetDataByte(3));
+                            value2.SetBitFlag(0, ((num8 >> 7) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(1, ((num8 >> 6) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(2, ((num8 >> 5) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(3, ((num8 >> 4) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(4, ((num8 >> 3) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(5, ((num8 >> 2) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(6, ((num8 >> 1) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(7, (num8 & 1) == 1 ? true : false);
+                            value2.SetBitFlag(8, ((num7 >> 7) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(9, ((num7 >> 6) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(10, ((num7 >> 5) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(11, ((num7 >> 4) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(12, ((num7 >> 3) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(13, ((num7 >> 2) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(14, ((num7 >> 1) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(15, (num7 & 1) == 1 ? true : false);
+                            value2.SetBitFlag(16, ((num6 >> 7) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(17, ((num6 >> 6) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(18, ((num6 >> 5) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(19, ((num6 >> 4) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(20, ((num6 >> 3) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(21, ((num6 >> 2) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(22, ((num6 >> 1) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(23, (num6 & 1) == 1 ? true : false);
+                            value2.SetBitFlag(24, ((num5 >> 7) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(25, ((num5 >> 6) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(26, ((num5 >> 5) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(27, ((num5 >> 4) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(28, ((num5 >> 3) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(29, ((num5 >> 2) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(30, ((num5 >> 1) & 1) == 1 ? true : false);
+                            value2.SetBitFlag(31, (num5 & 1) == 1 ? true : false);
+                            return value2;
                         case 1:
                             if (response.GetDataByteCount() < 4) {
                                 value2.ErrorDetected = true;
@@ -94,147 +82,145 @@ namespace SH_OBD {
                             }
                             switch (param.SubParameter) {
                                 case 0:
-                                    if ((HexByteToInt(response.GetDataByte(0)) & 0x80) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(0)) & 0x80) == 0) {
                                         return new OBDParameterValue(false, 0.0, "OFF", "OFF");
                                     }
                                     return new OBDParameterValue(true, 1.0, "ON", "ON");
-
-                                case 1: {
-                                        int num12 = HexByteToInt(response.GetDataByte(0));
-                                        if ((num12 & 0x80) != 0) {
-                                            num12 -= 0x80;
-                                        }
-                                        value2.DoubleValue = num12;
-                                        return value2;
+                                case 1:
+                                    int num12 = Utility.Hex2Int(response.GetDataByte(0));
+                                    if ((num12 & 0x80) != 0) {
+                                        num12 -= 0x80;
                                     }
+                                    value2.DoubleValue = num12;
+                                    return value2;
                                 case 2:
-                                    if ((HexByteToInt(response.GetDataByte(1)) & 1) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(1)) & 1) == 0) {
                                         return new OBDParameterValue(false, 0.0, "NO", "NO");
                                     }
                                     return new OBDParameterValue(true, 1.0, "YES", "YES");
 
                                 case 3:
-                                    if ((HexByteToInt(response.GetDataByte(1)) & 2) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(1)) & 2) == 0) {
                                         return new OBDParameterValue(false, 0.0, "NO", "NO");
                                     }
                                     return new OBDParameterValue(true, 1.0, "YES", "YES");
 
                                 case 4:
-                                    if ((HexByteToInt(response.GetDataByte(1)) & 4) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(1)) & 4) == 0) {
                                         return new OBDParameterValue(false, 0.0, "NO", "NO");
                                     }
                                     return new OBDParameterValue(true, 1.0, "YES", "YES");
 
                                 case 5:
-                                    if ((HexByteToInt(response.GetDataByte(1)) & 0x10) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(1)) & 0x10) == 0) {
                                         return new OBDParameterValue(true, 1.0, "YES", "YES");
                                     }
                                     return new OBDParameterValue(false, 0.0, "NO", "NO");
 
                                 case 6:
-                                    if ((HexByteToInt(response.GetDataByte(1)) & 0x20) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(1)) & 0x20) == 0) {
                                         return new OBDParameterValue(true, 1.0, "YES", "YES");
                                     }
                                     return new OBDParameterValue(false, 0.0, "NO", "NO");
 
                                 case 7:
-                                    if ((HexByteToInt(response.GetDataByte(1)) & 0x40) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(1)) & 0x40) == 0) {
                                         return new OBDParameterValue(true, 1.0, "YES", "YES");
                                     }
                                     return new OBDParameterValue(false, 0.0, "NO", "NO");
 
                                 case 8:
-                                    if ((HexByteToInt(response.GetDataByte(2)) & 1) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(2)) & 1) == 0) {
                                         return new OBDParameterValue(false, 0.0, "NO", "NO");
                                     }
                                     return new OBDParameterValue(true, 1.0, "YES", "YES");
 
                                 case 9:
-                                    if ((HexByteToInt(response.GetDataByte(2)) & 2) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(2)) & 2) == 0) {
                                         return new OBDParameterValue(false, 0.0, "NO", "NO");
                                     }
                                     return new OBDParameterValue(true, 1.0, "YES", "YES");
 
                                 case 10:
-                                    if ((HexByteToInt(response.GetDataByte(2)) & 4) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(2)) & 4) == 0) {
                                         return new OBDParameterValue(false, 0.0, "NO", "NO");
                                     }
                                     return new OBDParameterValue(true, 1.0, "YES", "YES");
 
                                 case 11:
-                                    if ((HexByteToInt(response.GetDataByte(2)) & 8) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(2)) & 8) == 0) {
                                         return new OBDParameterValue(false, 0.0, "NO", "NO");
                                     }
                                     return new OBDParameterValue(true, 1.0, "YES", "YES");
 
                                 case 12:
-                                    if ((HexByteToInt(response.GetDataByte(2)) & 0x10) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(2)) & 0x10) == 0) {
                                         return new OBDParameterValue(false, 0.0, "NO", "NO");
                                     }
                                     return new OBDParameterValue(true, 1.0, "YES", "YES");
 
                                 case 13:
-                                    if ((HexByteToInt(response.GetDataByte(2)) & 0x20) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(2)) & 0x20) == 0) {
                                         return new OBDParameterValue(false, 0.0, "NO", "NO");
                                     }
                                     return new OBDParameterValue(true, 1.0, "YES", "YES");
 
                                 case 14:
-                                    if ((HexByteToInt(response.GetDataByte(2)) & 0x40) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(2)) & 0x40) == 0) {
                                         return new OBDParameterValue(false, 0.0, "NO", "NO");
                                     }
                                     return new OBDParameterValue(true, 1.0, "YES", "YES");
 
                                 case 15:
-                                    if ((HexByteToInt(response.GetDataByte(2)) & 0x80) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(2)) & 0x80) == 0) {
                                         return new OBDParameterValue(false, 0.0, "NO", "NO");
                                     }
                                     return new OBDParameterValue(true, 1.0, "YES", "YES");
 
                                 case 0x10:
-                                    if ((HexByteToInt(response.GetDataByte(3)) & 1) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(3)) & 1) == 0) {
                                         return new OBDParameterValue(true, 1.0, "YES", "YES");
                                     }
                                     return new OBDParameterValue(false, 0.0, "NO", "NO");
 
                                 case 0x11:
-                                    if ((HexByteToInt(response.GetDataByte(3)) & 2) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(3)) & 2) == 0) {
                                         return new OBDParameterValue(true, 1.0, "YES", "YES");
                                     }
                                     return new OBDParameterValue(false, 0.0, "NO", "NO");
 
                                 case 0x12:
-                                    if ((HexByteToInt(response.GetDataByte(3)) & 4) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(3)) & 4) == 0) {
                                         return new OBDParameterValue(true, 1.0, "YES", "YES");
                                     }
                                     return new OBDParameterValue(false, 0.0, "NO", "NO");
 
                                 case 0x13:
-                                    if ((HexByteToInt(response.GetDataByte(3)) & 8) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(3)) & 8) == 0) {
                                         return new OBDParameterValue(true, 1.0, "YES", "YES");
                                     }
                                     return new OBDParameterValue(false, 0.0, "NO", "NO");
 
                                 case 20:
-                                    if ((HexByteToInt(response.GetDataByte(3)) & 0x10) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(3)) & 0x10) == 0) {
                                         return new OBDParameterValue(true, 1.0, "YES", "YES");
                                     }
                                     return new OBDParameterValue(false, 0.0, "NO", "NO");
 
                                 case 0x15:
-                                    if ((HexByteToInt(response.GetDataByte(3)) & 0x20) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(3)) & 0x20) == 0) {
                                         return new OBDParameterValue(true, 1.0, "YES", "YES");
                                     }
                                     return new OBDParameterValue(false, 0.0, "NO", "NO");
 
                                 case 0x16:
-                                    if ((HexByteToInt(response.GetDataByte(3)) & 0x40) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(3)) & 0x40) == 0) {
                                         return new OBDParameterValue(true, 1.0, "YES", "YES");
                                     }
                                     return new OBDParameterValue(false, 0.0, "NO", "NO");
 
                                 case 0x17:
-                                    if ((HexByteToInt(response.GetDataByte(3)) & 0x80) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(3)) & 0x80) == 0) {
                                         return new OBDParameterValue(true, 1.0, "YES", "YES");
                                     }
                                     return new OBDParameterValue(false, 0.0, "NO", "NO");
@@ -251,9 +237,9 @@ namespace SH_OBD {
                                 return value2;
                             }
                             if (param.SubParameter == 0) {
-                                num9 = HexByteToInt(response.GetDataByte(0));
+                                num9 = Utility.Hex2Int(response.GetDataByte(0));
                             } else {
-                                num9 = HexByteToInt(response.GetDataByte(1));
+                                num9 = Utility.Hex2Int(response.GetDataByte(1));
                             }
                             if ((num9 & 1) != 0) {
                                 value2.StringValue = "Open Loop: Has not yet satisfied conditions to go closed loop.";
@@ -289,7 +275,7 @@ namespace SH_OBD {
                                 value2.ErrorDetected = true;
                                 return value2;
                             }
-                            value2.DoubleValue = HexByteToInt(response.GetDataByte(0)) * 0.39215686274509803;
+                            value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0)) * 0.39215686274509803;
                             return value2;
 
                         case 5:
@@ -297,7 +283,7 @@ namespace SH_OBD {
                                 value2.ErrorDetected = true;
                                 return value2;
                             }
-                            value2.DoubleValue = HexByteToInt(response.GetDataByte(0)) - 40.0;
+                            value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0)) - 40.0;
                             if (bEnglishUnits) {
                                 value2.DoubleValue = (value2.DoubleValue * 1.8) + 32.0;
                             }
@@ -313,9 +299,9 @@ namespace SH_OBD {
                                 return value2;
                             }
                             if (param.SubParameter == 0) {
-                                num16 = HexByteToInt(response.GetDataByte(0));
+                                num16 = Utility.Hex2Int(response.GetDataByte(0));
                             } else {
-                                num16 = HexByteToInt(response.GetDataByte(1));
+                                num16 = Utility.Hex2Int(response.GetDataByte(1));
                             }
                             value2.DoubleValue = (num16 * 0.78125) - 100.0;
                             return value2;
@@ -325,7 +311,7 @@ namespace SH_OBD {
                                 value2.ErrorDetected = true;
                                 return value2;
                             }
-                            value2.DoubleValue = HexByteToInt(response.GetDataByte(0)) * 3.0;
+                            value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0)) * 3.0;
                             if (bEnglishUnits) {
                                 value2.DoubleValue *= 0.145037738;
                             }
@@ -336,7 +322,7 @@ namespace SH_OBD {
                                 value2.ErrorDetected = true;
                                 return value2;
                             }
-                            value2.DoubleValue = HexByteToInt(response.GetDataByte(0));
+                            value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0));
                             if (bEnglishUnits) {
                                 value2.DoubleValue *= 0.145037738;
                             }
@@ -347,8 +333,8 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                int num66 = HexByteToInt(response.GetDataByte(0));
-                                int num65 = HexByteToInt(response.GetDataByte(1));
+                                int num66 = Utility.Hex2Int(response.GetDataByte(0));
+                                int num65 = Utility.Hex2Int(response.GetDataByte(1));
                                 value2.DoubleValue = ((num66 * 0x100) + num65) * 0.25;
                                 return value2;
                             }
@@ -357,7 +343,7 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                int num64 = HexByteToInt(response.GetDataByte(0));
+                                int num64 = Utility.Hex2Int(response.GetDataByte(0));
                                 value2.DoubleValue = num64;
                                 if (bEnglishUnits) {
                                     value2.DoubleValue *= 0.621371192;
@@ -369,7 +355,7 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                double num63 = HexByteToInt(response.GetDataByte(0));
+                                double num63 = Utility.Hex2Int(response.GetDataByte(0));
                                 value2.DoubleValue = (num63 * 0.5) - 64.0;
                                 return value2;
                             }
@@ -378,7 +364,7 @@ namespace SH_OBD {
                                 value2.ErrorDetected = true;
                                 return value2;
                             }
-                            value2.DoubleValue = HexByteToInt(response.GetDataByte(0)) - 40.0;
+                            value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0)) - 40.0;
                             if (bEnglishUnits) {
                                 value2.DoubleValue = (value2.DoubleValue * 1.8) + 32.0;
                             }
@@ -389,8 +375,8 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                double num62 = HexByteToInt(response.GetDataByte(0));
-                                double num61 = HexByteToInt(response.GetDataByte(1));
+                                double num62 = Utility.Hex2Int(response.GetDataByte(0));
+                                double num61 = Utility.Hex2Int(response.GetDataByte(1));
                                 value2.DoubleValue = ((num62 * 256.0) + num61) * 0.01;
                                 if (bEnglishUnits) {
                                     value2.DoubleValue *= 0.13227735731092655;
@@ -402,7 +388,7 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                double num60 = HexByteToInt(response.GetDataByte(0));
+                                double num60 = Utility.Hex2Int(response.GetDataByte(0));
                                 value2.DoubleValue = num60 * 0.39215686274509803;
                                 return value2;
                             }
@@ -411,7 +397,7 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                int num13 = HexByteToInt(response.GetDataByte(0));
+                                int num13 = Utility.Hex2Int(response.GetDataByte(0));
                                 if ((num13 & 1) != 0) {
                                     value2.StringValue = "Upstream of first catalytic converter.";
                                     value2.ShortStringValue = "UPS";
@@ -433,7 +419,7 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                int num4 = HexByteToInt(response.GetDataByte(0));
+                                int num4 = Utility.Hex2Int(response.GetDataByte(0));
                                 switch (param.SubParameter) {
                                     case 0:
                                         if ((num4 & 1) == 0) {
@@ -564,7 +550,7 @@ namespace SH_OBD {
                                 value2.ErrorDetected = true;
                                 return value2;
                             }
-                            switch (HexByteToInt(response.GetDataByte(0))) {
+                            switch (Utility.Hex2Int(response.GetDataByte(0))) {
                                 case 1:
                                     value2.StringValue = "OBD II (California ARB)";
                                     value2.ShortStringValue = "OBDII CARB";
@@ -650,11 +636,11 @@ namespace SH_OBD {
                                     value2.ShortStringValue = "EMD";
                                     return value2;
                             }
-                            if (HexByteToInt(response.GetDataByte(0)) >= 0x12 && HexByteToInt(response.GetDataByte(0)) <= 0xFA) {
+                            if (Utility.Hex2Int(response.GetDataByte(0)) >= 0x12 && Utility.Hex2Int(response.GetDataByte(0)) <= 0xFA) {
                                 value2.StringValue = "ISO/SAE reserved";
                                 value2.ShortStringValue = "---";
                                 return value2;
-                            } else if (HexByteToInt(response.GetDataByte(0)) >= 0xFB && HexByteToInt(response.GetDataByte(0)) <= 0xFF) {
+                            } else if (Utility.Hex2Int(response.GetDataByte(0)) >= 0xFB && Utility.Hex2Int(response.GetDataByte(0)) <= 0xFF) {
                                 value2.StringValue = "ISO/SAE - Not available for assignment";
                                 value2.ShortStringValue = "SAE J1939 special meaning";
                                 return value2;
@@ -666,7 +652,7 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                int num3 = HexByteToInt(response.GetDataByte(0));
+                                int num3 = Utility.Hex2Int(response.GetDataByte(0));
                                 switch (param.SubParameter) {
                                     case 0:
                                         if ((num3 & 1) == 0) {
@@ -790,8 +776,8 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                double num58 = HexByteToInt(response.GetDataByte(0));
-                                double num57 = HexByteToInt(response.GetDataByte(1));
+                                double num58 = Utility.Hex2Int(response.GetDataByte(0));
+                                double num57 = Utility.Hex2Int(response.GetDataByte(1));
                                 value2.DoubleValue = (num58 * 256.0) + num57;
                                 return value2;
                             }
@@ -800,8 +786,8 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                double num56 = HexByteToInt(response.GetDataByte(0));
-                                double num55 = HexByteToInt(response.GetDataByte(1));
+                                double num56 = Utility.Hex2Int(response.GetDataByte(0));
+                                double num55 = Utility.Hex2Int(response.GetDataByte(1));
                                 value2.DoubleValue = (num56 * 256.0) + num55;
                                 if (bEnglishUnits) {
                                     value2.DoubleValue *= 0.621371192;
@@ -813,8 +799,8 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                double num54 = HexByteToInt(response.GetDataByte(0));
-                                double num53 = HexByteToInt(response.GetDataByte(1));
+                                double num54 = Utility.Hex2Int(response.GetDataByte(0));
+                                double num53 = Utility.Hex2Int(response.GetDataByte(1));
                                 value2.DoubleValue = (((num54 * 256.0) + num53) * 10.0) * 0.0078125;
                                 if (bEnglishUnits) {
                                     value2.DoubleValue *= 0.145037738;
@@ -826,8 +812,8 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                double num52 = HexByteToInt(response.GetDataByte(0));
-                                double num51 = HexByteToInt(response.GetDataByte(1));
+                                double num52 = Utility.Hex2Int(response.GetDataByte(0));
+                                double num51 = Utility.Hex2Int(response.GetDataByte(1));
                                 value2.DoubleValue = (((num52 * 256.0) + num51) * 10.0) * 0.0078125;
                                 if (bEnglishUnits) {
                                     value2.DoubleValue *= 0.145037738;
@@ -847,13 +833,13 @@ namespace SH_OBD {
                                     return value2;
                                 }
                                 if (param.SubParameter == 0) {
-                                    double num50 = HexByteToInt(response.GetDataByte(0));
-                                    double num49 = HexByteToInt(response.GetDataByte(1));
+                                    double num50 = Utility.Hex2Int(response.GetDataByte(0));
+                                    double num49 = Utility.Hex2Int(response.GetDataByte(1));
                                     value2.DoubleValue = ((num50 * 256.0) + num49) * 3.0517578125E-05;
                                     return value2;
                                 }
-                                double num48 = HexByteToInt(response.GetDataByte(2));
-                                double num47 = HexByteToInt(response.GetDataByte(3));
+                                double num48 = Utility.Hex2Int(response.GetDataByte(2));
+                                double num47 = Utility.Hex2Int(response.GetDataByte(3));
                                 value2.DoubleValue = ((num48 * 256.0) + num47) * 0.0001220703125;
                                 return value2;
                             }
@@ -862,7 +848,7 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                double num46 = HexByteToInt(response.GetDataByte(0));
+                                double num46 = Utility.Hex2Int(response.GetDataByte(0));
                                 value2.DoubleValue = (num46 * 100.0) * 0.00392156862745098;
                                 return value2;
                             }
@@ -871,7 +857,7 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                double num45 = HexByteToInt(response.GetDataByte(0));
+                                double num45 = Utility.Hex2Int(response.GetDataByte(0));
                                 value2.DoubleValue = (num45 - 128.0) * 0.78125;
                                 return value2;
                             }
@@ -880,7 +866,7 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                double num44 = HexByteToInt(response.GetDataByte(0));
+                                double num44 = Utility.Hex2Int(response.GetDataByte(0));
                                 value2.DoubleValue = (num44 * 100.0) * 0.00392156862745098;
                                 return value2;
                             }
@@ -889,7 +875,7 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                double num43 = HexByteToInt(response.GetDataByte(0));
+                                double num43 = Utility.Hex2Int(response.GetDataByte(0));
                                 value2.DoubleValue = (num43 * 100.0) * 0.00392156862745098;
                                 return value2;
                             }
@@ -898,7 +884,7 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                double num42 = HexByteToInt(response.GetDataByte(0));
+                                double num42 = Utility.Hex2Int(response.GetDataByte(0));
                                 value2.DoubleValue = num42;
                                 return value2;
                             }
@@ -907,8 +893,8 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                double num41 = HexByteToInt(response.GetDataByte(0));
-                                double num40 = HexByteToInt(response.GetDataByte(1));
+                                double num41 = Utility.Hex2Int(response.GetDataByte(0));
+                                double num40 = Utility.Hex2Int(response.GetDataByte(1));
                                 value2.DoubleValue = (num41 * 256.0) + num40;
                                 if (bEnglishUnits) {
                                     value2.DoubleValue *= 0.621371192;
@@ -920,8 +906,8 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                double num11 = HexByteToInt(response.GetDataByte(0));
-                                double num39 = HexByteToInt(response.GetDataByte(1));
+                                double num11 = Utility.Hex2Int(response.GetDataByte(0));
+                                double num39 = Utility.Hex2Int(response.GetDataByte(1));
                                 if (num11 > 127.0) {
                                     num11 = (num11 - 128.0) * -1.0;
                                 }
@@ -936,7 +922,7 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                double num38 = HexByteToInt(response.GetDataByte(0));
+                                double num38 = Utility.Hex2Int(response.GetDataByte(0));
                                 value2.DoubleValue = num38;
                                 if (bEnglishUnits) {
                                     value2.DoubleValue *= 0.145037738;
@@ -956,13 +942,13 @@ namespace SH_OBD {
                                     return value2;
                                 }
                                 if (param.SubParameter == 0) {
-                                    double num37 = HexByteToInt(response.GetDataByte(0));
-                                    double num36 = HexByteToInt(response.GetDataByte(1));
+                                    double num37 = Utility.Hex2Int(response.GetDataByte(0));
+                                    double num36 = Utility.Hex2Int(response.GetDataByte(1));
                                     value2.DoubleValue = ((num37 * 256.0) + num36) * 3.0517578125E-05;
                                     return value2;
                                 }
-                                double num35 = HexByteToInt(response.GetDataByte(2));
-                                double num34 = HexByteToInt(response.GetDataByte(3));
+                                double num35 = Utility.Hex2Int(response.GetDataByte(2));
+                                double num34 = Utility.Hex2Int(response.GetDataByte(3));
                                 value2.DoubleValue = (((num35 * 256.0) + num34) * 0.00390625) - 128.0;
                                 return value2;
                             }
@@ -974,8 +960,8 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                double num33 = HexByteToInt(response.GetDataByte(0));
-                                double num32 = HexByteToInt(response.GetDataByte(1));
+                                double num33 = Utility.Hex2Int(response.GetDataByte(0));
+                                double num32 = Utility.Hex2Int(response.GetDataByte(1));
                                 value2.DoubleValue = (((num33 * 256.0) + num32) * 0.1) - 40.0;
                                 if (bEnglishUnits) {
                                     value2.DoubleValue = (value2.DoubleValue * 1.8) + 32.0;
@@ -989,7 +975,7 @@ namespace SH_OBD {
                             }
                             switch (param.SubParameter) {
                                 case 0:
-                                    if ((HexByteToInt(response.GetDataByte(1)) & 1) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(1)) & 1) == 0) {
                                         value2.BoolValue = false;
                                         value2.DoubleValue = 0.0;
                                         value2.StringValue = "NO";
@@ -1003,7 +989,7 @@ namespace SH_OBD {
                                     return value2;
 
                                 case 1:
-                                    if ((HexByteToInt(response.GetDataByte(1)) & 2) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(1)) & 2) == 0) {
                                         value2.BoolValue = false;
                                         value2.DoubleValue = 0.0;
                                         value2.StringValue = "NO";
@@ -1017,7 +1003,7 @@ namespace SH_OBD {
                                     return value2;
 
                                 case 2:
-                                    if ((HexByteToInt(response.GetDataByte(1)) & 4) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(1)) & 4) == 0) {
                                         value2.BoolValue = false;
                                         value2.DoubleValue = 0.0;
                                         value2.StringValue = "NO";
@@ -1031,7 +1017,7 @@ namespace SH_OBD {
                                     return value2;
 
                                 case 3:
-                                    if ((HexByteToInt(response.GetDataByte(1)) & 0x10) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(1)) & 0x10) == 0) {
                                         value2.BoolValue = true;
                                         value2.DoubleValue = 1.0;
                                         value2.StringValue = "YES";
@@ -1045,7 +1031,7 @@ namespace SH_OBD {
                                     return value2;
 
                                 case 4:
-                                    if ((HexByteToInt(response.GetDataByte(1)) & 0x20) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(1)) & 0x20) == 0) {
                                         value2.BoolValue = true;
                                         value2.DoubleValue = 1.0;
                                         value2.StringValue = "YES";
@@ -1059,7 +1045,7 @@ namespace SH_OBD {
                                     return value2;
 
                                 case 5:
-                                    if ((HexByteToInt(response.GetDataByte(1)) & 0x40) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(1)) & 0x40) == 0) {
                                         value2.BoolValue = true;
                                         value2.DoubleValue = 1.0;
                                         value2.StringValue = "YES";
@@ -1073,7 +1059,7 @@ namespace SH_OBD {
                                     return value2;
 
                                 case 6:
-                                    if ((HexByteToInt(response.GetDataByte(2)) & 1) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(2)) & 1) == 0) {
                                         value2.BoolValue = false;
                                         value2.DoubleValue = 0.0;
                                         value2.StringValue = "NO";
@@ -1087,7 +1073,7 @@ namespace SH_OBD {
                                     return value2;
 
                                 case 7:
-                                    if ((HexByteToInt(response.GetDataByte(2)) & 2) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(2)) & 2) == 0) {
                                         value2.BoolValue = false;
                                         value2.DoubleValue = 0.0;
                                         value2.StringValue = "NO";
@@ -1101,7 +1087,7 @@ namespace SH_OBD {
                                     return value2;
 
                                 case 8:
-                                    if ((HexByteToInt(response.GetDataByte(2)) & 4) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(2)) & 4) == 0) {
                                         value2.BoolValue = false;
                                         value2.DoubleValue = 0.0;
                                         value2.StringValue = "NO";
@@ -1115,7 +1101,7 @@ namespace SH_OBD {
                                     return value2;
 
                                 case 9:
-                                    if ((HexByteToInt(response.GetDataByte(2)) & 8) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(2)) & 8) == 0) {
                                         value2.BoolValue = false;
                                         value2.DoubleValue = 0.0;
                                         value2.StringValue = "NO";
@@ -1129,7 +1115,7 @@ namespace SH_OBD {
                                     return value2;
 
                                 case 10:
-                                    if ((HexByteToInt(response.GetDataByte(2)) & 0x10) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(2)) & 0x10) == 0) {
                                         value2.BoolValue = false;
                                         value2.DoubleValue = 0.0;
                                         value2.StringValue = "NO";
@@ -1143,7 +1129,7 @@ namespace SH_OBD {
                                     return value2;
 
                                 case 11:
-                                    if ((HexByteToInt(response.GetDataByte(2)) & 0x20) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(2)) & 0x20) == 0) {
                                         value2.BoolValue = false;
                                         value2.DoubleValue = 0.0;
                                         value2.StringValue = "NO";
@@ -1157,7 +1143,7 @@ namespace SH_OBD {
                                     return value2;
 
                                 case 12:
-                                    if ((HexByteToInt(response.GetDataByte(2)) & 0x40) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(2)) & 0x40) == 0) {
                                         value2.BoolValue = false;
                                         value2.DoubleValue = 0.0;
                                         value2.StringValue = "NO";
@@ -1171,7 +1157,7 @@ namespace SH_OBD {
                                     return value2;
 
                                 case 13:
-                                    if ((HexByteToInt(response.GetDataByte(2)) & 0x80) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(2)) & 0x80) == 0) {
                                         value2.BoolValue = false;
                                         value2.DoubleValue = 0.0;
                                         value2.StringValue = "NO";
@@ -1185,7 +1171,7 @@ namespace SH_OBD {
                                     return value2;
 
                                 case 14:
-                                    if ((HexByteToInt(response.GetDataByte(3)) & 1) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(3)) & 1) == 0) {
                                         value2.BoolValue = true;
                                         value2.DoubleValue = 1.0;
                                         value2.StringValue = "YES";
@@ -1199,7 +1185,7 @@ namespace SH_OBD {
                                     return value2;
 
                                 case 15:
-                                    if ((HexByteToInt(response.GetDataByte(3)) & 2) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(3)) & 2) == 0) {
                                         value2.BoolValue = true;
                                         value2.DoubleValue = 1.0;
                                         value2.StringValue = "YES";
@@ -1213,7 +1199,7 @@ namespace SH_OBD {
                                     return value2;
 
                                 case 0x10:
-                                    if ((HexByteToInt(response.GetDataByte(3)) & 4) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(3)) & 4) == 0) {
                                         value2.BoolValue = true;
                                         value2.DoubleValue = 1.0;
                                         value2.StringValue = "YES";
@@ -1227,7 +1213,7 @@ namespace SH_OBD {
                                     return value2;
 
                                 case 0x11:
-                                    if ((HexByteToInt(response.GetDataByte(3)) & 8) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(3)) & 8) == 0) {
                                         value2.BoolValue = true;
                                         value2.DoubleValue = 1.0;
                                         value2.StringValue = "YES";
@@ -1241,7 +1227,7 @@ namespace SH_OBD {
                                     return value2;
 
                                 case 0x12:
-                                    if ((HexByteToInt(response.GetDataByte(3)) & 0x10) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(3)) & 0x10) == 0) {
                                         value2.BoolValue = true;
                                         value2.DoubleValue = 1.0;
                                         value2.StringValue = "YES";
@@ -1255,7 +1241,7 @@ namespace SH_OBD {
                                     return value2;
 
                                 case 0x13:
-                                    if ((HexByteToInt(response.GetDataByte(3)) & 0x20) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(3)) & 0x20) == 0) {
                                         value2.BoolValue = true;
                                         value2.DoubleValue = 1.0;
                                         value2.StringValue = "YES";
@@ -1269,7 +1255,7 @@ namespace SH_OBD {
                                     return value2;
 
                                 case 20:
-                                    if ((HexByteToInt(response.GetDataByte(3)) & 0x40) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(3)) & 0x40) == 0) {
                                         value2.BoolValue = true;
                                         value2.DoubleValue = 1.0;
                                         value2.StringValue = "YES";
@@ -1283,7 +1269,7 @@ namespace SH_OBD {
                                     return value2;
 
                                 case 0x15:
-                                    if ((HexByteToInt(response.GetDataByte(3)) & 0x80) == 0) {
+                                    if ((Utility.Hex2Int(response.GetDataByte(3)) & 0x80) == 0) {
                                         value2.BoolValue = true;
                                         value2.DoubleValue = 1.0;
                                         value2.StringValue = "YES";
@@ -1306,8 +1292,8 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                double num29 = HexByteToInt(response.GetDataByte(0));
-                                double num28 = HexByteToInt(response.GetDataByte(1));
+                                double num29 = Utility.Hex2Int(response.GetDataByte(0));
+                                double num28 = Utility.Hex2Int(response.GetDataByte(1));
                                 value2.DoubleValue = ((num29 * 256.0) + num28) * 0.39215686274509803;
                                 return value2;
                             }
@@ -1316,8 +1302,8 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                double num27 = HexByteToInt(response.GetDataByte(0));
-                                double num26 = HexByteToInt(response.GetDataByte(1));
+                                double num27 = Utility.Hex2Int(response.GetDataByte(0));
+                                double num26 = Utility.Hex2Int(response.GetDataByte(1));
                                 value2.DoubleValue = ((num27 * 256.0) + num26) * 3.0517578125E-05;
                                 return value2;
                             }
@@ -1326,7 +1312,7 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                double num25 = HexByteToInt(response.GetDataByte(0));
+                                double num25 = Utility.Hex2Int(response.GetDataByte(0));
                                 value2.DoubleValue = (num25 * 100.0) * 0.00392156862745098;
                                 return value2;
                             }
@@ -1335,7 +1321,7 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                double num24 = HexByteToInt(response.GetDataByte(0));
+                                double num24 = Utility.Hex2Int(response.GetDataByte(0));
                                 value2.DoubleValue = num24 - 40.0;
                                 if (bEnglishUnits) {
                                     value2.DoubleValue = (value2.DoubleValue * 1.8) + 32.0;
@@ -1352,7 +1338,7 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                double num23 = HexByteToInt(response.GetDataByte(0));
+                                double num23 = Utility.Hex2Int(response.GetDataByte(0));
                                 value2.DoubleValue = (num23 * 100.0) * 0.00392156862745098;
                                 return value2;
                             }
@@ -1362,8 +1348,8 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                double num22 = HexByteToInt(response.GetDataByte(0));
-                                double num21 = HexByteToInt(response.GetDataByte(1));
+                                double num22 = Utility.Hex2Int(response.GetDataByte(0));
+                                double num21 = Utility.Hex2Int(response.GetDataByte(1));
                                 value2.DoubleValue = (num22 * 256.0) + num21;
                                 return value2;
                             }
@@ -1372,7 +1358,7 @@ namespace SH_OBD {
                                 value2.ErrorDetected = true;
                                 return value2;
                             }
-                            switch (HexByteToInt(response.GetDataByte(0))) {
+                            switch (Utility.Hex2Int(response.GetDataByte(0))) {
                                 case 1:
                                     value2.StringValue = "Gasoline";
                                     break;
@@ -1469,7 +1455,7 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                double num20 = HexByteToInt(response.GetDataByte(0));
+                                double num20 = Utility.Hex2Int(response.GetDataByte(0));
                                 value2.DoubleValue = (num20 * 100.0) * 0.00392156862745098;
                                 return value2;
                             }
@@ -1492,7 +1478,7 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                int num18 = HexByteToInt(response.GetDataByte(1));
+                                int num18 = Utility.Hex2Int(response.GetDataByte(1));
                                 value2.DoubleValue = num18 * 0.005;
                                 return value2;
                             }
@@ -1501,7 +1487,7 @@ namespace SH_OBD {
                                     value2.ErrorDetected = true;
                                     return value2;
                                 }
-                                int num17 = HexByteToInt(response.GetDataByte(2));
+                                int num17 = Utility.Hex2Int(response.GetDataByte(2));
                                 value2.DoubleValue = num17 * 0.005;
                                 return value2;
                             }
@@ -1509,7 +1495,7 @@ namespace SH_OBD {
                             return value2;
                         }
                         if (response.GetDataByteCount() >= 1) {
-                            int num19 = HexByteToInt(response.GetDataByte(0));
+                            int num19 = Utility.Hex2Int(response.GetDataByte(0));
                             value2.DoubleValue = num19 * 0.005;
                             return value2;
                         }
@@ -1518,6 +1504,9 @@ namespace SH_OBD {
                     }
                 case 9:
                     goto Label_38E3;
+                //default:
+                //    value2.ErrorDetected = true;
+                //    return value2;
             }
             goto Label_390C;
 
@@ -1535,11 +1524,11 @@ namespace SH_OBD {
                 return value2;
             }
             if (param.SubParameter == 0) {
-                double num59 = HexByteToInt(response.GetDataByte(0));
+                double num59 = Utility.Hex2Int(response.GetDataByte(0));
                 value2.DoubleValue = num59 * 0.005;
                 return value2;
             }
-            double num15 = HexByteToInt(response.GetDataByte(1));
+            double num15 = Utility.Hex2Int(response.GetDataByte(1));
             if (num15 == 255.0) {
                 value2.DoubleValue = 0.0;
                 return value2;
@@ -1551,7 +1540,7 @@ namespace SH_OBD {
                 value2.ErrorDetected = true;
                 return value2;
             }
-            if ((HexByteToInt(response.GetDataByte(0)) & 1) != 0) {
+            if ((Utility.Hex2Int(response.GetDataByte(0)) & 1) != 0) {
                 value2.DoubleValue = 1.0;
                 value2.BoolValue = true;
                 value2.StringValue = "ON";
@@ -1568,30 +1557,37 @@ namespace SH_OBD {
                 value2.ErrorDetected = true;
                 return value2;
             }
-            double num31 = HexByteToInt(response.GetDataByte(0));
-            double num30 = HexByteToInt(response.GetDataByte(1));
+            double num31 = Utility.Hex2Int(response.GetDataByte(0));
+            double num30 = Utility.Hex2Int(response.GetDataByte(1));
             value2.DoubleValue = ((num31 * 256.0) + num30) * 0.001;
             return value2;
         Label_379A:
-            strings = new StringCollection();
-            int startIndex = 0;
-            if (4 <= response.Data.Length) {
-                do {
-                    string str = GetDTCName(response.Data.Substring(startIndex, 4));
-                    if (str.CompareTo("P0000") != 0) {
-                        strings.Add(str);
-                    }
-                    startIndex += 4;
+            strings = new List<string>();
+            for (int i = 0; i <= response.Data.Length - 4; i += 4) {
+                string str = GetDTCName(response.Data.Substring(i, 4));
+                if (str.CompareTo("P0000") != 0) {
+                    strings.Add(str);
                 }
-                while ((startIndex + 4) <= response.Data.Length);
             }
-            value2.StringCollectionValue = strings;
+            value2.ListStringValue = strings;
             return value2;
         Label_38E3:
-            if (param.Parameter == 2) {
-                value2.StringValue = HexStringToASCIIString(response.Data);
-                value2.ShortStringValue = value2.StringValue;
-                return value2;
+            switch (param.Parameter) {
+                case 0x02:
+                case 0x04:
+                    value2.StringValue = HexStringToASCIIString(response.Data);
+                    value2.ShortStringValue = value2.StringValue;
+                    return value2;
+                case 0x06:
+                    value2.StringValue = response.Data;
+                    value2.ShortStringValue = value2.StringValue;
+                    return value2;
+                case 0x0A:
+                    value2.StringValue = HexStringToASCIIString(response.Data.Substring(0, 6).Replace("00", ""));
+                    value2.StringValue += HexStringToASCIIString(response.Data.Substring(8, 2));
+                    value2.StringValue += HexStringToASCIIString(response.Data.Substring(10).Replace("00", ""));
+                    value2.ShortStringValue = value2.StringValue;
+                    return value2;
             }
         Label_390C:
             value2.ErrorDetected = true;
@@ -1658,13 +1654,13 @@ namespace SH_OBD {
                 return GetValue(param, responses.GetOBDResponse(0), bEnglishUnits);
             }
             OBDParameterValue value8 = new OBDParameterValue();
-            StringCollection strings = new StringCollection();
+            List<string> strings = new List<string>();
             for (int i = 0; i < responses.ResponseCount; i++) {
-                foreach (string str in GetValue(param, responses.GetOBDResponse(i), bEnglishUnits).StringCollectionValue) {
+                foreach (string str in GetValue(param, responses.GetOBDResponse(i), bEnglishUnits).ListStringValue) {
                     strings.Add(str);
                 }
             }
-            value8.StringCollectionValue = strings;
+            value8.ListStringValue = strings;
             return value8;
         }
 

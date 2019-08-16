@@ -4,386 +4,438 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace SH_OBD
-{
-	public class FreezeFrameDataControl : UserControl
-	{
-		private Label lblPIDHeader;
-		private Label lblDescriptionHeader;
-		private Label lblEnglishValueHeader;
-		private Label lblEnglishUnitsHeader;
-		private Label lblMetricValueHeader;
-		private Label lblMetricUnitsHeader;
-		private Label lblMetricUnits02;
-		private Label lblMetricValue02;
-		private Label lblEnglishUnits02;
-		private Label lblEnglishValue02;
-		private Label lblDescription02;
-		private Label lblPID02;
-		private Label lblMetricUnits05;
-		private Label lblMetricValue05;
-		private Label lblEnglishUnits05;
-		private Label lblEnglishValue05;
-		private Label lblDescription05;
-		private Label lblPID05;
-		private Label lblMetricUnits04;
-		private Label lblMetricValue04;
-		private Label lblEnglishUnits04;
-		private Label lblEnglishValue04;
-		private Label lblDescription04;
-		private Label lblPID04;
-		private Label lblMetricUnits0E;
-		private Label lblMetricValue0E;
-		private Label lblEnglishUnits0E;
-		private Label lblEnglishValue0E;
-		private Label lblDescription0E;
-		private Label lblPID0E;
-		private Label lblMetricUnits0D;
-		private Label lblMetricValue0D;
-		private Label lblEnglishUnits0D;
-		private Label lblEnglishValue0D;
-		private Label lblDescription0D;
-		private Label lblPID0D;
-		private Label lblMetricUnits0C;
-		private Label lblMetricValue0C;
-		private Label lblEnglishUnits0C;
-		private Label lblEnglishValue0C;
-		private Label lblDescription0C;
-		private Label lblPID0C;
-		private Label lblMetricUnits0B;
-		private Label lblMetricValue0B;
-		private Label lblEnglishUnits0B;
-		private Label lblEnglishValue0B;
-		private Label lblDescription0B;
-		private Label lblPID0B;
-		private Label lblMetricUnits03a;
-		private Label lblMetricValue03a;
-		private Label lblEnglishUnits03a;
-		private Label lblEnglishValue03a;
-		private Label lblDescription03a;
-		private Label lblPID03a;
-		private Label lblMetricUnits09a;
-		private Label lblMetricValue09a;
-		private Label lblEnglishUnits09a;
-		private Label lblEnglishValue09a;
-		private Label lblDescription09a;
-		private Label lblPID09a;
-		private Label lblMetricUnits08a;
-		private Label lblMetricValue08a;
-		private Label lblEnglishUnits08a;
-		private Label lblEnglishValue08a;
-		private Label lblDescription08a;
-		private Label lblPID08a;
-		private Label lblMetricUnits07a;
-		private Label lblMetricValue07a;
-		private Label lblEnglishUnits07a;
-		private Label lblEnglishValue07a;
-		private Label lblDescription07a;
-		private Label lblPID07a;
-		private Label lblMetricUnits06a;
-		private Label lblMetricValue06a;
-		private Label lblEnglishUnits06a;
-		private Label lblEnglishValue06a;
-		private Label lblDescription06a;
-		private Label lblPID06a;
-		private Label lblMetricUnits03b;
-		private Label lblMetricValue03b;
-		private Label lblEnglishUnits03b;
-		private Label lblEnglishValue03b;
-		private Label lblDescription03b;
-		private Label lblPID03b;
-		private Label lblMetricUnits09b;
-		private Label lblMetricValue09b;
-		private Label lblEnglishUnits09b;
-		private Label lblEnglishValue09b;
-		private Label lblDescription09b;
-		private Label lblPID09b;
-		private Label lblMetricUnits08b;
-		private Label lblMetricValue08b;
-		private Label lblEnglishUnits08b;
-		private Label lblEnglishValue08b;
-		private Label lblDescription08b;
-		private Label lblPID08b;
-		private Label lblMetricUnits07b;
-		private Label lblMetricValue07b;
-		private Label lblEnglishUnits07b;
-		private Label lblEnglishValue07b;
-		private Label lblDescription07b;
-		private Label lblPID07b;
-		private Label lblMetricUnits06b;
-		private Label lblMetricValue06b;
-		private Label lblEnglishUnits06b;
-		private Label lblEnglishValue06b;
-		private Label lblDescription06b;
-		private Label lblPID06b;
+namespace SH_OBD {
+    public class FreezeFrameDataControl : UserControl {
+        private Label lblPIDHeader;
+        private Label lblDescriptionHeader;
+        private Label lblEnglishValueHeader;
+        private Label lblEnglishUnitsHeader;
+        private Label lblMetricValueHeader;
+        private Label lblMetricUnitsHeader;
+        private Label lblMetricUnits02;
+        private Label lblMetricValue02;
+        private Label lblEnglishUnits02;
+        private Label lblEnglishValue02;
+        private Label lblDescription02;
+        private Label lblPID02;
+        private Label lblMetricUnits05;
+        private Label lblMetricValue05;
+        private Label lblEnglishUnits05;
+        private Label lblEnglishValue05;
+        private Label lblDescription05;
+        private Label lblPID05;
+        private Label lblMetricUnits04;
+        private Label lblMetricValue04;
+        private Label lblEnglishUnits04;
+        private Label lblEnglishValue04;
+        private Label lblDescription04;
+        private Label lblPID04;
+        private Label lblMetricUnits0E;
+        private Label lblMetricValue0E;
+        private Label lblEnglishUnits0E;
+        private Label lblEnglishValue0E;
+        private Label lblDescription0E;
+        private Label lblPID0E;
+        private Label lblMetricUnits0D;
+        private Label lblMetricValue0D;
+        private Label lblEnglishUnits0D;
+        private Label lblEnglishValue0D;
+        private Label lblDescription0D;
+        private Label lblPID0D;
+        private Label lblMetricUnits0C;
+        private Label lblMetricValue0C;
+        private Label lblEnglishUnits0C;
+        private Label lblEnglishValue0C;
+        private Label lblDescription0C;
+        private Label lblPID0C;
+        private Label lblMetricUnits0B;
+        private Label lblMetricValue0B;
+        private Label lblEnglishUnits0B;
+        private Label lblEnglishValue0B;
+        private Label lblDescription0B;
+        private Label lblPID0B;
+        private Label lblMetricUnits03a;
+        private Label lblMetricValue03a;
+        private Label lblEnglishUnits03a;
+        private Label lblEnglishValue03a;
+        private Label lblDescription03a;
+        private Label lblPID03a;
+        private Label lblMetricUnits09a;
+        private Label lblMetricValue09a;
+        private Label lblEnglishUnits09a;
+        private Label lblEnglishValue09a;
+        private Label lblDescription09a;
+        private Label lblPID09a;
+        private Label lblMetricUnits08a;
+        private Label lblMetricValue08a;
+        private Label lblEnglishUnits08a;
+        private Label lblEnglishValue08a;
+        private Label lblDescription08a;
+        private Label lblPID08a;
+        private Label lblMetricUnits07a;
+        private Label lblMetricValue07a;
+        private Label lblEnglishUnits07a;
+        private Label lblEnglishValue07a;
+        private Label lblDescription07a;
+        private Label lblPID07a;
+        private Label lblMetricUnits06a;
+        private Label lblMetricValue06a;
+        private Label lblEnglishUnits06a;
+        private Label lblEnglishValue06a;
+        private Label lblDescription06a;
+        private Label lblPID06a;
+        private Label lblMetricUnits03b;
+        private Label lblMetricValue03b;
+        private Label lblEnglishUnits03b;
+        private Label lblEnglishValue03b;
+        private Label lblDescription03b;
+        private Label lblPID03b;
+        private Label lblMetricUnits09b;
+        private Label lblMetricValue09b;
+        private Label lblEnglishUnits09b;
+        private Label lblEnglishValue09b;
+        private Label lblDescription09b;
+        private Label lblPID09b;
+        private Label lblMetricUnits08b;
+        private Label lblMetricValue08b;
+        private Label lblEnglishUnits08b;
+        private Label lblEnglishValue08b;
+        private Label lblDescription08b;
+        private Label lblPID08b;
+        private Label lblMetricUnits07b;
+        private Label lblMetricValue07b;
+        private Label lblEnglishUnits07b;
+        private Label lblEnglishValue07b;
+        private Label lblDescription07b;
+        private Label lblPID07b;
+        private Label lblMetricUnits06b;
+        private Label lblMetricValue06b;
+        private Label lblEnglishUnits06b;
+        private Label lblEnglishValue06b;
+        private Label lblDescription06b;
+        private Label lblPID06b;
 
-		[Description("Ignition Timing Advance (deg)")]
-		[Category("FreezeFrame")]
-		public double SparkAdvance
-		{
-			get
-			{
-				return Utility.Text2Double(lblEnglishValue0E.Text);
-			}
-			set
-			{
-				lblEnglishValue0E.Text = value.ToString("##0.##");
-				lblMetricValue0E.Text = value.ToString("##0.##");
-			}
-		}
+        [Description("Ignition Timing Advance (deg)")]
+        [Category("FreezeFrame")]
+        public double SparkAdvance {
+            get {
+                return Utility.Text2Double(lblEnglishValue0E.Text);
+            }
+            set {
+                lblEnglishValue0E.Text = value.ToString("##0.##");
+                lblMetricValue0E.Text = value.ToString("##0.##");
+            }
+        }
 
-		[Description("Vehicle Speed (mph)")]
-		[Category("FreezeFrame")]
-		public double VehicleSpeed
-		{
-			get
-			{
-				return Utility.Text2Double(lblEnglishValue0D.Text);
-			}
-			set
-			{
-				lblEnglishValue0D.Text = value.ToString("##0.##");
-				lblMetricValue0D.Text = (VehicleSpeed * 1.609344).ToString("##0.##");
-			}
-		}
+        [Description("Vehicle Speed (mph)")]
+        [Category("FreezeFrame")]
+        public double VehicleSpeed {
+            get {
+                return Utility.Text2Double(lblEnglishValue0D.Text);
+            }
+            set {
+                lblEnglishValue0D.Text = value.ToString("##0.##");
+                lblMetricValue0D.Text = (VehicleSpeed * 1.609344).ToString("##0.##");
+            }
+        }
 
-		[Description("Engine RPM (rev/min)")]
-		[Category("FreezeFrame")]
-		public double EngineRPM
-		{
-			get
-			{
-				return Utility.Text2Double(lblEnglishValue0C.Text);
-			}
-			set
-			{
-				lblEnglishValue0C.Text = value.ToString("##0.##");
-				lblMetricValue0C.Text = value.ToString("##0.##");
-			}
-		}
+        [Description("Engine RPM (rev/min)")]
+        [Category("FreezeFrame")]
+        public double EngineRPM {
+            get {
+                return Utility.Text2Double(lblEnglishValue0C.Text);
+            }
+            set {
+                lblEnglishValue0C.Text = value.ToString("##0.##");
+                lblMetricValue0C.Text = value.ToString("##0.##");
+            }
+        }
 
-		[Description("Intake Manifold Pressure (inHg)")]
-		[Category("FreezeFrame")]
-		public double IntakePressure
-		{
-			get
-			{
-				return Utility.Text2Double(lblEnglishValue0B.Text);
-			}
-			set
-			{
-				lblEnglishValue0B.Text = value.ToString("##0.##");
-				lblMetricValue0B.Text = (IntakePressure * 3.38639).ToString("##0.##");
-			}
-		}
+        [Description("Intake Manifold Pressure (inHg)")]
+        [Category("FreezeFrame")]
+        public double IntakePressure {
+            get {
+                return Utility.Text2Double(lblEnglishValue0B.Text);
+            }
+            set {
+                lblEnglishValue0B.Text = value.ToString("##0.##");
+                lblMetricValue0B.Text = (IntakePressure * 3.38639).ToString("##0.##");
+            }
+        }
 
-		[Description("Long Term Fuel Trim - Bank 4 (%)")]
-		[Category("FreezeFrame")]
-		public double LTFT4
-		{
-			get
-			{
-				return Utility.Text2Double(lblEnglishValue09b.Text);
-			}
-			set
-			{
-				lblEnglishValue09b.Text = value.ToString("##0.##");
-				lblMetricValue09b.Text = value.ToString("##0.##");
-			}
-		}
+        [Description("Long Term Fuel Trim - Bank 4 (%)")]
+        [Category("FreezeFrame")]
+        public double LTFT4 {
+            get {
+                return Utility.Text2Double(lblEnglishValue09b.Text);
+            }
+            set {
+                lblEnglishValue09b.Text = value.ToString("##0.##");
+                lblMetricValue09b.Text = value.ToString("##0.##");
+            }
+        }
 
-		[Category("FreezeFrame")]
-		[Description("Long Term Fuel Trim - Bank 3 (%)")]
-		public double LTFT3
-		{
-			get
-			{
-				return Utility.Text2Double(lblEnglishValue07b.Text);
-			}
-			set
-			{
-				lblEnglishValue07b.Text = value.ToString("##0.##");
-				lblMetricValue07b.Text = value.ToString("##0.##");
-			}
-		}
+        [Category("FreezeFrame")]
+        [Description("Long Term Fuel Trim - Bank 3 (%)")]
+        public double LTFT3 {
+            get {
+                return Utility.Text2Double(lblEnglishValue07b.Text);
+            }
+            set {
+                lblEnglishValue07b.Text = value.ToString("##0.##");
+                lblMetricValue07b.Text = value.ToString("##0.##");
+            }
+        }
 
-		[Category("FreezeFrame")]
-		[Description("Long Term Fuel Trim - Bank 2 (%)")]
-		public double LTFT2
-		{
-			get
-			{
-				return Utility.Text2Double(lblEnglishValue09a.Text);
-			}
-			set
-			{
-				lblEnglishValue09a.Text = value.ToString("##0.##");
-				lblMetricValue09a.Text = value.ToString("##0.##");
-			}
-		}
+        [Category("FreezeFrame")]
+        [Description("Long Term Fuel Trim - Bank 2 (%)")]
+        public double LTFT2 {
+            get {
+                return Utility.Text2Double(lblEnglishValue09a.Text);
+            }
+            set {
+                lblEnglishValue09a.Text = value.ToString("##0.##");
+                lblMetricValue09a.Text = value.ToString("##0.##");
+            }
+        }
 
-		[Category("FreezeFrame")]
-		[Description("Long Term Fuel Trim - Bank 1 (%)")]
-		public double LTFT1
-		{
-			get
-			{
-				return Utility.Text2Double(lblEnglishValue07a.Text);
-			}
-			set
-			{
-				lblEnglishValue07a.Text = value.ToString("##0.##");
-				lblMetricValue07a.Text = value.ToString("##0.##");
-			}
-		}
+        [Category("FreezeFrame")]
+        [Description("Long Term Fuel Trim - Bank 1 (%)")]
+        public double LTFT1 {
+            get {
+                return Utility.Text2Double(lblEnglishValue07a.Text);
+            }
+            set {
+                lblEnglishValue07a.Text = value.ToString("##0.##");
+                lblMetricValue07a.Text = value.ToString("##0.##");
+            }
+        }
 
-		[Description("Short Term Fuel Trim - Bank 4 (%)")]
-		[Category("FreezeFrame")]
-		public double STFT4
-		{
-			get
-			{
-				return Utility.Text2Double(lblEnglishValue08b.Text);
-			}
-			set
-			{
-				lblEnglishValue08b.Text = value.ToString("##0.##");
-				lblMetricValue08b.Text = value.ToString("##0.##");
-			}
-		}
+        [Description("Short Term Fuel Trim - Bank 4 (%)")]
+        [Category("FreezeFrame")]
+        public double STFT4 {
+            get {
+                return Utility.Text2Double(lblEnglishValue08b.Text);
+            }
+            set {
+                lblEnglishValue08b.Text = value.ToString("##0.##");
+                lblMetricValue08b.Text = value.ToString("##0.##");
+            }
+        }
 
-		[Category("FreezeFrame")]
-		[Description("Short Term Fuel Trim - Bank 3 (%)")]
-		public double STFT3
-		{
-			get
-			{
-				return Utility.Text2Double(lblEnglishValue06b.Text);
-			}
-			set
-			{
-				lblEnglishValue06b.Text = value.ToString("##0.##");
-				lblMetricValue06b.Text = value.ToString("##0.##");
-			}
-		}
+        [Category("FreezeFrame")]
+        [Description("Short Term Fuel Trim - Bank 3 (%)")]
+        public double STFT3 {
+            get {
+                return Utility.Text2Double(lblEnglishValue06b.Text);
+            }
+            set {
+                lblEnglishValue06b.Text = value.ToString("##0.##");
+                lblMetricValue06b.Text = value.ToString("##0.##");
+            }
+        }
 
-		[Category("FreezeFrame")]
-		[Description("Short Term Fuel Trim - Bank 2 (%)")]
-		public double STFT2
-		{
-			get
-			{
-				return Utility.Text2Double(lblEnglishValue08a.Text);
-			}
-			set
-			{
-				lblEnglishValue08a.Text = value.ToString("##0.##");
-				lblMetricValue08a.Text = value.ToString("##0.##");
-			}
-		}
+        [Category("FreezeFrame")]
+        [Description("Short Term Fuel Trim - Bank 2 (%)")]
+        public double STFT2 {
+            get {
+                return Utility.Text2Double(lblEnglishValue08a.Text);
+            }
+            set {
+                lblEnglishValue08a.Text = value.ToString("##0.##");
+                lblMetricValue08a.Text = value.ToString("##0.##");
+            }
+        }
 
-		[Description("Short Term Fuel Trim - Bank 1 (%)")]
-		[Category("FreezeFrame")]
-		public double STFT1
-		{
-			get
-			{
-				return Utility.Text2Double(lblEnglishValue06a.Text);
-			}
-			set
-			{
-				lblEnglishValue06a.Text = value.ToString("##0.##");
-				lblMetricValue06a.Text = value.ToString("##0.##");
-			}
-		}
+        [Description("Short Term Fuel Trim - Bank 1 (%)")]
+        [Category("FreezeFrame")]
+        public double STFT1 {
+            get {
+                return Utility.Text2Double(lblEnglishValue06a.Text);
+            }
+            set {
+                lblEnglishValue06a.Text = value.ToString("##0.##");
+                lblMetricValue06a.Text = value.ToString("##0.##");
+            }
+        }
 
-		[Description("Engine Coolant Temperature (Fahrenheit)")]
-		[Category("FreezeFrame")]
-		public double EngineCoolantTemp
-		{
-			get
-			{
-				return Utility.Text2Double(lblEnglishValue05.Text);
-			}
-			set
-			{
-				lblEnglishValue05.Text = value.ToString("##0.##");
-				lblMetricValue05.Text = ((EngineCoolantTemp - 32.0) * 0.55555555555555558).ToString("##0.##");
-			}
-		}
+        [Description("Engine Coolant Temperature (Fahrenheit)")]
+        [Category("FreezeFrame")]
+        public double EngineCoolantTemp {
+            get {
+                return Utility.Text2Double(lblEnglishValue05.Text);
+            }
+            set {
+                lblEnglishValue05.Text = value.ToString("##0.##");
+                lblMetricValue05.Text = ((EngineCoolantTemp - 32.0) * 0.55555555555555558).ToString("##0.##");
+            }
+        }
 
-		[Description("Calculated Load Value (%)")]
-		[Category("FreezeFrame")]
-		public double CalculatedLoad
-		{
-			get
-			{
-				return Utility.Text2Double(lblEnglishValue04.Text);
-			}
-			set
-			{
-				lblEnglishValue04.Text = value.ToString("##0.##");
-				lblMetricValue04.Text = value.ToString("##0.##");
-			}
-		}
+        [Description("Calculated Load Value (%)")]
+        [Category("FreezeFrame")]
+        public double CalculatedLoad {
+            get {
+                return Utility.Text2Double(lblEnglishValue04.Text);
+            }
+            set {
+                lblEnglishValue04.Text = value.ToString("##0.##");
+                lblMetricValue04.Text = value.ToString("##0.##");
+            }
+        }
 
-		[Category("FreezeFrame")]
-		[Description("Fuel System 2 Status")]
-		public string FuelSystem2Status
-		{
-			get
-			{
-				return lblEnglishValue03b.Text;
-			}
-			set
-			{
-				lblEnglishValue03b.Text = value;
-				lblMetricValue03b.Text = value;
-			}
-		}
+        [Category("FreezeFrame")]
+        [Description("Fuel System 2 Status")]
+        public string FuelSystem2Status {
+            get {
+                return lblEnglishValue03b.Text;
+            }
+            set {
+                lblEnglishValue03b.Text = value;
+                lblMetricValue03b.Text = value;
+            }
+        }
 
-		[Category("FreezeFrame")]
-		[Description("Fuel System 1 Status")]
-		public string FuelSystem1Status
-		{
-			get
-			{
-				return lblEnglishValue03a.Text;
-			}
-			set
-			{
-				lblEnglishValue03a.Text = value;
-				lblMetricValue03a.Text = value;
-			}
-		}
+        [Category("FreezeFrame")]
+        [Description("Fuel System 1 Status")]
+        public string FuelSystem1Status {
+            get {
+                return lblEnglishValue03a.Text;
+            }
+            set {
+                lblEnglishValue03a.Text = value;
+                lblMetricValue03a.Text = value;
+            }
+        }
 
-		[Description("DTC that triggered Freeze Frame data storage")]
-		[Category("FreezeFrame")]
-		public string DTC
-		{
-			get
-			{
-				return lblEnglishValue02.Text;
-			}
-			set
-			{
-				lblEnglishValue02.Text = value;
-				lblMetricValue02.Text = value;
-			}
-		}
+        [Description("DTC that triggered Freeze Frame data storage")]
+        [Category("FreezeFrame")]
+        public string DTC {
+            get {
+                return lblEnglishValue02.Text;
+            }
+            set {
+                lblEnglishValue02.Text = value;
+                lblMetricValue02.Text = value;
+            }
+        }
 
-		public FreezeFrameDataControl()
-		{
-			InitializeComponent();
-		}
+        public FreezeFrameDataControl() {
+            InitializeComponent();
+        }
 
-		protected override void Dispose([MarshalAs(UnmanagedType.U1)] bool disposing)
-		{
-			base.Dispose(disposing);
-		}
+        protected override void Dispose([MarshalAs(UnmanagedType.U1)] bool disposing) {
+            lblPIDHeader.Dispose();
+            lblDescriptionHeader.Dispose();
+            lblEnglishValueHeader.Dispose();
+            lblEnglishUnitsHeader.Dispose();
+            lblMetricValueHeader.Dispose();
+            lblMetricUnitsHeader.Dispose();
+            lblMetricUnits02.Dispose();
+            lblMetricValue02.Dispose();
+            lblEnglishUnits02.Dispose();
+            lblEnglishValue02.Dispose();
+            lblDescription02.Dispose();
+            lblPID02.Dispose();
+            lblMetricUnits05.Dispose();
+            lblMetricValue05.Dispose();
+            lblEnglishUnits05.Dispose();
+            lblEnglishValue05.Dispose();
+            lblDescription05.Dispose();
+            lblPID05.Dispose();
+            lblMetricUnits04.Dispose();
+            lblMetricValue04.Dispose();
+            lblEnglishUnits04.Dispose();
+            lblEnglishValue04.Dispose();
+            lblDescription04.Dispose();
+            lblPID04.Dispose();
+            lblMetricUnits0E.Dispose();
+            lblMetricValue0E.Dispose();
+            lblEnglishUnits0E.Dispose();
+            lblEnglishValue0E.Dispose();
+            lblDescription0E.Dispose();
+            lblPID0E.Dispose();
+            lblMetricUnits0D.Dispose();
+            lblMetricValue0D.Dispose();
+            lblEnglishUnits0D.Dispose();
+            lblEnglishValue0D.Dispose();
+            lblDescription0D.Dispose();
+            lblPID0D.Dispose();
+            lblMetricUnits0C.Dispose();
+            lblMetricValue0C.Dispose();
+            lblEnglishUnits0C.Dispose();
+            lblEnglishValue0C.Dispose();
+            lblDescription0C.Dispose();
+            lblPID0C.Dispose();
+            lblMetricUnits0B.Dispose();
+            lblMetricValue0B.Dispose();
+            lblEnglishUnits0B.Dispose();
+            lblEnglishValue0B.Dispose();
+            lblDescription0B.Dispose();
+            lblPID0B.Dispose();
+            lblMetricUnits03a.Dispose();
+            lblMetricValue03a.Dispose();
+            lblEnglishUnits03a.Dispose();
+            lblEnglishValue03a.Dispose();
+            lblDescription03a.Dispose();
+            lblPID03a.Dispose();
+            lblMetricUnits09a.Dispose();
+            lblMetricValue09a.Dispose();
+            lblEnglishUnits09a.Dispose();
+            lblEnglishValue09a.Dispose();
+            lblDescription09a.Dispose();
+            lblPID09a.Dispose();
+            lblMetricUnits08a.Dispose();
+            lblMetricValue08a.Dispose();
+            lblEnglishUnits08a.Dispose();
+            lblEnglishValue08a.Dispose();
+            lblDescription08a.Dispose();
+            lblPID08a.Dispose();
+            lblMetricUnits07a.Dispose();
+            lblMetricValue07a.Dispose();
+            lblEnglishUnits07a.Dispose();
+            lblEnglishValue07a.Dispose();
+            lblDescription07a.Dispose();
+            lblPID07a.Dispose();
+            lblMetricUnits06a.Dispose();
+            lblMetricValue06a.Dispose();
+            lblEnglishUnits06a.Dispose();
+            lblEnglishValue06a.Dispose();
+            lblDescription06a.Dispose();
+            lblPID06a.Dispose();
+            lblMetricUnits03b.Dispose();
+            lblMetricValue03b.Dispose();
+            lblEnglishUnits03b.Dispose();
+            lblEnglishValue03b.Dispose();
+            lblDescription03b.Dispose();
+            lblPID03b.Dispose();
+            lblMetricUnits09b.Dispose();
+            lblMetricValue09b.Dispose();
+            lblEnglishUnits09b.Dispose();
+            lblEnglishValue09b.Dispose();
+            lblDescription09b.Dispose();
+            lblPID09b.Dispose();
+            lblMetricUnits08b.Dispose();
+            lblMetricValue08b.Dispose();
+            lblEnglishUnits08b.Dispose();
+            lblEnglishValue08b.Dispose();
+            lblDescription08b.Dispose();
+            lblPID08b.Dispose();
+            lblMetricUnits07b.Dispose();
+            lblMetricValue07b.Dispose();
+            lblEnglishUnits07b.Dispose();
+            lblEnglishValue07b.Dispose();
+            lblDescription07b.Dispose();
+            lblPID07b.Dispose();
+            lblMetricUnits06b.Dispose();
+            lblMetricValue06b.Dispose();
+            lblEnglishUnits06b.Dispose();
+            lblEnglishValue06b.Dispose();
+            lblDescription06b.Dispose();
+            lblPID06b.Dispose();
+            base.Dispose(disposing);
+        }
 
-		private void InitializeComponent()
-		{
+        private void InitializeComponent() {
             this.lblPIDHeader = new System.Windows.Forms.Label();
             this.lblDescriptionHeader = new System.Windows.Forms.Label();
             this.lblEnglishValueHeader = new System.Windows.Forms.Label();
@@ -507,7 +559,7 @@ namespace SH_OBD
             // 
             // lblDescriptionHeader
             // 
-            this.lblDescriptionHeader.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblDescriptionHeader.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDescriptionHeader.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblDescriptionHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -618,7 +670,7 @@ namespace SH_OBD
             // 
             // lblDescription02
             // 
-            this.lblDescription02.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblDescription02.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDescription02.BackColor = System.Drawing.Color.White;
             this.lblDescription02.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -694,7 +746,7 @@ namespace SH_OBD
             // 
             // lblDescription03a
             // 
-            this.lblDescription03a.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblDescription03a.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDescription03a.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(234)))), ((int)(((byte)(234)))));
             this.lblDescription03a.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -772,7 +824,7 @@ namespace SH_OBD
             // 
             // lblDescription05
             // 
-            this.lblDescription05.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblDescription05.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDescription05.BackColor = System.Drawing.Color.White;
             this.lblDescription05.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -850,7 +902,7 @@ namespace SH_OBD
             // 
             // lblDescription04
             // 
-            this.lblDescription04.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblDescription04.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDescription04.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(234)))), ((int)(((byte)(234)))));
             this.lblDescription04.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -928,7 +980,7 @@ namespace SH_OBD
             // 
             // lblDescription09a
             // 
-            this.lblDescription09a.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblDescription09a.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDescription09a.BackColor = System.Drawing.Color.White;
             this.lblDescription09a.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -1006,7 +1058,7 @@ namespace SH_OBD
             // 
             // lblDescription08a
             // 
-            this.lblDescription08a.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblDescription08a.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDescription08a.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(234)))), ((int)(((byte)(234)))));
             this.lblDescription08a.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -1084,7 +1136,7 @@ namespace SH_OBD
             // 
             // lblDescription07a
             // 
-            this.lblDescription07a.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblDescription07a.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDescription07a.BackColor = System.Drawing.Color.White;
             this.lblDescription07a.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -1162,7 +1214,7 @@ namespace SH_OBD
             // 
             // lblDescription06a
             // 
-            this.lblDescription06a.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblDescription06a.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDescription06a.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(234)))), ((int)(((byte)(234)))));
             this.lblDescription06a.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -1240,7 +1292,7 @@ namespace SH_OBD
             // 
             // lblDescription0E
             // 
-            this.lblDescription0E.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblDescription0E.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDescription0E.BackColor = System.Drawing.Color.White;
             this.lblDescription0E.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -1318,7 +1370,7 @@ namespace SH_OBD
             // 
             // lblDescription0D
             // 
-            this.lblDescription0D.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblDescription0D.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDescription0D.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(234)))), ((int)(((byte)(234)))));
             this.lblDescription0D.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -1396,7 +1448,7 @@ namespace SH_OBD
             // 
             // lblDescription0C
             // 
-            this.lblDescription0C.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblDescription0C.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDescription0C.BackColor = System.Drawing.Color.White;
             this.lblDescription0C.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -1474,7 +1526,7 @@ namespace SH_OBD
             // 
             // lblDescription0B
             // 
-            this.lblDescription0B.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblDescription0B.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDescription0B.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(234)))), ((int)(((byte)(234)))));
             this.lblDescription0B.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -1550,7 +1602,7 @@ namespace SH_OBD
             // 
             // lblDescription03b
             // 
-            this.lblDescription03b.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblDescription03b.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDescription03b.BackColor = System.Drawing.Color.White;
             this.lblDescription03b.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -1628,7 +1680,7 @@ namespace SH_OBD
             // 
             // lblDescription09b
             // 
-            this.lblDescription09b.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblDescription09b.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDescription09b.BackColor = System.Drawing.Color.White;
             this.lblDescription09b.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -1706,7 +1758,7 @@ namespace SH_OBD
             // 
             // lblDescription08b
             // 
-            this.lblDescription08b.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblDescription08b.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDescription08b.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(234)))), ((int)(((byte)(234)))));
             this.lblDescription08b.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -1784,7 +1836,7 @@ namespace SH_OBD
             // 
             // lblDescription07b
             // 
-            this.lblDescription07b.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblDescription07b.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDescription07b.BackColor = System.Drawing.Color.White;
             this.lblDescription07b.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -1811,7 +1863,7 @@ namespace SH_OBD
             // lblMetricUnits06b
             // 
             this.lblMetricUnits06b.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblMetricUnits06b.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(234)))), ((int)(((byte)(234)))));
+            this.lblMetricUnits06b.BackColor = System.Drawing.Color.FromArgb(234, 234, 234);
             this.lblMetricUnits06b.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblMetricUnits06b.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMetricUnits06b.Location = new System.Drawing.Point(475, 190);
@@ -1824,7 +1876,7 @@ namespace SH_OBD
             // lblMetricValue06b
             // 
             this.lblMetricValue06b.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblMetricValue06b.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(234)))), ((int)(((byte)(234)))));
+            this.lblMetricValue06b.BackColor = System.Drawing.Color.FromArgb(234, 234, 234);
             this.lblMetricValue06b.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblMetricValue06b.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMetricValue06b.Location = new System.Drawing.Point(396, 190);
@@ -1837,7 +1889,7 @@ namespace SH_OBD
             // lblEnglishUnits06b
             // 
             this.lblEnglishUnits06b.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblEnglishUnits06b.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(234)))), ((int)(((byte)(234)))));
+            this.lblEnglishUnits06b.BackColor = System.Drawing.Color.FromArgb(234, 234, 234);
             this.lblEnglishUnits06b.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblEnglishUnits06b.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblEnglishUnits06b.Location = new System.Drawing.Point(317, 190);
@@ -1850,7 +1902,7 @@ namespace SH_OBD
             // lblEnglishValue06b
             // 
             this.lblEnglishValue06b.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblEnglishValue06b.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(234)))), ((int)(((byte)(234)))));
+            this.lblEnglishValue06b.BackColor = System.Drawing.Color.FromArgb(234, 234, 234);
             this.lblEnglishValue06b.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblEnglishValue06b.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblEnglishValue06b.Location = new System.Drawing.Point(238, 190);
@@ -1862,9 +1914,9 @@ namespace SH_OBD
             // 
             // lblDescription06b
             // 
-            this.lblDescription06b.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblDescription06b.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblDescription06b.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(234)))), ((int)(((byte)(234)))));
+            this.lblDescription06b.BackColor = System.Drawing.Color.FromArgb(234, 234, 234);
             this.lblDescription06b.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblDescription06b.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDescription06b.Location = new System.Drawing.Point(39, 190);
@@ -1876,7 +1928,7 @@ namespace SH_OBD
             // 
             // lblPID06b
             // 
-            this.lblPID06b.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(234)))), ((int)(((byte)(234)))));
+            this.lblPID06b.BackColor = System.Drawing.Color.FromArgb(234, 234, 234);
             this.lblPID06b.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblPID06b.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPID06b.Location = new System.Drawing.Point(0, 190);
@@ -2001,44 +2053,43 @@ namespace SH_OBD
             this.Size = new System.Drawing.Size(555, 343);
             this.ResumeLayout(false);
 
-		}
+        }
 
-		public void Reset()
-		{
-			lblEnglishValue02.Text = "-";
-			lblMetricValue02.Text = "-";
-			lblEnglishValue03a.Text = "-";
-			lblMetricValue03a.Text = "-";
-			lblEnglishValue03b.Text = "-";
-			lblMetricValue03b.Text = "-";
-			lblEnglishValue04.Text = "-";
-			lblMetricValue04.Text = "-";
-			lblEnglishValue05.Text = "-";
-			lblMetricValue05.Text = "-";
-			lblEnglishValue06a.Text = "-";
-			lblMetricValue06a.Text = "-";
-			lblEnglishValue07a.Text = "-";
-			lblMetricValue07a.Text = "-";
-			lblEnglishValue08a.Text = "-";
-			lblMetricValue08a.Text = "-";
-			lblEnglishValue09a.Text = "-";
-			lblMetricValue09a.Text = "-";
-			lblEnglishValue06b.Text = "-";
-			lblMetricValue06b.Text = "-";
-			lblEnglishValue07b.Text = "-";
-			lblMetricValue07b.Text = "-";
-			lblEnglishValue08b.Text = "-";
-			lblMetricValue08b.Text = "-";
-			lblEnglishValue09b.Text = "-";
-			lblMetricValue09b.Text = "-";
-			lblEnglishValue0B.Text = "-";
-			lblMetricValue0B.Text = "-";
-			lblEnglishValue0C.Text = "-";
-			lblMetricValue0C.Text = "-";
-			lblEnglishValue0D.Text = "-";
-			lblMetricValue0D.Text = "-";
-			lblEnglishValue0E.Text = "-";
-			lblMetricValue0E.Text = "-";
-		}
-	}
+        public void Reset() {
+            lblEnglishValue02.Text = "-";
+            lblMetricValue02.Text = "-";
+            lblEnglishValue03a.Text = "-";
+            lblMetricValue03a.Text = "-";
+            lblEnglishValue03b.Text = "-";
+            lblMetricValue03b.Text = "-";
+            lblEnglishValue04.Text = "-";
+            lblMetricValue04.Text = "-";
+            lblEnglishValue05.Text = "-";
+            lblMetricValue05.Text = "-";
+            lblEnglishValue06a.Text = "-";
+            lblMetricValue06a.Text = "-";
+            lblEnglishValue07a.Text = "-";
+            lblMetricValue07a.Text = "-";
+            lblEnglishValue08a.Text = "-";
+            lblMetricValue08a.Text = "-";
+            lblEnglishValue09a.Text = "-";
+            lblMetricValue09a.Text = "-";
+            lblEnglishValue06b.Text = "-";
+            lblMetricValue06b.Text = "-";
+            lblEnglishValue07b.Text = "-";
+            lblMetricValue07b.Text = "-";
+            lblEnglishValue08b.Text = "-";
+            lblMetricValue08b.Text = "-";
+            lblEnglishValue09b.Text = "-";
+            lblMetricValue09b.Text = "-";
+            lblEnglishValue0B.Text = "-";
+            lblMetricValue0B.Text = "-";
+            lblEnglishValue0C.Text = "-";
+            lblMetricValue0C.Text = "-";
+            lblEnglishValue0D.Text = "-";
+            lblMetricValue0D.Text = "-";
+            lblEnglishValue0E.Text = "-";
+            lblMetricValue0E.Text = "-";
+        }
+    }
 }

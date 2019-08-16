@@ -18,7 +18,7 @@ namespace SH_OBD {
 
         private void btnRead_Click(object sender, EventArgs e) {
             if (!m_obdInterface.ConnectedStatus) {
-                MessageBox.Show("成功连接车辆OBD接口后才能进行操作", "车辆OBD接口连接请求", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("成功连接车辆OBD接口后才能进行操作", "出错", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             } else {
                 btnRead.Enabled = false;
                 ReadTestResults();

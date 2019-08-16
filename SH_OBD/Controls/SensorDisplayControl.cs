@@ -105,11 +105,11 @@ namespace SH_OBD {
             rectangle = ClientRectangle;
             rectangle.Inflate(-10, -10);
 
-            float emSize = (float)rectangle.Width * 0.04f;
+            float emSize = rectangle.Width * 0.04f;
             Font font = new Font("Arial", emSize, FontStyle.Bold);
             SizeF sizeF;
             for (sizeF = g.MeasureString(m_Name, font);
-                sizeF.Width > (float)(rectangle.Width * 0.95) || sizeF.Height > (float)(rectangle.Height * 0.45);
+                sizeF.Width > (rectangle.Width * 0.95f) || sizeF.Height > (rectangle.Height * 0.45f);
                 sizeF = g.MeasureString(m_Name, font)
                 ) {
                 font.Dispose();
@@ -122,17 +122,17 @@ namespace SH_OBD {
                 );
             g.DrawString(m_Name, font, new SolidBrush(Color.Black), point1.X, point1.Y);
 
-            emSize = (float)rectangle.Width * 0.04f;
+            emSize = rectangle.Width * 0.04f;
             Font font2 = new Font("Arial", emSize, FontStyle.Bold);
             for (sizeF = g.MeasureString(m_Value, font2);
-                sizeF.Width > (float)rectangle.Width || sizeF.Height > (float)(rectangle.Height / 2);
+                sizeF.Width > rectangle.Width || sizeF.Height > rectangle.Height / 2f;
                 sizeF = g.MeasureString(m_Value, font2)
                 ) {
                 font2.Dispose();
                 emSize -= 0.1f;
                 font2 = new Font("Arial", emSize, FontStyle.Bold);
             }
-            PointF point2 = (PointF)new Point(
+            PointF point2 = new Point(
                 ((int)((double)((rectangle.Right + rectangle.Left) / 2) - (double)sizeF.Width * 0.5)),
                 ((int)(((double)(rectangle.Height / 2) - (double)sizeF.Height) * 0.5 + (double)((rectangle.Bottom + rectangle.Top) / 2)))
                 );

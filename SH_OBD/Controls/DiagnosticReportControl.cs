@@ -1,4 +1,4 @@
-﻿using System.Collections.Specialized;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -23,10 +23,10 @@ namespace SH_OBD {
         public bool m_bMilStatus;
         public int m_iTotalCodes;
         public string m_strFreezeFrameDTC;
-        public StringCollection m_listCodes;
-        public StringCollection m_listDefinitions;
-        public StringCollection m_listPending;
-        public StringCollection m_listPendingDefinitions;
+        public List<string> m_listCodes;
+        public List<string> m_listDefinitions;
+        public List<string> m_listPending;
+        public List<string> m_listPendingDefinitions;
         public string m_strFuelSystem1Status;
         public string m_strFuelSystem2Status;
         public double m_dCalculatedLoad;
@@ -137,23 +137,15 @@ namespace SH_OBD {
         [Category("Report")]
         [Description("Show Engine Coolant Temp")]
         public bool ShowEngineCoolantTemp {
-            get {
-                return m_bShowEngineCoolantTemp;
-            }
-            set {
-                m_bShowEngineCoolantTemp = value;
-            }
+            get { return m_bShowEngineCoolantTemp; }
+            set { m_bShowEngineCoolantTemp = value; }
         }
 
         [Category("Report")]
         [Description("Show Calculated Load")]
         public bool ShowCalculatedLoad {
-            get {
-                return m_bShowCalculatedLoad;
-            }
-            set {
-                m_bShowCalculatedLoad = value;
-            }
+            get { return m_bShowCalculatedLoad; }
+            set { m_bShowCalculatedLoad = value; }
         }
 
         [Category("Report")]
@@ -271,23 +263,15 @@ namespace SH_OBD {
         [Category("Report")]
         [Description("Is Catalyst Monitor Supported?")]
         public bool CatalystMonitorSupported {
-            get {
-                return m_bCatalystMonitorSupported;
-            }
-            set {
-                m_bCatalystMonitorSupported = value;
-            }
+            get { return m_bCatalystMonitorSupported; }
+            set { m_bCatalystMonitorSupported = value; }
         }
 
         [Category("Report")]
         [Description("Is Comprehensive Component Monitor Completed?")]
         public bool ComprehensiveMonitorCompleted {
-            get {
-                return m_bComprehensiveMonitorCompleted;
-            }
-            set {
-                m_bComprehensiveMonitorCompleted = value;
-            }
+            get { return m_bComprehensiveMonitorCompleted; }
+            set { m_bComprehensiveMonitorCompleted = value; }
         }
 
         [Category("Report")]
@@ -300,452 +284,288 @@ namespace SH_OBD {
         [Category("Report")]
         [Description("Is Fuel System Monitor Completed?")]
         public bool FuelSystemMonitorCompleted {
-            get {
-                return m_bFuelSystemMonitorCompleted;
-            }
-            set {
-                m_bFuelSystemMonitorCompleted = value;
-            }
+            get { return m_bFuelSystemMonitorCompleted; }
+            set { m_bFuelSystemMonitorCompleted = value; }
         }
 
         [Category("Report")]
         [Description("Is Fuel System Monitor Supported?")]
         public bool FuelSystemMonitorSupported {
-            get {
-                return m_bFuelSystemMonitorSupported;
-            }
-            set {
-                m_bFuelSystemMonitorSupported = value;
-            }
+            get { return m_bFuelSystemMonitorSupported; }
+            set { m_bFuelSystemMonitorSupported = value; }
         }
 
         [Category("Report")]
         [Description("Is Misfire Monitor Completed?")]
         public bool MisfireMonitorCompleted {
-            get {
-                return m_bMisfireMonitorCompleted;
-            }
-            set {
-                m_bMisfireMonitorCompleted = value;
-            }
+            get { return m_bMisfireMonitorCompleted; }
+            set { m_bMisfireMonitorCompleted = value; }
         }
 
         [Category("Report")]
         [Description("Is Misfire Monitor Supported?")]
         public bool MisfireMonitorSupported {
-            get {
-                return m_bMisfireMonitorSupported;
-            }
-            set {
-                m_bMisfireMonitorSupported = value;
-            }
+            get { return m_bMisfireMonitorSupported; }
+            set { m_bMisfireMonitorSupported = value; }
         }
 
         [Category("Report")]
         [Description("Ignition Timing Advance (deg)")]
         public double SparkAdvance {
-            get {
-                return m_dSparkAdvance;
-            }
-            set {
-                m_dSparkAdvance = value;
-            }
+            get { return m_dSparkAdvance; }
+            set { m_dSparkAdvance = value; }
         }
 
         [Category("Report")]
         [Description("Vehicle Speed (mph)")]
         public double VehicleSpeed {
-            get {
-                return m_dVehicleSpeed;
-            }
-            set {
-                m_dVehicleSpeed = value;
-            }
+            get { return m_dVehicleSpeed; }
+            set { m_dVehicleSpeed = value; }
         }
 
         [Category("Report")]
         [Description("Engine RPM (rev/min)")]
         public double EngineRPM {
-            get {
-                return m_dEngineRPM;
-            }
-            set {
-                m_dEngineRPM = value;
-            }
+            get { return m_dEngineRPM; }
+            set { m_dEngineRPM = value; }
         }
 
         [Category("Report")]
         [Description("Intake Manifold Pressure (inHg)")]
         public double IntakePressure {
-            get {
-                return m_dIntakePressure;
-            }
-            set {
-                m_dIntakePressure = value;
-            }
+            get { return m_dIntakePressure; }
+            set { m_dIntakePressure = value; }
         }
 
         [Category("Report")]
         [Description("Long Term Fuel Trim - Bank 4 (%)")]
         public double LTFT4 {
-            get {
-                return m_dLTFT4;
-            }
-            set {
-                m_dLTFT4 = value;
-            }
+            get { return m_dLTFT4; }
+            set { m_dLTFT4 = value; }
         }
 
         [Category("Report")]
         [Description("Long Term Fuel Trim - Bank 3 (%)")]
         public double LTFT3 {
-            get {
-                return m_dLTFT3;
-            }
-            set {
-                m_dLTFT3 = value;
-            }
+            get { return m_dLTFT3; }
+            set { m_dLTFT3 = value; }
         }
 
         [Category("Report")]
         [Description("Long Term Fuel Trim - Bank 2 (%)")]
         public double LTFT2 {
-            get {
-                return m_dLTFT2;
-            }
-            set {
-                m_dLTFT2 = value;
-            }
+            get { return m_dLTFT2; }
+            set { m_dLTFT2 = value; }
         }
 
         [Category("Report")]
         [Description("Long Term Fuel Trim - Bank 1 (%)")]
         public double LTFT1 {
-            get {
-                return m_dLTFT1;
-            }
-            set {
-                m_dLTFT1 = value;
-            }
+            get { return m_dLTFT1; }
+            set { m_dLTFT1 = value; }
         }
 
         [Category("Report")]
         [Description("Short Term Fuel Trim - Bank 4 (%)")]
         public double STFT4 {
-            get {
-                return m_dSTFT4;
-            }
-            set {
-                m_dSTFT4 = value;
-            }
+            get { return m_dSTFT4; }
+            set { m_dSTFT4 = value; }
         }
 
         [Category("Report")]
         [Description("Short Term Fuel Trim - Bank 3 (%)")]
         public double STFT3 {
-            get {
-                return m_dSTFT3;
-            }
-            set {
-                m_dSTFT3 = value;
-            }
+            get { return m_dSTFT3; }
+            set { m_dSTFT3 = value; }
         }
 
         [Category("Report")]
         [Description("Short Term Fuel Trim - Bank 2 (%)")]
         public double STFT2 {
-            get {
-                return m_dSTFT2;
-            }
-            set {
-                m_dSTFT2 = value;
-            }
+            get { return m_dSTFT2; }
+            set { m_dSTFT2 = value; }
         }
 
         [Category("Report")]
         [Description("Short Term Fuel Trim - Bank 1 (%)")]
         public double STFT1 {
-            get {
-                return m_dSTFT1;
-            }
-            set {
-                m_dSTFT1 = value;
-            }
+            get { return m_dSTFT1; }
+            set { m_dSTFT1 = value; }
         }
 
         [Category("Report")]
         [Description("Engine Coolant Temperature (Fahrenheit)")]
         public double EngineCoolantTemp {
-            get {
-                return m_dEngineCoolantTemp;
-            }
-            set {
-                m_dEngineCoolantTemp = value;
-            }
+            get { return m_dEngineCoolantTemp; }
+            set { m_dEngineCoolantTemp = value; }
         }
 
         [Category("Report")]
         [Description("Calculated Load Value (%)")]
         public double CalculatedLoad {
-            get {
-                return m_dCalculatedLoad;
-            }
-            set {
-                m_dCalculatedLoad = value;
-            }
+            get { return m_dCalculatedLoad; }
+            set { m_dCalculatedLoad = value; }
         }
 
         [Category("Report")]
         [Description("Fuel System 2 Status")]
         public string FuelSystem2Status {
-            get {
-                return m_strFuelSystem2Status;
-            }
-            set {
-                m_strFuelSystem2Status = value;
-            }
+            get { return m_strFuelSystem2Status; }
+            set { m_strFuelSystem2Status = value; }
         }
 
         [Category("Report")]
         [Description("Fuel System 1 Status")]
         public string FuelSystem1Status {
-            get {
-                return m_strFuelSystem1Status;
-            }
-            set {
-                m_strFuelSystem1Status = value;
-            }
+            get { return m_strFuelSystem1Status; }
+            set { m_strFuelSystem1Status = value; }
         }
 
         [Category("Report")]
         [Description("List of pending trouble code definitions.")]
-        public StringCollection PendingDefinitionList {
-            get {
-                return m_listPendingDefinitions;
-            }
-            set {
-                m_listPendingDefinitions = value;
-            }
+        public List<string> PendingDefinitionList {
+            get { return m_listPendingDefinitions; }
+            set { m_listPendingDefinitions = value; }
         }
 
         [Category("Report")]
         [Description("List of pending trouble codes.")]
-        public StringCollection PendingList {
-            get {
-                return m_listPending;
-            }
-            set {
-                m_listPending = value;
-            }
+        public List<string> PendingList {
+            get { return m_listPending; }
+            set { m_listPending = value; }
         }
 
         [Category("Report")]
         [Description("List of trouble code definitions.")]
-        public StringCollection DTCDefinitionList {
-            get {
-                return m_listDefinitions;
-            }
-            set {
-                m_listDefinitions = value;
-            }
+        public List<string> DTCDefinitionList {
+            get { return m_listDefinitions; }
+            set { m_listDefinitions = value; }
         }
 
         [Category("Report")]
         [Description("List of trouble codes stored.")]
-        public StringCollection DTCList {
-            get {
-                return m_listCodes;
-            }
-            set {
-                m_listCodes = value;
-            }
+        public List<string> DTCList {
+            get { return m_listCodes; }
+            set { m_listCodes = value; }
         }
 
         [Category("Report")]
         [Description("Number of trouble codes stored.")]
         public int TotalCodes {
-            get {
-                return m_iTotalCodes;
-            }
-            set {
-                m_iTotalCodes = value;
-            }
+            get { return m_iTotalCodes; }
+            set { m_iTotalCodes = value; }
         }
 
         [Category("Report")]
         [Description("Status of the vehicle's MIL.")]
         public bool MilStatus {
-            get {
-                return m_bMilStatus;
-            }
-            set {
-                m_bMilStatus = value;
-            }
+            get { return m_bMilStatus; }
+            set { m_bMilStatus = value; }
         }
 
         [Category("Report")]
         [Description("The DTC that triggered Freeze Frame storage.")]
         public string FreezeFrameDTC {
-            get {
-                return m_strFreezeFrameDTC;
-            }
-            set {
-                m_strFreezeFrameDTC = value;
-            }
+            get { return m_strFreezeFrameDTC; }
+            set { m_strFreezeFrameDTC = value; }
         }
 
         [Category("Report")]
         [Description("The year, make, and model of vehicle.")]
         public string Vehicle {
-            get {
-                return m_strVehicle;
-            }
-            set {
-                m_strVehicle = value;
-            }
+            get { return m_strVehicle; }
+            set { m_strVehicle = value; }
         }
 
         [Category("Report")]
         [Description("The date the report was generated.")]
         public string GenerationDate {
-            get {
-                return m_strDate;
-            }
-            set {
-                m_strDate = value;
-            }
+            get { return m_strDate; }
+            set { m_strDate = value; }
         }
 
         [Category("Report")]
         [Description("The telephone number of the client receiving the service.")]
         public string ClientTelephone {
-            get {
-                return m_strClientTelephone;
-            }
-            set {
-                m_strClientTelephone = value;
-            }
+            get { return m_strClientTelephone; }
+            set { m_strClientTelephone = value; }
         }
 
         [Category("Report")]
         [Description("The second address line of the client receiving the service.")]
         public string ClientAddress2 {
-            get {
-                return m_strClientAddress2;
-            }
-            set {
-                m_strClientAddress2 = value;
-            }
+            get { return m_strClientAddress2; }
+            set { m_strClientAddress2 = value; }
         }
 
         [Category("Report")]
         [Description("The first address line of the client receiving the service.")]
         public string ClientAddress1 {
-            get {
-                return m_strClientAddress1;
-            }
-            set {
-                m_strClientAddress1 = value;
-            }
+            get { return m_strClientAddress1; }
+            set { m_strClientAddress1 = value; }
         }
 
         [Category("Report")]
         [Description("The name of the client receiving the service.")]
         public string ClientName {
-            get {
-                return m_strClientName;
-            }
-            set {
-                m_strClientName = value;
-            }
+            get { return m_strClientName; }
+            set { m_strClientName = value; }
         }
 
         [Category("Report")]
         [Description("The telephone number of the company providing the service.")]
         public string ShopTelephone {
-            get {
-                return m_strShopTelephone;
-            }
-            set {
-                m_strShopTelephone = value;
-            }
+            get { return m_strShopTelephone; }
+            set { m_strShopTelephone = value; }
         }
 
         [Category("Report")]
         [Description("The second address line of the company providing the service.")]
         public string ShopAddress2 {
-            get {
-                return m_strShopAddress2;
-            }
-            set {
-                m_strShopAddress2 = value;
-            }
+            get { return m_strShopAddress2; }
+            set { m_strShopAddress2 = value; }
         }
 
         [Category("Report")]
         [Description("The first address line of the company providing the service.")]
         public string ShopAddress1 {
-            get {
-                return m_strShopAddress1;
-            }
-            set {
-                m_strShopAddress1 = value;
-            }
+            get { return m_strShopAddress1; }
+            set { m_strShopAddress1 = value; }
         }
 
         [Category("Report")]
         [Description("The name of the company providing the service.")]
         public string ShopName {
-            get {
-                return m_strShopName;
-            }
-            set {
-                m_strShopName = value;
-            }
+            get { return m_strShopName; }
+            set { m_strShopName = value; }
         }
 
         [Category("Report")]
         [Description("The MIL On indicator graphic.")]
         public Image MilOnImage {
-            get {
-                return m_imgMilOn;
-            }
-            set {
-                m_imgMilOn = value;
-            }
+            get { return m_imgMilOn; }
+            set { m_imgMilOn = value; }
         }
 
         [Category("Report")]
         [Description("The MIL Off indicator graphic.")]
         public Image MilOffImage {
-            get {
-                return m_imgMilOff;
-            }
-            set {
-                m_imgMilOff = value;
-            }
+            get { return m_imgMilOff; }
+            set { m_imgMilOff = value; }
         }
 
         [Category("Report")]
         [Description("The logo to display in the header of the report.")]
         public Image Logo {
-            get {
-                return m_imgLogo;
-            }
-            set {
-                m_imgLogo = value;
-            }
+            get { return m_imgLogo; }
+            set { m_imgLogo = value; }
         }
 
         [Category("Report")]
         [Description("The border color for the report.")]
         public Color BorderColor {
-            get {
-                return m_colorBorder;
-            }
-            set {
-                m_colorBorder = value;
-            }
+            get { return m_colorBorder; }
+            set { m_colorBorder = value; }
         }
 
         public DiagnosticReportControl() {
@@ -763,10 +583,10 @@ namespace SH_OBD {
             ClientTelephone = " ";
             Vehicle = " ";
             GenerationDate = " ";
-            DTCList = new StringCollection();
-            DTCDefinitionList = new StringCollection();
-            PendingList = new StringCollection();
-            PendingDefinitionList = new StringCollection();
+            DTCList = new List<string>();
+            DTCDefinitionList = new List<string>();
+            PendingList = new List<string>();
+            PendingDefinitionList = new List<string>();
             m_bShowFuelSystemStatus = false;
             m_bShowCalculatedLoad = false;
             m_bShowEngineCoolantTemp = false;
@@ -794,12 +614,11 @@ namespace SH_OBD {
         }
 
         private void PaintControl(Graphics g) {
-            Brush brush1 = (Brush)new SolidBrush(Color.Blue);
-            Brush brush2 = (Brush)new SolidBrush(Color.Green);
-            Brush brush3 = (Brush)new SolidBrush(Color.Red);
-            Brush brush4 = (Brush)new SolidBrush(Color.Black);
-            Brush brush5 = (Brush)new SolidBrush(Color.FromArgb(235, 235, (int)byte.MaxValue));
-            Pen pen1 = new Pen(Color.Black);
+            Brush brush1 = new SolidBrush(Color.Blue);
+            Brush brush2 = new SolidBrush(Color.Green);
+            Brush brush3 = new SolidBrush(Color.Red);
+            Brush brush4 = new SolidBrush(Color.Black);
+            Brush brush5 = new SolidBrush(Color.FromArgb(235, 235, byte.MaxValue));
             Pen pen2 = new Pen(Color.Blue);
             Pen pen3 = new Pen(BorderColor, 1f);
             Font font1 = new Font("Times New Roman", 8f, FontStyle.Bold);
@@ -811,26 +630,24 @@ namespace SH_OBD {
                 LineAlignment = StringAlignment.Center
             };
             if (m_imgLogo != null) {
-                int width = (int)((double)m_imgLogo.Width / (double)m_imgLogo.Height * 75.0);
+                int width = (int)(m_imgLogo.Width / m_imgLogo.Height * 75.0);
                 if (width > 240) {
                     width = 240;
                 }
                 g.DrawImage(m_imgLogo, 5, 5, width, 75);
             }
             Font font6 = new Font("Arial", 18f);
-            RectangleF layoutRectangle1 = new RectangleF();
-            layoutRectangle1 = new RectangleF(250f, 5f, 500f, (float)font6.Height);
+            RectangleF layoutRectangle1 = new RectangleF(250f, 5f, 500f, font6.Height);
             g.DrawString("OBD-II 诊断报告", font6, brush4, layoutRectangle1, format);
-            layoutRectangle1.X = layoutRectangle1.X - 1f;
-            layoutRectangle1.Y = layoutRectangle1.Y - 1f;
+            layoutRectangle1.X -= 1f;
+            layoutRectangle1.Y -= 1f;
             g.DrawString("OBD-II 诊断报告", font6, brush1, layoutRectangle1, format);
             Font font7 = new Font("Arial", 10f, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline);
             Font font8 = new Font("Arial", 8f);
-            RectangleF layoutRectangle2 = new RectangleF();
-            layoutRectangle2 = new RectangleF(250f, layoutRectangle1.Height + 5f, 250f, (float)font7.Height);
+            RectangleF layoutRectangle2 = new RectangleF(250f, layoutRectangle1.Height + 5f, 250f, font7.Height);
             g.DrawString("提供服务方:", font7, brush4, layoutRectangle2, format);
-            layoutRectangle2.Height = (float)font8.Height;
-            layoutRectangle2.Y = (float)((double)layoutRectangle2.Height + (double)layoutRectangle2.Y + 5.0);
+            layoutRectangle2.Height = font8.Height;
+            layoutRectangle2.Y = layoutRectangle2.Height + layoutRectangle2.Y + 5.0f;
             g.DrawString(ShopName, font8, brush4, layoutRectangle2, format);
             layoutRectangle2.Y = layoutRectangle2.Height + layoutRectangle2.Y;
             g.DrawString(ShopAddress1, font8, brush4, layoutRectangle2, format);
@@ -840,10 +657,10 @@ namespace SH_OBD {
             g.DrawString(ShopTelephone, font8, brush4, layoutRectangle2, format);
             layoutRectangle2.X = 500f;
             layoutRectangle2.Y = layoutRectangle1.Height + 5f;
-            layoutRectangle2.Height = (float)font7.Height;
+            layoutRectangle2.Height = font7.Height;
             g.DrawString("接收服务方:", font7, brush4, layoutRectangle2, format);
-            layoutRectangle2.Height = (float)font8.Height;
-            layoutRectangle2.Y = (float)((double)layoutRectangle2.Height + (double)layoutRectangle2.Y + 5.0);
+            layoutRectangle2.Height = font8.Height;
+            layoutRectangle2.Y = layoutRectangle2.Height + layoutRectangle2.Y + 5.0f;
             g.DrawString(ClientName, font8, brush4, layoutRectangle2, format);
             layoutRectangle2.Y = layoutRectangle2.Height + layoutRectangle2.Y;
             g.DrawString(ClientAddress1, font8, brush4, layoutRectangle2, format);
@@ -854,16 +671,14 @@ namespace SH_OBD {
             g.DrawLine(pen2, 5, 110, 745, 110);
             g.DrawLine(pen2, 5, 112, 745, 112);
             string s1 = "我们对您的车辆 " + Vehicle + " ，于 " + GenerationDate + " 进行了分析。";
-            RectangleF layoutRectangle3 = new RectangleF();
-            layoutRectangle3 = new RectangleF(0.0f, 112f, 750f, 20f);
-            Font font9 = new Font("Arial", 10f);
+            RectangleF layoutRectangle3 = new RectangleF(0.0f, 112f, 750f, 20f);
+            Font font9 = new Font("Arial", 8f);
             g.DrawString(s1, font9, brush4, layoutRectangle3, format);
             g.DrawLine(pen2, 5, (int)layoutRectangle3.Bottom, 745, (int)layoutRectangle3.Bottom);
             g.DrawLine(pen2, 5, (int)layoutRectangle3.Bottom + 2, 745, (int)layoutRectangle3.Bottom + 2);
             int num1 = (int)layoutRectangle3.Bottom + 2;
             int num2 = num1 + 10;
-            RectangleF layoutRectangle4 = new RectangleF();
-            layoutRectangle4 = new RectangleF(5f, (float)num2, 100f, 20f);
+            RectangleF layoutRectangle4 = new RectangleF(5f, num2, 100f, 20f);
             g.DrawRectangle(pen2, (int)layoutRectangle4.X, (int)layoutRectangle4.Y, (int)layoutRectangle4.Width, (int)layoutRectangle4.Height);
             g.DrawString("MIL 故障指示灯", font1, brush1, layoutRectangle4, format);
             int num3 = font1.Height + num2 + 10;
@@ -871,78 +686,67 @@ namespace SH_OBD {
                 int x = 55 - MilOnImage.Width / 2;
                 g.DrawImage(MilOnImage, x, num3 + 7, MilOnImage.Width, MilOnImage.Height);
                 int num4 = MilOnImage.Height + num3 + 5;
-                layoutRectangle4.Y = (float)num4 + 7f;
+                layoutRectangle4.Y = num4 + 7f;
                 g.DrawString("ON", font2, brush3, layoutRectangle4, format);
-                layoutRectangle4.Y = (float)((double)layoutRectangle4.Height + (double)layoutRectangle4.Y + 17.0);
+                layoutRectangle4.Y = layoutRectangle4.Height + layoutRectangle4.Y + 17.0f;
                 g.DrawRectangle(pen2, (int)layoutRectangle4.X, (int)layoutRectangle4.Y, (int)layoutRectangle4.Width, (int)layoutRectangle4.Height);
                 g.DrawString("存储的故障码", font1, brush1, layoutRectangle4, format);
-                layoutRectangle4.Y = (float)((double)layoutRectangle4.Height + (double)layoutRectangle4.Y + 10.0);
+                layoutRectangle4.Y = layoutRectangle4.Height + layoutRectangle4.Y + 10.0f;
                 int num5 = TotalCodes;
                 g.DrawString(num5.ToString("d"), font2, brush3, layoutRectangle4, format);
             } else if (MilOffImage != null) {
                 int x = 55 - MilOffImage.Width / 2;
                 g.DrawImage(MilOffImage, x, num3 + 7, MilOffImage.Width, MilOffImage.Height);
                 int num4 = MilOffImage.Height + num3 + 5;
-                layoutRectangle4.Y = (float)num4 + 7f;
+                layoutRectangle4.Y = num4 + 7f;
                 g.DrawString("OFF", font2, brush2, layoutRectangle4, format);
-                layoutRectangle4.Y = (float)((double)layoutRectangle4.Height + (double)layoutRectangle4.Y + 17.0);
+                layoutRectangle4.Y = layoutRectangle4.Height + layoutRectangle4.Y + 17.0f;
                 g.DrawRectangle(pen2, (int)layoutRectangle4.X, (int)layoutRectangle4.Y, (int)layoutRectangle4.Width, (int)layoutRectangle4.Height);
                 g.DrawString("存储的故障码", font1, brush1, layoutRectangle4, format);
-                layoutRectangle4.Y = (float)((double)layoutRectangle4.Height + (double)layoutRectangle4.Y + 10.0);
+                layoutRectangle4.Y = layoutRectangle4.Height + layoutRectangle4.Y + 10.0f;
                 int num5 = TotalCodes;
                 g.DrawString(num5.ToString("d"), font2, brush2, layoutRectangle4, format);
             }
             int y1 = num1 + 10;
-            RectangleF layoutRectangle5 = new RectangleF();
-            layoutRectangle5 = new RectangleF(115f, (float)y1, 630f, 20f);
+            RectangleF layoutRectangle5 = new RectangleF(115f, y1, 630f, 20f);
             g.DrawRectangle(pen2, (int)layoutRectangle5.X, (int)layoutRectangle5.Y, (int)layoutRectangle5.Width, (int)layoutRectangle5.Height);
             g.DrawString("存储的故障码", font1, brush1, layoutRectangle5, format);
             int num6 = y1 + font1.Height + 10;
-            layoutRectangle5.Height = (float)font3.Height;
-            if (DTCList != null) {
-                int count1 = DTCList.Count;
-            }
-            int index1 = 0;
-            do {
+            layoutRectangle5.Height = font3.Height;
+            for (int i = 0; i < 5; i++) {
                 layoutRectangle5.X = 115f;
-                layoutRectangle5.Y = (float)num6;
-                if (index1 % 2 == 0) {
+                layoutRectangle5.Y = num6;
+                if (i % 2 == 0) {
                     g.FillRectangle(brush5, (int)layoutRectangle5.X, (int)layoutRectangle5.Y, (int)layoutRectangle5.Width, (int)layoutRectangle5.Height);
                 }
-                layoutRectangle5.X = layoutRectangle5.X + 5f;
-                if (DTCList != null && DTCDefinitionList != null && (index1 < DTCList.Count && index1 < DTCDefinitionList.Count)) {
-                    string s2 = DTCList[index1] + " = " + DTCDefinitionList[index1];
+                layoutRectangle5.X += 5f;
+                if (DTCList != null && DTCDefinitionList != null && (i < DTCList.Count && i < DTCDefinitionList.Count)) {
+                    string s2 = DTCList[i] + " = " + DTCDefinitionList[i];
                     g.DrawString(s2, font3, brush4, layoutRectangle5);
                 }
                 num6 = font3.Height + num6;
-                ++index1;
-            } while (index1 < 5);
+            }
             int num7 = num6 + 5;
             layoutRectangle5.Height = 20f;
-            layoutRectangle5.Y = (float)num7;
+            layoutRectangle5.Y = num7;
             layoutRectangle5.X = 115f;
             g.DrawRectangle(pen2, (int)layoutRectangle5.X, (int)layoutRectangle5.Y, (int)layoutRectangle5.Width, (int)layoutRectangle5.Height);
             g.DrawString("未决故障码", font1, brush1, layoutRectangle5, format);
             int y2 = font1.Height + num7 + 10;
-            layoutRectangle5.Height = (float)font3.Height;
-            if (PendingList != null) {
-                int count2 = PendingList.Count;
-            }
-            int index2 = 0;
-            do {
+            layoutRectangle5.Height = font3.Height;
+            for (int i = 0; i < 5; i++) {
                 layoutRectangle5.X = 115f;
-                layoutRectangle5.Y = (float)y2;
-                if (index2 % 2 == 0) {
+                layoutRectangle5.Y = y2;
+                if (i % 2 == 0) {
                     g.FillRectangle(brush5, (int)layoutRectangle5.X, (int)layoutRectangle5.Y, (int)layoutRectangle5.Width, (int)layoutRectangle5.Height);
                 }
-                layoutRectangle5.X = layoutRectangle5.X + 5f;
-                if (PendingList != null && PendingDefinitionList != null && (index2 < PendingList.Count && index2 < PendingDefinitionList.Count)) {
-                    string s2 = PendingList[index2] + " = " + PendingDefinitionList[index2];
+                layoutRectangle5.X += 5f;
+                if (PendingList != null && PendingDefinitionList != null && (i < PendingList.Count && i < PendingDefinitionList.Count)) {
+                    string s2 = PendingList[i] + " = " + PendingDefinitionList[i];
                     g.DrawString(s2, font3, brush4, layoutRectangle5);
                 }
                 y2 = font3.Height + y2;
-                ++index2;
-            } while (index2 < 5);
+            }
             g.DrawLine(pen2, 110, y1, 110, y2);
             int num8 = y2 + 5;
             g.DrawLine(pen2, 5, num8, 745, num8);
@@ -950,24 +754,18 @@ namespace SH_OBD {
             int num9 = num8 + 12;
             bool flag = string.Compare(FreezeFrameDTC, "P0000") != 0;
             // new string((sbyte*) &\u003CModule\u003E.\u003F\u003F_C\u0040_05OIJEMFOP\u0040P0000\u003F\u0024AA\u0040)
-            RectangleF layoutRectangle6 = new RectangleF();
-            layoutRectangle6 = new RectangleF(5f, (float)num9, 740f, 20f);
+            RectangleF layoutRectangle6 = new RectangleF(5f, num9, 740f, 20f);
             g.DrawRectangle(pen2, (int)layoutRectangle6.X, (int)layoutRectangle6.Y, (int)layoutRectangle6.Width, (int)layoutRectangle6.Height);
             string s3 = !flag ? "冻结帧数据 (不可用)" : "冻结帧数据 (被: " + FreezeFrameDTC + " 帧触发)";
             g.DrawString(s3, font1, brush1, layoutRectangle6, format);
             int num10 = font1.Height + num9 + 10;
             format.LineAlignment = StringAlignment.Near;
-            RectangleF layoutRectangle7 = new RectangleF();
-            float y3 = (float)num10;
-            layoutRectangle7 = new RectangleF(5f, y3, 161f, (float)font3.Height);
-            RectangleF layoutRectangle8 = new RectangleF();
-            layoutRectangle8 = new RectangleF(layoutRectangle7.Right, y3, 66f, (float)font3.Height);
-            RectangleF layoutRectangle9 = new RectangleF();
-            layoutRectangle9 = new RectangleF(layoutRectangle8.Right, y3, 36f, (float)font3.Height);
-            RectangleF layoutRectangle10 = new RectangleF();
-            layoutRectangle10 = new RectangleF(layoutRectangle9.Right, y3, 66f, (float)font3.Height);
-            RectangleF layoutRectangle11 = new RectangleF();
-            layoutRectangle11 = new RectangleF(layoutRectangle10.Right, y3, 36f, (float)font3.Height);
+            float y3 = num10;
+            RectangleF layoutRectangle7 = new RectangleF(5f, y3, 161f, font3.Height);
+            RectangleF layoutRectangle8 = new RectangleF(layoutRectangle7.Right, y3, 66f, font3.Height);
+            RectangleF layoutRectangle9 = new RectangleF(layoutRectangle8.Right, y3, 36f, font3.Height);
+            RectangleF layoutRectangle10 = new RectangleF(layoutRectangle9.Right, y3, 66f, font3.Height);
+            RectangleF layoutRectangle11 = new RectangleF(layoutRectangle10.Right, y3, 36f, font3.Height);
             g.FillRectangle(brush5, (int)layoutRectangle7.X, (int)layoutRectangle7.Y, (int)layoutRectangle7.Width, (int)layoutRectangle7.Height);
             g.FillRectangle(brush5, (int)layoutRectangle8.X, (int)layoutRectangle8.Y, (int)layoutRectangle8.Width, (int)layoutRectangle8.Height);
             g.FillRectangle(brush5, (int)layoutRectangle9.X, (int)layoutRectangle9.Y, (int)layoutRectangle9.Width, (int)layoutRectangle9.Height);
@@ -978,11 +776,11 @@ namespace SH_OBD {
             g.DrawString("单位", font4, brush4, layoutRectangle9, format);
             g.DrawString("公制", font4, brush4, layoutRectangle10, format);
             g.DrawString("单位", font4, brush4, layoutRectangle11, format);
-            layoutRectangle7.Y = (float)font3.Height + layoutRectangle7.Y;
-            layoutRectangle8.Y = (float)font3.Height + layoutRectangle8.Y;
-            layoutRectangle9.Y = (float)font3.Height + layoutRectangle9.Y;
-            layoutRectangle10.Y = (float)font3.Height + layoutRectangle10.Y;
-            layoutRectangle11.Y = (float)font3.Height + layoutRectangle11.Y;
+            layoutRectangle7.Y = font3.Height + layoutRectangle7.Y;
+            layoutRectangle8.Y = font3.Height + layoutRectangle8.Y;
+            layoutRectangle9.Y = font3.Height + layoutRectangle9.Y;
+            layoutRectangle10.Y = font3.Height + layoutRectangle10.Y;
+            layoutRectangle11.Y = font3.Height + layoutRectangle11.Y;
             g.DrawString("燃油系统 1 状态", font3, brush4, layoutRectangle7);
             if (flag && m_bShowFuelSystemStatus) {
                 g.DrawString(FuelSystem1Status, font3, brush4, layoutRectangle8, format);
@@ -991,11 +789,11 @@ namespace SH_OBD {
                 g.DrawString("-", font3, brush4, layoutRectangle8, format);
                 g.DrawString("-", font3, brush4, layoutRectangle10, format);
             }
-            layoutRectangle7.Y = (float)font3.Height + layoutRectangle7.Y;
-            layoutRectangle8.Y = (float)font3.Height + layoutRectangle8.Y;
-            layoutRectangle9.Y = (float)font3.Height + layoutRectangle9.Y;
-            layoutRectangle10.Y = (float)font3.Height + layoutRectangle10.Y;
-            layoutRectangle11.Y = (float)font3.Height + layoutRectangle11.Y;
+            layoutRectangle7.Y = font3.Height + layoutRectangle7.Y;
+            layoutRectangle8.Y = font3.Height + layoutRectangle8.Y;
+            layoutRectangle9.Y = font3.Height + layoutRectangle9.Y;
+            layoutRectangle10.Y = font3.Height + layoutRectangle10.Y;
+            layoutRectangle11.Y = font3.Height + layoutRectangle11.Y;
             g.FillRectangle(brush5, (int)layoutRectangle7.X, (int)layoutRectangle7.Y, (int)layoutRectangle7.Width, (int)layoutRectangle7.Height);
             g.FillRectangle(brush5, (int)layoutRectangle8.X, (int)layoutRectangle8.Y, (int)layoutRectangle8.Width, (int)layoutRectangle8.Height);
             g.FillRectangle(brush5, (int)layoutRectangle9.X, (int)layoutRectangle9.Y, (int)layoutRectangle9.Width, (int)layoutRectangle9.Height);
@@ -1014,12 +812,12 @@ namespace SH_OBD {
             }
             g.DrawString("%", font3, brush4, layoutRectangle9, format);
             g.DrawString("%", font3, brush4, layoutRectangle11, format);
-            layoutRectangle7.Y = (float)font3.Height + layoutRectangle7.Y;
-            layoutRectangle8.Y = (float)font3.Height + layoutRectangle8.Y;
-            layoutRectangle9.Y = (float)font3.Height + layoutRectangle9.Y;
-            layoutRectangle10.Y = (float)font3.Height + layoutRectangle10.Y;
-            layoutRectangle11.Y = (float)font3.Height + layoutRectangle11.Y;
-            g.DrawString("STFT - Bank 1", font3, brush4, layoutRectangle7);
+            layoutRectangle7.Y = font3.Height + layoutRectangle7.Y;
+            layoutRectangle8.Y = font3.Height + layoutRectangle8.Y;
+            layoutRectangle9.Y = font3.Height + layoutRectangle9.Y;
+            layoutRectangle10.Y = font3.Height + layoutRectangle10.Y;
+            layoutRectangle11.Y = font3.Height + layoutRectangle11.Y;
+            g.DrawString("短时燃油修正 - 组 1", font3, brush4, layoutRectangle7);
             if (flag && m_bShowSTFT13) {
                 double num4 = STFT1;
                 g.DrawString(num4.ToString("f4"), font3, brush4, layoutRectangle8, format);
@@ -1031,17 +829,17 @@ namespace SH_OBD {
             }
             g.DrawString("%", font3, brush4, layoutRectangle9, format);
             g.DrawString("%", font3, brush4, layoutRectangle11, format);
-            layoutRectangle7.Y = (float)font3.Height + layoutRectangle7.Y;
-            layoutRectangle8.Y = (float)font3.Height + layoutRectangle8.Y;
-            layoutRectangle9.Y = (float)font3.Height + layoutRectangle9.Y;
-            layoutRectangle10.Y = (float)font3.Height + layoutRectangle10.Y;
-            layoutRectangle11.Y = (float)font3.Height + layoutRectangle11.Y;
+            layoutRectangle7.Y = font3.Height + layoutRectangle7.Y;
+            layoutRectangle8.Y = font3.Height + layoutRectangle8.Y;
+            layoutRectangle9.Y = font3.Height + layoutRectangle9.Y;
+            layoutRectangle10.Y = font3.Height + layoutRectangle10.Y;
+            layoutRectangle11.Y = font3.Height + layoutRectangle11.Y;
             g.FillRectangle(brush5, (int)layoutRectangle7.X, (int)layoutRectangle7.Y, (int)layoutRectangle7.Width, (int)layoutRectangle7.Height);
             g.FillRectangle(brush5, (int)layoutRectangle8.X, (int)layoutRectangle8.Y, (int)layoutRectangle8.Width, (int)layoutRectangle8.Height);
             g.FillRectangle(brush5, (int)layoutRectangle9.X, (int)layoutRectangle9.Y, (int)layoutRectangle9.Width, (int)layoutRectangle9.Height);
             g.FillRectangle(brush5, (int)layoutRectangle10.X, (int)layoutRectangle10.Y, (int)layoutRectangle10.Width, (int)layoutRectangle10.Height);
             g.FillRectangle(brush5, (int)layoutRectangle11.X, (int)layoutRectangle11.Y, (int)layoutRectangle11.Width, (int)layoutRectangle11.Height);
-            g.DrawString("STFT - Bank 2", font3, brush4, layoutRectangle7);
+            g.DrawString("短时燃油修正 - 组 2", font3, brush4, layoutRectangle7);
             if (flag && m_bShowSTFT24) {
                 double num4 = STFT2;
                 g.DrawString(num4.ToString("f4"), font3, brush4, layoutRectangle8, format);
@@ -1053,12 +851,12 @@ namespace SH_OBD {
             }
             g.DrawString("%", font3, brush4, layoutRectangle9, format);
             g.DrawString("%", font3, brush4, layoutRectangle11, format);
-            layoutRectangle7.Y = (float)font3.Height + layoutRectangle7.Y;
-            layoutRectangle8.Y = (float)font3.Height + layoutRectangle8.Y;
-            layoutRectangle9.Y = (float)font3.Height + layoutRectangle9.Y;
-            layoutRectangle10.Y = (float)font3.Height + layoutRectangle10.Y;
-            layoutRectangle11.Y = (float)font3.Height + layoutRectangle11.Y;
-            g.DrawString("STFT - Bank 3", font3, brush4, layoutRectangle7);
+            layoutRectangle7.Y = font3.Height + layoutRectangle7.Y;
+            layoutRectangle8.Y = font3.Height + layoutRectangle8.Y;
+            layoutRectangle9.Y = font3.Height + layoutRectangle9.Y;
+            layoutRectangle10.Y = font3.Height + layoutRectangle10.Y;
+            layoutRectangle11.Y = font3.Height + layoutRectangle11.Y;
+            g.DrawString("短时燃油修正 - 组 3", font3, brush4, layoutRectangle7);
             if (flag && m_bShowSTFT13) {
                 double num4 = STFT3;
                 g.DrawString(num4.ToString("f4"), font3, brush4, layoutRectangle8, format);
@@ -1070,17 +868,17 @@ namespace SH_OBD {
             }
             g.DrawString("%", font3, brush4, layoutRectangle9, format);
             g.DrawString("%", font3, brush4, layoutRectangle11, format);
-            layoutRectangle7.Y = (float)font3.Height + layoutRectangle7.Y;
-            layoutRectangle8.Y = (float)font3.Height + layoutRectangle8.Y;
-            layoutRectangle9.Y = (float)font3.Height + layoutRectangle9.Y;
-            layoutRectangle10.Y = (float)font3.Height + layoutRectangle10.Y;
-            layoutRectangle11.Y = (float)font3.Height + layoutRectangle11.Y;
+            layoutRectangle7.Y = font3.Height + layoutRectangle7.Y;
+            layoutRectangle8.Y = font3.Height + layoutRectangle8.Y;
+            layoutRectangle9.Y = font3.Height + layoutRectangle9.Y;
+            layoutRectangle10.Y = font3.Height + layoutRectangle10.Y;
+            layoutRectangle11.Y = font3.Height + layoutRectangle11.Y;
             g.FillRectangle(brush5, (int)layoutRectangle7.X, (int)layoutRectangle7.Y, (int)layoutRectangle7.Width, (int)layoutRectangle7.Height);
             g.FillRectangle(brush5, (int)layoutRectangle8.X, (int)layoutRectangle8.Y, (int)layoutRectangle8.Width, (int)layoutRectangle8.Height);
             g.FillRectangle(brush5, (int)layoutRectangle9.X, (int)layoutRectangle9.Y, (int)layoutRectangle9.Width, (int)layoutRectangle9.Height);
             g.FillRectangle(brush5, (int)layoutRectangle10.X, (int)layoutRectangle10.Y, (int)layoutRectangle10.Width, (int)layoutRectangle10.Height);
             g.FillRectangle(brush5, (int)layoutRectangle11.X, (int)layoutRectangle11.Y, (int)layoutRectangle11.Width, (int)layoutRectangle11.Height);
-            g.DrawString("STFT - Bank 4", font3, brush4, layoutRectangle7);
+            g.DrawString("短时燃油修正 - 组 4", font3, brush4, layoutRectangle7);
             if (flag && m_bShowSTFT24) {
                 double num4 = STFT4;
                 g.DrawString(num4.ToString("f4"), font3, brush4, layoutRectangle8, format);
@@ -1092,11 +890,11 @@ namespace SH_OBD {
             }
             g.DrawString("%", font3, brush4, layoutRectangle9, format);
             g.DrawString("%", font3, brush4, layoutRectangle11, format);
-            layoutRectangle7.Y = (float)font3.Height + layoutRectangle7.Y;
-            layoutRectangle8.Y = (float)font3.Height + layoutRectangle8.Y;
-            layoutRectangle9.Y = (float)font3.Height + layoutRectangle9.Y;
-            layoutRectangle10.Y = (float)font3.Height + layoutRectangle10.Y;
-            layoutRectangle11.Y = (float)font3.Height + layoutRectangle11.Y;
+            layoutRectangle7.Y = font3.Height + layoutRectangle7.Y;
+            layoutRectangle8.Y = font3.Height + layoutRectangle8.Y;
+            layoutRectangle9.Y = font3.Height + layoutRectangle9.Y;
+            layoutRectangle10.Y = font3.Height + layoutRectangle10.Y;
+            layoutRectangle11.Y = font3.Height + layoutRectangle11.Y;
             g.DrawString("进气歧管压力", font3, brush4, layoutRectangle7);
             if (flag && m_bShowIntakePressure) {
                 double num4 = IntakePressure * 3.38639;
@@ -1109,11 +907,11 @@ namespace SH_OBD {
             }
             g.DrawString("inHg", font3, brush4, layoutRectangle9, format);
             g.DrawString("kPa", font3, brush4, layoutRectangle11, format);
-            layoutRectangle7.Y = (float)font3.Height + layoutRectangle7.Y;
-            layoutRectangle8.Y = (float)font3.Height + layoutRectangle8.Y;
-            layoutRectangle9.Y = (float)font3.Height + layoutRectangle9.Y;
-            layoutRectangle10.Y = (float)font3.Height + layoutRectangle10.Y;
-            layoutRectangle11.Y = (float)font3.Height + layoutRectangle11.Y;
+            layoutRectangle7.Y = font3.Height + layoutRectangle7.Y;
+            layoutRectangle8.Y = font3.Height + layoutRectangle8.Y;
+            layoutRectangle9.Y = font3.Height + layoutRectangle9.Y;
+            layoutRectangle10.Y = font3.Height + layoutRectangle10.Y;
+            layoutRectangle11.Y = font3.Height + layoutRectangle11.Y;
             g.FillRectangle(brush5, (int)layoutRectangle7.X, (int)layoutRectangle7.Y, (int)layoutRectangle7.Width, (int)layoutRectangle7.Height);
             g.FillRectangle(brush5, (int)layoutRectangle8.X, (int)layoutRectangle8.Y, (int)layoutRectangle8.Width, (int)layoutRectangle8.Height);
             g.FillRectangle(brush5, (int)layoutRectangle9.X, (int)layoutRectangle9.Y, (int)layoutRectangle9.Width, (int)layoutRectangle9.Height);
@@ -1151,11 +949,11 @@ namespace SH_OBD {
             g.DrawString("单位", font4, brush4, layoutRectangle9, format);
             g.DrawString("公制", font4, brush4, layoutRectangle10, format);
             g.DrawString("单位", font4, brush4, layoutRectangle11, format);
-            layoutRectangle7.Y = (float)font3.Height + layoutRectangle7.Y;
-            layoutRectangle8.Y = (float)font3.Height + layoutRectangle8.Y;
-            layoutRectangle9.Y = (float)font3.Height + layoutRectangle9.Y;
-            layoutRectangle10.Y = (float)font3.Height + layoutRectangle10.Y;
-            layoutRectangle11.Y = (float)font3.Height + layoutRectangle11.Y;
+            layoutRectangle7.Y = font3.Height + layoutRectangle7.Y;
+            layoutRectangle8.Y = font3.Height + layoutRectangle8.Y;
+            layoutRectangle9.Y = font3.Height + layoutRectangle9.Y;
+            layoutRectangle10.Y = font3.Height + layoutRectangle10.Y;
+            layoutRectangle11.Y = font3.Height + layoutRectangle11.Y;
             g.DrawString("燃油系统 2 状态", font3, brush4, layoutRectangle7);
             if (flag && m_bShowFuelSystemStatus) {
                 g.DrawString(FuelSystem2Status, font3, brush4, layoutRectangle8, format);
@@ -1166,11 +964,11 @@ namespace SH_OBD {
             }
             g.DrawString("", font3, brush4, layoutRectangle9, format);
             g.DrawString("", font3, brush4, layoutRectangle11, format);
-            layoutRectangle7.Y = (float)font3.Height + layoutRectangle7.Y;
-            layoutRectangle8.Y = (float)font3.Height + layoutRectangle8.Y;
-            layoutRectangle9.Y = (float)font3.Height + layoutRectangle9.Y;
-            layoutRectangle10.Y = (float)font3.Height + layoutRectangle10.Y;
-            layoutRectangle11.Y = (float)font3.Height + layoutRectangle11.Y;
+            layoutRectangle7.Y = font3.Height + layoutRectangle7.Y;
+            layoutRectangle8.Y = font3.Height + layoutRectangle8.Y;
+            layoutRectangle9.Y = font3.Height + layoutRectangle9.Y;
+            layoutRectangle10.Y = font3.Height + layoutRectangle10.Y;
+            layoutRectangle11.Y = font3.Height + layoutRectangle11.Y;
             g.FillRectangle(brush5, (int)layoutRectangle7.X, (int)layoutRectangle7.Y, (int)layoutRectangle7.Width, (int)layoutRectangle7.Height);
             g.FillRectangle(brush5, (int)layoutRectangle8.X, (int)layoutRectangle8.Y, (int)layoutRectangle8.Width, (int)layoutRectangle8.Height);
             g.FillRectangle(brush5, (int)layoutRectangle9.X, (int)layoutRectangle9.Y, (int)layoutRectangle9.Width, (int)layoutRectangle9.Height);
@@ -1188,12 +986,12 @@ namespace SH_OBD {
             }
             g.DrawString("°F", font3, brush4, layoutRectangle9, format);
             g.DrawString("°C", font3, brush4, layoutRectangle11, format);
-            layoutRectangle7.Y = (float)font3.Height + layoutRectangle7.Y;
-            layoutRectangle8.Y = (float)font3.Height + layoutRectangle8.Y;
-            layoutRectangle9.Y = (float)font3.Height + layoutRectangle9.Y;
-            layoutRectangle10.Y = (float)font3.Height + layoutRectangle10.Y;
-            layoutRectangle11.Y = (float)font3.Height + layoutRectangle11.Y;
-            g.DrawString("LTFT - Bank 1", font3, brush4, layoutRectangle7);
+            layoutRectangle7.Y = font3.Height + layoutRectangle7.Y;
+            layoutRectangle8.Y = font3.Height + layoutRectangle8.Y;
+            layoutRectangle9.Y = font3.Height + layoutRectangle9.Y;
+            layoutRectangle10.Y = font3.Height + layoutRectangle10.Y;
+            layoutRectangle11.Y = font3.Height + layoutRectangle11.Y;
+            g.DrawString("长时燃油修正 - 组 1", font3, brush4, layoutRectangle7);
             if (flag && m_bShowLTFT13) {
                 double num4 = LTFT1;
                 g.DrawString(num4.ToString("f4"), font3, brush4, layoutRectangle8, format);
@@ -1205,17 +1003,17 @@ namespace SH_OBD {
             }
             g.DrawString("%", font3, brush4, layoutRectangle9, format);
             g.DrawString("%", font3, brush4, layoutRectangle11, format);
-            layoutRectangle7.Y = (float)font3.Height + layoutRectangle7.Y;
-            layoutRectangle8.Y = (float)font3.Height + layoutRectangle8.Y;
-            layoutRectangle9.Y = (float)font3.Height + layoutRectangle9.Y;
-            layoutRectangle10.Y = (float)font3.Height + layoutRectangle10.Y;
-            layoutRectangle11.Y = (float)font3.Height + layoutRectangle11.Y;
+            layoutRectangle7.Y = font3.Height + layoutRectangle7.Y;
+            layoutRectangle8.Y = font3.Height + layoutRectangle8.Y;
+            layoutRectangle9.Y = font3.Height + layoutRectangle9.Y;
+            layoutRectangle10.Y = font3.Height + layoutRectangle10.Y;
+            layoutRectangle11.Y = font3.Height + layoutRectangle11.Y;
             g.FillRectangle(brush5, (int)layoutRectangle7.X, (int)layoutRectangle7.Y, (int)layoutRectangle7.Width, (int)layoutRectangle7.Height);
             g.FillRectangle(brush5, (int)layoutRectangle8.X, (int)layoutRectangle8.Y, (int)layoutRectangle8.Width, (int)layoutRectangle8.Height);
             g.FillRectangle(brush5, (int)layoutRectangle9.X, (int)layoutRectangle9.Y, (int)layoutRectangle9.Width, (int)layoutRectangle9.Height);
             g.FillRectangle(brush5, (int)layoutRectangle10.X, (int)layoutRectangle10.Y, (int)layoutRectangle10.Width, (int)layoutRectangle10.Height);
             g.FillRectangle(brush5, (int)layoutRectangle11.X, (int)layoutRectangle11.Y, (int)layoutRectangle11.Width, (int)layoutRectangle11.Height);
-            g.DrawString("LTFT - Bank 2", font3, brush4, layoutRectangle7);
+            g.DrawString("长时燃油修正 - 组 2", font3, brush4, layoutRectangle7);
             if (flag && m_bShowLTFT24) {
                 double num4 = LTFT2;
                 g.DrawString(num4.ToString("f4"), font3, brush4, layoutRectangle8, format);
@@ -1227,12 +1025,12 @@ namespace SH_OBD {
             }
             g.DrawString("%", font3, brush4, layoutRectangle9, format);
             g.DrawString("%", font3, brush4, layoutRectangle11, format);
-            layoutRectangle7.Y = (float)font3.Height + layoutRectangle7.Y;
-            layoutRectangle8.Y = (float)font3.Height + layoutRectangle8.Y;
-            layoutRectangle9.Y = (float)font3.Height + layoutRectangle9.Y;
-            layoutRectangle10.Y = (float)font3.Height + layoutRectangle10.Y;
-            layoutRectangle11.Y = (float)font3.Height + layoutRectangle11.Y;
-            g.DrawString("LTFT - Bank 3", font3, brush4, layoutRectangle7);
+            layoutRectangle7.Y = font3.Height + layoutRectangle7.Y;
+            layoutRectangle8.Y = font3.Height + layoutRectangle8.Y;
+            layoutRectangle9.Y = font3.Height + layoutRectangle9.Y;
+            layoutRectangle10.Y = font3.Height + layoutRectangle10.Y;
+            layoutRectangle11.Y = font3.Height + layoutRectangle11.Y;
+            g.DrawString("长时燃油修正 - 组 3", font3, brush4, layoutRectangle7);
             if (flag && m_bShowLTFT13) {
                 double num4 = LTFT3;
                 g.DrawString(num4.ToString("f4"), font3, brush4, layoutRectangle8, format);
@@ -1244,17 +1042,17 @@ namespace SH_OBD {
             }
             g.DrawString("%", font3, brush4, layoutRectangle9, format);
             g.DrawString("%", font3, brush4, layoutRectangle11, format);
-            layoutRectangle7.Y = (float)font3.Height + layoutRectangle7.Y;
-            layoutRectangle8.Y = (float)font3.Height + layoutRectangle8.Y;
-            layoutRectangle9.Y = (float)font3.Height + layoutRectangle9.Y;
-            layoutRectangle10.Y = (float)font3.Height + layoutRectangle10.Y;
-            layoutRectangle11.Y = (float)font3.Height + layoutRectangle11.Y;
+            layoutRectangle7.Y = font3.Height + layoutRectangle7.Y;
+            layoutRectangle8.Y = font3.Height + layoutRectangle8.Y;
+            layoutRectangle9.Y = font3.Height + layoutRectangle9.Y;
+            layoutRectangle10.Y = font3.Height + layoutRectangle10.Y;
+            layoutRectangle11.Y = font3.Height + layoutRectangle11.Y;
             g.FillRectangle(brush5, (int)layoutRectangle7.X, (int)layoutRectangle7.Y, (int)layoutRectangle7.Width, (int)layoutRectangle7.Height);
             g.FillRectangle(brush5, (int)layoutRectangle8.X, (int)layoutRectangle8.Y, (int)layoutRectangle8.Width, (int)layoutRectangle8.Height);
             g.FillRectangle(brush5, (int)layoutRectangle9.X, (int)layoutRectangle9.Y, (int)layoutRectangle9.Width, (int)layoutRectangle9.Height);
             g.FillRectangle(brush5, (int)layoutRectangle10.X, (int)layoutRectangle10.Y, (int)layoutRectangle10.Width, (int)layoutRectangle10.Height);
             g.FillRectangle(brush5, (int)layoutRectangle11.X, (int)layoutRectangle11.Y, (int)layoutRectangle11.Width, (int)layoutRectangle11.Height);
-            g.DrawString("LTFT - Bank 4", font3, brush4, layoutRectangle7);
+            g.DrawString("长时燃油修正 - 组 4", font3, brush4, layoutRectangle7);
             if (flag && m_bShowLTFT24) {
                 double num4 = LTFT4;
                 g.DrawString(num4.ToString("f4"), font3, brush4, layoutRectangle8, format);
@@ -1266,11 +1064,11 @@ namespace SH_OBD {
             }
             g.DrawString("%", font3, brush4, layoutRectangle9, format);
             g.DrawString("%", font3, brush4, layoutRectangle11, format);
-            layoutRectangle7.Y = (float)font3.Height + layoutRectangle7.Y;
-            layoutRectangle8.Y = (float)font3.Height + layoutRectangle8.Y;
-            layoutRectangle9.Y = (float)font3.Height + layoutRectangle9.Y;
-            layoutRectangle10.Y = (float)font3.Height + layoutRectangle10.Y;
-            layoutRectangle11.Y = (float)font3.Height + layoutRectangle11.Y;
+            layoutRectangle7.Y = font3.Height + layoutRectangle7.Y;
+            layoutRectangle8.Y = font3.Height + layoutRectangle8.Y;
+            layoutRectangle9.Y = font3.Height + layoutRectangle9.Y;
+            layoutRectangle10.Y = font3.Height + layoutRectangle10.Y;
+            layoutRectangle11.Y = font3.Height + layoutRectangle11.Y;
             g.DrawString("发动机转速", font3, brush4, layoutRectangle7);
             if (flag && m_bShowEngineRPM) {
                 double num4 = EngineRPM;
@@ -1283,11 +1081,11 @@ namespace SH_OBD {
             }
             g.DrawString("rpm", font3, brush4, layoutRectangle9, format);
             g.DrawString("rpm", font3, brush4, layoutRectangle11, format);
-            layoutRectangle7.Y = (float)font3.Height + layoutRectangle7.Y;
-            layoutRectangle8.Y = (float)font3.Height + layoutRectangle8.Y;
-            layoutRectangle9.Y = (float)font3.Height + layoutRectangle9.Y;
-            layoutRectangle10.Y = (float)font3.Height + layoutRectangle10.Y;
-            layoutRectangle11.Y = (float)font3.Height + layoutRectangle11.Y;
+            layoutRectangle7.Y = font3.Height + layoutRectangle7.Y;
+            layoutRectangle8.Y = font3.Height + layoutRectangle8.Y;
+            layoutRectangle9.Y = font3.Height + layoutRectangle9.Y;
+            layoutRectangle10.Y = font3.Height + layoutRectangle10.Y;
+            layoutRectangle11.Y = font3.Height + layoutRectangle11.Y;
             g.FillRectangle(brush5, (int)layoutRectangle7.X, (int)layoutRectangle7.Y, (int)layoutRectangle7.Width, (int)layoutRectangle7.Height);
             g.FillRectangle(brush5, (int)layoutRectangle8.X, (int)layoutRectangle8.Y, (int)layoutRectangle8.Width, (int)layoutRectangle8.Height);
             g.FillRectangle(brush5, (int)layoutRectangle9.X, (int)layoutRectangle9.Y, (int)layoutRectangle9.Width, (int)layoutRectangle9.Height);
@@ -1305,32 +1103,28 @@ namespace SH_OBD {
             }
             g.DrawString("°", font3, brush4, layoutRectangle9, format);
             g.DrawString("°", font3, brush4, layoutRectangle11, format);
-            int num11 = (int)((double)layoutRectangle11.Bottom + 5.0);
+            int num11 = (int)(layoutRectangle11.Bottom + 5.0);
             g.DrawLine(pen2, 5, num11, 745, num11);
             g.DrawLine(pen2, 5, num11 + 2, 745, num11 + 2);
             format.LineAlignment = StringAlignment.Center;
             int num12 = num11 + 12;
-            RectangleF layoutRectangle12 = new RectangleF();
-            layoutRectangle12 = new RectangleF(5f, (float)num12, 740f, 20f);
+            RectangleF layoutRectangle12 = new RectangleF(5f, num12, 740f, 20f);
             g.DrawRectangle(pen2, (int)layoutRectangle12.X, (int)layoutRectangle12.Y, (int)layoutRectangle12.Width, (int)layoutRectangle12.Height);
             g.DrawString("连续诊断与非连续诊断", font1, brush1, layoutRectangle12, format);
             int num13 = font1.Height + num12 + 10;
-            RectangleF layoutRectangle13 = new RectangleF();
-            float y4 = (float)num13;
-            layoutRectangle13 = new RectangleF(5f, y4, 183f, (float)font3.Height);
-            RectangleF layoutRectangle14 = new RectangleF();
-            layoutRectangle14 = new RectangleF(layoutRectangle13.Right, y4, 91f, (float)font3.Height);
-            RectangleF layoutRectangle15 = new RectangleF();
-            layoutRectangle15 = new RectangleF(layoutRectangle14.Right, y4, 91f, (float)font3.Height);
+            float y4 = num13;
+            RectangleF layoutRectangle13 = new RectangleF(5f, y4, 183f, font3.Height);
+            RectangleF layoutRectangle14 = new RectangleF(layoutRectangle13.Right, y4, 91f, font3.Height);
+            RectangleF layoutRectangle15 = new RectangleF(layoutRectangle14.Right, y4, 91f, font3.Height);
             g.FillRectangle(brush5, (int)layoutRectangle13.X, (int)layoutRectangle13.Y, (int)layoutRectangle13.Width, (int)layoutRectangle13.Height);
             g.FillRectangle(brush5, (int)layoutRectangle14.X, (int)layoutRectangle14.Y, (int)layoutRectangle14.Width, (int)layoutRectangle14.Height);
             g.FillRectangle(brush5, (int)layoutRectangle15.X, (int)layoutRectangle15.Y, (int)layoutRectangle15.Width, (int)layoutRectangle15.Height);
             g.DrawString("连续诊断", font4, brush4, layoutRectangle13, format);
             g.DrawString("支持?", font4, brush4, layoutRectangle14, format);
             g.DrawString("完成?", font4, brush4, layoutRectangle15, format);
-            layoutRectangle13.Y = (float)font3.Height + layoutRectangle13.Y;
-            layoutRectangle14.Y = (float)font3.Height + layoutRectangle14.Y;
-            layoutRectangle15.Y = (float)font3.Height + layoutRectangle15.Y;
+            layoutRectangle13.Y = font3.Height + layoutRectangle13.Y;
+            layoutRectangle14.Y = font3.Height + layoutRectangle14.Y;
+            layoutRectangle15.Y = font3.Height + layoutRectangle15.Y;
             g.DrawString("失火", font3, brush4, layoutRectangle13);
             if (MisfireMonitorSupported) {
                 g.DrawString("支持", font3, brush2, layoutRectangle14, format);
@@ -1343,9 +1137,9 @@ namespace SH_OBD {
                 g.DrawString("不适用", font3, brush4, layoutRectangle14, format);
                 g.DrawString("-", font3, brush4, layoutRectangle15, format);
             }
-            layoutRectangle13.Y = (float)font3.Height + layoutRectangle13.Y;
-            layoutRectangle14.Y = (float)font3.Height + layoutRectangle14.Y;
-            layoutRectangle15.Y = (float)font3.Height + layoutRectangle15.Y;
+            layoutRectangle13.Y = font3.Height + layoutRectangle13.Y;
+            layoutRectangle14.Y = font3.Height + layoutRectangle14.Y;
+            layoutRectangle15.Y = font3.Height + layoutRectangle15.Y;
             g.FillRectangle(brush5, (int)layoutRectangle13.X, (int)layoutRectangle13.Y, (int)layoutRectangle13.Width, (int)layoutRectangle13.Height);
             g.FillRectangle(brush5, (int)layoutRectangle14.X, (int)layoutRectangle14.Y, (int)layoutRectangle14.Width, (int)layoutRectangle14.Height);
             g.FillRectangle(brush5, (int)layoutRectangle15.X, (int)layoutRectangle15.Y, (int)layoutRectangle15.Width, (int)layoutRectangle15.Height);
@@ -1361,9 +1155,9 @@ namespace SH_OBD {
                 g.DrawString("不适用", font3, brush4, layoutRectangle14, format);
                 g.DrawString("-", font3, brush4, layoutRectangle15, format);
             }
-            layoutRectangle13.Y = (float)font3.Height + layoutRectangle13.Y;
-            layoutRectangle14.Y = (float)font3.Height + layoutRectangle14.Y;
-            layoutRectangle15.Y = (float)font3.Height + layoutRectangle15.Y;
+            layoutRectangle13.Y = font3.Height + layoutRectangle13.Y;
+            layoutRectangle14.Y = font3.Height + layoutRectangle14.Y;
+            layoutRectangle15.Y = font3.Height + layoutRectangle15.Y;
             g.DrawString("综合部件", font3, brush4, layoutRectangle13);
             if (ComprehensiveMonitorSupported) {
                 g.DrawString("支持", font3, brush2, layoutRectangle14, format);
@@ -1388,9 +1182,9 @@ namespace SH_OBD {
             g.DrawString("非连续诊断", font4, brush4, layoutRectangle13, format);
             g.DrawString("支持?", font4, brush4, layoutRectangle14, format);
             g.DrawString("完成?", font4, brush4, layoutRectangle15, format);
-            layoutRectangle13.Y = (float)font3.Height + layoutRectangle13.Y;
-            layoutRectangle14.Y = (float)font3.Height + layoutRectangle14.Y;
-            layoutRectangle15.Y = (float)font3.Height + layoutRectangle15.Y;
+            layoutRectangle13.Y = font3.Height + layoutRectangle13.Y;
+            layoutRectangle14.Y = font3.Height + layoutRectangle14.Y;
+            layoutRectangle15.Y = font3.Height + layoutRectangle15.Y;
             g.DrawString("催化器", font3, brush4, layoutRectangle13);
             if (CatalystMonitorSupported) {
                 g.DrawString("支持", font3, brush2, layoutRectangle14, format);
@@ -1403,9 +1197,9 @@ namespace SH_OBD {
                 g.DrawString("不适用", font3, brush4, layoutRectangle14, format);
                 g.DrawString("-", font3, brush4, layoutRectangle15, format);
             }
-            layoutRectangle13.Y = (float)font3.Height + layoutRectangle13.Y;
-            layoutRectangle14.Y = (float)font3.Height + layoutRectangle14.Y;
-            layoutRectangle15.Y = (float)font3.Height + layoutRectangle15.Y;
+            layoutRectangle13.Y = font3.Height + layoutRectangle13.Y;
+            layoutRectangle14.Y = font3.Height + layoutRectangle14.Y;
+            layoutRectangle15.Y = font3.Height + layoutRectangle15.Y;
             g.FillRectangle(brush5, (int)layoutRectangle13.X, (int)layoutRectangle13.Y, (int)layoutRectangle13.Width, (int)layoutRectangle13.Height);
             g.FillRectangle(brush5, (int)layoutRectangle14.X, (int)layoutRectangle14.Y, (int)layoutRectangle14.Width, (int)layoutRectangle14.Height);
             g.FillRectangle(brush5, (int)layoutRectangle15.X, (int)layoutRectangle15.Y, (int)layoutRectangle15.Width, (int)layoutRectangle15.Height);
@@ -1421,9 +1215,9 @@ namespace SH_OBD {
                 g.DrawString("不适用", font3, brush4, layoutRectangle14, format);
                 g.DrawString("-", font3, brush4, layoutRectangle15, format);
             }
-            layoutRectangle13.Y = (float)font3.Height + layoutRectangle13.Y;
-            layoutRectangle14.Y = (float)font3.Height + layoutRectangle14.Y;
-            layoutRectangle15.Y = (float)font3.Height + layoutRectangle15.Y;
+            layoutRectangle13.Y = font3.Height + layoutRectangle13.Y;
+            layoutRectangle14.Y = font3.Height + layoutRectangle14.Y;
+            layoutRectangle15.Y = font3.Height + layoutRectangle15.Y;
             g.DrawString("蒸发系统", font3, brush4, layoutRectangle13);
             if (EvapSystemMonitorSupported) {
                 g.DrawString("支持", font3, brush2, layoutRectangle14, format);
@@ -1436,9 +1230,9 @@ namespace SH_OBD {
                 g.DrawString("不适用", font3, brush4, layoutRectangle14, format);
                 g.DrawString("-", font3, brush4, layoutRectangle15, format);
             }
-            layoutRectangle13.Y = (float)font3.Height + layoutRectangle13.Y;
-            layoutRectangle14.Y = (float)font3.Height + layoutRectangle14.Y;
-            layoutRectangle15.Y = (float)font3.Height + layoutRectangle15.Y;
+            layoutRectangle13.Y = font3.Height + layoutRectangle13.Y;
+            layoutRectangle14.Y = font3.Height + layoutRectangle14.Y;
+            layoutRectangle15.Y = font3.Height + layoutRectangle15.Y;
             g.FillRectangle(brush5, (int)layoutRectangle13.X, (int)layoutRectangle13.Y, (int)layoutRectangle13.Width, (int)layoutRectangle13.Height);
             g.FillRectangle(brush5, (int)layoutRectangle14.X, (int)layoutRectangle14.Y, (int)layoutRectangle14.Width, (int)layoutRectangle14.Height);
             g.FillRectangle(brush5, (int)layoutRectangle15.X, (int)layoutRectangle15.Y, (int)layoutRectangle15.Width, (int)layoutRectangle15.Height);
@@ -1454,9 +1248,9 @@ namespace SH_OBD {
                 g.DrawString("不适用", font3, brush4, layoutRectangle14, format);
                 g.DrawString("-", font3, brush4, layoutRectangle15, format);
             }
-            layoutRectangle13.Y = (float)font3.Height + layoutRectangle13.Y;
-            layoutRectangle14.Y = (float)font3.Height + layoutRectangle14.Y;
-            layoutRectangle15.Y = (float)font3.Height + layoutRectangle15.Y;
+            layoutRectangle13.Y = font3.Height + layoutRectangle13.Y;
+            layoutRectangle14.Y = font3.Height + layoutRectangle14.Y;
+            layoutRectangle15.Y = font3.Height + layoutRectangle15.Y;
             g.DrawString("A/C 系统制冷剂", font3, brush4, layoutRectangle13);
             if (RefrigerantMonitorSupported) {
                 g.DrawString("支持", font3, brush2, layoutRectangle14, format);
@@ -1469,9 +1263,9 @@ namespace SH_OBD {
                 g.DrawString("不适用", font3, brush4, layoutRectangle14, format);
                 g.DrawString("-", font3, brush4, layoutRectangle15, format);
             }
-            layoutRectangle13.Y = (float)font3.Height + layoutRectangle13.Y;
-            layoutRectangle14.Y = (float)font3.Height + layoutRectangle14.Y;
-            layoutRectangle15.Y = (float)font3.Height + layoutRectangle15.Y;
+            layoutRectangle13.Y = font3.Height + layoutRectangle13.Y;
+            layoutRectangle14.Y = font3.Height + layoutRectangle14.Y;
+            layoutRectangle15.Y = font3.Height + layoutRectangle15.Y;
             g.FillRectangle(brush5, (int)layoutRectangle13.X, (int)layoutRectangle13.Y, (int)layoutRectangle13.Width, (int)layoutRectangle13.Height);
             g.FillRectangle(brush5, (int)layoutRectangle14.X, (int)layoutRectangle14.Y, (int)layoutRectangle14.Width, (int)layoutRectangle14.Height);
             g.FillRectangle(brush5, (int)layoutRectangle15.X, (int)layoutRectangle15.Y, (int)layoutRectangle15.Width, (int)layoutRectangle15.Height);
@@ -1487,9 +1281,9 @@ namespace SH_OBD {
                 g.DrawString("不适用", font3, brush4, layoutRectangle14, format);
                 g.DrawString("-", font3, brush4, layoutRectangle15, format);
             }
-            layoutRectangle13.Y = (float)font3.Height + layoutRectangle13.Y;
-            layoutRectangle14.Y = (float)font3.Height + layoutRectangle14.Y;
-            layoutRectangle15.Y = (float)font3.Height + layoutRectangle15.Y;
+            layoutRectangle13.Y = font3.Height + layoutRectangle13.Y;
+            layoutRectangle14.Y = font3.Height + layoutRectangle14.Y;
+            layoutRectangle15.Y = font3.Height + layoutRectangle15.Y;
             g.DrawString("加热氧气传感器", font3, brush4, layoutRectangle13);
             if (OxygenSensorHeaterMonitorSupported) {
                 g.DrawString("支持", font3, brush2, layoutRectangle14, format);
@@ -1502,9 +1296,9 @@ namespace SH_OBD {
                 g.DrawString("不适用", font3, brush4, layoutRectangle14, format);
                 g.DrawString("-", font3, brush4, layoutRectangle15, format);
             }
-            layoutRectangle13.Y = (float)font3.Height + layoutRectangle13.Y;
-            layoutRectangle14.Y = (float)font3.Height + layoutRectangle14.Y;
-            layoutRectangle15.Y = (float)font3.Height + layoutRectangle15.Y;
+            layoutRectangle13.Y = font3.Height + layoutRectangle13.Y;
+            layoutRectangle14.Y = font3.Height + layoutRectangle14.Y;
+            layoutRectangle15.Y = font3.Height + layoutRectangle15.Y;
             g.FillRectangle(brush5, (int)layoutRectangle13.X, (int)layoutRectangle13.Y, (int)layoutRectangle13.Width, (int)layoutRectangle13.Height);
             g.FillRectangle(brush5, (int)layoutRectangle14.X, (int)layoutRectangle14.Y, (int)layoutRectangle14.Width, (int)layoutRectangle14.Height);
             g.FillRectangle(brush5, (int)layoutRectangle15.X, (int)layoutRectangle15.Y, (int)layoutRectangle15.Width, (int)layoutRectangle15.Height);
@@ -1520,20 +1314,24 @@ namespace SH_OBD {
                 g.DrawString("不适用", font3, brush4, layoutRectangle14, format);
                 g.DrawString("-", font3, brush4, layoutRectangle15, format);
             }
-            int num14 = (int)((double)layoutRectangle13.Bottom + 5.0);
+            int num14 = (int)(layoutRectangle13.Bottom + 5.0);
             g.DrawLine(pen2, 5, num14, 745, num14);
             g.DrawLine(pen2, 5, num14 + 2, 745, num14 + 2);
             if (num14 < 900) {
-                RectangleF rectangleF = new RectangleF();
-                rectangleF = new RectangleF(5f, (float)(num14 + 12), 740f, 20f);
+                RectangleF rectangleF = new RectangleF(5f, (num14 + 12), 740f, 20f);
                 g.DrawRectangle(pen2, (int)rectangleF.X, (int)rectangleF.Y, (int)rectangleF.Width, (int)rectangleF.Height);
                 g.DrawString("备注", font1, brush1, rectangleF, format);
                 rectangleF.Y = rectangleF.Bottom;
-                rectangleF.Height = (float)(1000.0 - (double)rectangleF.Y - 5.0);
+                rectangleF.Height = 1000.0f - rectangleF.Y - 5.0f;
                 g.FillRectangle(brush5, rectangleF);
                 g.DrawRectangle(pen2, (int)rectangleF.X, (int)rectangleF.Y, (int)rectangleF.Width, (int)rectangleF.Height);
             }
             g.DrawRectangle(pen3, 0, 0, 749, 999);
+
+            font2.Dispose();
+            brush2.Dispose();
+            brush3.Dispose();
+            brush5.Dispose();
         }
 
         public Image GetImage() {

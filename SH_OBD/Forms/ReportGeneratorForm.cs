@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -24,7 +23,7 @@ namespace SH_OBD {
 
         private void btnGenerate_Click(object sender, EventArgs e) {
             if (!m_obdInterface.ConnectedStatus) {
-                MessageBox.Show("必须首先与车辆进行连接，才能进行后续操作！", "连接请求", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("必须首先与车辆进行连接，才能进行后续操作！", "出错", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             } else {
                 m_bReportForm = new ReportForm();
                 btnGenerate.Enabled = false;
@@ -82,16 +81,13 @@ namespace SH_OBD {
             });
             if (!value4.ErrorDetected) {
                 m_bReportForm.ReportPage1.DTCList.Clear();
-                StringEnumerator enumerator2 = value4.StringCollectionValue.GetEnumerator();
-                if (enumerator2.MoveNext()) {
-                    do {
-                        m_bReportForm.ReportPage1.DTCList.Add(enumerator2.Current);
-                        DisplayDetailMessage("存储的故障码: " + enumerator2.Current);
-                        DTC dtc2 = m_obdInterface.GetDTC(enumerator2.Current);
-                        if (dtc2 != null) {
-                            m_bReportForm.ReportPage1.DTCDefinitionList.Add(dtc2.Description);
-                        }
-                    } while (enumerator2.MoveNext());
+                foreach (string strVal in value4.ListStringValue) {
+                    m_bReportForm.ReportPage1.DTCList.Add(strVal);
+                    DisplayDetailMessage("存储的故障码: " + strVal);
+                    DTC dtc2 = m_obdInterface.GetDTC(strVal);
+                    if (dtc2 != null) {
+                        m_bReportForm.ReportPage1.DTCDefinitionList.Add(dtc2.Description);
+                    }
                 }
             }
             DisplayStatusMessage("请求未决故障码列表");
@@ -101,16 +97,13 @@ namespace SH_OBD {
             });
             if (!value2.ErrorDetected) {
                 m_bReportForm.ReportPage1.PendingList.Clear();
-                StringEnumerator enumerator = value2.StringCollectionValue.GetEnumerator();
-                if (enumerator.MoveNext()) {
-                    do {
-                        m_bReportForm.ReportPage1.PendingList.Add(enumerator.Current);
-                        DisplayDetailMessage("未决故障码: " + enumerator.Current);
-                        DTC dtc = m_obdInterface.GetDTC(enumerator.Current);
-                        if (dtc != null) {
-                            m_bReportForm.ReportPage1.PendingDefinitionList.Add(dtc.Description);
-                        }
-                    } while (enumerator.MoveNext());
+                foreach (string strVal in value2.ListStringValue) {
+                    m_bReportForm.ReportPage1.PendingList.Add(strVal);
+                    DisplayDetailMessage("未决故障码: " + strVal);
+                    DTC dtc = m_obdInterface.GetDTC(strVal);
+                    if (dtc != null) {
+                        m_bReportForm.ReportPage1.PendingDefinitionList.Add(dtc.Description);
+                    }
                 }
             }
 
@@ -210,7 +203,7 @@ namespace SH_OBD {
                 OBDParameterValue value15 = m_obdInterface.GetValue(parameter13, true);
                 if (!value15.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowSTFT13 = true;
-                    DisplayDetailMessage("STFT Bank 1: " + value15.DoubleValue.ToString());
+                    DisplayDetailMessage("短时燃油修正 - 组 1: " + value15.DoubleValue.ToString());
                     m_bReportForm.ReportPage1.STFT1 = value15.DoubleValue;
                 }
             }
@@ -224,7 +217,7 @@ namespace SH_OBD {
                 OBDParameterValue value14 = m_obdInterface.GetValue(parameter12, true);
                 if (!value14.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowSTFT13 = true;
-                    DisplayDetailMessage("STFT Bank 3: " + value14.DoubleValue.ToString());
+                    DisplayDetailMessage("短时燃油修正 - 组 3: " + value14.DoubleValue.ToString());
                     m_bReportForm.ReportPage1.STFT3 = value14.DoubleValue;
                 }
             }
@@ -238,7 +231,7 @@ namespace SH_OBD {
                 OBDParameterValue value13 = m_obdInterface.GetValue(parameter11, true);
                 if (!value13.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowLTFT13 = true;
-                    DisplayDetailMessage("LTFT Bank 1: " + value13.DoubleValue.ToString());
+                    DisplayDetailMessage("长时燃油修正 - 组 1: " + value13.DoubleValue.ToString());
                     m_bReportForm.ReportPage1.LTFT1 = value13.DoubleValue;
                 }
             }
@@ -252,7 +245,7 @@ namespace SH_OBD {
                 OBDParameterValue value12 = m_obdInterface.GetValue(parameter10, true);
                 if (!value12.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowLTFT13 = true;
-                    DisplayDetailMessage("LTFT Bank 3: " + value12.DoubleValue.ToString());
+                    DisplayDetailMessage("长时燃油修正 - 组 3: " + value12.DoubleValue.ToString());
                     m_bReportForm.ReportPage1.LTFT3 = value12.DoubleValue;
                 }
             }
@@ -266,7 +259,7 @@ namespace SH_OBD {
                 OBDParameterValue value11 = m_obdInterface.GetValue(parameter9, true);
                 if (!value11.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowSTFT24 = true;
-                    DisplayDetailMessage("STFT Bank 2: " + value11.DoubleValue.ToString());
+                    DisplayDetailMessage("短时燃油修正 - 组 2: " + value11.DoubleValue.ToString());
                     m_bReportForm.ReportPage1.STFT2 = value11.DoubleValue;
                 }
             }
@@ -280,7 +273,7 @@ namespace SH_OBD {
                 OBDParameterValue value10 = m_obdInterface.GetValue(parameter8, true);
                 if (!value10.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowSTFT24 = true;
-                    DisplayDetailMessage("STFT Bank 4: " + value10.DoubleValue.ToString());
+                    DisplayDetailMessage("短时燃油修正 - 组 4: " + value10.DoubleValue.ToString());
                     m_bReportForm.ReportPage1.STFT4 = value10.DoubleValue;
                 }
             }
@@ -294,7 +287,7 @@ namespace SH_OBD {
                 OBDParameterValue value9 = m_obdInterface.GetValue(parameter7, true);
                 if (!value9.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowLTFT24 = true;
-                    DisplayDetailMessage("LTFT Bank 2: " + value9.DoubleValue.ToString());
+                    DisplayDetailMessage("长时燃油修正 - 组 2: " + value9.DoubleValue.ToString());
                     m_bReportForm.ReportPage1.LTFT2 = value9.DoubleValue;
                 }
             }
@@ -308,7 +301,7 @@ namespace SH_OBD {
                 OBDParameterValue value8 = m_obdInterface.GetValue(parameter6, true);
                 if (!value8.ErrorDetected) {
                     m_bReportForm.ReportPage1.ShowLTFT24 = true;
-                    DisplayDetailMessage("LTFT Bank 4: " + value8.DoubleValue.ToString());
+                    DisplayDetailMessage("长时燃油修正 - 组 4: " + value8.DoubleValue.ToString());
                     m_bReportForm.ReportPage1.LTFT4 = value8.DoubleValue;
                 }
             }
@@ -372,14 +365,17 @@ namespace SH_OBD {
 
         private void CollectMonitoringTestData() {
             DisplayStatusMessage("读取故障诊断器结果");
+            OBDParameterValue value23 = m_obdInterface.GetValue("SAE.MISFIRE_SUPPORT", true);
             this.BeginInvoke((EventHandler)delegate {
                 progressBar.Value += 1;
             });
-            OBDParameterValue value23 = m_obdInterface.GetValue("SAE.MISFIRE_SUPPORT", true);
             if (!value23.ErrorDetected) {
                 if (value23.BoolValue) {
                     m_bReportForm.ReportPage1.MisfireMonitorSupported = true;
                     OBDParameterValue value22 = m_obdInterface.GetValue("SAE.MISFIRE_STATUS", true);
+                    this.BeginInvoke((EventHandler)delegate {
+                        progressBar.Value += 1;
+                    });
                     if (!value22.ErrorDetected) {
                         if (value22.BoolValue) {
                             DisplayDetailMessage("失火就绪状态?: 完成");
@@ -395,10 +391,16 @@ namespace SH_OBD {
                 }
             }
             OBDParameterValue value21 = m_obdInterface.GetValue("SAE.FUEL_SUPPORT", true);
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             if (!value21.ErrorDetected) {
                 if (value21.BoolValue) {
                     m_bReportForm.ReportPage1.FuelSystemMonitorSupported = true;
                     OBDParameterValue value20 = m_obdInterface.GetValue("SAE.FUEL_STATUS", true);
+                    this.BeginInvoke((EventHandler)delegate {
+                        progressBar.Value += 1;
+                    });
                     if (!value20.ErrorDetected) {
                         if (value20.BoolValue) {
                             DisplayDetailMessage("燃油系统就绪状态?: 完成");
@@ -414,10 +416,16 @@ namespace SH_OBD {
                 }
             }
             OBDParameterValue value19 = m_obdInterface.GetValue("SAE.CCM_SUPPORT", true);
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             if (!value19.ErrorDetected) {
                 if (value19.BoolValue) {
                     m_bReportForm.ReportPage1.ComprehensiveMonitorSupported = true;
                     OBDParameterValue value18 = m_obdInterface.GetValue("SAE.CCM_STATUS", true);
+                    this.BeginInvoke((EventHandler)delegate {
+                        progressBar.Value += 1;
+                    });
                     if (!value18.ErrorDetected) {
                         if (value18.BoolValue) {
                             DisplayDetailMessage("综合部件就绪状态?: 完成");
@@ -433,10 +441,16 @@ namespace SH_OBD {
                 }
             }
             OBDParameterValue value17 = m_obdInterface.GetValue("SAE.CAT_SUPPORT", true);
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             if (!value17.ErrorDetected) {
                 if (value17.BoolValue) {
                     m_bReportForm.ReportPage1.CatalystMonitorSupported = true;
                     OBDParameterValue value16 = m_obdInterface.GetValue("SAE.CAT_STATUS", true);
+                    this.BeginInvoke((EventHandler)delegate {
+                        progressBar.Value += 1;
+                    });
                     if (!value16.ErrorDetected) {
                         if (value16.BoolValue) {
                             DisplayDetailMessage("催化器就绪状态?: 完成");
@@ -452,10 +466,16 @@ namespace SH_OBD {
                 }
             }
             OBDParameterValue value15 = m_obdInterface.GetValue("SAE.HCAT_SUPPORT", true);
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             if (!value15.ErrorDetected) {
                 if (value15.BoolValue) {
                     m_bReportForm.ReportPage1.HeatedCatalystMonitorSupported = true;
                     OBDParameterValue value14 = m_obdInterface.GetValue("SAE.HCAT_STATUS", true);
+                    this.BeginInvoke((EventHandler)delegate {
+                        progressBar.Value += 1;
+                    });
                     if (!value14.ErrorDetected) {
                         if (value14.BoolValue) {
                             DisplayDetailMessage("加热催化器就绪状态?: 完成");
@@ -471,10 +491,16 @@ namespace SH_OBD {
                 }
             }
             OBDParameterValue value13 = m_obdInterface.GetValue("SAE.EVAP_SUPPORT", true);
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             if (!value13.ErrorDetected) {
                 if (value13.BoolValue) {
                     m_bReportForm.ReportPage1.EvapSystemMonitorSupported = true;
                     OBDParameterValue value12 = m_obdInterface.GetValue("SAE.EVAP_STATUS", true);
+                    this.BeginInvoke((EventHandler)delegate {
+                        progressBar.Value += 1;
+                    });
                     if (!value12.ErrorDetected) {
                         if (value12.BoolValue) {
                             DisplayDetailMessage("蒸发系统就绪状态?: 完成");
@@ -490,10 +516,16 @@ namespace SH_OBD {
                 }
             }
             OBDParameterValue value11 = m_obdInterface.GetValue("SAE.AIR_SUPPORT", true);
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             if (!value11.ErrorDetected) {
                 if (value11.BoolValue) {
                     m_bReportForm.ReportPage1.SecondaryAirMonitorSupported = true;
                     OBDParameterValue value10 = m_obdInterface.GetValue("SAE.AIR_STATUS", true);
+                    this.BeginInvoke((EventHandler)delegate {
+                        progressBar.Value += 1;
+                    });
                     if (!value10.ErrorDetected) {
                         if (value10.BoolValue) {
                             DisplayDetailMessage("二次空气系统就绪状态?: 完成");
@@ -509,10 +541,16 @@ namespace SH_OBD {
                 }
             }
             OBDParameterValue value9 = m_obdInterface.GetValue("SAE.AC_SUPPORT", true);
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             if (!value9.ErrorDetected) {
                 if (value9.BoolValue) {
                     m_bReportForm.ReportPage1.RefrigerantMonitorSupported = true;
                     OBDParameterValue value8 = m_obdInterface.GetValue("SAE.AC_STATUS", true);
+                    this.BeginInvoke((EventHandler)delegate {
+                        progressBar.Value += 1;
+                    });
                     if (!value8.ErrorDetected) {
                         if (value8.BoolValue) {
                             DisplayDetailMessage("A/C系统制冷剂就绪状态?: 完成");
@@ -528,10 +566,16 @@ namespace SH_OBD {
                 }
             }
             OBDParameterValue value7 = m_obdInterface.GetValue("SAE.O2_SUPPORT", true);
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             if (!value7.ErrorDetected) {
                 if (value7.BoolValue) {
                     m_bReportForm.ReportPage1.OxygenSensorMonitorSupported = true;
                     OBDParameterValue value6 = m_obdInterface.GetValue("SAE.O2_STATUS", true);
+                    this.BeginInvoke((EventHandler)delegate {
+                        progressBar.Value += 1;
+                    });
                     if (!value6.ErrorDetected) {
                         if (value6.BoolValue) {
                             DisplayDetailMessage("氧气传感器就绪状态?: 完成");
@@ -547,10 +591,16 @@ namespace SH_OBD {
                 }
             }
             OBDParameterValue value5 = m_obdInterface.GetValue("SAE.O2HTR_SUPPORT", true);
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             if (!value5.ErrorDetected) {
                 if (value5.BoolValue) {
                     m_bReportForm.ReportPage1.OxygenSensorHeaterMonitorSupported = true;
                     OBDParameterValue value4 = m_obdInterface.GetValue("SAE.O2HTR_STATUS", true);
+                    this.BeginInvoke((EventHandler)delegate {
+                        progressBar.Value += 1;
+                    });
                     if (!value4.ErrorDetected) {
                         if (value4.BoolValue) {
                             DisplayDetailMessage("加热氧气传感器就绪状态?: 完成");
@@ -566,10 +616,16 @@ namespace SH_OBD {
                 }
             }
             OBDParameterValue value3 = m_obdInterface.GetValue("SAE.EGR_SUPPORT", true);
+            this.BeginInvoke((EventHandler)delegate {
+                progressBar.Value += 1;
+            });
             if (!value3.ErrorDetected) {
                 if (value3.BoolValue) {
                     m_bReportForm.ReportPage1.EGRSystemMonitorSupported = true;
                     OBDParameterValue value2 = m_obdInterface.GetValue("SAE.EGR_STATUS", true);
+                    this.BeginInvoke((EventHandler)delegate {
+                        progressBar.Value += 1;
+                    });
                     if (!value2.ErrorDetected) {
                         if (value2.BoolValue) {
                             DisplayDetailMessage("EGR系统就绪状态?: 完成");
@@ -587,7 +643,7 @@ namespace SH_OBD {
         }
 
         private void DisplayStatusMessage(string str) {
-            this.Invoke((EventHandler)delegate {
+            this.BeginInvoke((EventHandler)delegate {
                 richTextStatus.SelectionFont = new Font("Times New Roman", 12f, FontStyle.Bold);
                 richTextStatus.SelectionColor = Color.Blue;
                 richTextStatus.AppendText(str + "\r\n");
@@ -595,7 +651,7 @@ namespace SH_OBD {
         }
 
         private void DisplayRequest(string str) {
-            this.Invoke((EventHandler)delegate {
+            this.BeginInvoke((EventHandler)delegate {
                 richTextStatus.SelectionFont = new Font("Times New Roman", 10f, FontStyle.Bold);
                 richTextStatus.SelectionColor = Color.Black;
                 richTextStatus.AppendText("   发送: ");
@@ -606,7 +662,7 @@ namespace SH_OBD {
         }
 
         private void DisplayValidResponse(string str) {
-            this.Invoke((EventHandler)delegate {
+            this.BeginInvoke((EventHandler)delegate {
                 richTextStatus.SelectionFont = new Font("Times New Roman", 10f, FontStyle.Bold);
                 Color black = Color.Black;
                 richTextStatus.SelectionColor = black;
@@ -619,7 +675,7 @@ namespace SH_OBD {
         }
 
         private void DisplayInvalidResponse(string str) {
-            this.Invoke((EventHandler)delegate {
+            this.BeginInvoke((EventHandler)delegate {
                 richTextStatus.SelectionFont = new Font("Times New Roman", 10f, FontStyle.Bold);
                 Color black = Color.Black;
                 richTextStatus.SelectionColor = black;
@@ -632,7 +688,7 @@ namespace SH_OBD {
         }
 
         private void DisplayDetailMessage(string str) {
-            this.Invoke((EventHandler)delegate {
+            this.BeginInvoke((EventHandler)delegate {
                 richTextStatus.SelectionFont = new Font("Times New Roman", 10f, FontStyle.Regular);
                 Color black = Color.Black;
                 richTextStatus.SelectionColor = black;
@@ -641,24 +697,25 @@ namespace SH_OBD {
         }
 
         private void DisplayBlankLine() {
-            this.Invoke((EventHandler)delegate {
+            this.BeginInvoke((EventHandler)delegate {
                 richTextStatus.SelectionFont = new Font("Times New Roman", 10f, FontStyle.Regular);
                 richTextStatus.AppendText("\r\n");
             });
         }
 
         private void btnOpen_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Title = "打开 OBD-II 诊断报告";
-            openFileDialog.Filter = "SH_OBD 报告文件 (*.obd)|*.obd";
-            openFileDialog.FilterIndex = 0;
-            openFileDialog.RestoreDirectory = true;
-            int num1 = (int)openFileDialog.ShowDialog();
+            OpenFileDialog openFileDialog = new OpenFileDialog {
+                Title = "打开 OBD-II 诊断报告",
+                Filter = "报告文件 (*.obd)|*.obd",
+                FilterIndex = 0,
+                RestoreDirectory = true
+            };
+            openFileDialog.ShowDialog();
             if (openFileDialog.FileName.Length <= 0) {
                 return;
             }
             FileStream fileStream = File.OpenRead(openFileDialog.FileName);
-            BinaryReader binaryReader = new BinaryReader((Stream)fileStream);
+            BinaryReader binaryReader = new BinaryReader(fileStream);
             m_bReportForm = new ReportForm();
             m_bReportForm.ReportPage1.ShopName = binaryReader.ReadString();
             m_bReportForm.ReportPage1.ShopAddress1 = binaryReader.ReadString();
@@ -673,46 +730,38 @@ namespace SH_OBD {
             m_bReportForm.ReportPage1.MilStatus = binaryReader.ReadBoolean();
             m_bReportForm.ReportPage1.TotalCodes = binaryReader.ReadInt32();
             m_bReportForm.ReportPage1.FreezeFrameDTC = binaryReader.ReadString();
-            StringCollection stringCollection1 = new StringCollection();
-            uint num2 = 25U;
-            do {
+            List<string> stringList1 = new List<string>();
+            for (uint i = 25U; i > 0U; i--) {
                 string str = binaryReader.ReadString();
                 if (str.Length > 0) {
-                    stringCollection1.Add(str);
+                    stringList1.Add(str);
                 }
-                --num2;
-            } while (num2 > 0U);
-            m_bReportForm.ReportPage1.DTCList = stringCollection1;
-            StringCollection stringCollection2 = new StringCollection();
-            uint num3 = 25U;
-            do {
+            }
+            m_bReportForm.ReportPage1.DTCList = stringList1;
+            List<string> stringList2 = new List<string>();
+            for (uint i = 25U; i > 0U; i--) {
                 string str = binaryReader.ReadString();
                 if (str.Length > 0) {
-                    stringCollection2.Add(str);
+                    stringList2.Add(str);
                 }
-                --num3;
-            } while (num3 > 0U);
-            m_bReportForm.ReportPage1.DTCDefinitionList = stringCollection2;
-            StringCollection stringCollection3 = new StringCollection();
-            uint num4 = 25U;
-            do {
+            }
+            m_bReportForm.ReportPage1.DTCDefinitionList = stringList2;
+            List<string> stringList3 = new List<string>();
+            for (uint i = 25U; i > 0U; i--) {
                 string str = binaryReader.ReadString();
                 if (str.Length > 0) {
-                    stringCollection3.Add(str);
+                    stringList3.Add(str);
                 }
-                --num4;
-            } while (num4 > 0U);
-            m_bReportForm.ReportPage1.PendingList = stringCollection3;
-            StringCollection stringCollection4 = new StringCollection();
-            uint num5 = 25U;
-            do {
+            }
+            m_bReportForm.ReportPage1.PendingList = stringList3;
+            List<string> stringList4 = new List<string>();
+            for (uint i = 25U; i > 0U; i--) {
                 string str = binaryReader.ReadString();
                 if (str.Length > 0) {
-                    stringCollection4.Add(str);
+                    stringList4.Add(str);
                 }
-                --num5;
-            } while (num5 > 0U);
-            m_bReportForm.ReportPage1.PendingDefinitionList = stringCollection4;
+            }
+            m_bReportForm.ReportPage1.PendingDefinitionList = stringList4;
             m_bReportForm.ReportPage1.FuelSystem1Status = binaryReader.ReadString();
             m_bReportForm.ReportPage1.FuelSystem2Status = binaryReader.ReadString();
             m_bReportForm.ReportPage1.CalculatedLoad = binaryReader.ReadDouble();
@@ -764,7 +813,8 @@ namespace SH_OBD {
             m_bReportForm.ReportPage1.EGRSystemMonitorCompleted = binaryReader.ReadBoolean();
             binaryReader.Close();
             fileStream.Close();
-            int num6 = (int)m_bReportForm.ShowDialog();
+            m_bReportForm.ShowDialog();
+            openFileDialog.Dispose();
         }
 
         private void ReportGeneratorForm_Load(object sender, EventArgs e) {

@@ -97,7 +97,7 @@ namespace SH_OBD.Properties {
         }
         
         /// <summary>
-        ///   查找类似 测功机 的本地化字符串。
+        ///   查找类似 功率测试 的本地化字符串。
         /// </summary>
         internal static string buttonName_Dyno {
             get {
@@ -205,7 +205,7 @@ namespace SH_OBD.Properties {
         }
         
         /// <summary>
-        ///   查找类似 路试 的本地化字符串。
+        ///   查找类似 加速性能 的本地化字符串。
         /// </summary>
         internal static string buttonName_Track {
             get {

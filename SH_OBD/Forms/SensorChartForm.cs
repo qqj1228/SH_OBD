@@ -52,14 +52,18 @@ namespace SH_OBD {
             int width = Width;
             int height = Height;
             int num1 = 0;
-            if (chkSensor1.Checked)
+            if (chkSensor1.Checked) {
                 num1 = 1;
-            if (chkSensor2.Checked)
+            }
+            if (chkSensor2.Checked) {
                 ++num1;
-            if (chkSensor3.Checked)
+            }
+            if (chkSensor3.Checked) {
                 ++num1;
-            if (chkSensor4.Checked)
+            }
+            if (chkSensor4.Checked) {
                 ++num1;
+            }
             if (num1 == 0) {
                 chart1.Visible = false;
                 chart2.Visible = false;
@@ -304,19 +308,17 @@ namespace SH_OBD {
             dSensorTimes[index] = numArray2;
             m_dSensorMax[index] = m_arraySensorValues[index][0].Value;
             m_dSensorMin[index] = m_arraySensorValues[index][0].Value;
-            if (0 < m_arraySensorValues[index].Count) {
-                for (int i = 0; i < m_arraySensorValues[index].Count; i++) {
-                    DatedValue datedValue = m_arraySensorValues[index][i];
-                    if (datedValue.Value > m_dSensorMax[index]) {
-                        m_dSensorMax[index] = datedValue.Value;
-                    }
-                    if (datedValue.Value < m_dSensorMin[index]) {
-                        m_dSensorMin[index] = datedValue.Value;
-                    }
-                    dSensorValues[index][i] = datedValue.Value;
-                    TimeSpan timeSpan = DateTime.Now.Subtract(datedValue.Date);
-                    dSensorTimes[index][i] = timeSpan.TotalSeconds * -1.0;
+            for (int i = 0; i < m_arraySensorValues[index].Count; i++) {
+                DatedValue datedValue = m_arraySensorValues[index][i];
+                if (datedValue.Value > m_dSensorMax[index]) {
+                    m_dSensorMax[index] = datedValue.Value;
                 }
+                if (datedValue.Value < m_dSensorMin[index]) {
+                    m_dSensorMin[index] = datedValue.Value;
+                }
+                dSensorValues[index][i] = datedValue.Value;
+                TimeSpan timeSpan = DateTime.Now.Subtract(datedValue.Date);
+                dSensorTimes[index][i] = timeSpan.TotalSeconds * -1.0;
             }
             if (chart.YRangeEnd < m_dSensorMax[index]) {
                 chart.YRangeEnd = Math.Ceiling(m_dSensorMax[index]);

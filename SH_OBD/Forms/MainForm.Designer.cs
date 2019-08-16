@@ -70,10 +70,11 @@
             this.StatusLabelProtocol,
             this.StatusLabelDeviceType,
             this.StatusLabelPort});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 585);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 738);
             this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.statusStrip1.Size = new System.Drawing.Size(934, 26);
+            this.statusStrip1.Size = new System.Drawing.Size(1245, 26);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -81,7 +82,7 @@
             // 
             this.StatusLabelConnStatus.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.StatusLabelConnStatus.Name = "StatusLabelConnStatus";
-            this.StatusLabelConnStatus.Size = new System.Drawing.Size(265, 21);
+            this.StatusLabelConnStatus.Size = new System.Drawing.Size(367, 21);
             this.StatusLabelConnStatus.Spring = true;
             this.StatusLabelConnStatus.Text = "OBD通讯接口状态";
             // 
@@ -89,7 +90,7 @@
             // 
             this.StatusLabelDeviceName.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.StatusLabelDeviceName.Name = "StatusLabelDeviceName";
-            this.StatusLabelDeviceName.Size = new System.Drawing.Size(265, 21);
+            this.StatusLabelDeviceName.Size = new System.Drawing.Size(367, 21);
             this.StatusLabelDeviceName.Spring = true;
             this.StatusLabelDeviceName.Text = "OBD设备名称";
             // 
@@ -97,7 +98,7 @@
             // 
             this.StatusLabelProtocol.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.StatusLabelProtocol.Name = "StatusLabelProtocol";
-            this.StatusLabelProtocol.Size = new System.Drawing.Size(265, 21);
+            this.StatusLabelProtocol.Size = new System.Drawing.Size(367, 21);
             this.StatusLabelProtocol.Spring = true;
             this.StatusLabelProtocol.Text = "OBD连接协议";
             // 
@@ -131,16 +132,18 @@
             this.panel1.Controls.Add(this.buttonFF);
             this.panel1.Controls.Add(this.buttonDTC);
             this.panel1.Controls.Add(this.buttonTests);
-            this.panel1.Location = new System.Drawing.Point(0, 55);
+            this.panel1.Location = new System.Drawing.Point(0, 69);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(120, 531);
+            this.panel1.Size = new System.Drawing.Size(159, 663);
             this.panel1.TabIndex = 1;
             // 
             // buttonReport
             // 
-            this.buttonReport.Location = new System.Drawing.Point(5, 266);
+            this.buttonReport.Location = new System.Drawing.Point(7, 332);
+            this.buttonReport.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonReport.Name = "buttonReport";
-            this.buttonReport.Size = new System.Drawing.Size(110, 23);
+            this.buttonReport.Size = new System.Drawing.Size(147, 29);
             this.buttonReport.TabIndex = 10;
             this.buttonReport.Text = "buttonReport";
             this.buttonReport.UseVisualStyleBackColor = true;
@@ -148,9 +151,10 @@
             // 
             // buttonTerminal
             // 
-            this.buttonTerminal.Location = new System.Drawing.Point(5, 295);
+            this.buttonTerminal.Location = new System.Drawing.Point(7, 369);
+            this.buttonTerminal.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonTerminal.Name = "buttonTerminal";
-            this.buttonTerminal.Size = new System.Drawing.Size(110, 23);
+            this.buttonTerminal.Size = new System.Drawing.Size(147, 29);
             this.buttonTerminal.TabIndex = 11;
             this.buttonTerminal.Text = "buttonTerminal";
             this.buttonTerminal.UseVisualStyleBackColor = true;
@@ -158,9 +162,10 @@
             // 
             // buttonFuel
             // 
-            this.buttonFuel.Location = new System.Drawing.Point(5, 237);
+            this.buttonFuel.Location = new System.Drawing.Point(7, 296);
+            this.buttonFuel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonFuel.Name = "buttonFuel";
-            this.buttonFuel.Size = new System.Drawing.Size(110, 23);
+            this.buttonFuel.Size = new System.Drawing.Size(147, 29);
             this.buttonFuel.TabIndex = 9;
             this.buttonFuel.Text = "buttonFuel";
             this.buttonFuel.UseVisualStyleBackColor = true;
@@ -168,9 +173,10 @@
             // 
             // buttonDyno
             // 
-            this.buttonDyno.Location = new System.Drawing.Point(5, 208);
+            this.buttonDyno.Location = new System.Drawing.Point(7, 260);
+            this.buttonDyno.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonDyno.Name = "buttonDyno";
-            this.buttonDyno.Size = new System.Drawing.Size(110, 23);
+            this.buttonDyno.Size = new System.Drawing.Size(147, 29);
             this.buttonDyno.TabIndex = 8;
             this.buttonDyno.Text = "buttonDyno";
             this.buttonDyno.UseVisualStyleBackColor = true;
@@ -178,9 +184,10 @@
             // 
             // buttonTrack
             // 
-            this.buttonTrack.Location = new System.Drawing.Point(5, 179);
+            this.buttonTrack.Location = new System.Drawing.Point(7, 224);
+            this.buttonTrack.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonTrack.Name = "buttonTrack";
-            this.buttonTrack.Size = new System.Drawing.Size(110, 23);
+            this.buttonTrack.Size = new System.Drawing.Size(147, 29);
             this.buttonTrack.TabIndex = 7;
             this.buttonTrack.Text = "buttonTrack";
             this.buttonTrack.UseVisualStyleBackColor = true;
@@ -188,9 +195,10 @@
             // 
             // buttonSensorGraph
             // 
-            this.buttonSensorGraph.Location = new System.Drawing.Point(5, 150);
+            this.buttonSensorGraph.Location = new System.Drawing.Point(7, 188);
+            this.buttonSensorGraph.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonSensorGraph.Name = "buttonSensorGraph";
-            this.buttonSensorGraph.Size = new System.Drawing.Size(110, 23);
+            this.buttonSensorGraph.Size = new System.Drawing.Size(147, 29);
             this.buttonSensorGraph.TabIndex = 6;
             this.buttonSensorGraph.Text = "buttonSensorGraph";
             this.buttonSensorGraph.UseVisualStyleBackColor = true;
@@ -198,9 +206,10 @@
             // 
             // buttonSensorGrid
             // 
-            this.buttonSensorGrid.Location = new System.Drawing.Point(5, 121);
+            this.buttonSensorGrid.Location = new System.Drawing.Point(7, 151);
+            this.buttonSensorGrid.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonSensorGrid.Name = "buttonSensorGrid";
-            this.buttonSensorGrid.Size = new System.Drawing.Size(110, 23);
+            this.buttonSensorGrid.Size = new System.Drawing.Size(147, 29);
             this.buttonSensorGrid.TabIndex = 5;
             this.buttonSensorGrid.Text = "buttonSensorGrid";
             this.buttonSensorGrid.UseVisualStyleBackColor = true;
@@ -208,9 +217,10 @@
             // 
             // buttonO2
             // 
-            this.buttonO2.Location = new System.Drawing.Point(5, 92);
+            this.buttonO2.Location = new System.Drawing.Point(7, 115);
+            this.buttonO2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonO2.Name = "buttonO2";
-            this.buttonO2.Size = new System.Drawing.Size(110, 23);
+            this.buttonO2.Size = new System.Drawing.Size(147, 29);
             this.buttonO2.TabIndex = 4;
             this.buttonO2.Text = "buttonO2";
             this.buttonO2.UseVisualStyleBackColor = true;
@@ -218,9 +228,10 @@
             // 
             // buttonFF
             // 
-            this.buttonFF.Location = new System.Drawing.Point(5, 63);
+            this.buttonFF.Location = new System.Drawing.Point(7, 79);
+            this.buttonFF.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonFF.Name = "buttonFF";
-            this.buttonFF.Size = new System.Drawing.Size(110, 23);
+            this.buttonFF.Size = new System.Drawing.Size(147, 29);
             this.buttonFF.TabIndex = 3;
             this.buttonFF.Text = "buttonFF";
             this.buttonFF.UseVisualStyleBackColor = true;
@@ -228,9 +239,10 @@
             // 
             // buttonDTC
             // 
-            this.buttonDTC.Location = new System.Drawing.Point(5, 33);
+            this.buttonDTC.Location = new System.Drawing.Point(7, 41);
+            this.buttonDTC.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonDTC.Name = "buttonDTC";
-            this.buttonDTC.Size = new System.Drawing.Size(110, 23);
+            this.buttonDTC.Size = new System.Drawing.Size(147, 29);
             this.buttonDTC.TabIndex = 2;
             this.buttonDTC.Text = "buttonDTC";
             this.buttonDTC.UseVisualStyleBackColor = true;
@@ -238,9 +250,10 @@
             // 
             // buttonTests
             // 
-            this.buttonTests.Location = new System.Drawing.Point(5, 3);
+            this.buttonTests.Location = new System.Drawing.Point(7, 4);
+            this.buttonTests.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonTests.Name = "buttonTests";
-            this.buttonTests.Size = new System.Drawing.Size(110, 23);
+            this.buttonTests.Size = new System.Drawing.Size(147, 29);
             this.buttonTests.TabIndex = 1;
             this.buttonTests.Text = "buttonTests";
             this.buttonTests.UseVisualStyleBackColor = true;
@@ -256,18 +269,20 @@
             this.panel2.Controls.Add(this.picDiagram);
             this.panel2.Controls.Add(this.lblInstruction1);
             this.panel2.Controls.Add(this.buttonDefaultFontStyle);
-            this.panel2.Location = new System.Drawing.Point(120, 55);
+            this.panel2.Location = new System.Drawing.Point(160, 69);
+            this.panel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(814, 531);
+            this.panel2.Size = new System.Drawing.Size(1085, 663);
             this.panel2.TabIndex = 3;
             // 
             // pictureBox1
             // 
             this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(260, 62);
+            this.pictureBox1.Location = new System.Drawing.Point(347, 78);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(280, 140);
+            this.pictureBox1.Size = new System.Drawing.Size(373, 175);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 22;
             this.pictureBox1.TabStop = false;
@@ -276,9 +291,10 @@
             // 
             this.picDiagram.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.picDiagram.Image = ((System.Drawing.Image)(resources.GetObject("picDiagram.Image")));
-            this.picDiagram.Location = new System.Drawing.Point(143, 208);
+            this.picDiagram.Location = new System.Drawing.Point(191, 260);
+            this.picDiagram.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.picDiagram.Name = "picDiagram";
-            this.picDiagram.Size = new System.Drawing.Size(528, 72);
+            this.picDiagram.Size = new System.Drawing.Size(704, 90);
             this.picDiagram.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picDiagram.TabIndex = 20;
             this.picDiagram.TabStop = false;
@@ -286,18 +302,20 @@
             // lblInstruction1
             // 
             this.lblInstruction1.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.lblInstruction1.Location = new System.Drawing.Point(219, 297);
+            this.lblInstruction1.Location = new System.Drawing.Point(292, 371);
+            this.lblInstruction1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblInstruction1.Name = "lblInstruction1";
-            this.lblInstruction1.Size = new System.Drawing.Size(386, 120);
+            this.lblInstruction1.Size = new System.Drawing.Size(515, 150);
             this.lblInstruction1.TabIndex = 16;
             this.lblInstruction1.Text = "1、请确认已使用了正确的通讯设置。\r\n\r\n2、请确认已使用了正确的车辆设置。\r\n\r\n3、使用OBD设备连接车辆OBD-II接口与电脑主机。\r\n\r\n4、打开车辆点火" +
     "按钮至“ON”位置，或者发动引擎使其处于运转状态。\r\n\r\n5、点击工具栏“建立连接”按钮。";
             // 
             // buttonDefaultFontStyle
             // 
-            this.buttonDefaultFontStyle.Location = new System.Drawing.Point(221, 433);
+            this.buttonDefaultFontStyle.Location = new System.Drawing.Point(295, 541);
+            this.buttonDefaultFontStyle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonDefaultFontStyle.Name = "buttonDefaultFontStyle";
-            this.buttonDefaultFontStyle.Size = new System.Drawing.Size(75, 23);
+            this.buttonDefaultFontStyle.Size = new System.Drawing.Size(100, 29);
             this.buttonDefaultFontStyle.TabIndex = 21;
             this.buttonDefaultFontStyle.Text = "DefaultFontStyle";
             this.buttonDefaultFontStyle.UseVisualStyleBackColor = true;
@@ -315,7 +333,7 @@
             this.toolStripBtnSettings});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(934, 55);
+            this.toolStrip1.Size = new System.Drawing.Size(1245, 55);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.TabStop = true;
             this.toolStrip1.Text = "toolStrip1";
@@ -372,15 +390,15 @@
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(934, 611);
+            this.ClientSize = new System.Drawing.Size(1245, 764);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.statusStrip1);
-            this.IsMdiContainer = true;
-            this.MinimumSize = new System.Drawing.Size(920, 640);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.MinimumSize = new System.Drawing.Size(1221, 790);
             this.Name = "MainForm";
             this.Text = "SH_OBD";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);

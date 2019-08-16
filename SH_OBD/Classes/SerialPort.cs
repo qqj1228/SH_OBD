@@ -278,8 +278,9 @@ namespace SH_OBD {
                     ReceiveEventFlag = false;      //打开事件
 
                     while (num++ < Overtime) {
-                        if (_serialPort.BytesToRead >= ReceiveData.Length)
+                        if (_serialPort.BytesToRead >= ReceiveData.Length) {
                             break;
+                        }
                         System.Threading.Thread.Sleep(10);
                     }
 

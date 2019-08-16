@@ -96,7 +96,7 @@
             0,
             0});
             this.numFromRPM.Minimum = new decimal(new int[] {
-            1000,
+            500,
             0,
             0,
             0});
@@ -105,7 +105,7 @@
             this.numFromRPM.Size = new System.Drawing.Size(72, 21);
             this.numFromRPM.TabIndex = 6;
             this.numFromRPM.Value = new decimal(new int[] {
-            2000,
+            500,
             0,
             0,
             0});
@@ -232,7 +232,7 @@
             this.dyno.XData5 = null;
             this.dyno.XGrid = 0.5D;
             this.dyno.XRangeEnd = 6.5D;
-            this.dyno.XRangeStart = 2D;
+            this.dyno.XRangeStart = 0.5D;
             this.dyno.YData1 = null;
             this.dyno.YData2 = null;
             this.dyno.YData3 = null;
@@ -296,7 +296,7 @@
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(156, 28);
             this.btnStart.TabIndex = 7;
-            this.btnStart.Text = "开始测功拉取(&B)";
+            this.btnStart.Text = "开始功率测试(&B)";
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
             // groupControl

@@ -30,7 +30,7 @@ namespace SH_OBD {
                 m_obdInterface.GetLogger().TraceError("Freeze Frame Form, Attempted to refresh without vehicle connection.");
                 MessageBox.Show(
                     "必须先与车辆进行连接，才能进行后续操作",
-                    "连接请求",
+                    "出错",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Exclamation
                 );

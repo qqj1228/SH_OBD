@@ -23,9 +23,9 @@ namespace SH_OBD {
         private FuelEconomyForm f_FuelEconomy;
         private ReportGeneratorForm f_Report;
         private TerminalForm f_Terminal;
-        private OBDInterface m_obdInterface;
-
-        private Font m_boldFont, m_originFont;
+        private readonly OBDInterface m_obdInterface;
+        private readonly Font m_boldFont;
+        private readonly Font m_originFont;
 
         public MainForm() {
             InitializeComponent();
@@ -107,6 +107,8 @@ namespace SH_OBD {
                     (dicSubForms[key] as DynoForm).CheckConnection();
                 } else if (key == Properties.Resources.buttonName_FuelEconomy) {
                     (dicSubForms[key] as FuelEconomyForm).CheckConnection();
+                } else if (key == Properties.Resources.buttonName_Terminal) {
+                    (dicSubForms[key] as TerminalForm).CheckConnection();
                 }
             }
         }
@@ -302,17 +304,11 @@ namespace SH_OBD {
                 if (m_obdInterface.InitDeviceAuto()) {
                     m_obdInterface.GetLogger().TraceInfo("Connection Established!");
                     ShowConnectedLabel();
-                    OBDParameter param = new OBDParameter {
-                        OBDRequest = "0902",
-                        Service = 9,
-                        Parameter = 2,
-                        ValueTypes = 4
-                    };
-                    m_obdInterface.GetValue(param, true);
                 } else {
                     m_obdInterface.GetLogger().TraceWarning("Failed to find a compatible OBD-II interface.");
                     MessageBox.Show("无法找到与本机相连的兼容的OBD-II硬件设备。\r\n请确认没有其他软件正在使用所需端口。", "自动探测失败", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     ShowDisconnectedLabel();
+                    m_obdInterface.Disconnect();
                 }
             } else {
                 int baudRate = m_obdInterface.CommSettings.BaudRate;
@@ -332,6 +328,7 @@ namespace SH_OBD {
                         MessageBoxIcon.Exclamation
                         );
                     ShowDisconnectedLabel();
+                    m_obdInterface.Disconnect();
                 }
             }
         }

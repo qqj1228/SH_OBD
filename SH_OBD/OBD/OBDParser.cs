@@ -49,7 +49,7 @@ namespace SH_OBD {
                 input.IndexOf("LVRESET") >= 0 ||
                 input.IndexOf("STOPPED") >= 0 ||
                 input.IndexOf("UNABLETOCONNECT") >= 0
-                );
+            );
         }
     }
 }
