@@ -14,7 +14,7 @@ using System.Xml.Serialization;
 
 namespace SH_OBD {
     public partial class SensorGridForm : Form {
-        private OBDInterface m_obdInterface;
+        private readonly OBDInterface m_obdInterface;
         private DateTime m_dtStartTime;
         private const int controlMargin = 5;
         private const int controlHeight = 65;
@@ -133,8 +133,9 @@ namespace SH_OBD {
                         OBDParameterValue value = m_obdInterface.GetValue(param, radioDisplayEnglish.Checked);
                         if (!value.ErrorDetected) {
                             string text = param.EnglishUnitLabel;
-                            if (!radioDisplayEnglish.Checked)
+                            if (!radioDisplayEnglish.Checked) {
                                 text = param.MetricUnitLabel;
+                            }
 
                             SensorLogItem sensorLogItem = new SensorLogItem(
                                 param.Name,
@@ -170,17 +171,16 @@ namespace SH_OBD {
         private void RebuildSensorGrid() {
             panelDisplay.Controls.Clear();
             Size controlSize = new Size(controlWidth, controlHeight);
-            int index = 0;
-            foreach (OBDParameter param in SensorGridForm.m_ListSensors) {
+            for (int i = 0; i < m_ListSensors.Count; i++) {
                 if (panelDisplay.Width > controlWidth) {
                     controlSize.Width = (panelDisplay.Width - 3 * controlMargin) / 2;
                 } else {
                     controlSize.Width = panelDisplay.Width - 2 * controlMargin;
                 }
                 SensorDisplayControl control = new SensorDisplayControl {
-                    Title = param.Name,
+                    Title = m_ListSensors[i].Name,
                     Size = controlSize,
-                    Tag = param
+                    Tag = m_ListSensors[i]
                 };
                 if (radioDisplayEnglish.Checked) {
                     control.SetDisplayMode(1);
@@ -189,16 +189,15 @@ namespace SH_OBD {
                 }
                 control.Refresh();
                 if (panelDisplay.Width > controlWidth) {
-                    if (index % 2 == 0) {
-                        control.Location = new Point(controlMargin, (control.Height + controlMargin) * (index / 2) + controlMargin);
+                    if (i % 2 == 0) {
+                        control.Location = new Point(controlMargin, (control.Height + controlMargin) * (i / 2) + controlMargin);
                     } else {
-                        control.Location = new Point(control.Width + controlMargin * 2, (control.Height + controlMargin) * (index / 2) + controlMargin);
+                        control.Location = new Point(control.Width + controlMargin * 2, (control.Height + controlMargin) * (i / 2) + controlMargin);
                     }
                 } else {
-                    control.Location = new Point(controlMargin, (control.Height + controlMargin) * index + controlMargin);
+                    control.Location = new Point(controlMargin, (control.Height + controlMargin) * i + controlMargin);
                 }
-                panelDisplay.Controls.Add((Control)control);
-                ++index;
+                panelDisplay.Controls.Add(control);
             }
         }
 
@@ -224,11 +223,12 @@ namespace SH_OBD {
 
         private void btnSave_Click(object sender, EventArgs e) {
             if (m_ListLog.Count != 0) {
-                SaveFileDialog dialog = new SaveFileDialog();
-                dialog.Title = "Save Logged Data As";
-                dialog.Filter = "Comma-separated values (*.csv)|*.csv|XML (*.xml)|*.xml";
-                dialog.FilterIndex = 0;
-                dialog.RestoreDirectory = true;
+                SaveFileDialog dialog = new SaveFileDialog {
+                    Title = "Save Logged Data As",
+                    Filter = "Comma-separated values (*.csv)|*.csv|XML (*.xml)|*.xml",
+                    FilterIndex = 0,
+                    RestoreDirectory = true
+                };
                 dialog.ShowDialog();
                 if (dialog.FileName != "") {
                     if (dialog.FileName.EndsWith(".xml")) {
@@ -239,30 +239,26 @@ namespace SH_OBD {
                         }
                     } else {
                         List<string> list = new List<string>();
-                        int num2 = 0;
-                        while (num2 < m_ListLog.Count) {
-                            SensorLogItem item = m_ListLog[num2];
+                        for (int i = 0; i < m_ListLog.Count; i++) {
                             string str =
-                                item.Time.ToString("MM-dd-yyyy hh:mm:ss.fff", DateTimeFormatInfo.InvariantInfo) + ", "
-                                + item.Name + ", "
-                                + item.EnglishDisplay + ", "
-                                + item.EnglishUnits + ", "
-                                + item.MetricDisplay + ", "
-                                + item.MetricUnits;
+                                m_ListLog[i].Time.ToString("MM-dd-yyyy hh:mm:ss.fff", DateTimeFormatInfo.InvariantInfo) + ", "
+                                + m_ListLog[i].Name + ", "
+                                + m_ListLog[i].EnglishDisplay + ", "
+                                + m_ListLog[i].EnglishUnits + ", "
+                                + m_ListLog[i].MetricDisplay + ", "
+                                + m_ListLog[i].MetricUnits;
                             list.Add(str);
-                            num2++;
                         }
                         FileStream stream = new FileStream(dialog.FileName, FileMode.Create, FileAccess.Write);
                         StreamWriter writer = new StreamWriter(stream);
-                        int num = 0;
-                        while (num < list.Count) {
-                            writer.WriteLine(list[num]);
-                            num++;
+                        for (int i = 0; i < list.Count; i++) {
+                            writer.WriteLine(list[i]);
                         }
                         writer.Close();
                         stream.Close();
                     }
                 }
+                dialog.Dispose();
             }
         }
 
@@ -277,48 +273,33 @@ namespace SH_OBD {
             lblTimeElapsed.Text = "00:00.000";
             scrollTime.Enabled = false;
 
-            int index = 0;
-            while (index < panelDisplay.Controls.Count) {
-                SensorDisplayControl control = (SensorDisplayControl)panelDisplay.Controls[index];
+            for (int i = 0; i < panelDisplay.Controls.Count; i++) {
+                SensorDisplayControl control = (SensorDisplayControl)panelDisplay.Controls[i];
                 control.EnglishDisplay = "";
                 control.MetricDisplay = "";
-                ++index;
             }
         }
 
         private void scrollTime_Scroll(object sender, ScrollEventArgs e) {
-            int index1 = scrollTime.Value;
-            if (index1 < 0 || scrollTime.Value >= m_ListLog.Count) {
+            if (scrollTime.Value < 0 || scrollTime.Value >= m_ListLog.Count) {
                 return;
             }
 
-            SensorLogItem log_item = m_ListLog[index1];
+            int index = scrollTime.Value;
+            SensorLogItem log_item = m_ListLog[index];
             DateTime dateTime = new DateTime(0L);
             TimeSpan timeSpan = log_item.Time.Subtract(m_dtStartTime);
             lblTimeElapsed.Text = dateTime.Add(timeSpan).ToString("mm:ss.fff", DateTimeFormatInfo.InvariantInfo);
-            int num = 0;
-            if (0 >= SensorGridForm.m_ListSensors.Count) {
-                return;
-            }
-            int index2 = index1;
-            do {
-                if (index2 >= 0) {
-                    SensorLogItem sensorLogItem2 = m_ListLog[index2];
-                    int index3 = 0;
-                    if (0 < panelDisplay.Controls.Count) {
-                        do {
-                            SensorDisplayControl sensorDisplayControl = (SensorDisplayControl)panelDisplay.Controls[index3];
-                            if (string.Compare(sensorDisplayControl.Title, sensorLogItem2.Name) == 0) {
-                                sensorDisplayControl.EnglishDisplay = sensorLogItem2.EnglishDisplay + " " + sensorLogItem2.EnglishUnits;
-                                sensorDisplayControl.MetricDisplay = sensorLogItem2.MetricDisplay + " " + sensorLogItem2.MetricUnits;
-                            }
-                            ++index3;
-                        } while (index3 < panelDisplay.Controls.Count);
+            for (int i = 0; i < m_ListSensors.Count && index >= 0; i++, --index) {
+                SensorLogItem sensorLogItem2 = m_ListLog[index];
+                for (int j = 0; j < panelDisplay.Controls.Count; j++) {
+                    SensorDisplayControl sensorDisplayControl = (SensorDisplayControl)panelDisplay.Controls[j];
+                    if (string.Compare(sensorDisplayControl.Title, sensorLogItem2.Name) == 0) {
+                        sensorDisplayControl.EnglishDisplay = sensorLogItem2.EnglishDisplay + " " + sensorLogItem2.EnglishUnits;
+                        sensorDisplayControl.MetricDisplay = sensorLogItem2.MetricDisplay + " " + sensorLogItem2.MetricUnits;
                     }
                 }
-                ++num;
-                --index2;
-            } while (num < SensorGridForm.m_ListSensors.Count);
+            }
         }
 
         public void PauseLogging() {

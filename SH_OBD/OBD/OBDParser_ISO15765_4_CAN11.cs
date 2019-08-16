@@ -22,58 +22,44 @@ namespace SH_OBD {
             List<string> lines = SplitByCR(response);
             lines.Sort();
             List<List<string>> groups = new List<List<string>>();
-            List<string> group = new List<string>();
-            string line0 = lines[0];
-            group.Add(line0);
+            List<string> group = new List<string> { lines[0] };
             groups.Add(group);
-            if (line0.Length < OBDParser_ISO15765_4_CAN11.HEADER_LENGTH) {
+            if (lines[0].Length < OBDParser_ISO15765_4_CAN11.HEADER_LENGTH) {
                 responseList.ErrorDetected = true;
                 return responseList;
             }
 
-            string header = line0.Substring(0, OBDParser_ISO15765_4_CAN11.HEADER_LENGTH);
-            int idx = 1;
-            while (idx < lines.Count) {
-                string line = lines[idx];
-                if (line.Length >= OBDParser_ISO15765_4_CAN11.HEADER_LENGTH) {
-                    if (line.Substring(0, OBDParser_ISO15765_4_CAN11.HEADER_LENGTH).CompareTo(header) == 0)
-                        group.Add(line);
+            string header = lines[0].Substring(0, OBDParser_ISO15765_4_CAN11.HEADER_LENGTH);
+            for (int i = 1; i < lines.Count; i++) {
+                if (lines[i].Length >= OBDParser_ISO15765_4_CAN11.HEADER_LENGTH) {
+                    if (lines[i].Substring(0, OBDParser_ISO15765_4_CAN11.HEADER_LENGTH).CompareTo(header) == 0)
+                        group.Add(lines[i]);
                     else {
-                        group = new List<string> {
-                            lines[idx]
-                        };
+                        group = new List<string> { lines[i] };
                         groups.Add(group);
-                        header = line.Substring(0, OBDParser_ISO15765_4_CAN11.HEADER_LENGTH);
+                        header = lines[i].Substring(0, OBDParser_ISO15765_4_CAN11.HEADER_LENGTH);
                     }
-                    ++idx;
                 } else {
                     responseList.ErrorDetected = true;
                     return responseList;
                 }
             }
-
-            idx = 0;
-            while (idx < groups.Count) {
+            for (int i = 0; i < groups.Count; i++) {
                 OBDResponse obd_response = new OBDResponse();
                 bool bIsMultiline = false;
-                group = groups[idx];
-                if (group.Count > 1)
+                if (groups[i].Count > 1) {
                     bIsMultiline = true;
+                }
                 int dataStartIndex1 = GetDataStartIndex(param, bIsMultiline, false);
-                string str2 = group[0];
-                int length1 = str2.Length - dataStartIndex1;
-                obd_response.Header = str2.Substring(0, OBDParser_ISO15765_4_CAN11.HEADER_LENGTH);
-                obd_response.Data = length1 > 0 ? str2.Substring(dataStartIndex1, length1) : "";
+                int length1 = groups[i][0].Length - dataStartIndex1;
+                obd_response.Header = groups[i][0].Substring(0, OBDParser_ISO15765_4_CAN11.HEADER_LENGTH);
+                obd_response.Data = length1 > 0 ? groups[i][0].Substring(dataStartIndex1, length1) : "";
                 int dataStartIndex2 = GetDataStartIndex(param, bIsMultiline, true);
-                int sub_idx = 1;
-                while (sub_idx < group.Count) {
-                    string str3 = group[sub_idx];
-                    int length2 = str3.Length - dataStartIndex2;
-                    obd_response.Data = obd_response.Data + (length2 > 0 ? str3.Substring(dataStartIndex2, length2) : "");
-                    ++sub_idx;
+                for (int j = 1; j < groups[i].Count; j++) {
+                    int length2 = groups[i][j].Length - dataStartIndex2;
+                    obd_response.Data += (length2 > 0 ? groups[i][j].Substring(dataStartIndex2, length2) : "");
                 }
                 responseList.AddOBDResponse(obd_response);
-                ++idx;
             }
             return responseList;
         }
@@ -95,7 +81,11 @@ namespace SH_OBD {
                 case 5:
                     return 11;
                 case 9:
-                    return 13;
+                    if (param.Parameter == 0x06) {
+                        return 11;
+                    } else {
+                        return 13;
+                    }
                 default:
                     return 9;
             }

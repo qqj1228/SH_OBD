@@ -47,24 +47,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\DataItem.cs" />
-    <Compile Include="Classes\DataList.cs" />
-    <Compile Include="Classes\DataNode.cs" />
-    <Compile Include="Classes\DatedValue.cs" />
-    <Compile Include="Classes\DTC.cs" />
-    <Compile Include="Classes\DynoRecord.cs" />
+    <Compile Include="Classes\Structure.cs" />
     <Compile Include="Classes\Logger.cs" />
     <Compile Include="Classes\Settings.cs" />
-    <Compile Include="Classes\Sensor.cs" />
-    <Compile Include="Classes\SensorLogItem.cs" />
-    <Compile Include="Classes\SensorValue.cs" />
     <Compile Include="Classes\SerialPort.cs" />
-    <Compile Include="Classes\Timeslip.cs" />
-    <Compile Include="Classes\UserPreferences.cs" />
     <Compile Include="Classes\Utility.cs" />
-    <Compile Include="Classes\VehicleProfile.cs" />
-    <Compile Include="Classes\WheelStruc.cs" />
-    <Compile Include="CommBase\CommBase.cs" />
+    <Compile Include="Classes\CommBase.cs" />
     <Compile Include="Forms\DynoForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -77,8 +65,7 @@
     <Compile Include="Forms\DTCForm.Designer.cs">
       <DependentUpon>DTCForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="CommBase\CommLine.cs" />
-    <Compile Include="CommBase\CommPortException.cs" />
+    <Compile Include="Classes\CommLine.cs" />
     <Compile Include="Controls\DGChartControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

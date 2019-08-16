@@ -9,10 +9,9 @@ using System.Xml.Serialization;
 namespace SH_OBD {
     public abstract class CommBase : IDisposable {
         private SerialPortClass m_serial = null;
-        private Logger m_log;
+        private readonly Logger m_log;
         private bool m_online = false;
         private bool m_auto = false;
-        private bool m_checkSends = true;
         private int m_writeCount = 0;
 
         public CommBase(Logger log) {
@@ -76,7 +75,6 @@ namespace SH_OBD {
             ) {
                 WriteTimeout = 5000 // 发送超时设为5s
             };
-            m_checkSends = commBaseSettings.CheckAllSends;
             m_writeCount = 0;
             m_auto = false;
             m_serial.DataReceived += new SerialPortClass.SerialPortDataReceiveEventArgs(SerialDataReceived);
@@ -239,5 +237,11 @@ namespace SH_OBD {
             GT = (byte)62,
             DEL = (byte)127,
         }
+    }
+
+    public class CommPortException : ApplicationException {
+        public CommPortException(string desc) : base(desc) { }
+
+        public CommPortException(Exception e) : base("Receive Thread Exception", e) { }
     }
 }

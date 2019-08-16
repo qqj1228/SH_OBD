@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace SH_OBD {
     public partial class VehicleForm : Form {
-        private List<VehicleProfile> m_VehicleList;
+        private readonly OBDInterface m_obdInterface;
+        private readonly List<VehicleProfile> m_VehicleList;
         private bool bDirtyProfile;
-        private OBDInterface m_obdInterface;
 
         public VehicleForm(OBDInterface obd) {
             InitializeComponent();
@@ -29,7 +29,7 @@ namespace SH_OBD {
 
         private void btnDeleteVehicle_Click(object sender, EventArgs e) {
             if (m_VehicleList.Count > 1) {
-                if (MessageBox.Show("This will permanently delete " + listVehicles.SelectedItem.ToString() + ".\n\n Are you sure?", "Delete " + listVehicles.SelectedItem.ToString() + "?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == DialogResult.Yes) {
+                if (MessageBox.Show("\"" + listVehicles.SelectedItem.ToString() + "\" 将会被永久删除.\n\n 确定要删除吗？", "删除 " + listVehicles.SelectedItem.ToString() + "？", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == DialogResult.Yes) {
                     int selectedIndex = listVehicles.SelectedIndex;
                     m_VehicleList.RemoveAt(selectedIndex);
                     UpdateProfileList(m_VehicleList);
@@ -41,7 +41,7 @@ namespace SH_OBD {
                     }
                 }
             } else {
-                MessageBox.Show("You must keep at least one vehicle profile.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show("必须保留至少一个车辆配置", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }
 
@@ -66,7 +66,7 @@ namespace SH_OBD {
 
         private void btnExit_Click(object sender, EventArgs e) {
             if (bDirtyProfile) {
-                if (MessageBox.Show("This profile has been modified since it was last saved.\n\nDo you wish to exit anyway?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == DialogResult.Yes) {
+                if (MessageBox.Show("当前车辆配置未保存\n\n仍然想要退出吗？", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == DialogResult.Yes) {
                     base.Close();
                 }
             } else {
@@ -146,7 +146,7 @@ namespace SH_OBD {
                     vehicle.Wheel.RimDiameter = Convert.ToInt32(txtRimDiameter.Text, CultureInfo.InvariantCulture);
                     vehicle.Notes = txtNotes.Text;
                 } catch (FormatException) {
-                    MessageBox.Show("Make sure that numeric fields contain only numeric data, and make sure that you are not forgetting a required field.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                    MessageBox.Show("确保在数字输入框内仅输入了数字，并且确保没有遗漏输入数据", "出错", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                     return;
                 }
 
@@ -157,7 +157,7 @@ namespace SH_OBD {
                 UpdateProfileList(m_VehicleList);
                 listVehicles.SetSelected(selectedIndex, true);
             } else {
-                MessageBox.Show("You must enter a name for your profile.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                MessageBox.Show("必须给当前车辆配置命名", "出错", MessageBoxButtons.OK, MessageBoxIcon.Hand);
             }
         }
 
@@ -201,6 +201,7 @@ namespace SH_OBD {
                 txtSpeedoFactor.Text = speedFactorCalcForm.SpeedFactor.ToString("0.000");
                 MarkProfileDirty(true);
             }
+            speedFactorCalcForm.Dispose();
         }
 
         private void PopulateProfileCombobox() {

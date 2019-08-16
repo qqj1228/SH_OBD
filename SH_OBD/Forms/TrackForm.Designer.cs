@@ -68,7 +68,7 @@
             this.groupTimeslipControls.Size = new System.Drawing.Size(180, 135);
             this.groupTimeslipControls.TabIndex = 10;
             this.groupTimeslipControls.TabStop = false;
-            this.groupTimeslipControls.Text = "耗时";
+            this.groupTimeslipControls.Text = "结果";
             // 
             // btnSave
             // 
@@ -174,7 +174,7 @@
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(156, 27);
             this.btnReset.TabIndex = 2;
-            this.btnReset.Text = "重启(&R)";
+            this.btnReset.Text = "重置(&R)";
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
             // btnStage
@@ -183,7 +183,7 @@
             this.btnStage.Name = "btnStage";
             this.btnStage.Size = new System.Drawing.Size(156, 28);
             this.btnStage.TabIndex = 1;
-            this.btnStage.Text = "上路(&S)";
+            this.btnStage.Text = "开始(&S)";
             this.btnStage.Click += new System.EventHandler(this.btnStage_Click);
             // 
             // timerClock1

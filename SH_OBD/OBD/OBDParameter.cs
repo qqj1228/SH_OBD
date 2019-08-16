@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace SH_OBD {
     /// <summary>
     /// 用于发送命令的OBD参数
@@ -22,12 +23,37 @@ namespace SH_OBD {
             set {
                 m_OBDRequest = value;
                 if (m_OBDRequest.Length >= 4) {
-                    int.TryParse(m_OBDRequest.Substring(0, 2), out int result);
-                    Service = result;
-                    int.TryParse(m_OBDRequest.Substring(2, 2), out m_parameter);
+                    bool bRet = int.TryParse(m_OBDRequest.Substring(0, 2), out int result);
+                    if (bRet) {
+                        Service = result;
+                    } else {
+                        try {
+                            Service = Convert.ToInt32(m_OBDRequest.Substring(0, 2), 16);
+                        } catch (Exception) {
+                            Service = 0;
+                        }
+                    }
+                    bRet = int.TryParse(m_OBDRequest.Substring(2, 2), out result);
+                    if (bRet) {
+                        m_parameter = result;
+                    } else {
+                        try {
+                            m_parameter = Convert.ToInt32(m_OBDRequest.Substring(2, 2), 16);
+                        } catch (Exception) {
+                            m_parameter = 0;
+                        }
+                    }
                 } else if (m_OBDRequest.Length >= 2) {
-                    int.TryParse(m_OBDRequest.Substring(0, 2), out int result);
-                    Service = result;
+                    bool bRet = int.TryParse(m_OBDRequest.Substring(0, 2), out int result);
+                    if (bRet) {
+                        Service = result;
+                    } else {
+                        try {
+                            Service = Convert.ToInt32(m_OBDRequest.Substring(0, 2), 16);
+                        } catch (Exception) {
+                            Service = 0;
+                        }
+                    }
                     m_parameter = 0;
                 }
             }
@@ -99,5 +125,14 @@ namespace SH_OBD {
         public override string ToString() {
             return Name;
         }
+
+        public enum EnumValueTypes {
+            Double = 0x01,
+            Bool = 0x02,
+            String = 0x04,
+            ListString = 0x08,
+            BitFlags = 0x20
+        }
+
     }
 }

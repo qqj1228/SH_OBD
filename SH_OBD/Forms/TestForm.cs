@@ -11,11 +11,11 @@ namespace SH_OBD {
     public partial class TestForm : Form {
         private static List<TestStatus> m_ListConTests;
         private static List<TestStatus> m_ListNonConTests;
-        private OBDInterface m_obd2Interface;
+        private readonly OBDInterface m_obdInterface;
 
         public TestForm(OBDInterface obd) {
             InitializeComponent();
-            m_obd2Interface = obd;
+            m_obdInterface = obd;
         }
 
         private void TestForm_Resize(object sender, EventArgs e) {
@@ -77,7 +77,7 @@ namespace SH_OBD {
         }
 
         public void CheckConnection() {
-            if (!m_obd2Interface.ConnectedStatus) {
+            if (!m_obdInterface.ConnectedStatus) {
                 return;
             }
             UpdateTests();
@@ -87,14 +87,14 @@ namespace SH_OBD {
             progressBar.Minimum = 0;
             progressBar.Maximum = 35;
             OBDParameterValue value;
-            value = m_obd2Interface.GetValue("SAE.MISFIRE_SUPPORT", true);
+            value = m_obdInterface.GetValue("SAE.MISFIRE_SUPPORT", true);
             progressBar.Value = 1;
             TestStatus status = m_ListConTests[0];
             if (!value.ErrorDetected) {
                 if (!value.BoolValue) {
                     status.Status = "不适用";
                 } else {
-                    value = m_obd2Interface.GetValue("SAE.MISFIRE_STATUS", true);
+                    value = m_obdInterface.GetValue("SAE.MISFIRE_STATUS", true);
                     if (!value.ErrorDetected) {
                         status.Status = value.BoolValue ? "完成" : "未完成";
                     } else {
@@ -105,14 +105,14 @@ namespace SH_OBD {
                 status.Status = "出错";
             }
 
-            value = m_obd2Interface.GetValue("SAE.FUEL_SUPPORT", true);
+            value = m_obdInterface.GetValue("SAE.FUEL_SUPPORT", true);
             progressBar.Value = 2;
             status = m_ListConTests[1];
             if (!value.ErrorDetected) {
                 if (!value.BoolValue) {
                     status.Status = "不适用";
                 } else {
-                    value = m_obd2Interface.GetValue("SAE.FUEL_STATUS", true);
+                    value = m_obdInterface.GetValue("SAE.FUEL_STATUS", true);
                     if (!value.ErrorDetected) {
                         status.Status = value.BoolValue ? "完成" : "未完成";
                     } else {
@@ -123,14 +123,14 @@ namespace SH_OBD {
                 status.Status = "出错";
             }
 
-            value = m_obd2Interface.GetValue("SAE.CCM_SUPPORT", true);
+            value = m_obdInterface.GetValue("SAE.CCM_SUPPORT", true);
             progressBar.Value = 3;
             status = m_ListConTests[2];
             if (!value.ErrorDetected) {
                 if (!value.BoolValue) {
                     status.Status = "不适用";
                 } else {
-                    value = m_obd2Interface.GetValue("SAE.CCM_STATUS", true);
+                    value = m_obdInterface.GetValue("SAE.CCM_STATUS", true);
                     if (!value.ErrorDetected) {
                         status.Status = value.BoolValue ? "完成" : "未完成";
                     } else {
@@ -142,14 +142,14 @@ namespace SH_OBD {
             }
             gridConTests.Refresh();
 
-            value = m_obd2Interface.GetValue("SAE.CAT_SUPPORT", true);
+            value = m_obdInterface.GetValue("SAE.CAT_SUPPORT", true);
             progressBar.Value = 4;
             status = m_ListNonConTests[0];
             if (!value.ErrorDetected) {
                 if (!value.BoolValue) {
                     status.Status = "不适用";
                 } else {
-                    value = m_obd2Interface.GetValue("SAE.CAT_STATUS", true);
+                    value = m_obdInterface.GetValue("SAE.CAT_STATUS", true);
                     if (!value.ErrorDetected) {
                         status.Status = value.BoolValue ? "完成" : "未完成";
                     } else {
@@ -160,14 +160,14 @@ namespace SH_OBD {
                 status.Status = "出错";
             }
 
-            value = m_obd2Interface.GetValue("SAE.HCAT_SUPPORT", true);
+            value = m_obdInterface.GetValue("SAE.HCAT_SUPPORT", true);
             progressBar.Value = 5;
             status = m_ListNonConTests[1];
             if (!value.ErrorDetected) {
                 if (!value.BoolValue) {
                     status.Status = "不适用";
                 } else {
-                    value = m_obd2Interface.GetValue("SAE.HCAT_STATUS", true);
+                    value = m_obdInterface.GetValue("SAE.HCAT_STATUS", true);
                     if (!value.ErrorDetected) {
                         status.Status = value.BoolValue ? "完成" : "未完成";
                     } else {
@@ -178,14 +178,14 @@ namespace SH_OBD {
                 status.Status = "出错";
             }
 
-            value = m_obd2Interface.GetValue("SAE.EVAP_SUPPORT", true);
+            value = m_obdInterface.GetValue("SAE.EVAP_SUPPORT", true);
             progressBar.Value = 6;
             status = m_ListNonConTests[2];
             if (!value.ErrorDetected) {
                 if (!value.BoolValue) {
                     status.Status = "不适用";
                 } else {
-                    value = m_obd2Interface.GetValue("SAE.EVAP_STATUS", true);
+                    value = m_obdInterface.GetValue("SAE.EVAP_STATUS", true);
                     if (!value.ErrorDetected) {
                         status.Status = value.BoolValue ? "完成" : "未完成";
                     } else {
@@ -196,14 +196,14 @@ namespace SH_OBD {
                 status.Status = "出错";
             }
 
-            value = m_obd2Interface.GetValue("SAE.AIR_SUPPORT", true);
+            value = m_obdInterface.GetValue("SAE.AIR_SUPPORT", true);
             progressBar.Value = 7;
             status = m_ListNonConTests[3];
             if (!value.ErrorDetected) {
                 if (!value.BoolValue) {
                     status.Status = "不适用";
                 } else {
-                    value = m_obd2Interface.GetValue("SAE.AIR_STATUS", true);
+                    value = m_obdInterface.GetValue("SAE.AIR_STATUS", true);
                     if (!value.ErrorDetected)
                         status.Status = value.BoolValue ? "完成" : "未完成";
                     else
@@ -213,7 +213,7 @@ namespace SH_OBD {
                 status.Status = "出错";
             }
 
-            value = m_obd2Interface.GetValue("SAE.AC_SUPPORT", true);
+            value = m_obdInterface.GetValue("SAE.AC_SUPPORT", true);
             progressBar.Value = 8;
             status = m_ListNonConTests[4];
             if (!value.ErrorDetected) {
@@ -221,7 +221,7 @@ namespace SH_OBD {
                     status.Status = "不适用";
                 }
                 else {
-                    value = m_obd2Interface.GetValue("SAE.AC_STATUS", true);
+                    value = m_obdInterface.GetValue("SAE.AC_STATUS", true);
                     if (!value.ErrorDetected) {
                         status.Status = value.BoolValue ? "完成" : "未完成";
                     } else {
@@ -232,7 +232,7 @@ namespace SH_OBD {
                 status.Status = "出错";
             }
 
-            value = m_obd2Interface.GetValue("SAE.O2_SUPPORT", true);
+            value = m_obdInterface.GetValue("SAE.O2_SUPPORT", true);
             progressBar.Value = 9;
             status = m_ListNonConTests[5];
             if (!value.ErrorDetected) {
@@ -240,7 +240,7 @@ namespace SH_OBD {
                     status.Status = "不适用";
                 }
                 else {
-                    value = m_obd2Interface.GetValue("SAE.O2_STATUS", true);
+                    value = m_obdInterface.GetValue("SAE.O2_STATUS", true);
                     if (!value.ErrorDetected) {
                         status.Status = value.BoolValue ? "完成" : "未完成";
                     } else {
@@ -251,7 +251,7 @@ namespace SH_OBD {
                 status.Status = "出错";
             }
 
-            value = m_obd2Interface.GetValue("SAE.O2HTR_SUPPORT", true);
+            value = m_obdInterface.GetValue("SAE.O2HTR_SUPPORT", true);
             progressBar.Value = 10;
             status = m_ListNonConTests[6];
             if (!value.ErrorDetected) {
@@ -259,7 +259,7 @@ namespace SH_OBD {
                     status.Status = "不适用";
                 }
                 else {
-                    value = m_obd2Interface.GetValue("SAE.O2HTR_STATUS", true);
+                    value = m_obdInterface.GetValue("SAE.O2HTR_STATUS", true);
                     if (!value.ErrorDetected) {
                         status.Status = value.BoolValue ? "完成" : "未完成";
                     } else {
@@ -270,7 +270,7 @@ namespace SH_OBD {
                 status.Status = "出错";
             }
 
-            value = m_obd2Interface.GetValue("SAE.EGR_SUPPORT", true);
+            value = m_obdInterface.GetValue("SAE.EGR_SUPPORT", true);
             progressBar.Value = 11;
             status = m_ListNonConTests[7];
             if (!value.ErrorDetected) {
@@ -278,7 +278,7 @@ namespace SH_OBD {
                     status.Status = "不适用";
                 }
                 else {
-                    value = m_obd2Interface.GetValue("SAE.EGR_STATUS", true);
+                    value = m_obdInterface.GetValue("SAE.EGR_STATUS", true);
                     if (!value.ErrorDetected) {
                         status.Status = value.BoolValue ? "完成" : "未完成";
                     } else {
@@ -290,40 +290,40 @@ namespace SH_OBD {
             }
             gridNonConTests.Refresh();
 
-            if (m_obd2Interface.IsParameterSupported("SAE.FUEL1_STATUS")) {
-                value = m_obd2Interface.GetValue("SAE.FUEL1_STATUS", true);
+            if (m_obdInterface.IsParameterSupported("SAE.FUEL1_STATUS")) {
+                value = m_obdInterface.GetValue("SAE.FUEL1_STATUS", true);
                 progressBar.Value++;
                 lblFuel1.Text = value.ErrorDetected ? "出错" : value.StringValue;
             } else {
                 lblFuel1.Text = "不适用";
             }
 
-            if (m_obd2Interface.IsParameterSupported("SAE.FUEL2_STATUS")) {
-                value = m_obd2Interface.GetValue("SAE.FUEL2_STATUS", true);
+            if (m_obdInterface.IsParameterSupported("SAE.FUEL2_STATUS")) {
+                value = m_obdInterface.GetValue("SAE.FUEL2_STATUS", true);
                 progressBar.Value++;
                 lblFuel2.Text = value.ErrorDetected ? "出错" : value.StringValue;
             } else {
                 lblFuel2.Text = "不适用";
             }
 
-            if (m_obd2Interface.IsParameterSupported("SAE.PTO_STATUS")) {
-                value = m_obd2Interface.GetValue("SAE.PTO_STATUS", true);
+            if (m_obdInterface.IsParameterSupported("SAE.PTO_STATUS")) {
+                value = m_obdInterface.GetValue("SAE.PTO_STATUS", true);
                 progressBar.Value++;
                 lblPTO.Text = value.ErrorDetected ? "出错" : value.StringValue;
             } else {
                 lblPTO.Text = "不适用";
             }
 
-            if (m_obd2Interface.IsParameterSupported("SAE.SECAIR_STATUS")) {
-                value = m_obd2Interface.GetValue("SAE.SECAIR_STATUS", true);
+            if (m_obdInterface.IsParameterSupported("SAE.SECAIR_STATUS")) {
+                value = m_obdInterface.GetValue("SAE.SECAIR_STATUS", true);
                 progressBar.Value++;
                 lblAir.Text = value.ErrorDetected ? "出错" : value.StringValue;
             } else {
                 lblAir.Text = "不适用";
             }
 
-            if (m_obd2Interface.IsParameterSupported("SAE.OBD_TYPE")) {
-                value = m_obd2Interface.GetValue("SAE.OBD_TYPE", true);
+            if (m_obdInterface.IsParameterSupported("SAE.OBD_TYPE")) {
+                value = m_obdInterface.GetValue("SAE.OBD_TYPE", true);
                 progressBar.Value++;
                 lblOBD.Text = value.ErrorDetected ? "出错" : value.StringValue;
             } else {
@@ -331,37 +331,65 @@ namespace SH_OBD {
             }
 
             string strContent = "";
-            string strHeader = "";
-            int counter = 0;
-            if (m_obd2Interface.IsParameterSupported("SAE.O2B1S1A_PRESENT")) {
+            //string strHeader;
+            //int counter;
+            OBDParameter param = new OBDParameter {
+                OBDRequest = "0902",
+                Service = 9,
+                Parameter = 2,
+                ValueTypes = (int)OBDParameter.EnumValueTypes.String
+            };
+            OBDParameterValue val = m_obdInterface.GetValue(param, true);
+            progressBar.Value++;
+            strContent += "VIN: " + val.StringValue;
+
+            param.OBDRequest = "0904";
+            param.ValueTypes = (int)OBDParameter.EnumValueTypes.String;
+            val = m_obdInterface.GetValue(param, true);
+            progressBar.Value++;
+            strContent += "\nCAL ID: " + val.StringValue;
+
+            param.OBDRequest = "0906";
+            param.ValueTypes = (int)OBDParameter.EnumValueTypes.String;
+            val = m_obdInterface.GetValue(param, true);
+            progressBar.Value++;
+            strContent += "\nCVN: " + val.StringValue;
+
+            param.OBDRequest = "090A";
+            param.ValueTypes = (int)OBDParameter.EnumValueTypes.String;
+            val = m_obdInterface.GetValue(param, true);
+            progressBar.Value++;
+            strContent += "\nECU名称: " + val.StringValue;
+
+            /*if (m_obd2Interface.IsParameterSupported("SAE.O2B1S1A_PRESENT")) {
                 strHeader = "PID $13 Bank 1: ";
                 strContent += strHeader;
                 counter = 0;
                 value = m_obd2Interface.GetValue("SAE.O2B1S1A_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    strContent = strContent + "传感器 1, ";
+                    strContent += "传感器 1, ";
                     ++counter;
                 }
 
                 value = m_obd2Interface.GetValue("SAE.O2B1S2A_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    strContent = strContent + "传感器 2, ";
+                    strContent += "传感器 2, ";
                     ++counter;
                 }
 
                 value = m_obd2Interface.GetValue("SAE.O2B1S3A_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    strContent = strContent + "传感器 3, ";
+                    strContent += "传感器 3, ";
                     ++counter;
                 }
 
                 value = m_obd2Interface.GetValue("SAE.O2B1S4A_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    strContent = strContent + "传感器 4, ";
+                    strContent += "传感器 4, ";
                     ++counter;
                 }
                 if (counter == 0) {
@@ -376,28 +404,28 @@ namespace SH_OBD {
                 value = m_obd2Interface.GetValue("SAE.O2B2S1A_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    strContent = strContent + "传感器 1, ";
+                    strContent += "传感器 1, ";
                     ++counter;
                 }
 
                 value = m_obd2Interface.GetValue("SAE.O2B2S2A_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    strContent = strContent + "传感器 2, ";
+                    strContent += "传感器 2, ";
                     ++counter;
                 }
 
                 value = m_obd2Interface.GetValue("SAE.O2B2S3A_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    strContent = strContent + "传感器 3, ";
+                    strContent += "传感器 3, ";
                     ++counter;
                 }
 
                 value = m_obd2Interface.GetValue("SAE.O2B2S4A_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    strContent = strContent + "传感器 4, ";
+                    strContent += "传感器 4, ";
                     ++counter;
                 }
                 if (counter == 0) {
@@ -414,14 +442,14 @@ namespace SH_OBD {
                 value = m_obd2Interface.GetValue("SAE.O2B1S1B_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    strContent = strContent + "传感器 1, ";
+                    strContent += "传感器 1, ";
                     ++counter;
                 }
 
                 value = m_obd2Interface.GetValue("SAE.O2B1S2B_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    strContent = strContent + "传感器 2, ";
+                    strContent += "传感器 2, ";
                     ++counter;
                 }
                 if (counter == 0) {
@@ -436,14 +464,14 @@ namespace SH_OBD {
                 value = m_obd2Interface.GetValue("SAE.O2B2S1B_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    strContent = strContent + "传感器 1, ";
+                    strContent += "传感器 1, ";
                     ++counter;
                 }
 
                 value = m_obd2Interface.GetValue("SAE.O2B2S2B_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    strContent = strContent + "传感器 2, ";
+                    strContent += "传感器 2, ";
                     ++counter;
                 }
                 if (counter == 0) {
@@ -458,14 +486,14 @@ namespace SH_OBD {
                 value = m_obd2Interface.GetValue("SAE.O2B3S1B_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    strContent = strContent + "传感器 1, ";
+                    strContent += "传感器 1, ";
                     ++counter;
                 }
 
                 value = m_obd2Interface.GetValue("SAE.O2B3S2B_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    strContent = strContent + "传感器 2, ";
+                    strContent += "传感器 2, ";
                     ++counter;
                 }
                 if (counter == 0) {
@@ -480,14 +508,14 @@ namespace SH_OBD {
                 value = m_obd2Interface.GetValue("SAE.O2B4S1B_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    strContent = strContent + "传感器 1, ";
+                    strContent += "传感器 1, ";
                     ++counter;
                 }
 
                 value = m_obd2Interface.GetValue("SAE.O2B4S2B_PRESENT", true);
                 progressBar.Value++;
                 if (!value.ErrorDetected && value.BoolValue) {
-                    strContent = strContent + "传感器 2, ";
+                    strContent += "传感器 2, ";
                     ++counter;
                 }
                 if (counter == 0) {
@@ -495,11 +523,11 @@ namespace SH_OBD {
                 } else {
                     strContent = strContent.Substring(0, strContent.Length - 2);
                 }
-            }
-            lblOxygen.Text = strContent;
+            }*/
+            lblVehicleInfo.Text = strContent;
             progressBar.Value++;
-            if (m_obd2Interface.GetDevice() == HardwareType.ELM327) {
-                value = m_obd2Interface.GetValue("ELM.BATTERY_VOLTAGE", true);
+            if (m_obdInterface.GetDevice() == HardwareType.ELM327) {
+                value = m_obdInterface.GetValue("ELM.BATTERY_VOLTAGE", true);
                 if (!value.ErrorDetected) {
                     lblBattery.Text = value.DoubleValue.ToString() + " V";
                 }
@@ -510,9 +538,9 @@ namespace SH_OBD {
         }
 
         private void btnUpdate_Click(object sender, EventArgs e) {
-            if (!m_obd2Interface.ConnectedStatus) {
-                m_obd2Interface.GetLogger().TraceError("Test Form, Attempted refresh without vehicle connection.");
-                MessageBox.Show("必须首先与车辆进行连接，才能进行后续操作！", "连接请求", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            if (!m_obdInterface.ConnectedStatus) {
+                m_obdInterface.GetLogger().TraceError("Test Form, Attempted refresh without vehicle connection.");
+                MessageBox.Show("必须首先与车辆进行连接，才能进行后续操作！", "出错", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             } else {
                 btnUpdate.Enabled = false;
                 UpdateTests();
@@ -524,38 +552,17 @@ namespace SH_OBD {
 
     [Serializable]
     public class TestStatus {
-        private string m_strName;
-        private string m_strStatus;
-        private int m_iSupportID;
-        private int m_iStatusID;
+        public string Name { get; set; }
+        public string Status { get; set; }
+        public int SupportID { get; set; }
+        public int StatusID { get; set; }
 
         public TestStatus(string strName, string strStatus, int iSupportID, int iStatusID) {
-            m_strName = strName;
-            m_strStatus = strStatus;
-            m_iSupportID = iSupportID;
-            m_iStatusID = iStatusID;
+            Name = strName;
+            Status = strStatus;
+            SupportID = iSupportID;
+            StatusID = iStatusID;
         }
-
-        public string Name {
-            get { return m_strName; }
-            set { m_strName = value; }
-        }
-
-        public string Status {
-            get { return m_strStatus; }
-            set { m_strStatus = value; }
-        }
-
-        public int SupportID {
-            get { return m_iSupportID; }
-            set { m_iSupportID = value; }
-        }
-
-        public int StatusID {
-            get { return m_iStatusID; }
-            set { m_iStatusID = value; }
-        }
-
     }
 
 }

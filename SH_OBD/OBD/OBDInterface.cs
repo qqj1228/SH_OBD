@@ -16,35 +16,37 @@ namespace SH_OBD {
 
         public delegate void __Delegate_OnConnect();
         public delegate void __Delegate_OnDisconnect();
+        public event __Delegate_OnDisconnect OnDisconnect;
+        public event __Delegate_OnConnect OnConnect;
 
         private OBDDevice m_obdDevice;
         private List<DTC> m_listDTC;
-        private List<OBDParameter> m_listAllParameters;
-        private List<OBDParameter> m_listSupportedParameters;
-        private Logger m_log;
-        private UserPreferences m_userpreferences;
-        private Settings m_settings;
-        private List<VehicleProfile> m_VehicleProfiles;
-        public bool ConnectedStatus {
-            get { return m_obdDevice.GetConnected(); }
-        }
-
-        public event OBDInterface.__Delegate_OnDisconnect OnDisconnect;
-        public event OBDInterface.__Delegate_OnConnect OnConnect;
+        private readonly List<OBDParameter> m_listAllParameters;
+        private readonly List<OBDParameter> m_listSupportedParameters;
+        private readonly Logger m_log;
+        public UserPreferences UserPreferences { get; private set; }
+        public Settings CommSettings { get; private set; }
+        public List<VehicleProfile> VehicleProfiles { get; private set; }
 
         public OBDInterface() {
             m_log = new Logger("./log", EnumLogLevel.LogLevelAll, true, 100);
             m_log.TraceInfo("==================== START Ver: " + MainFileVersion.AssemblyVersion + " ====================");
             m_listAllParameters = new List<OBDParameter>();
             m_listSupportedParameters = new List<OBDParameter>();
-            m_userpreferences = LoadUserPreferences();
-            m_settings = LoadCommSettings();
-            m_VehicleProfiles = LoadVehicleProfiles();
+            UserPreferences = LoadUserPreferences();
+            CommSettings = LoadCommSettings();
+            VehicleProfiles = LoadVehicleProfiles();
             SetDevice(HardwareType.ELM327);
         }
 
+        public Logger GetLogger() { return m_log; }
+
+        public bool ConnectedStatus {
+            get { return m_obdDevice.GetConnected(); }
+        }
+
         public HardwareType GetDevice() {
-            return m_settings.HardwareIndex;
+            return CommSettings.HardwareIndex;
         }
 
         public string GetDeviceDesString() {
@@ -56,7 +58,7 @@ namespace SH_OBD {
         }
 
         public ProtocolType GetProtocol() {
-            return m_settings.ProtocolIndex;
+            return CommSettings.ProtocolIndex;
         }
 
         public bool InitDevice(HardwareType device, int port, int baud, ProtocolType protocol) {
@@ -72,14 +74,13 @@ namespace SH_OBD {
             return false;
         }
 
-
         public bool InitDeviceAuto() {
             m_log.TraceInfo("Beginning AUTO initialization...");
             SetDevice(HardwareType.ELM327);
-            if (m_obdDevice.Initialize(m_settings) && InitOBD()) {
-                m_settings.ProtocolIndex = m_obdDevice.GetProtocolType();
-                m_settings.ComPort = m_obdDevice.GetComPortIndex();
-                SaveCommSettings(m_settings);
+            if (m_obdDevice.Initialize(CommSettings) && InitOBD()) {
+                CommSettings.ProtocolIndex = m_obdDevice.GetProtocolType();
+                CommSettings.ComPort = m_obdDevice.GetComPortIndex();
+                SaveCommSettings(CommSettings);
                 m_obdDevice.SetConnected(true);
                 OnConnect?.Invoke();
                 return true;
@@ -115,7 +116,7 @@ namespace SH_OBD {
                 return false;
             }
             foreach (OBDParameter param2 in m_listAllParameters) {
-                if (param2.Parameter > 0x20 && param2.Parameter <= 0x40 && value.GetBitFlag(param2.Parameter - param.Parameter -1)) {
+                if (param2.Parameter > 0x20 && param2.Parameter <= 0x40 && value.GetBitFlag(param2.Parameter - param.Parameter - 1)) {
                     m_listSupportedParameters.Add(param2);
                 }
             }
@@ -182,24 +183,24 @@ namespace SH_OBD {
                 return obdParameterValue;
             } else {
                 string values = "Values: ";
-                if ((param.ValueTypes & 0x01) == 0x01) {
+                if ((param.ValueTypes & (int)OBDParameter.EnumValueTypes.Double) == (int)OBDParameter.EnumValueTypes.Double) {
                     values += string.Format("[Double: {0}] ", obdParameterValue.DoubleValue.ToString());
                 }
-                if ((param.ValueTypes & 0x02) == 0x02) {
+                if ((param.ValueTypes & (int)OBDParameter.EnumValueTypes.Bool) == (int)OBDParameter.EnumValueTypes.Bool) {
                     values += string.Format("[Bool: {0}] ", obdParameterValue.BoolValue.ToString());
                 }
-                if ((param.ValueTypes & 0x04) == 0x04) {
+                if ((param.ValueTypes & (int)OBDParameter.EnumValueTypes.String) == (int)OBDParameter.EnumValueTypes.String) {
                     values += string.Format("[String: {0} / {1}] ", obdParameterValue.StringValue, obdParameterValue.ShortStringValue);
                 }
-                if ((param.ValueTypes & 0x08) == 0x08) {
-                    values += "[StringCollection: ";
-                    foreach (string strx in obdParameterValue.StringCollectionValue) {
+                if ((param.ValueTypes & (int)OBDParameter.EnumValueTypes.ListString) == (int)OBDParameter.EnumValueTypes.ListString) {
+                    values += "[ListString: ";
+                    foreach (string strx in obdParameterValue.ListStringValue) {
                         values = string.Concat(values, strx + ", ");
                     }
                     values = values.Substring(0, values.Length - 2);
                     values += "]";
                 }
-                if ((param.ValueTypes & 0x20) == 0x20) {
+                if ((param.ValueTypes & (int)OBDParameter.EnumValueTypes.BitFlags) == (int)OBDParameter.EnumValueTypes.BitFlags) {
                     values += "[BitFlags: ";
                     for (int idx = 0; idx < 32; idx++) {
                         values += (obdParameterValue.GetBitFlag(idx) ? "T" : "F");
@@ -229,7 +230,6 @@ namespace SH_OBD {
         public string GetRawResponse(string strCmd) {
             return m_obdDevice.Query(strCmd);
         }
-
 
         public bool ClearCodes() {
             return (m_obdDevice.Query("04").IndexOf("44") >= 0);
@@ -380,7 +380,7 @@ namespace SH_OBD {
         }
 
         private void SetDevice(HardwareType device) {
-            m_settings.HardwareIndex = device;
+            CommSettings.HardwareIndex = device;
             switch (device) {
                 case HardwareType.ELM327:
                     m_log.TraceInfo("Set device to ELM327");
@@ -422,57 +422,49 @@ namespace SH_OBD {
         }
 
         public void SaveCommSettings(Settings settings) {
-            m_settings = settings;
+            CommSettings = settings;
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(Settings));
             using (TextWriter writer = new StreamWriter(m_settings_xml)) {
-                xmlSerializer.Serialize(writer, m_settings);
+                xmlSerializer.Serialize(writer, CommSettings);
                 writer.Close();
             }
         }
 
         public void SaveUserPreferences(UserPreferences prefs) {
-            m_userpreferences = prefs;
+            UserPreferences = prefs;
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(UserPreferences));
             using (TextWriter writer = (TextWriter)new StreamWriter(m_userprefs_xml)) {
-                xmlSerializer.Serialize(writer, m_userpreferences);
+                xmlSerializer.Serialize(writer, UserPreferences);
                 writer.Close();
             }
-        }
-
-        public UserPreferences UserPreferences {
-            get { return m_userpreferences; }
-        }
-
-        public Settings CommSettings {
-            get { return m_settings; }
         }
 
         public Settings LoadCommSettings() {
             try {
                 XmlSerializer serializer = new XmlSerializer(typeof(Settings));
                 using (FileStream reader = new FileStream(m_settings_xml, FileMode.Open)) {
-                    m_settings = (Settings)serializer.Deserialize(reader);
+                    CommSettings = (Settings)serializer.Deserialize(reader);
                     reader.Close();
                 }
             } catch (Exception e) {
                 m_log.TraceError("Using default communication settings because of failed to load them, reason: " + e.Message);
-                m_settings = new Settings();
+                CommSettings = new Settings();
             }
-            return m_settings;
+            return CommSettings;
         }
 
         public UserPreferences LoadUserPreferences() {
             try {
                 XmlSerializer serializer = new XmlSerializer(typeof(UserPreferences));
                 using (FileStream reader = new FileStream(m_userprefs_xml, FileMode.Open)) {
-                    m_userpreferences = (UserPreferences)serializer.Deserialize(reader);
+                    UserPreferences = (UserPreferences)serializer.Deserialize(reader);
                     reader.Close();
                 }
             } catch (Exception e) {
                 m_log.TraceError("Using default user preferences because of failed to load them, reason: " + e.Message);
-                m_userpreferences = new UserPreferences();
+                UserPreferences = new UserPreferences();
             }
-            return m_userpreferences;
+            return UserPreferences;
         }
 
         public List<VehicleProfile> LoadVehicleProfiles() {
@@ -508,15 +500,15 @@ namespace SH_OBD {
         public VehicleProfile ActiveProfile {
             get {
                 try {
-                    if (m_settings.ActiveProfileIndex >= 0 && m_settings.ActiveProfileIndex < m_VehicleProfiles.Count) {
-                        return m_VehicleProfiles[m_settings.ActiveProfileIndex];
+                    if (CommSettings.ActiveProfileIndex >= 0 && CommSettings.ActiveProfileIndex < VehicleProfiles.Count) {
+                        return VehicleProfiles[CommSettings.ActiveProfileIndex];
                     }
-                    if (m_VehicleProfiles.Count == 0) {
-                        m_VehicleProfiles.Add(new VehicleProfile());
+                    if (VehicleProfiles.Count == 0) {
+                        VehicleProfiles.Add(new VehicleProfile());
                     }
-                    m_settings.ActiveProfileIndex = 0;
+                    CommSettings.ActiveProfileIndex = 0;
 
-                    return m_VehicleProfiles[0];
+                    return VehicleProfiles[0];
                 } catch (Exception e) {
                     m_log.TraceError("Failed to get vehicle profile, reason: " + e.Message);
                     return null;
@@ -530,13 +522,9 @@ namespace SH_OBD {
             SaveCommSettings(settings);
         }
 
-        public List<VehicleProfile> VehicleProfiles {
-            get { return m_VehicleProfiles; }
-        }
-
         public void SaveVehicleProfiles(List<VehicleProfile> profiles) {
             FileStream file = null;
-            m_VehicleProfiles = profiles;
+            VehicleProfiles = profiles;
             try {
                 BinaryFormatter binaryFormatter = new BinaryFormatter();
                 if (File.Exists(m_vehicles_db)) {
@@ -554,7 +542,5 @@ namespace SH_OBD {
                 }
             }
         }
-
-        public Logger GetLogger() { return m_log; }
     }
 }

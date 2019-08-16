@@ -191,12 +191,11 @@ namespace SH_OBD {
             if (!m_CommELM.Online) {
                 return false;
             }
-            while (attempts > 0) {
+            for (int i = attempts; i > 0; i--) {
                 string response = m_CommELM.GetResponse(command);
                 if (response.IndexOf("OK") >= 0 || response.IndexOf("ELM") >= 0) {
                     return true;
                 }
-                --attempts;
             }
             m_log.TraceWarning("Current device can't support command \"" + command + "\"!");
             return false;
