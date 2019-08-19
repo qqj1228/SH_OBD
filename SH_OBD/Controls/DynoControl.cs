@@ -491,6 +491,15 @@ namespace DGChart {
             colorSet4 = new Color();
             colorSet5 = new Color();
             InitializeComponent();
+
+            // 使用双缓冲技术重绘控件，下面三个控件样式都须设置才有效果
+
+            // 为 true，控件将自行绘制，而不是通过操作系统来绘制。此样式仅适用于派生自 Control 的类。
+            SetStyle(ControlStyles.UserPaint, true);
+            // 为 true，控件将忽略 WM_ERASEBKGND 窗口消息以减少闪烁。仅当 UserPaint 位设置为 true 时，才应当应用该样式。
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            // 为 true，则绘制在缓冲区中进行，完成后将结果输出到屏幕上。
+            SetStyle(ControlStyles.DoubleBuffer, true);
         }
 
         private void InitializeComponent() {
@@ -502,7 +511,7 @@ namespace DGChart {
             drawMode = DynoControl.DrawModeType.Line;
             borderTop = 30;
             borderLeft = 50;
-            borderBottom = 80;
+            borderBottom = 50;
             borderRight = 30;
             xRangeStart = 0.0;
             xRangeEnd = 100.0;
@@ -546,6 +555,7 @@ namespace DGChart {
                 } else if (yRangeStart <= 0.0) {
                     return;
                 }
+
                 Graphics graphics = e.Graphics;
                 graphics.SmoothingMode = SmoothingMode.AntiAlias;
                 PaintControl(graphics);
@@ -557,11 +567,18 @@ namespace DGChart {
         private void PaintControl(Graphics g) {
             double[] numArray1 = null;
             double[] numArray2 = null;
+            Pen pen1 = null;
+            Pen pen2 = null;
+            Pen pen3 = null;
+            Pen pen4 = null;
+            Pen pen5 = null;
+            SolidBrush solidBrush = null;
+            StringFormat format = null;
             try {
                 //g.FillRectangle(new SolidBrush(colorBg), clientRectangle);
-                Pen pen1 = new Pen(colorGrid, 1f);
-                Pen pen2 = new Pen(colorAxis, 1f);
-                SolidBrush solidBrush = new SolidBrush(colorAxis);
+                pen1 = new Pen(colorGrid, 1f);
+                pen2 = new Pen(colorAxis, 1f);
+                solidBrush = new SolidBrush(colorAxis);
                 int left = ClientRectangle.Left + borderLeft;
                 int top = ClientRectangle.Top + borderTop;
                 int width = ClientRectangle.Width - borderLeft - borderRight;
@@ -570,6 +587,7 @@ namespace DGChart {
                 int bottom = ClientRectangle.Bottom - borderBottom;
                 int xCount = 1;
                 int xGridPixel = 0;
+                format = new StringFormat();
 
                 if (xLogBase < 2) {
                     xCount = Convert.ToInt32((xRangeEnd - xRangeStart) / xGrid);
@@ -605,6 +623,9 @@ namespace DGChart {
                         g.DrawString(str, fontAxis, solidBrush, xCoor - sizeF.Width * 0.5f, sizeF.Height * 0.5f + bottom);
                     }
                 }
+                SizeF sizeF1 = g.MeasureString("RPM (x 1000)", fontAxis);
+                g.DrawString("RPM (x 1000)", fontAxis, solidBrush, (float)((right - left) / 2 + left) - sizeF1.Width * 0.5f, sizeF1.Height * 2f + bottom);
+
                 int yCount = 1;
                 int yGridPixel = 0;
                 if (yLogBase < 2) {
@@ -641,14 +662,8 @@ namespace DGChart {
                         g.DrawString(str, fontAxis, solidBrush, left - sizeF.Width - sizeF.Height * 0.25f, yCoor - sizeF.Height * 0.5f);
                     }
                 }
-                g.DrawRectangle(pen2, left, top, width, height);
-                SizeF sizeF1 = g.MeasureString("RPM (x 1000)", fontAxis);
-                g.DrawString("RPM (x 1000)", fontAxis, solidBrush, (float)((right - left) / 2 + left) - sizeF1.Width * 0.5f, sizeF1.Height * 2f + bottom);
 
-                // 画Logo
-                if (Logo != null) {
-                    g.DrawImage(Logo, 35, 10, 200, 75);
-                }
+                g.DrawRectangle(pen2, left, top, width, height);
 
                 // 画曲线
                 int xPixel = xGridPixel * xCount;
@@ -657,40 +672,40 @@ namespace DGChart {
                     Color color2 = new Color();
                     bool flag = false;
                     switch (i) {
-                        case 0:
-                            numArray1 = xData1;
-                            numArray2 = yData1;
-                            flag = showData1;
-                            color2 = colorSet1;
-                            m_dMaxHpValue = 0.0;
-                            m_dMaxHpRpm = 0.0;
-                            break;
-                        case 1:
-                            numArray1 = xData2;
-                            numArray2 = yData2;
-                            flag = showData2;
-                            color2 = colorSet2;
-                            m_dMaxTqValue = 0.0;
-                            m_dMaxTqRpm = 0.0;
-                            break;
-                        case 2:
-                            numArray1 = xData3;
-                            numArray2 = yData3;
-                            flag = showData3;
-                            color2 = colorSet3;
-                            break;
-                        case 3:
-                            numArray1 = xData4;
-                            numArray2 = yData4;
-                            flag = showData4;
-                            color2 = colorSet4;
-                            break;
-                        case 4:
-                            numArray1 = xData5;
-                            numArray2 = yData5;
-                            flag = showData5;
-                            color2 = colorSet5;
-                            break;
+                    case 0:
+                        numArray1 = xData1;
+                        numArray2 = yData1;
+                        flag = showData1;
+                        color2 = colorSet1;
+                        m_dMaxHpValue = 0.0;
+                        m_dMaxHpRpm = 0.0;
+                        break;
+                    case 1:
+                        numArray1 = xData2;
+                        numArray2 = yData2;
+                        flag = showData2;
+                        color2 = colorSet2;
+                        m_dMaxTqValue = 0.0;
+                        m_dMaxTqRpm = 0.0;
+                        break;
+                    case 2:
+                        numArray1 = xData3;
+                        numArray2 = yData3;
+                        flag = showData3;
+                        color2 = colorSet3;
+                        break;
+                    case 3:
+                        numArray1 = xData4;
+                        numArray2 = yData4;
+                        flag = showData4;
+                        color2 = colorSet4;
+                        break;
+                    case 4:
+                        numArray1 = xData5;
+                        numArray2 = yData5;
+                        flag = showData5;
+                        color2 = colorSet5;
+                        break;
                     }
                     if (flag && numArray1 != null && numArray2 != null && numArray1.Length == numArray2.Length) {
                         Point[] pointArray = new Point[numArray1.Length];
@@ -713,23 +728,28 @@ namespace DGChart {
                                 pointArray[j] = point2;
                             }
                         }
-                        Pen pen3 = new Pen(color2, penWidth);
+                        pen3 = new Pen(color2, penWidth);
                         for (int j = 0; j < pointArray.Length; ++j) {
                             switch (drawMode) {
-                                case DynoControl.DrawModeType.Dot:
-                                    g.DrawEllipse(pen3, pointArray[j].X - penWidth / 2, pointArray[j].Y - penWidth / 2, penWidth, penWidth);
-                                    break;
-                                case DynoControl.DrawModeType.Bar:
-                                    g.DrawLine(pen3, new Point(pointArray[j].X, bottom), pointArray[j]);
-                                    break;
-                                default:
-                                    if (j > 0) {
-                                        g.DrawLine(pen3, pointArray[j - 1], pointArray[j]);
-                                    }
-                                    break;
+                            case DynoControl.DrawModeType.Dot:
+                                g.DrawEllipse(pen3, pointArray[j].X - penWidth / 2, pointArray[j].Y - penWidth / 2, penWidth, penWidth);
+                                break;
+                            case DynoControl.DrawModeType.Bar:
+                                g.DrawLine(pen3, new Point(pointArray[j].X, bottom), pointArray[j]);
+                                break;
+                            default:
+                                if (j > 0) {
+                                    g.DrawLine(pen3, pointArray[j - 1], pointArray[j]);
+                                }
+                                break;
                             }
                         }
                     }
+                }
+
+                // 画Logo
+                if (Logo != null) {
+                    g.DrawImage(Logo, 35, 10, 200, 75);
                 }
 
                 // 画图例
@@ -739,18 +759,23 @@ namespace DGChart {
                 SizeF sizeF3 = g.MeasureString(str2, fontAxis);
                 Rectangle rect1 = new Rectangle(
                     borderLeft + 5,
-                    Height - (int)sizeF2.Height - 30,
+                    top,
                     (int)(sizeF3.Width + (double)sizeF2.Width) + 80,
                     (int)sizeF2.Height + 20
                 );
                 //g.FillRectangle(Brushes.White, rect1);
-                g.DrawRectangle(new Pen(Brushes.Black), rect1);
-                Pen pen4 = new Pen(colorSet1);
-                Pen pen5 = new Pen(colorSet2);
+                //g.DrawRectangle(new Pen(Brushes.Black), rect1);
+                pen4 = new Pen(colorSet1);
+                pen5 = new Pen(colorSet2);
                 g.DrawString(str1, fontAxis, pen4.Brush, rect1.Left + 35, rect1.Top + 10);
                 g.DrawString(str2, fontAxis, pen5.Brush, rect1.Left + 70 + sizeF2.Width, rect1.Top + 10);
                 g.FillRectangle(pen4.Brush, new Rectangle(rect1.Left + 10, rect1.Top + 10, 20, (int)sizeF2.Height));
                 g.FillRectangle(pen5.Brush, new Rectangle(rect1.Left + (int)sizeF2.Width + 45, rect1.Top + 10, 20, (int)sizeF3.Height));
+
+                // 画标签
+                format.Alignment = StringAlignment.Far;
+                format.LineAlignment = StringAlignment.Far;
+                g.DrawString(strName, fontAxis, solidBrush, new RectangleF(230f, height - 5f, Width - 255f, 75f), format);
 
                 // 画RPM极值
                 string str3 = m_dMaxHpValue.ToString("####.##") + " RWHP @ " + (m_dMaxHpRpm * 1000.0).ToString("#####") + " RPM" + "\r\n\r\n" + m_dMaxTqValue.ToString("####.##")
@@ -770,24 +795,42 @@ namespace DGChart {
                     sizeF4.Width + 20f,
                     sizeF4.Height + 20f
                 );
-                StringFormat format = new StringFormat {
-                    Alignment = StringAlignment.Center,
-                    LineAlignment = StringAlignment.Center
-                };
+                format.Alignment = StringAlignment.Center;
+                format.LineAlignment = StringAlignment.Center;
                 g.DrawString(str3, fontAxis, solidBrush, layoutRectangle2, format);
-
-                // 画标签
-                format.Alignment = StringAlignment.Far;
-                format.LineAlignment = StringAlignment.Far;
-                g.DrawString(strName, fontAxis, solidBrush, new RectangleF(230f, 40f, Width - 255, 75f), format);
             } catch {
                 MessageBox.Show("PaintControl() in DynoControl occurred ERROR");
+            } finally {
+                if (pen1 != null) {
+                    pen1.Dispose();
+                }
+                if (pen2 != null) {
+                    pen2.Dispose();
+                }
+                if (pen3 != null) {
+                    pen3.Dispose();
+                }
+                if (pen4 != null) {
+                    pen4.Dispose();
+                }
+                if (pen5 != null) {
+                    pen5.Dispose();
+                }
+                if (solidBrush != null) {
+                    solidBrush.Dispose();
+                }
+                if (format != null) {
+                    format.Dispose();
+                }
             }
         }
 
         public Image GetImage() {
             Bitmap bitmap = new Bitmap(Width, Height);
-            PaintControl(Graphics.FromImage((Image)bitmap));
+            using (Graphics gfx = Graphics.FromImage(bitmap)) {
+                gfx.FillRectangle(new SolidBrush(colorBg), 0, 0, Width, Height);
+                PaintControl(gfx);
+            }
             return bitmap as Image;
         }
 

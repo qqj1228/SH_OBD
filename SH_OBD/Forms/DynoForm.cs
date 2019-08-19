@@ -27,6 +27,7 @@ namespace SH_OBD {
         private double m_dVehicleWeight;
         private DateTime m_dtDynoTime;
         private const int yScale = 10;
+        private double LastYRangeEnd = 0;
 
         public DynoForm(OBDInterface obd) {
             m_obdInterface = obd;
@@ -83,7 +84,7 @@ namespace SH_OBD {
                         m_RpmValues.Add(d_value);
                         value = m_obdInterface.GetValue("SAE.VSS", false);
                         if (!value.ErrorDetected) {
-                            d_value = new DatedValue(value.DoubleValue * (double)m_obdInterface.ActiveProfile.SpeedCalibrationFactor) {
+                            d_value = new DatedValue(value.DoubleValue * m_obdInterface.ActiveProfile.SpeedCalibrationFactor) {
                                 Date = DateTime.Now
                             };
                             m_KphValues.Add(d_value);
@@ -133,24 +134,27 @@ namespace SH_OBD {
                     m_TQMax = m_TQValue[i];
                 }
             }
-            this.BeginInvoke((EventHandler)delegate {
-                dyno.XData1 = m_SampleRPM;
-                dyno.YData1 = m_HPValue;
-                dyno.XData2 = m_SampleRPM;
-                dyno.YData2 = m_TQValue;
-                if (m_HPMax != 0.0 && m_TQMax != 0.0) {
-                    double YEnd = m_HPMax < m_TQMax ? m_TQMax : m_HPMax;
-                    YEnd = Convert.ToInt32(YEnd + 0.5);
-                    dyno.YGrid = (YEnd - dyno.YRangeStart) / yScale;
-                    while (Convert.ToInt32(YEnd) % Convert.ToInt32(dyno.YGrid) != 0) {
-                        YEnd += 1.0;
-                    }
-                    dyno.YRangeEnd = YEnd;
+            dyno.ShowData1 = false;
+            dyno.ShowData2 = false;
+            dyno.XData1 = m_SampleRPM;
+            dyno.YData1 = m_HPValue;
+            dyno.XData2 = m_SampleRPM;
+            dyno.YData2 = m_TQValue;
+            if (m_HPMax != 0.0 && m_TQMax != 0.0) {
+                double YEnd = m_HPMax < m_TQMax ? m_TQMax : m_HPMax;
+                YEnd = Convert.ToInt32(YEnd + 0.5);
+                dyno.YGrid = (YEnd - dyno.YRangeStart) / yScale;
+                while (Convert.ToInt32(YEnd) % Convert.ToInt32(dyno.YGrid) != 0) {
+                    YEnd += 1.0;
                 }
-                dyno.ShowData1 = true;
-                dyno.ShowData2 = true;
-                //dyno.Refresh();
-            });
+                if (LastYRangeEnd != YEnd) {
+                    dyno.YRangeEnd = YEnd;
+                    LastYRangeEnd = YEnd;
+                }
+            }
+            dyno.ShowData1 = true;
+            dyno.ShowData2 = true;
+            //dyno.Refresh();
         }
 
         private void btnPrint_Click(object sender, EventArgs e) {
