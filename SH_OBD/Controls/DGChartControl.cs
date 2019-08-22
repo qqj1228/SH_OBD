@@ -539,22 +539,28 @@ namespace DGChart {
 
         private void Chart_Paint(object sender, PaintEventArgs e) {
             try {
-                if (xRangeEnd <= xRangeStart || yRangeEnd <= yRangeStart)
+                if (xRangeEnd <= xRangeStart || yRangeEnd <= yRangeStart) {
                     return;
+                }
                 if (xLogBase < 2) {
-                    if (xGrid <= 0.0)
+                    if (xGrid <= 0.0) {
                         return;
-                } else if (xRangeStart <= 0.0)
+                    }
+                } else if (xRangeStart <= 0.0) {
                     return;
+                }
                 if (yLogBase < 2) {
-                    if (yGrid <= 0.0)
+                    if (yGrid <= 0.0) {
                         return;
-                } else if (yRangeStart <= 0.0)
+                    }
+                } else if (yRangeStart <= 0.0) {
                     return;
+                }
                 Graphics graphics = e.Graphics;
                 graphics.SmoothingMode = SmoothingMode.AntiAlias;
                 PaintControl(graphics);
             } catch (Exception) {
+                MessageBox.Show("Chart_Paint() in DGChartControl occurred ERROR");
             }
         }
 
@@ -565,6 +571,8 @@ namespace DGChart {
             Pen pen2 = null;
             Pen pen3 = null;
             SolidBrush solidBrush = null;
+            StringFormat format = null;
+
             try {
                 pen1 = new Pen(colorGrid, 1f);
                 pen2 = new Pen(colorAxis, 1f);
@@ -572,161 +580,174 @@ namespace DGChart {
                 Rectangle clientRectangle = ClientRectangle;
                 Color color1 = colorBg;
                 g.FillRectangle(new SolidBrush(color1), clientRectangle);
-                int num1 = clientRectangle.Left + borderLeft;
-                int num2 = clientRectangle.Top + borderTop;
+                int left = clientRectangle.Left + borderLeft;
+                int top = clientRectangle.Top + borderTop;
                 int width = clientRectangle.Width - borderLeft - borderRight;
                 int height = clientRectangle.Height - borderTop - borderBottom;
-                int x2 = clientRectangle.Right - borderRight;
-                int num3 = clientRectangle.Bottom - borderBottom;
-                int num4;
-                int num5;
+                int right = clientRectangle.Right - borderRight;
+                int bottom = clientRectangle.Bottom - borderBottom;
+                int xCount = 1;
+                int xGridPixel = 0;
+                format = new StringFormat();
+
+                // 画x轴
                 if (xLogBase < 2) {
-                    num4 = Convert.ToInt32((xRangeEnd - xRangeStart) / xGrid);
-                    if (num4 == 0)
-                        num4 = 1;
-                    num5 = width / num4;
-                    for (int index = 0; index <= num4; ++index) {
-                        int num6 = index * num5 + num1;
-                        g.DrawLine(pen1, num6, num2, num6, num3);
-                        string str = Convert.ToString((xRangeEnd - xRangeStart) * index / num4 + xRangeStart);
+                    xCount = Convert.ToInt32((xRangeEnd - xRangeStart) / xGrid);
+                    if (xCount == 0) {
+                        xCount = 1;
+                    }
+                    xGridPixel = width / xCount;
+                    for (int i = 0; i <= xCount; ++i) {
+                        int xCoor = i * xGridPixel + left;
+                        g.DrawLine(pen1, xCoor, top, xCoor, bottom);
+                        string str = Convert.ToString((xRangeEnd - xRangeStart) * i / xCount + xRangeStart);
                         SizeF sizeF = g.MeasureString(str, fontAxis);
-                        g.DrawString(str, fontAxis, solidBrush, num6 - sizeF.Width * 0.5f, sizeF.Height * 0.5f + num3);
+                        g.DrawString(str, fontAxis, solidBrush, xCoor - sizeF.Width * 0.5f, sizeF.Height * 0.5f + bottom);
                     }
                 } else {
-                    num4 = Convert.ToInt32(Math.Log(xRangeEnd, xLogBase) - Math.Log(xRangeStart, xLogBase));
-                    if (num4 == 0)
-                        num4 = 1;
-                    num5 = width / num4;
-                    for (int index1 = 0; index1 <= num4; ++index1) {
-                        int num6 = index1 * num5 + num1;
-                        if (index1 < num4) {
+                    xCount = Convert.ToInt32(Math.Log(xRangeEnd, xLogBase) - Math.Log(xRangeStart, xLogBase));
+                    if (xCount == 0) {
+                        xCount = 1;
+                    }
+                    xGridPixel = width / xCount;
+                    for (int i = 0; i <= xCount; ++i) {
+                        int xCoor = i * xGridPixel + left;
+                        if (i < xCount) {
                             for (int index2 = 1; index2 < xLogBase; ++index2) {
-                                int num7 = Convert.ToInt32(Math.Log(index2, xLogBase) * num5);
-                                int num8 = num6 + num7;
-                                g.DrawLine(pen1, num8, num2, num8, num3);
+                                int xCoorLog = xCoor + Convert.ToInt32(Math.Log(index2, xLogBase) * xGridPixel);
+                                g.DrawLine(pen1, xCoorLog, top, xCoorLog, bottom);
                             }
                         }
-                        string str = Convert.ToString(Math.Pow(xLogBase, Math.Log(xRangeStart, xLogBase) + index1));
+                        string str = Convert.ToString(Math.Pow(xLogBase, Math.Log(xRangeStart, xLogBase) + i));
                         SizeF sizeF = g.MeasureString(str, fontAxis);
-                        g.DrawString(str, fontAxis, solidBrush, num6 - sizeF.Width * 0.5f, sizeF.Height * 0.5f + num3);
+                        g.DrawString(str, fontAxis, solidBrush, xCoor - sizeF.Width * 0.5f, sizeF.Height * 0.5f + bottom);
                     }
                 }
-                int num9 = num5 * num4;
-                int num10;
-                int num11;
+
+                // 画y轴
+                int yCount = 1;
+                int yGridPixel = 0;
                 if (yLogBase < 2) {
-                    num10 = Convert.ToInt32((yRangeEnd - yRangeStart) / yGrid);
-                    if (num10 == 0)
-                        num10 = 1;
-                    num11 = height / num10;
-                    for (int index = 0; index <= num10; ++index) {
-                        int num6 = num3 - index * num11;
-                        g.DrawLine(pen1, num1, num6, x2, num6);
-                        string str = Convert.ToString((yRangeEnd - yRangeStart) * index / num10 + yRangeStart);
+                    yCount = Convert.ToInt32((yRangeEnd - yRangeStart) / yGrid);
+                    if (yCount == 0) {
+                        yCount = 1;
+                    }
+                    yGridPixel = height / yCount;
+                    for (int i = 0; i <= yCount; ++i) {
+                        int yCoor = bottom - i * yGridPixel;
+                        g.DrawLine(pen1, left, yCoor, right, yCoor);
+                        string str = Convert.ToString((yRangeEnd - yRangeStart) * i / yCount + yRangeStart);
                         SizeF sizeF = g.MeasureString(str, fontAxis);
-                        g.DrawString(str, fontAxis, solidBrush, (float)(num1 - sizeF.Width - sizeF.Height * 0.25), num6 - sizeF.Height * 0.5f);
+                        g.DrawString(str, fontAxis, solidBrush, (float)(left - sizeF.Width - sizeF.Height * 0.25), yCoor - sizeF.Height * 0.5f);
                     }
                 } else {
-                    num10 = Convert.ToInt32(Math.Log(yRangeEnd, yLogBase) - Math.Log(yRangeStart, yLogBase));
-                    if (num10 == 0)
-                        num10 = 1;
-                    num11 = height / num10;
-                    for (int index1 = 0; index1 <= num10; ++index1) {
-                        int num6 = num3 - index1 * num11;
-                        if (index1 < num10) {
-                            for (int index2 = 1; index2 < yLogBase; ++index2) {
-                                int num7 = Convert.ToInt32(Math.Log(index2, yLogBase) * num11);
-                                int num8 = num6 - num7;
-                                g.DrawLine(pen1, num1, num8, x2, num8);
+                    yCount = Convert.ToInt32(Math.Log(yRangeEnd, yLogBase) - Math.Log(yRangeStart, yLogBase));
+                    if (yCount == 0) {
+                        yCount = 1;
+                    }
+                    yGridPixel = height / yCount;
+                    for (int i = 0; i <= yCount; ++i) {
+                        int yCoor = bottom - i * yGridPixel;
+                        if (i < yCount) {
+                            for (int j = 1; j < yLogBase; ++j) {
+                                int yCoorLog = yCoor - Convert.ToInt32(Math.Log(j, yLogBase) * yGridPixel);
+                                g.DrawLine(pen1, left, yCoorLog, right, yCoorLog);
                             }
                         }
-                        string str = Convert.ToString(Math.Pow(yLogBase, Math.Log(yRangeStart, yLogBase) + index1));
+                        string str = Convert.ToString(Math.Pow(yLogBase, Math.Log(yRangeStart, yLogBase) + i));
                         SizeF sizeF = g.MeasureString(str, fontAxis);
-                        g.DrawString(str, fontAxis, solidBrush, (float)(num1 - sizeF.Width - sizeF.Height * 0.25), num6 - sizeF.Height * 0.5f);
+                        g.DrawString(str, fontAxis, solidBrush, (float)(left - sizeF.Width - sizeF.Height * 0.25), yCoor - sizeF.Height * 0.5f);
                     }
                 }
-                int num12 = num11 * num10;
-                g.DrawRectangle(pen2, num1, num2, width, height);
+
+                // 画外框
+                g.DrawRectangle(pen2, left, top, width, height);
+                // 画x轴标签
                 SizeF sizeF1 = g.MeasureString(xLabel, fontAxis);
-                g.DrawString(xLabel, fontAxis, solidBrush, ((x2 - num1) / 2 + num1) - sizeF1.Width * 0.5f, sizeF1.Height * 2f + num3);
-                int num13 = num12;
-                int num14 = num9;
-                StringFormat format = new StringFormat {
-                    Alignment = StringAlignment.Center
-                };
-                RectangleF layoutRectangle = new RectangleF();
-                layoutRectangle = new RectangleF(0.0f, 5f, Width, 20f);
+                g.DrawString(xLabel, fontAxis, solidBrush, ((right - left) / 2 + left) - sizeF1.Width * 0.5f, sizeF1.Height * 2f + bottom);
+                // 画图表名称
+                RectangleF layoutRectangle = new RectangleF(0.0f, 5f, Width, 20f);
+                format.Alignment = StringAlignment.Center;
                 g.DrawString(strName, fontAxis, solidBrush, layoutRectangle, format);
-                for (int index1 = 0; index1 < 5; ++index1) {
+
+                // 画曲线
+                int xPixel = xGridPixel * xCount;
+                int yPixel = yGridPixel * yCount;
+                for (int i = 0; i < 5; ++i) {
                     Color color2 = new Color();
                     bool flag = false;
-                    switch (index1) {
-                        case 0:
-                            numArray1 = xData1;
-                            numArray2 = yData1;
-                            flag = showData1;
-                            color2 = colorSet1;
-                            break;
-                        case 1:
-                            numArray1 = xData2;
-                            numArray2 = yData2;
-                            flag = showData2;
-                            color2 = colorSet2;
-                            break;
-                        case 2:
-                            numArray1 = xData3;
-                            numArray2 = yData3;
-                            flag = showData3;
-                            color2 = colorSet3;
-                            break;
-                        case 3:
-                            numArray1 = xData4;
-                            numArray2 = yData4;
-                            flag = showData4;
-                            color2 = colorSet4;
-                            break;
-                        case 4:
-                            numArray1 = xData5;
-                            numArray2 = yData5;
-                            flag = showData5;
-                            color2 = colorSet5;
-                            break;
+                    switch (i) {
+                    case 0:
+                        numArray1 = xData1;
+                        numArray2 = yData1;
+                        flag = showData1;
+                        color2 = colorSet1;
+                        break;
+                    case 1:
+                        numArray1 = xData2;
+                        numArray2 = yData2;
+                        flag = showData2;
+                        color2 = colorSet2;
+                        break;
+                    case 2:
+                        numArray1 = xData3;
+                        numArray2 = yData3;
+                        flag = showData3;
+                        color2 = colorSet3;
+                        break;
+                    case 3:
+                        numArray1 = xData4;
+                        numArray2 = yData4;
+                        flag = showData4;
+                        color2 = colorSet4;
+                        break;
+                    case 4:
+                        numArray1 = xData5;
+                        numArray2 = yData5;
+                        flag = showData5;
+                        color2 = colorSet5;
+                        break;
                     }
                     if (flag && numArray1 != null && (numArray2 != null && numArray1.Length == numArray2.Length)) {
                         Point[] pointArray = new Point[numArray1.Length];
-                        Point point1 = new Point();
-                        point1 = new Point(num1, num3);
-                        Point point2 = point1;
-                        for (int index2 = 0; index2 < pointArray.Length; ++index2) {
+                        Point point2 = new Point(left, bottom);
+                        for (int j = 0; j < pointArray.Length; ++j) {
                             try {
-                                pointArray[index2].X = xLogBase >= 2 ? Convert.ToInt32((Math.Log(numArray1[index2], xLogBase) - Math.Log(xRangeStart, xLogBase)) / (Math.Log(xRangeEnd, xLogBase) - Math.Log(xRangeStart, xLogBase)) * num14 + num1) : Convert.ToInt32((numArray1[index2] - xRangeStart) / (xRangeEnd - xRangeStart) * num14 + num1);
-                                pointArray[index2].Y = yLogBase >= 2 ? Convert.ToInt32(num3 - (Math.Log(numArray2[index2], yLogBase) - Math.Log(yRangeStart, yLogBase)) / (Math.Log(yRangeEnd, yLogBase) - Math.Log(yRangeStart, yLogBase)) * num13) : Convert.ToInt32(num3 - (numArray2[index2] - yRangeStart) / (yRangeEnd - yRangeStart) * num13);
-                                point2 = pointArray[index2];
+                                if (xLogBase >= 2) {
+                                    pointArray[j].X = Convert.ToInt32((Math.Log(numArray1[j], xLogBase) - Math.Log(xRangeStart, xLogBase)) / (Math.Log(xRangeEnd, xLogBase) - Math.Log(xRangeStart, xLogBase)) * xPixel + left);
+                                } else {
+                                    pointArray[j].X = Convert.ToInt32((numArray1[j] - xRangeStart) / (xRangeEnd - xRangeStart) * xPixel + left);
+                                }
+                                if (yLogBase >= 2) {
+                                    pointArray[j].Y = Convert.ToInt32(bottom - (Math.Log(numArray2[j], yLogBase) - Math.Log(yRangeStart, yLogBase)) / (Math.Log(yRangeEnd, yLogBase) - Math.Log(yRangeStart, yLogBase)) * yPixel);
+                                } else {
+                                    pointArray[j].Y = Convert.ToInt32(bottom - (numArray2[j] - yRangeStart) / (yRangeEnd - yRangeStart) * yPixel);
+                                }
+                                point2 = pointArray[j];
                             } catch (Exception) {
-                                pointArray[index2] = point2;
+                                pointArray[j] = point2;
                             }
                         }
                         pen3 = new Pen(color2, penWidth);
-                        for (int index2 = 0; index2 < pointArray.Length; ++index2) {
+                        for (int j = 0; j < pointArray.Length; ++j) {
                             switch (drawMode) {
-                                case DGChartControl.DrawModeType.Dot:
-                                    g.DrawEllipse(pen3, pointArray[index2].X - penWidth / 2, pointArray[index2].Y - penWidth / 2, penWidth, penWidth);
-                                    break;
-                                case DGChartControl.DrawModeType.Bar:
-                                    Point pt1 = new Point();
-                                    pt1 = new Point(pointArray[index2].X, num3);
-                                    g.DrawLine(pen3, pt1, pointArray[index2]);
-                                    break;
-                                default:
-                                    if (index2 > 0) {
-                                        g.DrawLine(pen3, pointArray[index2 - 1], pointArray[index2]);
-                                    }
-                                    break;
+                            case DGChartControl.DrawModeType.Dot:
+                                g.DrawEllipse(pen3, pointArray[j].X - penWidth / 2, pointArray[j].Y - penWidth / 2, penWidth, penWidth);
+                                break;
+                            case DGChartControl.DrawModeType.Bar:
+                                g.DrawLine(pen3, new Point(pointArray[j].X, bottom), pointArray[j]);
+                                break;
+                            default:
+                                if (j > 0) {
+                                    g.DrawLine(pen3, pointArray[j - 1], pointArray[j]);
+                                }
+                                break;
                             }
                         }
                     }
                 }
             } catch (Exception) {
+                MessageBox.Show("PaintControl() in DGChartControl occurred ERROR");
             } finally {
                 if (pen1 != null) {
                     pen1.Dispose();
@@ -740,10 +761,13 @@ namespace DGChart {
                 if (solidBrush != null) {
                     solidBrush.Dispose();
                 }
+                if (format != null) {
+                    format.Dispose();
+                }
             }
         }
 
-        public Image getImage() {
+        public Image GetImage() {
             Bitmap bitmap = new Bitmap(Width, Height);
             PaintControl(Graphics.FromImage(bitmap));
             return bitmap as Image;

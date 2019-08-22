@@ -575,7 +575,6 @@ namespace DGChart {
             SolidBrush solidBrush = null;
             StringFormat format = null;
             try {
-                //g.FillRectangle(new SolidBrush(colorBg), clientRectangle);
                 pen1 = new Pen(colorGrid, 1f);
                 pen2 = new Pen(colorAxis, 1f);
                 solidBrush = new SolidBrush(colorAxis);
@@ -599,7 +598,7 @@ namespace DGChart {
                     for (int i = 0; i <= xCount; ++i) {
                         int xCoor = i * xGridPixel + left;
                         g.DrawLine(pen1, xCoor, top, xCoor, bottom);
-                        string str = Convert.ToString((xRangeEnd - xRangeStart) * i / (double)xCount + xRangeStart);
+                        string str = Convert.ToString((xRangeEnd - xRangeStart) * i / xCount + xRangeStart);
                         SizeF sizeF = g.MeasureString(str, fontAxis);
                         g.DrawString(str, fontAxis, solidBrush, xCoor - sizeF.Width * 0.5f, sizeF.Height * 0.5f + bottom);
                     }
@@ -624,7 +623,7 @@ namespace DGChart {
                     }
                 }
                 SizeF sizeF1 = g.MeasureString("RPM (x 1000)", fontAxis);
-                g.DrawString("RPM (x 1000)", fontAxis, solidBrush, (float)((right - left) / 2 + left) - sizeF1.Width * 0.5f, sizeF1.Height * 2f + bottom);
+                g.DrawString("RPM (x 1000)", fontAxis, solidBrush, (right - left) / 2 + left - sizeF1.Width * 0.5f, sizeF1.Height * 2f + bottom);
 
                 int yCount = 1;
                 int yGridPixel = 0;
@@ -638,7 +637,7 @@ namespace DGChart {
                     for (int i = 0; i <= yCount; ++i) {
                         int yCoor = bottom - i * yGridPixel;
                         g.DrawLine(pen1, left, yCoor, right, yCoor);
-                        string str = Convert.ToString((yRangeEnd - yRangeStart) * i / (double)yCount + yRangeStart);
+                        string str = Convert.ToString((yRangeEnd - yRangeStart) * i / yCount + yRangeStart);
                         SizeF sizeF = g.MeasureString(str, fontAxis);
                         g.DrawString(str, fontAxis, solidBrush, left - sizeF.Width - sizeF.Height * 0.25f, yCoor - sizeF.Height * 0.5f);
                     }
@@ -663,6 +662,7 @@ namespace DGChart {
                     }
                 }
 
+                // 画坐标外框
                 g.DrawRectangle(pen2, left, top, width, height);
 
                 // 画曲线
@@ -721,8 +721,16 @@ namespace DGChart {
                                     m_dMaxTqValue = numArray2[j];
                                     m_dMaxTqRpm = numArray1[j];
                                 }
-                                pointArray[j].X = xLogBase >= 2 ? Convert.ToInt32((Math.Log(numArray1[j], xLogBase) - Math.Log(xRangeStart, xLogBase)) / (Math.Log(xRangeEnd, xLogBase) - Math.Log(xRangeStart, xLogBase)) * xPixel + left) : Convert.ToInt32((numArray1[j] - xRangeStart) / (xRangeEnd - xRangeStart) * xPixel + left);
-                                pointArray[j].Y = yLogBase >= 2 ? Convert.ToInt32(bottom - (Math.Log(numArray2[j], yLogBase) - Math.Log(yRangeStart, yLogBase)) / (Math.Log(yRangeEnd, yLogBase) - Math.Log(yRangeStart, yLogBase)) * yPixel) : Convert.ToInt32(bottom - (numArray2[j] - yRangeStart) / (yRangeEnd - yRangeStart) * yPixel);
+                                if (xLogBase >= 2) {
+                                    pointArray[j].X = Convert.ToInt32((Math.Log(numArray1[j], xLogBase) - Math.Log(xRangeStart, xLogBase)) / (Math.Log(xRangeEnd, xLogBase) - Math.Log(xRangeStart, xLogBase)) * xPixel + left);
+                                } else {
+                                    pointArray[j].X = Convert.ToInt32((numArray1[j] - xRangeStart) / (xRangeEnd - xRangeStart) * xPixel + left);
+                                }
+                                if (yLogBase >= 2) {
+                                    pointArray[j].Y = Convert.ToInt32(bottom - (Math.Log(numArray2[j], yLogBase) - Math.Log(yRangeStart, yLogBase)) / (Math.Log(yRangeEnd, yLogBase) - Math.Log(yRangeStart, yLogBase)) * yPixel);
+                                } else {
+                                    pointArray[j].Y = Convert.ToInt32(bottom - (numArray2[j] - yRangeStart) / (yRangeEnd - yRangeStart) * yPixel);
+                                }
                                 point2 = pointArray[j];
                             } catch (Exception) {
                                 pointArray[j] = point2;

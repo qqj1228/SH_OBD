@@ -42,27 +42,11 @@ namespace SH_OBD {
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestValue01 = value.DoubleValue;
                     }
-                    value = m_obdInterface.GetValue(new OBDParameter(5, 1, 1, selectedSensorId), true);
-                    if (!value.ErrorDetected) {
-                        o2TestResultsControl1.TestMinimum01 = value.DoubleValue;
-                    }
-                    value = m_obdInterface.GetValue(new OBDParameter(5, 1, 2, selectedSensorId), true);
-                    if (!value.ErrorDetected) {
-                        o2TestResultsControl1.TestMaximum01 = value.DoubleValue;
-                    }
                     progressBar.Increment(1);
 
                     value = m_obdInterface.GetValue(new OBDParameter(5, 2, 0, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestValue02 = value.DoubleValue;
-                    }
-                    value = m_obdInterface.GetValue(new OBDParameter(5, 2, 1, selectedSensorId), true);
-                    if (!value.ErrorDetected) {
-                        o2TestResultsControl1.TestMinimum02 = value.DoubleValue;
-                    }
-                    value = m_obdInterface.GetValue(new OBDParameter(5, 2, 2, selectedSensorId), true);
-                    if (!value.ErrorDetected) {
-                        o2TestResultsControl1.TestMaximum02 = value.DoubleValue;
                     }
                     progressBar.Increment(1);
 
@@ -70,27 +54,11 @@ namespace SH_OBD {
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestValue03 = value.DoubleValue;
                     }
-                    value = m_obdInterface.GetValue(new OBDParameter(5, 3, 1, selectedSensorId), true);
-                    if (!value.ErrorDetected) {
-                        o2TestResultsControl1.TestMinimum03 = value.DoubleValue;
-                    }
-                    value = m_obdInterface.GetValue(new OBDParameter(5, 3, 2, selectedSensorId), true);
-                    if (!value.ErrorDetected) {
-                        o2TestResultsControl1.TestMaximum03 = value.DoubleValue;
-                    }
                     progressBar.Increment(1);
 
                     value = m_obdInterface.GetValue(new OBDParameter(5, 4, 0, selectedSensorId), true);
                     if (!value.ErrorDetected) {
                         o2TestResultsControl1.TestValue04 = value.DoubleValue;
-                    }
-                    value = m_obdInterface.GetValue(new OBDParameter(5, 4, 1, selectedSensorId), true);
-                    if (!value.ErrorDetected) {
-                        o2TestResultsControl1.TestMinimum04 = value.DoubleValue;
-                    }
-                    value = m_obdInterface.GetValue(new OBDParameter(5, 4, 2, selectedSensorId), true);
-                    if (!value.ErrorDetected) {
-                        o2TestResultsControl1.TestMaximum04 = value.DoubleValue;
                     }
                     progressBar.Increment(1);
 
@@ -186,29 +154,29 @@ namespace SH_OBD {
 
         private int GetSelectedSensorID() {
             string item = comboOxygenSensor.SelectedItem as string;
-            if (string.Compare(item, "组 1, 传感器 1 (O2B1S1)") == 0) {
+            if (item.Contains("Bit0")) {
                 return 1;
             }
-            if (string.Compare(item, "组 1, 传感器 2 (O2B1S2)") == 0) {
+            if (item.Contains("Bit1")) {
                 return 2;
             }
-            if (string.Compare(item, "组 1, 传感器 3 (O2B1S3)") == 0) {
-                return 3;
-            }
-            if (string.Compare(item, "组 1, 传感器 4 (O2B1S4)") == 0) {
+            if (item.Contains("Bit2")) {
                 return 4;
             }
-            if (string.Compare(item, "组 2, 传感器 1 (O2B2S1)") == 0) {
-                return 16;
+            if (item.Contains("Bit3")) {
+                return 8;
             }
-            if (string.Compare(item, "组 2, 传感器 2 (O2B2S2)") == 0) {
-                return 32;
+            if (item.Contains("Bit4")) {
+                return 0x10;
             }
-            if (string.Compare(item, "组 2, 传感器 3 (O2B2S3)") == 0) {
-                return 7;
+            if (item.Contains("Bit5")) {
+                return 0x20;
             }
-            if (string.Compare(item, "组 2, 传感器 4 (O2B2S4)") == 0) {
-                return 0;
+            if (item.Contains("Bit6")) {
+                return 0x40;
+            }
+            if (item.Contains("Bit7")) {
+                return 0x80;
             }
             return -1;
         }
@@ -217,88 +185,88 @@ namespace SH_OBD {
             comboOxygenSensor.Items.Clear();
             OBDParameterValue value;
 
-            value = m_obdInterface.GetValue("SAE.O2B1S1A_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B1S1$13_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("组 1, 传感器 1 (O2B1S1)");
+                comboOxygenSensor.Items.Add("组 1, 传感器 1 (O2B1S1$13_Bit0)");
             }
 
-            value = m_obdInterface.GetValue("SAE.O2B1S2A_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B1S2$13_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("组 1, 传感器 2 (O2B1S2)");
+                comboOxygenSensor.Items.Add("组 1, 传感器 2 (O2B1S2$13_Bit1)");
             }
 
-            value = m_obdInterface.GetValue("SAE.O2B1S3A_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B1S3$13_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("组 1, 传感器 3 (O2B1S3)");
+                comboOxygenSensor.Items.Add("组 1, 传感器 3 (O2B1S3$13_Bit2)");
             }
 
-            value = m_obdInterface.GetValue("SAE.O2B1S4A_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B1S4$13_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("组 1, 传感器 4 (O2B1S4)");
+                comboOxygenSensor.Items.Add("组 1, 传感器 4 (O2B1S4$13_Bit3)");
             }
 
-            value = m_obdInterface.GetValue("SAE.O2B2S1A_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B2S1$13_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("组 2, 传感器 1 (O2B2S1)");
+                comboOxygenSensor.Items.Add("组 2, 传感器 1 (O2B2S1$13_Bit4)");
             }
 
-            value = m_obdInterface.GetValue("SAE.O2B2S2A_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B2S2$13_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("组 2, 传感器 2 (O2B2S2)");
+                comboOxygenSensor.Items.Add("组 2, 传感器 2 (O2B2S2$13_Bit5)");
             }
 
-            value = m_obdInterface.GetValue("SAE.O2B2S3A_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B2S3$13_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("组 2, 传感器 3 (O2B2S3)");
+                comboOxygenSensor.Items.Add("组 2, 传感器 3 (O2B2S3$13_Bit6)");
             }
 
-            value = m_obdInterface.GetValue("SAE.O2B2S4A_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B2S4$13_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("组 2, 传感器 4 (O2B2S4)");
+                comboOxygenSensor.Items.Add("组 2, 传感器 4 (O2B2S4$13_Bit7)");
             }
 
             if (comboOxygenSensor.Items.Count > 0) {
                 comboOxygenSensor.SelectedIndex = 0;
             }
 
-            value = m_obdInterface.GetValue("SAE.O2B1S1B_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B1S1$1D_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("组 1, 传感器 1 (O2B1S1)");
+                comboOxygenSensor.Items.Add("组 1, 传感器 1 (O2B1S1$1D_Bit0)");
             }
 
-            value = m_obdInterface.GetValue("SAE.O2B1S2B_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B1S2$1D_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("组 1, 传感器 2 (O2B1S2)");
+                comboOxygenSensor.Items.Add("组 1, 传感器 2 (O2B1S2$1D_Bit1)");
             }
 
-            value = m_obdInterface.GetValue("SAE.O2B2S1B_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B2S1$1D_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("组 2, 传感器 1 (O2B2S1)");
+                comboOxygenSensor.Items.Add("组 2, 传感器 1 (O2B2S1$1D_Bit2)");
             }
 
-            value = m_obdInterface.GetValue("SAE.O2B2S2B_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B2S2$1D_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("组 2, 传感器 2 (O2B2S2)");
+                comboOxygenSensor.Items.Add("组 2, 传感器 2 (O2B2S2$1D_Bit3)");
             }
 
-            value = m_obdInterface.GetValue("SAE.O2B3S1B_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B3S1$1D_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("组 3, 传感器 1 (O2B3S1)");
+                comboOxygenSensor.Items.Add("组 3, 传感器 1 (O2B3S1$1D_Bit4)");
             }
 
-            value = m_obdInterface.GetValue("SAE.O2B3S2B_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B3S2$1D_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("组 3, 传感器 2 (O2B3S2)");
+                comboOxygenSensor.Items.Add("组 3, 传感器 2 (O2B3S2$1D_Bit5)");
             }
 
-            value = m_obdInterface.GetValue("SAE.O2B4S1B_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B4S1$1D_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("组 4, 传感器 1 (O2B4S1)");
+                comboOxygenSensor.Items.Add("组 4, 传感器 1 (O2B4S1$1D_Bit6)");
             }
 
-            value = m_obdInterface.GetValue("SAE.O2B4S2B_PRESENT", true);
+            value = m_obdInterface.GetValue("SAE.O2B4S2$1D_PRESENT", true);
             if (!value.ErrorDetected && value.BoolValue) {
-                comboOxygenSensor.Items.Add("组 4, 传感器 2 (O2B4S2)");
+                comboOxygenSensor.Items.Add("组 4, 传感器 2 (O2B4S2$1D_Bit7)");
             }
 
             if (comboOxygenSensor.Items.Count > 0) {

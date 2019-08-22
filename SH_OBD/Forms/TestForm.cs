@@ -219,8 +219,7 @@ namespace SH_OBD {
             if (!value.ErrorDetected) {
                 if (!value.BoolValue) {
                     status.Status = "不适用";
-                }
-                else {
+                } else {
                     value = m_obdInterface.GetValue("SAE.AC_STATUS", true);
                     if (!value.ErrorDetected) {
                         status.Status = value.BoolValue ? "完成" : "未完成";
@@ -238,8 +237,7 @@ namespace SH_OBD {
             if (!value.ErrorDetected) {
                 if (!value.BoolValue) {
                     status.Status = "不适用";
-                }
-                else {
+                } else {
                     value = m_obdInterface.GetValue("SAE.O2_STATUS", true);
                     if (!value.ErrorDetected) {
                         status.Status = value.BoolValue ? "完成" : "未完成";
@@ -257,8 +255,7 @@ namespace SH_OBD {
             if (!value.ErrorDetected) {
                 if (!value.BoolValue) {
                     status.Status = "不适用";
-                }
-                else {
+                } else {
                     value = m_obdInterface.GetValue("SAE.O2HTR_STATUS", true);
                     if (!value.ErrorDetected) {
                         status.Status = value.BoolValue ? "完成" : "未完成";
@@ -276,8 +273,7 @@ namespace SH_OBD {
             if (!value.ErrorDetected) {
                 if (!value.BoolValue) {
                     status.Status = "不适用";
-                }
-                else {
+                } else {
                     value = m_obdInterface.GetValue("SAE.EGR_STATUS", true);
                     if (!value.ErrorDetected) {
                         status.Status = value.BoolValue ? "完成" : "未完成";
@@ -331,37 +327,59 @@ namespace SH_OBD {
             }
 
             string strContent = "";
-            //string strHeader;
-            //int counter;
             OBDParameter param = new OBDParameter {
                 OBDRequest = "0902",
                 Service = 9,
                 Parameter = 2,
-                ValueTypes = (int)OBDParameter.EnumValueTypes.String
+                ValueTypes = (int)OBDParameter.EnumValueTypes.ListString
             };
             OBDParameterValue val = m_obdInterface.GetValue(param, true);
             progressBar.Value++;
-            strContent += "VIN: " + val.StringValue;
+            strContent += "VIN:";
+            foreach (string item in val.ListStringValue) {
+                strContent += "\n" + item;
+            }
 
             param.OBDRequest = "0904";
-            param.ValueTypes = (int)OBDParameter.EnumValueTypes.String;
             val = m_obdInterface.GetValue(param, true);
             progressBar.Value++;
-            strContent += "\nCAL ID: " + val.StringValue;
+            strContent += "\n\nCAL ID:";
+            foreach (string item in val.ListStringValue) {
+                strContent += "\n" + item;
+            }
 
             param.OBDRequest = "0906";
-            param.ValueTypes = (int)OBDParameter.EnumValueTypes.String;
             val = m_obdInterface.GetValue(param, true);
             progressBar.Value++;
-            strContent += "\nCVN: " + val.StringValue;
+            strContent += "\n\nCVN:";
+            foreach (string item in val.ListStringValue) {
+                strContent += "\n" + item;
+            }
+
+            //param.OBDRequest = "0908";
+            //val = m_obdInterface.GetValue(param, true);
+            //progressBar.Value++;
+            //strContent += "\n\nIPT:";
+            //foreach (string item in val.ListStringValue) {
+            //    strContent += "," + Utility.Hex2Int(item);
+            //}
 
             param.OBDRequest = "090A";
-            param.ValueTypes = (int)OBDParameter.EnumValueTypes.String;
             val = m_obdInterface.GetValue(param, true);
             progressBar.Value++;
-            strContent += "\nECU名称: " + val.StringValue;
+            strContent += "\n\nECU名称:";
+            foreach (string item in val.ListStringValue) {
+                strContent += "\n" + item;
+            }
 
-            /*if (m_obd2Interface.IsParameterSupported("SAE.O2B1S1A_PRESENT")) {
+            lblVehicleInfo.Text = strContent;
+            progressBar.Value++;
+
+            /*string strContent = "";
+            string strHeader;
+            int counter;
+
+            if (m_obd2Interface.IsParameterSupported("SAE.O2B1S1A_PRESENT")) {
                 strHeader = "PID $13 Bank 1: ";
                 strContent += strHeader;
                 counter = 0;
@@ -524,8 +542,6 @@ namespace SH_OBD {
                     strContent = strContent.Substring(0, strContent.Length - 2);
                 }
             }*/
-            lblVehicleInfo.Text = strContent;
-            progressBar.Value++;
             if (m_obdInterface.GetDevice() == HardwareType.ELM327) {
                 value = m_obdInterface.GetValue("ELM.BATTERY_VOLTAGE", true);
                 if (!value.ErrorDetected) {

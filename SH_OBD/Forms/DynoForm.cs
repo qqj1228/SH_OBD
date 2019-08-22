@@ -44,6 +44,10 @@ namespace SH_OBD {
                 Landscape = true
             };
             pageSetupDialog.Document = printDocument;
+
+            m_RpmValues = new List<DatedValue>();
+            m_KphValues = new List<DatedValue>();
+            LastYRangeEnd = dyno.YRangeEnd;
         }
 
         private void btnStart_Click(object sender, EventArgs e) {
@@ -70,8 +74,8 @@ namespace SH_OBD {
         }
 
         private new void Capture() {
-            m_RpmValues = new List<DatedValue>();
-            m_KphValues = new List<DatedValue>();
+            m_RpmValues.Clear();
+            m_KphValues.Clear();
             OBDParameterValue value;
             DatedValue d_value;
             while (m_Capture) {
@@ -142,15 +146,13 @@ namespace SH_OBD {
             dyno.YData2 = m_TQValue;
             if (m_HPMax != 0.0 && m_TQMax != 0.0) {
                 double YEnd = m_HPMax < m_TQMax ? m_TQMax : m_HPMax;
-                YEnd = Convert.ToInt32(YEnd + 0.5);
-                dyno.YGrid = (YEnd - dyno.YRangeStart) / yScale;
-                while (Convert.ToInt32(YEnd) % Convert.ToInt32(dyno.YGrid) != 0) {
-                    YEnd += 1.0;
+                while (LastYRangeEnd < YEnd) {
+                    LastYRangeEnd *= 2;
                 }
-                if (LastYRangeEnd != YEnd) {
-                    dyno.YRangeEnd = YEnd;
-                    LastYRangeEnd = YEnd;
+                if (dyno.YRangeEnd != LastYRangeEnd) {
+                    dyno.YRangeEnd = LastYRangeEnd;
                 }
+                dyno.YGrid = Math.Round((dyno.YRangeEnd - dyno.YRangeStart) / yScale);
             }
             dyno.ShowData1 = true;
             dyno.ShowData2 = true;
@@ -174,8 +176,8 @@ namespace SH_OBD {
 
         private Image GetDynoImage() {
             Bitmap bitmap = new Bitmap(dyno.Width, dyno.Height);
-            Graphics.FromImage((Image)bitmap).DrawImage(dyno.GetImage(), 0, 0, dyno.Width, dyno.Height);
-            return (Image)bitmap;
+            Graphics.FromImage(bitmap).DrawImage(dyno.GetImage(), 0, 0, dyno.Width, dyno.Height);
+            return bitmap;
         }
 
         private void Print() {
@@ -186,15 +188,17 @@ namespace SH_OBD {
         }
 
         private void btnExportJPEG_Click(object sender, EventArgs e) {
-            SaveFileDialog dialog = new SaveFileDialog();
-            dialog.Title = "作为 JPEG 图片输出";
-            dialog.Filter = "JPEG 文件 (*.jpg)|*.jpg";
-            dialog.FilterIndex = 0;
-            dialog.RestoreDirectory = true;
+            SaveFileDialog dialog = new SaveFileDialog {
+                Title = "作为 JPEG 图片输出",
+                Filter = "JPEG 文件 (*.jpg)|*.jpg",
+                FilterIndex = 0,
+                RestoreDirectory = true
+            };
             dialog.ShowDialog();
             if (dialog.FileName != "") {
                 GetDynoImage().Save(dialog.FileName, ImageFormat.Jpeg);
             }
+            dialog.Dispose();
         }
 
         private void btnReset_Click(object sender, EventArgs e) {
@@ -207,7 +211,7 @@ namespace SH_OBD {
             dyno.XData2 = m_SampleRPM;
             dyno.YData2 = m_TQValue;
             btnStart.Enabled = true;
-            btnReset.Enabled = false;
+            //btnReset.Enabled = false;
             btnOpen.Enabled = true;
         }
 
@@ -223,10 +227,12 @@ namespace SH_OBD {
                 };
                 dialog.ShowDialog();
                 if (dialog.FileName != "") {
-                    DynoRecord record = new DynoRecord();
-                    record.RpmList = m_RpmValues;
-                    record.Weight = m_dVehicleWeight;
-                    record.Label = dyno.Label;
+                    DynoRecord record = new DynoRecord {
+                        RpmList = m_RpmValues,
+                        KphList = m_KphValues,
+                        Weight = m_dVehicleWeight,
+                        Label = dyno.Label
+                    };
                     Type[] typeArray = new Type[] { typeof(List<DatedValue>), typeof(DatedValue) };
                     using (TextWriter writer = new StreamWriter(dialog.FileName)) {
                         new XmlSerializer(typeof(DynoRecord), typeArray).Serialize(writer, record);
@@ -260,6 +266,7 @@ namespace SH_OBD {
             m_dVehicleWeight = dynoRecord.Weight;
             dyno.Label = dynoRecord.Label;
             m_RpmValues = dynoRecord.RpmList;
+            m_KphValues = dynoRecord.KphList;
             Calculate();
             openFileDialog.Dispose();
         }

@@ -17,6 +17,43 @@ namespace SH_OBD {
             return 0.0;
         }
 
+        /// <summary>
+        /// RangeInByte取值为1、2、3，用于处理数据长度分别为1byte、2byte、3byte的值
+        /// </summary>
+        /// <param name="Num"></param>
+        /// <param name="RangeInByte"></param>
+        /// <returns></returns>
+        public static int Int2SInt(int Num, int RangeInByte) {
+            int iRet = 0;
+            uint uNum = (uint)Num;
+            switch (RangeInByte) {
+            case 1:
+                if ((uNum & 0x80) == 0x80) {
+                    iRet = (int)(((~uNum) & 0x7F) + 1) * -1;
+                } else {
+                    iRet = Num;
+                }
+                break;
+            case 2:
+                if ((uNum & 0x8000) == 0x8000) {
+                    iRet = (int)(((~uNum) & 0x7FFF) + 1) * -1;
+                } else {
+                    iRet = Num;
+                }
+                break;
+            case 3:
+                if ((uNum & 0x800000) == 0x800000) {
+                    iRet = (int)(((~uNum) & 0x7FFFFF) + 1) * -1;
+                } else {
+                    iRet = Num;
+                }
+                break;
+            default:
+                throw new ArgumentOutOfRangeException("Wrong RangeInByte");
+            }
+            return iRet;
+        }
+
         public static int Hex2Int(string strHex) {
             int value = 0;
             foreach (char digit in strHex) {

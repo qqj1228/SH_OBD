@@ -69,25 +69,21 @@ namespace SH_OBD {
                 return 5;
             }
             switch (param.Service) {
-                case 1:
-                    return 9;
-                case 2:
-                    return 11;
-                case 3:
-                case 7:
-                    return !bIsMultiline ? 9 : 11;
-                case 4:
-                    return 7;
-                case 5:
-                    return 11;
-                case 9:
-                    if (param.Parameter == 0x06) {
-                        return 11;
-                    } else {
-                        return 13;
-                    }
-                default:
-                    return 9;
+            case 1:
+                return 9;
+            case 2:
+                return 11;
+            case 3:
+            case 7:
+                return bIsMultiline ? 11 : 9;
+            case 4:
+                return 7;
+            case 5:
+                return 11;
+            case 9:
+                return bIsMultiline ? 11 : 9;
+            default:
+                return 9;
             }
         }
     }
