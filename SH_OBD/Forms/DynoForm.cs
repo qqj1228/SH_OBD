@@ -79,14 +79,14 @@ namespace SH_OBD {
             OBDParameterValue value;
             DatedValue d_value;
             while (m_Capture) {
-                value = m_obdInterface.GetValue("SAE.RPM", true);
+                value = m_obdInterface.GetValue("SAE.RPM");
                 if (!value.ErrorDetected) {
                     d_value = new DatedValue(value.DoubleValue) {
                         Date = DateTime.Now
                     };
                     if (Convert.ToDecimal(d_value.Value) >= numFromRPM.Value && Convert.ToDecimal(d_value.Value) <= numToRPM.Value) {
                         m_RpmValues.Add(d_value);
-                        value = m_obdInterface.GetValue("SAE.VSS", false);
+                        value = m_obdInterface.GetValue("SAE.VSS");
                         if (!value.ErrorDetected) {
                             d_value = new DatedValue(value.DoubleValue * m_obdInterface.ActiveProfile.SpeedCalibrationFactor) {
                                 Date = DateTime.Now
@@ -167,9 +167,9 @@ namespace SH_OBD {
         }
 
         private void printDocument1_PrintPage(object sender, PrintPageEventArgs e) {
-            float num1 = (float)e.MarginBounds.Left;
-            float num2 = (float)e.MarginBounds.Right;
-            float num3 = (float)e.MarginBounds.Top;
+            float num1 = e.MarginBounds.Left;
+            float num2 = e.MarginBounds.Right;
+            float num3 = e.MarginBounds.Top;
             float num4 = num2 - num1;
             e.Graphics.DrawImage(dyno.GetImage(), Convert.ToInt32(num1), Convert.ToInt32(num3), Convert.ToInt32(num4), Convert.ToInt32(num4 * 0.6666667f));
         }

@@ -78,21 +78,21 @@
             // 
             // radioDisplayMetric
             // 
+            this.radioDisplayMetric.Checked = true;
             this.radioDisplayMetric.Location = new System.Drawing.Point(19, 51);
             this.radioDisplayMetric.Name = "radioDisplayMetric";
             this.radioDisplayMetric.Size = new System.Drawing.Size(71, 22);
             this.radioDisplayMetric.TabIndex = 1;
+            this.radioDisplayMetric.TabStop = true;
             this.radioDisplayMetric.Text = "公制(&M)";
             this.radioDisplayMetric.Click += new System.EventHandler(this.radioDisplayMetric_Click);
             // 
             // radioDisplayEnglish
             // 
-            this.radioDisplayEnglish.Checked = true;
             this.radioDisplayEnglish.Location = new System.Drawing.Point(19, 26);
             this.radioDisplayEnglish.Name = "radioDisplayEnglish";
             this.radioDisplayEnglish.Size = new System.Drawing.Size(71, 22);
             this.radioDisplayEnglish.TabIndex = 0;
-            this.radioDisplayEnglish.TabStop = true;
             this.radioDisplayEnglish.Text = "英制(&n)";
             this.radioDisplayEnglish.Click += new System.EventHandler(this.radioDisplayEnglish_Click);
             // 

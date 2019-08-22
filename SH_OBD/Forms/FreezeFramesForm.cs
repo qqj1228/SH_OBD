@@ -53,7 +53,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                OBDParameterValue value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                OBDParameterValue value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber));
                 if (value.ErrorDetected) {
                     m_obdInterface.GetLogger().TraceError("Error while requesting SAE.FF_DTC");
                     MessageBox.Show(
@@ -85,7 +85,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber));
                 if (!value.ErrorDetected) {
                     this.BeginInvoke(new Action(() => {
                         freezeFrame.FuelSystem1Status = value.StringValue;
@@ -97,7 +97,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber));
                 if (!value.ErrorDetected) {
                     this.BeginInvoke(new Action(() => {
                         freezeFrame.FuelSystem2Status = value.StringValue;
@@ -116,7 +116,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber));
                 if (!value.ErrorDetected) {
                     this.BeginInvoke(new Action(() => {
                         freezeFrame.CalculatedLoad = value.DoubleValue;
@@ -135,7 +135,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber));
                 if (!value.ErrorDetected) {
                     this.BeginInvoke(new Action(() => {
                         freezeFrame.EngineCoolantTemp = value.DoubleValue;
@@ -154,7 +154,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber));
                 if (!value.ErrorDetected) {
                     this.BeginInvoke(new Action(() => {
                         freezeFrame.STFT1 = value.DoubleValue;
@@ -166,7 +166,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber));
                 if (!value.ErrorDetected) {
                     this.BeginInvoke(new Action(() => {
                         freezeFrame.STFT3 = value.DoubleValue;
@@ -185,7 +185,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber));
                 if (!value.ErrorDetected) {
                     this.BeginInvoke(new Action(() => {
                         freezeFrame.LTFT1 = value.DoubleValue;
@@ -197,7 +197,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber));
                 if (!value.ErrorDetected) {
                     this.BeginInvoke(new Action(() => {
                         freezeFrame.LTFT3 = value.DoubleValue;
@@ -216,7 +216,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber));
                 if (!value.ErrorDetected) {
                     this.BeginInvoke(new Action(() => {
                         freezeFrame.STFT2 = value.DoubleValue;
@@ -228,7 +228,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber));
                 if (!value.ErrorDetected) {
                     this.BeginInvoke(new Action(() => {
                         freezeFrame.STFT4 = value.DoubleValue;
@@ -248,7 +248,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber));
                 if (!value.ErrorDetected) {
                     this.BeginInvoke(new Action(() => {
                         freezeFrame.LTFT2 = value.DoubleValue;
@@ -260,7 +260,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber));
                 if (!value.ErrorDetected) {
                     this.BeginInvoke(new Action(() => {
                         freezeFrame.LTFT4 = value.DoubleValue;
@@ -279,7 +279,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber));
                 if (!value.ErrorDetected) {
                     this.BeginInvoke(new Action(() => {
                         freezeFrame.IntakePressure = value.DoubleValue;
@@ -298,7 +298,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber));
                 if (!value.ErrorDetected) {
                     this.BeginInvoke(new Action(() => {
                         freezeFrame.EngineRPM = value.DoubleValue;
@@ -317,7 +317,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber));
                 if (!value.ErrorDetected) {
                     this.BeginInvoke(new Action(() => {
                         freezeFrame.VehicleSpeed = value.DoubleValue;
@@ -336,7 +336,7 @@ namespace SH_OBD {
                     break;
                 }
 
-                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber), true);
+                value = m_obdInterface.GetValue(parameter.GetFreezeFrameCopy(m_FrameNumber));
                 if (!value.ErrorDetected) {
                     this.BeginInvoke(new Action(() => {
                         freezeFrame.SparkAdvance = value.DoubleValue;

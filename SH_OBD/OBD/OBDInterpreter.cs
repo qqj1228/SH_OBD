@@ -1027,7 +1027,7 @@ namespace SH_OBD {
             return value2;
         }
 
-        public static OBDParameterValue GetMode0102Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
+        public static OBDParameterValue GetMode0102Value(OBDParameter param, OBDResponse response, bool bEnglishUnits = false) {
             OBDParameterValue value2 = new OBDParameterValue();
             int num;
 
@@ -1790,7 +1790,7 @@ namespace SH_OBD {
             }
         }
 
-        public static OBDParameterValue GetValue(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
+        public static OBDParameterValue GetValue(OBDParameter param, OBDResponse response, bool bEnglishUnits = false) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response == null) {
                 value2.ErrorDetected = true;
@@ -1814,7 +1814,7 @@ namespace SH_OBD {
             }
         }
 
-        public static OBDParameterValue GetValue(OBDParameter param, OBDResponseList responses, bool bEnglishUnits) {
+        public static OBDParameterValue GetValue(OBDParameter param, OBDResponseList responses, bool bEnglishUnits = false) {
             if (responses.ResponseCount == 1) {
                 return GetValue(param, responses.GetOBDResponse(0), bEnglishUnits);
             }

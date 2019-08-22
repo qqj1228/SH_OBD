@@ -148,7 +148,7 @@ namespace SH_OBD {
             return false;
         }
 
-        public OBDParameterValue GetValue(string strPID, bool bEnglishUnits) {
+        public OBDParameterValue GetValue(string strPID, bool bEnglishUnits = false) {
             OBDParameter obdParameter = LookupParameter(strPID);
             if (obdParameter != null) {
                 return GetValue(obdParameter, bEnglishUnits);
@@ -160,7 +160,7 @@ namespace SH_OBD {
             return value;
         }
 
-        public OBDParameterValue GetValue(OBDParameter param, bool bEnglishUnits) {
+        public OBDParameterValue GetValue(OBDParameter param, bool bEnglishUnits = false) {
             if (param.PID.Length > 0) {
                 m_log.TraceInfo("Requesting: " + param.PID);
             } else {

@@ -210,10 +210,10 @@ namespace SH_OBD {
             comboSensor1.Enabled = true;
             comboStyle1.Enabled = true;
             comboUnits1.Enabled = true;
-            comboUnits1.SelectedIndex = 0;
-            comboUnits2.SelectedIndex = 0;
-            comboUnits3.SelectedIndex = 0;
-            comboUnits4.SelectedIndex = 0;
+            comboUnits1.SelectedIndex = 1;
+            comboUnits2.SelectedIndex = 1;
+            comboUnits3.SelectedIndex = 1;
+            comboUnits4.SelectedIndex = 1;
             comboStyle1.SelectedIndex = 0;
             comboStyle2.SelectedIndex = 0;
             comboStyle3.SelectedIndex = 0;
@@ -230,10 +230,10 @@ namespace SH_OBD {
                 comboSensor3.Items.Clear();
                 comboSensor4.Items.Clear();
                 foreach (OBDParameter obdParameter in m_obdInterface.SupportedParameterList(1)) {
-                    comboSensor1.Items.Add((object)obdParameter);
-                    comboSensor2.Items.Add((object)obdParameter);
-                    comboSensor3.Items.Add((object)obdParameter);
-                    comboSensor4.Items.Add((object)obdParameter);
+                    comboSensor1.Items.Add(obdParameter);
+                    comboSensor2.Items.Add(obdParameter);
+                    comboSensor3.Items.Add(obdParameter);
+                    comboSensor4.Items.Add(obdParameter);
                 }
             } else {
                 IsPlotting = false;
@@ -291,7 +291,7 @@ namespace SH_OBD {
             }
             if (0 < m_arraySensorValues[index].Count) {
                 for (int i = 0; i < m_arraySensorValues[index].Count; i++) {
-                    if (DateTime.Now.Subtract(m_arraySensorValues[index][i].Date).TotalSeconds > (double)Convert.ToInt32(numHistory.Value)) {
+                    if (DateTime.Now.Subtract(m_arraySensorValues[index][i].Date).TotalSeconds > Convert.ToInt32(numHistory.Value)) {
                         m_arraySensorValues[index].RemoveAt(i);
                         i--;
                     }
@@ -333,10 +333,10 @@ namespace SH_OBD {
         }
 
         private void numHistory_ValueChanged(object sender, EventArgs e) {
-            chart1.XRangeStart = (double)Convert.ToSingle(numHistory.Value) * -1.0;
-            chart2.XRangeStart = (double)Convert.ToSingle(numHistory.Value) * -1.0;
-            chart3.XRangeStart = (double)Convert.ToSingle(numHistory.Value) * -1.0;
-            chart4.XRangeStart = (double)Convert.ToSingle(numHistory.Value) * -1.0;
+            chart1.XRangeStart = Convert.ToSingle(numHistory.Value) * -1.0;
+            chart2.XRangeStart = Convert.ToSingle(numHistory.Value) * -1.0;
+            chart3.XRangeStart = Convert.ToSingle(numHistory.Value) * -1.0;
+            chart4.XRangeStart = Convert.ToSingle(numHistory.Value) * -1.0;
         }
 
         private void ComboStyle_SelectedIndexChanged(object sender, EventArgs e) {
@@ -439,8 +439,8 @@ namespace SH_OBD {
 
         private void ComboSensorOrUnits_Update(List<DatedValue> arraySensorValues, DGChartControl chart, ComboBox comboSensor, ComboBox comboUnits) {
             arraySensorValues.Clear();
-            chart.XData1 = (double[])null;
-            chart.YData1 = (double[])null;
+            chart.XData1 = null;
+            chart.YData1 = null;
             if (comboSensor.Items.Count == 0) {
                 return;
             }

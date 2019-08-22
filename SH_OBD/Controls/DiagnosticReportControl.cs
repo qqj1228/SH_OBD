@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -598,6 +599,10 @@ namespace SH_OBD {
             m_bShowEngineRPM = false;
             m_bShowVehicleSpeed = false;
             m_bShowSparkAdvance = false;
+
+            SetStyle(ControlStyles.UserPaint, true);
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            SetStyle(ControlStyles.DoubleBuffer, true);
         }
 
         public void InitializeComponent() {
@@ -897,8 +902,8 @@ namespace SH_OBD {
             layoutRectangle11.Y = font3.Height + layoutRectangle11.Y;
             g.DrawString("进气歧管压力", font3, brush4, layoutRectangle7);
             if (flag && m_bShowIntakePressure) {
-                double num4 = IntakePressure * 3.38639;
-                double num5 = IntakePressure;
+                double num4 = IntakePressure;
+                double num5 = Math.Round(IntakePressure * 0.2953, 2);
                 g.DrawString(num5.ToString("f4"), font3, brush4, layoutRectangle8, format);
                 g.DrawString(num4.ToString("f4"), font3, brush4, layoutRectangle10, format);
             } else {
@@ -919,8 +924,8 @@ namespace SH_OBD {
             g.FillRectangle(brush5, (int)layoutRectangle11.X, (int)layoutRectangle11.Y, (int)layoutRectangle11.Width, (int)layoutRectangle11.Height);
             g.DrawString("车辆速度", font3, brush4, layoutRectangle7);
             if (flag && m_bShowVehicleSpeed) {
-                double num4 = VehicleSpeed * 1.609344;
-                double num5 = VehicleSpeed;
+                double num4 = VehicleSpeed;
+                double num5 = Math.Round(VehicleSpeed * 0.6214, 2);
                 g.DrawString(num5.ToString("f4"), font3, brush4, layoutRectangle8, format);
                 g.DrawString(num4.ToString("f4"), font3, brush4, layoutRectangle10, format);
             } else {
@@ -976,8 +981,8 @@ namespace SH_OBD {
             g.FillRectangle(brush5, (int)layoutRectangle11.X, (int)layoutRectangle11.Y, (int)layoutRectangle11.Width, (int)layoutRectangle11.Height);
             g.DrawString("发动机冷却液温度", font3, brush4, layoutRectangle7);
             if (flag && m_bShowEngineCoolantTemp) {
-                double num4 = (EngineCoolantTemp - 32.0) * (5.0 / 9.0);
-                double num5 = EngineCoolantTemp;
+                double num4 = EngineCoolantTemp;
+                double num5 = Math.Round(EngineCoolantTemp * 1.8 + 32, 2);
                 g.DrawString(num5.ToString("f4"), font3, brush4, layoutRectangle8, format);
                 g.DrawString(num4.ToString("f4"), font3, brush4, layoutRectangle10, format);
             } else {
