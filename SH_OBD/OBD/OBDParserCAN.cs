@@ -4,10 +4,8 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace SH_OBD {
-    public class OBDParser_ISO15765_4_CAN11 : OBDParser {
-        protected const int HEADER_LENGTH = 3;
-
-        public override OBDResponseList Parse(OBDParameter param, string response) {
+    public abstract class OBDParserCAN : OBDParser {
+        public OBDResponseList Parse(OBDParameter param, string response, int headLen, int offset) {
             if (string.IsNullOrEmpty(response)) {
                 response = "";
             }
@@ -24,20 +22,20 @@ namespace SH_OBD {
             List<List<string>> groups = new List<List<string>>();
             List<string> group = new List<string> { lines[0] };
             groups.Add(group);
-            if (lines[0].Length < OBDParser_ISO15765_4_CAN11.HEADER_LENGTH) {
+            if (lines[0].Length < headLen) {
                 responseList.ErrorDetected = true;
                 return responseList;
             }
 
-            string header = lines[0].Substring(0, OBDParser_ISO15765_4_CAN11.HEADER_LENGTH);
+            string header = lines[0].Substring(0, headLen);
             for (int i = 1; i < lines.Count; i++) {
-                if (lines[i].Length >= OBDParser_ISO15765_4_CAN11.HEADER_LENGTH) {
-                    if (lines[i].Substring(0, OBDParser_ISO15765_4_CAN11.HEADER_LENGTH).CompareTo(header) == 0)
+                if (lines[i].Length >= headLen) {
+                    if (lines[i].Substring(0, headLen).CompareTo(header) == 0) {
                         group.Add(lines[i]);
-                    else {
+                    } else {
                         group = new List<string> { lines[i] };
                         groups.Add(group);
-                        header = lines[i].Substring(0, OBDParser_ISO15765_4_CAN11.HEADER_LENGTH);
+                        header = lines[i].Substring(0, headLen);
                     }
                 } else {
                     responseList.ErrorDetected = true;
@@ -50,11 +48,11 @@ namespace SH_OBD {
                 if (groups[i].Count > 1) {
                     bIsMultiline = true;
                 }
-                int dataStartIndex1 = GetDataStartIndex(param, bIsMultiline, false);
+                int dataStartIndex1 = GetDataStartIndex(param, bIsMultiline, false) + offset;
                 int length1 = groups[i][0].Length - dataStartIndex1;
-                obd_response.Header = groups[i][0].Substring(0, OBDParser_ISO15765_4_CAN11.HEADER_LENGTH);
+                obd_response.Header = groups[i][0].Substring(0, headLen);
                 obd_response.Data = length1 > 0 ? groups[i][0].Substring(dataStartIndex1, length1) : "";
-                int dataStartIndex2 = GetDataStartIndex(param, bIsMultiline, true);
+                int dataStartIndex2 = GetDataStartIndex(param, bIsMultiline, true) + offset;
                 for (int j = 1; j < groups[i].Count; j++) {
                     int length2 = groups[i][j].Length - dataStartIndex2;
                     obd_response.Data += (length2 > 0 ? groups[i][j].Substring(dataStartIndex2, length2) : "");
@@ -85,6 +83,22 @@ namespace SH_OBD {
             default:
                 return 9;
             }
+        }
+    }
+
+    public class OBDParser_ISO15765_4_CAN11 : OBDParserCAN {
+        protected const int HEADER_LENGTH = 3;
+
+        public override OBDResponseList Parse(OBDParameter param, string response) {
+            return Parse(param, response, HEADER_LENGTH, 0);
+        }
+    }
+
+    public class OBDParser_ISO15765_4_CAN29 : OBDParserCAN {
+        protected const int HEADER_LENGTH = 8;
+
+        public override OBDResponseList Parse(OBDParameter param, string response) {
+            return Parse(param, response, HEADER_LENGTH, 5);
         }
     }
 }

@@ -273,43 +273,43 @@ namespace SH_OBD {
                         };
 
                         switch (tokens[6]) {
-                            case "Airflow":
-                                param.Category = 0; break;
-                            case "DTC":
-                                param.Category = 1; break;
-                            case "Emissions":
-                                param.Category = 2; break;
-                            case "Fuel":
-                                param.Category = 3; break;
-                            case "General":
-                                param.Category = 4; break;
-                            case "O2":
-                                param.Category = 5; break;
-                            case "Powertrain":
-                                param.Category = 6; break;
-                            case "Speed":
-                                param.Category = 7; break;
-                            case "Temperature":
-                                param.Category = 8; break;
+                        case "Airflow":
+                            param.Category = 0; break;
+                        case "DTC":
+                            param.Category = 1; break;
+                        case "Emissions":
+                            param.Category = 2; break;
+                        case "Fuel":
+                            param.Category = 3; break;
+                        case "General":
+                            param.Category = 4; break;
+                        case "O2":
+                            param.Category = 5; break;
+                        case "Powertrain":
+                            param.Category = 6; break;
+                        case "Speed":
+                            param.Category = 7; break;
+                        case "Temperature":
+                            param.Category = 8; break;
                         }
                         switch (tokens[7]) {
-                            case "Generic":
-                                param.Type = 0; break;
-                            case "Manufacturer":
-                                param.Type = 1; break;
-                            case "Scripted":
-                                param.Type = 2; break;
+                        case "Generic":
+                            param.Type = 0; break;
+                        case "Manufacturer":
+                            param.Type = 1; break;
+                        case "Scripted":
+                            param.Type = 2; break;
                         }
 
                         switch (tokens[8]) {
-                            case "SAE":
-                                param.Manufacturer = 0; break;
-                            case "GM":
-                                param.Manufacturer = 1; break;
-                            case "Ford":
-                                param.Manufacturer = 2; break;
-                            case "ProScan":
-                                param.Manufacturer = 3; break;
+                        case "SAE":
+                            param.Manufacturer = 0; break;
+                        case "GM":
+                            param.Manufacturer = 1; break;
+                        case "Ford":
+                            param.Manufacturer = 2; break;
+                        case "ProScan":
+                            param.Manufacturer = 3; break;
                         }
 
                         param.Priority = int.Parse(tokens[9]);
@@ -382,26 +382,26 @@ namespace SH_OBD {
         private void SetDevice(HardwareType device) {
             CommSettings.HardwareIndex = device;
             switch (device) {
-                case HardwareType.ELM327:
-                    m_log.TraceInfo("Set device to ELM327");
-                    m_obdDevice = new OBDDeviceELM327(m_log);
-                    break;
-                case HardwareType.ELM320:
-                    m_log.TraceInfo("Set device to ELM320");
-                    m_obdDevice = new OBDDeviceELM320(m_log);
-                    break;
-                case HardwareType.ELM322:
-                    m_log.TraceInfo("Set device to ELM322");
-                    m_obdDevice = new OBDDeviceELM322(m_log);
-                    break;
-                case HardwareType.ELM323:
-                    m_log.TraceInfo("Set device to ELM323");
-                    m_obdDevice = new OBDDeviceELM323(m_log);
-                    break;
-                default:
-                    m_log.TraceInfo("Set device to ELM327");
-                    m_obdDevice = new OBDDeviceELM327(m_log);
-                    break;
+            case HardwareType.ELM327:
+                m_log.TraceInfo("Set device to ELM327");
+                m_obdDevice = new OBDDeviceELM327(m_log);
+                break;
+            case HardwareType.ELM320:
+                m_log.TraceInfo("Set device to ELM320");
+                m_obdDevice = new OBDDeviceELM320(m_log);
+                break;
+            case HardwareType.ELM322:
+                m_log.TraceInfo("Set device to ELM322");
+                m_obdDevice = new OBDDeviceELM322(m_log);
+                break;
+            case HardwareType.ELM323:
+                m_log.TraceInfo("Set device to ELM323");
+                m_obdDevice = new OBDDeviceELM323(m_log);
+                break;
+            default:
+                m_log.TraceInfo("Set device to ELM327");
+                m_obdDevice = new OBDDeviceELM327(m_log);
+                break;
             }
         }
 

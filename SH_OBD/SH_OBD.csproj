@@ -122,13 +122,8 @@
     <Compile Include="OBD\OBDParameter.cs" />
     <Compile Include="OBD\OBDParameterValue.cs" />
     <Compile Include="OBD\OBDParser.cs" />
-    <Compile Include="OBD\OBDParser_ISO14230_4_KWP.cs" />
-    <Compile Include="OBD\OBDParser_ISO15765_4_CAN11.cs" />
-    <Compile Include="OBD\OBDParser_ISO15765_4_CAN29.cs" />
-    <Compile Include="OBD\OBDParser_ISO9141_2.cs" />
-    <Compile Include="OBD\OBDParser_J1850_PWM.cs" />
-    <Compile Include="OBD\OBDParser_J1850_VPW.cs" />
-    <Compile Include="OBD\OBDResponse.cs" />
+    <Compile Include="OBD\OBDParserNotCAN.cs" />
+    <Compile Include="OBD\OBDParserCAN.cs" />
     <Compile Include="OBD\OBDResponseList.cs" />
     <Compile Include="Forms\OxygenSensorsForm.cs">
       <SubType>Form</SubType>

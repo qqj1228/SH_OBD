@@ -1850,11 +1850,12 @@ namespace SH_OBD {
                         value2.StringValue = "ON";
                         value2.ShortStringValue = "ON";
                         return value2;
+                    } else {
+                        value2.DoubleValue = 0.0;
+                        value2.StringValue = "OFF";
+                        value2.ShortStringValue = "OFF";
+                        return value2;
                     }
-                    value2.DoubleValue = 0.0;
-                    value2.StringValue = "OFF";
-                    value2.ShortStringValue = "OFF";
-                    return value2;
                 }
                 if ((param.Parameter == 1) && (param.SubParameter == 1)) {
                     OBDParameterValue value3 = new OBDParameterValue {
