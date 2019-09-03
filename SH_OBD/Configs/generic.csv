@@ -7,25 +7,25 @@ SAE.PERMANENT_DTCS,永久DTC码列表,0A,10,0,0,DTC,Generic,SAE,3,,,,,,,0,0,1,1
 SAE.MISFIRE_SUPPORT,失火监测支持,0101,1,1,2,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
 SAE.FUEL_SUPPORT,燃油系统监测支持,0101,1,1,3,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
 SAE.CCM_SUPPORT,综合组件监测支持,0101,1,1,4,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.MISFIRE_STATUS,失火监测已完成,0101,1,1,5,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.FUEL_STATUS,燃油系统监测已完成,0101,1,1,6,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.CCM_STATUS,综合组件监测已完成,0101,1,1,7,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.CAT_SUPPORT,催化器监测支持,0101,1,1,8,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.HCAT_SUPPORT,加热的催化器监测支持,0101,1,1,9,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.EVAP_SUPPORT,燃油蒸发系统监测支持,0101,1,1,10,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.AIR_SUPPORT,二次空气系统监测支持,0101,1,1,11,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.AC_SUPPORT,空调 (A/C) 系统制冷剂监测支持,0101,1,1,12,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.O2_SUPPORT,氧传感器监测支持,0101,1,1,13,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.O2HTR_SUPPORT,加热的氧传感器监测支持,0101,1,1,14,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.EGR_SUPPORT,EGR系统监测支持,0101,1,1,15,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.CAT_STATUS,催化器监测已完成,0101,1,1,16,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.HCAT_STATUS,加热的催化器监测已完成,0101,1,1,17,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.EVAP_STATUS,燃油蒸发系统监测已完成,0101,1,1,18,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.AIR_STATUS,二次空气系统监测已完成,0101,1,1,19,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.AC_STATUS,空调 (A/C) 系统制冷剂监测已完成,0101,1,1,20,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.O2_STATUS,氧传感器监测已完成,0101,1,1,21,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.O2HTR_STATUS,加热的氧传感器监测已完成,0101,1,1,22,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
-SAE.EGR_STATUS,EGR系统监测已完成,0101,1,1,23,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.MISFIRE_STATUS,失火监测已完成,0101,1,1,6,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.FUEL_STATUS,燃油系统监测已完成,0101,1,1,7,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.CCM_STATUS,综合组件监测已完成,0101,1,1,8,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.CAT_SUPPORT,催化器监测支持,0101,1,1,9,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.HCAT_SUPPORT,加热的催化器监测支持,0101,1,1,10,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.EVAP_SUPPORT,燃油蒸发系统监测支持,0101,1,1,11,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.AIR_SUPPORT,二次空气系统监测支持,0101,1,1,12,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.AC_SUPPORT,空调 (A/C) 系统制冷剂监测支持,0101,1,1,13,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2_SUPPORT,氧传感器监测支持,0101,1,1,14,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2HTR_SUPPORT,加热的氧传感器监测支持,0101,1,1,15,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.EGR_SUPPORT,EGR系统监测支持,0101,1,1,16,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.CAT_STATUS,催化器监测已完成,0101,1,1,17,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.HCAT_STATUS,加热的催化器监测已完成,0101,1,1,18,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.EVAP_STATUS,燃油蒸发系统监测已完成,0101,1,1,19,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.AIR_STATUS,二次空气系统监测已完成,0101,1,1,20,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.AC_STATUS,空调 (A/C) 系统制冷剂监测已完成,0101,1,1,21,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2_STATUS,氧传感器监测已完成,0101,1,1,22,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.O2HTR_STATUS,加热的氧传感器监测已完成,0101,1,1,23,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
+SAE.EGR_STATUS,EGR系统监测已完成,0101,1,1,24,Emissions,Generic,SAE,3,,,0,1,0,1,1,1,1,0
 SAE.FF_DTC,引起冻结帧存储的DTC,0202,2,2,0,DTC,Generic,SAE,3,,,,,,,0,0,1,0
 SAE.FUEL1_STATUS,$03: 燃油系统 1 状态,0103,1,3,0,Fuel,Generic,SAE,3,,,,,,,0,0,1,0
 SAE.FUEL2_STATUS,$03: 燃油系统 2 状态,0103,1,3,1,Fuel,Generic,SAE,3,,,,,,,0,0,1,0
@@ -133,25 +133,25 @@ SAE.CATB2S2_TEMP,$3F: 催化器温度 (组 2 传感器 2),013F,1,63,0,Temperatur
 SAE.MISFIRE_ENABLED,$41: 失火监测已启用 (本次驾驶循环),0141,1,65,0,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
 SAE.FUEL_ENABLED,$41: 燃油系统监测已启用 (本次驾驶循环),0141,1,65,1,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
 SAE.CCM_ENABLED,$41: 综合组件监测已启用 (本次驾驶循环),0141,1,65,2,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.MISFIRE_COMPL,$41: 失火监测已完成 (本次驾驶循环),0141,1,65,3,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.FUEL_COMPL,$41: 燃油系统监测已完成 (本次驾驶循环),0141,1,65,4,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.CCM_COMPL,$41: 综合组件监测已完成 (本次驾驶循环),0141,1,65,5,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.CAT_ENABLED,$41: 催化器监测已启用 (本次驾驶循环),0141,1,65,6,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.HCAT_ENABLED,$41: 加热催化器监测已启用 (本次驾驶循环),0141,1,65,7,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.EVAP_ENABLED,$41: 燃油蒸发系统监测已启用 (本次驾驶循环),0141,1,65,8,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.AIR_ENABLED,$41: 二次空气系统检测已启用 (本次驾驶循环),0141,1,65,9,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.AC_ENABLED,$41: 空调 (A/C) 系统制冷剂监测已启用 (本次驾驶循环),0141,1,65,10,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.O2_ENABLED,$41: 氧传感器监测已启用 (本次驾驶循环),0141,1,65,11,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.O2HTR_ENABLED,$41: 氧传感器加热器监测已启用 (本次驾驶循环),0141,1,65,12,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.EGR_ENABLED,$41: EGR系统监测已启用 (本次驾驶循环),0141,1,65,13,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.CAT_COMPL,$41: 催化器监测已完成 (本次驾驶循环),0141,1,65,14,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.HCAT_COMPL,$41: 加热催化器监测已完成 (本次驾驶循环),0141,1,65,15,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.EVAP_COMPL,$41: 燃油蒸发系统监测已完成 (本次驾驶循环),0141,1,65,16,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.AIR_COMPL,$41: 二次空气系统检测已完成 (本次驾驶循环),0141,1,65,17,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.AC_COMPL,$41: 空调 (A/C) 系统制冷剂监测已完成 (本次驾驶循环),0141,1,65,18,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.O2_COMPL,$41: 氧传感器监测已完成 (本次驾驶循环),0141,1,65,19,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.O2HTR_COMPL,$41: 氧传感器加热器监测已完成 (本次驾驶循环),0141,1,65,20,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
-SAE.EGR_COMPL,$41: EGR系统监测已完成 (本次驾驶循环),0141,1,65,21,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.MISFIRE_COMPL,$41: 失火监测已完成 (本次驾驶循环),0141,1,65,4,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.FUEL_COMPL,$41: 燃油系统监测已完成 (本次驾驶循环),0141,1,65,5,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.CCM_COMPL,$41: 综合组件监测已完成 (本次驾驶循环),0141,1,65,6,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.CAT_ENABLED,$41: 催化器监测已启用 (本次驾驶循环),0141,1,65,7,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.HCAT_ENABLED,$41: 加热催化器监测已启用 (本次驾驶循环),0141,1,65,8,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.EVAP_ENABLED,$41: 燃油蒸发系统监测已启用 (本次驾驶循环),0141,1,65,9,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.AIR_ENABLED,$41: 二次空气系统检测已启用 (本次驾驶循环),0141,1,65,10,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.AC_ENABLED,$41: 空调 (A/C) 系统制冷剂监测已启用 (本次驾驶循环),0141,1,65,11,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.O2_ENABLED,$41: 氧传感器监测已启用 (本次驾驶循环),0141,1,65,12,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.O2HTR_ENABLED,$41: 氧传感器加热器监测已启用 (本次驾驶循环),0141,1,65,13,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.EGR_ENABLED,$41: EGR系统监测已启用 (本次驾驶循环),0141,1,65,14,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.CAT_COMPL,$41: 催化器监测已完成 (本次驾驶循环),0141,1,65,15,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.HCAT_COMPL,$41: 加热催化器监测已完成 (本次驾驶循环),0141,1,65,16,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.EVAP_COMPL,$41: 燃油蒸发系统监测已完成 (本次驾驶循环),0141,1,65,17,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.AIR_COMPL,$41: 二次空气系统检测已完成 (本次驾驶循环),0141,1,65,18,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.AC_COMPL,$41: 空调 (A/C) 系统制冷剂监测已完成 (本次驾驶循环),0141,1,65,19,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.O2_COMPL,$41: 氧传感器监测已完成 (本次驾驶循环),0141,1,65,20,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.O2HTR_COMPL,$41: 氧传感器加热器监测已完成 (本次驾驶循环),0141,1,65,21,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
+SAE.EGR_COMPL,$41: EGR系统监测已完成 (本次驾驶循环),0141,1,65,22,Emissions,Generic,SAE,3,,,,,,,1,1,1,0
 SAE.ECM_VOLTS,$42: 控制模块电压,0142,1,66,0,General,Generic,SAE,2,V,V,0,65.535,0,65.535,1,0,0,0
 SAE.LOAD_ABS,$43: 绝对负荷,0143,1,67,0,General,Generic,SAE,1,%,%,0,25700,0,25700,1,0,0,0
 SAE.LAMBDA,$44: 指令的当量率,0144,1,68,0,O2,Generic,SAE,1,,,0,2,0,2,1,0,0,0
@@ -180,3 +180,4 @@ SAE.LGSO2FT4,$58: 长时第二氧传感器燃油修正 - 组 4,0158,1,88,1,O2,Ge
 SAE.FRP_ABS,$59: 燃油导轨绝对压力,0159,1,89,0,Fuel,Generic,SAE,1,psi,kPa,0,95050.5,0,655350,1,0,0,0
 SAE.APP_R,$5A: 油门踏板相对位置,015A,1,90,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0
 ELM.BATTERY_VOLTAGE,电池电压,ATRV,0,0,0,General,Generic,ELM,3,V,V,0,100,0,100,1,0,0,0
+SAE.BAT_PWR,$5B: 混动/EV电池组剩余电量,015B,1,91,0,General,Generic,SAE,1,%,%,0,100,0,100,1,0,0,0

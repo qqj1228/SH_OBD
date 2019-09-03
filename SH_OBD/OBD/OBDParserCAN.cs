@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace SH_OBD {
     public abstract class OBDParserCAN : OBDParser {
-        public OBDResponseList Parse(OBDParameter param, string response, int headLen, int offset) {
+        public OBDResponseList Parse(OBDParameter param, string response, int headLen) {
             if (string.IsNullOrEmpty(response)) {
                 response = "";
             }
@@ -48,11 +48,11 @@ namespace SH_OBD {
                 if (groups[i].Count > 1) {
                     bIsMultiline = true;
                 }
-                int dataStartIndex1 = GetDataStartIndex(param, bIsMultiline, false) + offset;
+                int dataStartIndex1 = GetDataStartIndex(headLen, param, bIsMultiline, false);
                 int length1 = groups[i][0].Length - dataStartIndex1;
                 obd_response.Header = groups[i][0].Substring(0, headLen);
                 obd_response.Data = length1 > 0 ? groups[i][0].Substring(dataStartIndex1, length1) : "";
-                int dataStartIndex2 = GetDataStartIndex(param, bIsMultiline, true) + offset;
+                int dataStartIndex2 = GetDataStartIndex(headLen, param, bIsMultiline, true);
                 for (int j = 1; j < groups[i].Count; j++) {
                     int length2 = groups[i][j].Length - dataStartIndex2;
                     obd_response.Data += (length2 > 0 ? groups[i][j].Substring(dataStartIndex2, length2) : "");
@@ -62,27 +62,38 @@ namespace SH_OBD {
             return responseList;
         }
 
-        protected int GetDataStartIndex(OBDParameter param, bool bIsMultiline, bool bConsecutiveLine) {
+        protected int GetDataStartIndex(int headLen, OBDParameter param, bool bIsMultiline, bool bConsecutiveLine) {
+            int iRet;
             if (bConsecutiveLine) {
-                return 5;
+                // 连续帧
+                return headLen + 2;
             }
             switch (param.Service) {
             case 1:
-                return 9;
+                iRet = headLen + 6;
+                break;
             case 2:
-                return 11;
+                iRet = headLen + 8;
+                break;
             case 3:
             case 7:
-                return bIsMultiline ? 11 : 9;
+            case 0x0A:
+                iRet = headLen + 6;
+                break;
             case 4:
-                return 7;
+                iRet = headLen + 4;
+                break;
             case 5:
-                return 11;
+                iRet = headLen + 8;
+                break;
             case 9:
-                return bIsMultiline ? 11 : 9;
+                iRet = headLen + 6;
+                break;
             default:
-                return 9;
+                iRet = headLen + 6;
+                break;
             }
+            return bIsMultiline ? iRet + 2 : iRet;
         }
     }
 
@@ -90,7 +101,7 @@ namespace SH_OBD {
         protected const int HEADER_LENGTH = 3;
 
         public override OBDResponseList Parse(OBDParameter param, string response) {
-            return Parse(param, response, HEADER_LENGTH, 0);
+            return Parse(param, response, HEADER_LENGTH);
         }
     }
 
@@ -98,7 +109,7 @@ namespace SH_OBD {
         protected const int HEADER_LENGTH = 8;
 
         public override OBDResponseList Parse(OBDParameter param, string response) {
-            return Parse(param, response, HEADER_LENGTH, 5);
+            return Parse(param, response, HEADER_LENGTH);
         }
     }
 }

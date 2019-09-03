@@ -24,7 +24,7 @@ namespace SH_OBD {
         /// <param name="RangeInByte"></param>
         /// <returns></returns>
         public static int Int2SInt(int Num, int RangeInByte) {
-            int iRet = 0;
+            int iRet;
             uint uNum = (uint)Num;
             switch (RangeInByte) {
             case 1:
@@ -64,7 +64,7 @@ namespace SH_OBD {
         }
 
         public static int Hex2Int(char digit) {
-            digit = Char.ToUpperInvariant(digit);
+            digit = char.ToUpperInvariant(digit);
             if (digit >= 'A' && digit <= 'F') {
                 return Convert.ToInt32(digit - 'A' + 0xA);
             }
@@ -88,8 +88,22 @@ namespace SH_OBD {
             } else {
                 value += '0';
             }
-            return Char.ToString(Convert.ToChar(value));
+            return char.ToString(Convert.ToChar(value));
         }
+
+        public static string HexStrToASCIIStr(string strHex) {
+            string str = "";
+            if (strHex.Length > 0) {
+                for (int i = 0; i < strHex.Length; i += 2) {
+                    int num = Hex2Int(strHex.Substring(i, 2));
+                    if (num != 0) {
+                        str += new string((char)num, 1);
+                    }
+                }
+            }
+            return str;
+        }
+
     }
 
     // 获取文件版本类

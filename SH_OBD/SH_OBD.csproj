@@ -117,6 +117,7 @@
     <Compile Include="OBD\OBDDeviceELM322.cs" />
     <Compile Include="OBD\OBDDeviceELM323.cs" />
     <Compile Include="OBD\OBDDeviceELM327.cs" />
+    <Compile Include="OBD\OBDInterpreterPID.cs" />
     <Compile Include="OBD\OBDInterface.cs" />
     <Compile Include="OBD\OBDInterpreter.cs" />
     <Compile Include="OBD\OBDParameter.cs" />

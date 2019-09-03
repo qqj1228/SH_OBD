@@ -43,7 +43,11 @@ namespace SH_OBD {
             }
             for (int i = 0; i < groups.Count; i++) {
                 OBDResponse obd_response = new OBDResponse();
-                int dataStartIndex = GetDataStartIndex(param);
+                bool bIsMultiline = false;
+                if (groups[i].Count > 1) {
+                    bIsMultiline = true;
+                }
+                int dataStartIndex = GetDataStartIndex(headLen, param, bIsMultiline);
                 int length1 = groups[i][0].Length - dataStartIndex - 2;
                 obd_response.Header = groups[i][0].Substring(0, headLen);
                 obd_response.Data = length1 > 0 ? groups[i][0].Substring(dataStartIndex, length1) : "";
@@ -56,23 +60,31 @@ namespace SH_OBD {
             return responseList;
         }
 
-        protected int GetDataStartIndex(OBDParameter param) {
+        protected int GetDataStartIndex(int headLen, OBDParameter param, bool bIsMultiline) {
+            int iRet;
             switch (param.Service) {
             case 1:
-                return 10;
+                iRet = headLen + 4;
+                break;
             case 2:
-                return 12;
+                iRet = headLen + 6;
+                break;
             case 3:
             case 4:
-                return 8;
-            case 5:
-                return 12;
             case 7:
-                return 8;
+            case 0x0A:
+                iRet = headLen + 2;
+                break;
+            case 5:
+                iRet = headLen + 6;
+                break;
             case 9:
-                return param.Parameter % 2 == 0 ? 12 : 10;
+                return param.Parameter % 2 == 0 ? headLen + 6 : headLen + 4;
+            default:
+                iRet = headLen + 4;
+                break;
             }
-            return 10;
+            return bIsMultiline ? iRet + 2 : iRet;
         }
     }
 
