@@ -23,10 +23,10 @@ namespace SH_OBD {
         public int BaudRate {
             get {
                 switch (BaudRateIndex) {
-                    case 0: return 9600;
-                    case 1: return 38400;
-                    case 2: return 115200;
-                    default: return 9600;
+                case 0: return 9600;
+                case 1: return 38400;
+                case 2: return 115200;
+                default: return 9600;
                 }
             }
         }
@@ -36,8 +36,7 @@ namespace SH_OBD {
         }
 
         [XmlIgnore]
-        public static string[] ProtocolNames = new string[]
-        {
+        public static string[] ProtocolNames = new string[] {
             "自动",
             "SAE J1850 PWM (41.6K 波特率)",
             "SAE J1850 VPW (10.4K 波特率)",
@@ -176,6 +175,33 @@ namespace SH_OBD {
         public int Width;
         public int AspectRatio;
         public int RimDiameter;
+    }
+
+    [Serializable]
+    public class DBandMES {
+        public string UserName { get; set; }
+        public string PassWord { get; set; }
+        public string DBName { get; set; }
+        public string IP { get; set; }
+        public string Port { get; set; }
+        public string WebServiceAddress { get; set; }
+        public string WebServiceName { get; set; }
+        public string WebServiceMethods { get; set; }
+
+        public DBandMES() {
+            UserName = "sa";
+            PassWord = "sh49";
+            DBName = "SH_OBD";
+            IP = "127.0.0.1";
+            Port = "1433";
+            WebServiceAddress = "http://193.28.6.4:1908/";
+            WebServiceName = "Wes_DeviceTestData_MES";
+            WebServiceMethods = "WriteDataToMes";
+        }
+
+        public string[] GetMethodArray() {
+            return WebServiceMethods.Split(',');
+        }
     }
 
 }

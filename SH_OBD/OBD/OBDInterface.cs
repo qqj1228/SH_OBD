@@ -13,6 +13,7 @@ namespace SH_OBD {
         private const string m_vehicles_db = ".\\configs\\vehicles.db";
         private const string m_settings_xml = ".\\configs\\settings.xml";
         private const string m_userprefs_xml = ".\\configs\\userprefs.xml";
+        private const string m_dbandMES_xml = ".\\configs\\dbandMES.xml";
 
         public delegate void __Delegate_OnConnect();
         public delegate void __Delegate_OnDisconnect();
@@ -20,21 +21,26 @@ namespace SH_OBD {
         public event __Delegate_OnConnect OnConnect;
 
         private OBDDevice m_obdDevice;
+        private readonly OBDInterpreter m_obdInterpreter;
         private List<DTC> m_listDTC;
         private readonly List<OBDParameter> m_listAllParameters;
         private readonly List<OBDParameter> m_listSupportedParameters;
-        private readonly Logger m_log;
+        public readonly Logger m_log;
         public UserPreferences UserPreferences { get; private set; }
         public Settings CommSettings { get; private set; }
+        public DBandMES DBandMES { get; private set; }
         public List<VehicleProfile> VehicleProfiles { get; private set; }
 
         public OBDInterface() {
             m_log = new Logger("./log", EnumLogLevel.LogLevelAll, true, 100);
+            m_log.TraceInfo("==================================================================");
             m_log.TraceInfo("==================== START Ver: " + MainFileVersion.AssemblyVersion + " ====================");
             m_listAllParameters = new List<OBDParameter>();
             m_listSupportedParameters = new List<OBDParameter>();
+            m_obdInterpreter = new OBDInterpreter();
             UserPreferences = LoadUserPreferences();
             CommSettings = LoadCommSettings();
+            DBandMES = LoadDBandMES();
             VehicleProfiles = LoadVehicleProfiles();
             SetDevice(HardwareType.ELM327);
         }
@@ -90,49 +96,25 @@ namespace SH_OBD {
         }
 
         public bool InitOBD() {
-            // 获取PID 0100支持情况
+            // 获取PID支持情况
             OBDParameter param = new OBDParameter(1, 0, 0) {
                 ValueTypes = 32
             };
-            OBDParameterValue value = GetValue(param, true);
-            if (value.ErrorDetected) {
-                return false;
-            }
-
             m_listSupportedParameters.Clear();
-            foreach (OBDParameter param2 in m_listAllParameters) {
-                if (param2.Parameter > 2 && param2.Parameter <= 0x20 && value.GetBitFlag(param2.Parameter - 1)) {
-                    m_listSupportedParameters.Add(param2);
-                }
-            }
-            if (!value.GetBitFlag(31)) {
-                return true;
-            }
 
-            // 获取PID 0120支持情况
-            param.Parameter = 0x20;
-            value = GetValue(param, true);
-            if (value.ErrorDetected) {
-                return false;
-            }
-            foreach (OBDParameter param2 in m_listAllParameters) {
-                if (param2.Parameter > 0x20 && param2.Parameter <= 0x40 && value.GetBitFlag(param2.Parameter - param.Parameter - 1)) {
-                    m_listSupportedParameters.Add(param2);
+            for (int i = 0; (i * 0x20) < 0x100; i++) {
+                param.Parameter = i * 0x20;
+                OBDParameterValue value = GetValue(param, true);
+                if (value.ErrorDetected) {
+                    return false;
                 }
-            }
-            if (!value.GetBitFlag(31)) {
-                return true;
-            }
-
-            // 获取PID 0140支持情况
-            param.Parameter = 0x40;
-            value = GetValue(param, true);
-            if (value.ErrorDetected) {
-                return false;
-            }
-            foreach (OBDParameter param2 in m_listAllParameters) {
-                if (param2.Parameter > 0x40 && param2.Parameter <= 0x60 && value.GetBitFlag(param2.Parameter - param.Parameter - 1)) {
-                    m_listSupportedParameters.Add(param2);
+                foreach (OBDParameter param2 in m_listAllParameters) {
+                    if (param2.Parameter > 2 && param2.Parameter > (i * 0x20) && param2.Parameter < ((i + 1) * 0x20) && value.GetBitFlag(param2.Parameter - param.Parameter - 1)) {
+                        m_listSupportedParameters.Add(param2);
+                    }
+                }
+                if (!value.GetBitFlag(31)) {
+                    break;
                 }
             }
 
@@ -166,50 +148,96 @@ namespace SH_OBD {
             } else {
                 m_log.TraceInfo("Requesting: " + param.OBDRequest);
             }
-
             if (param.Service == 0) {
                 return SpecialValue(param);
             }
 
             OBDResponseList responses = m_obdDevice.Query(param);
-            string strItem1 = "Responses: ";
-            for (int i = 0; i < responses.ResponseCount; i++) {
-                strItem1 += string.Format("[{0}] ", responses.GetOBDResponse(i).Data);
-            }
-            m_log.TraceInfo(strItem1);
-            OBDParameterValue obdParameterValue = OBDInterpreter.GetValue(param, responses, bEnglishUnits);
-            if (obdParameterValue.ErrorDetected) {
-                m_log.TraceError("Error Detected in obdParameterValue!");
-                return obdParameterValue;
+            string strItem = "Responses: ";
+            if (responses.ErrorDetected) {
+                strItem += "Error Detected!";
             } else {
-                string values = "Values: ";
-                if ((param.ValueTypes & (int)OBDParameter.EnumValueTypes.Double) == (int)OBDParameter.EnumValueTypes.Double) {
-                    values += string.Format("[Double: {0}] ", obdParameterValue.DoubleValue.ToString());
+                for (int i = 0; i < responses.ResponseCount; i++) {
+                    strItem += string.Format("[{0}] ", responses.GetOBDResponse(i).Data);
                 }
-                if ((param.ValueTypes & (int)OBDParameter.EnumValueTypes.Bool) == (int)OBDParameter.EnumValueTypes.Bool) {
-                    values += string.Format("[Bool: {0}] ", obdParameterValue.BoolValue.ToString());
-                }
-                if ((param.ValueTypes & (int)OBDParameter.EnumValueTypes.String) == (int)OBDParameter.EnumValueTypes.String) {
-                    values += string.Format("[String: {0} / {1}] ", obdParameterValue.StringValue, obdParameterValue.ShortStringValue);
-                }
-                if ((param.ValueTypes & (int)OBDParameter.EnumValueTypes.ListString) == (int)OBDParameter.EnumValueTypes.ListString) {
-                    values += "[ListString: ";
-                    foreach (string strx in obdParameterValue.ListStringValue) {
-                        values = string.Concat(values, strx + ", ");
-                    }
-                    values = values.Substring(0, values.Length - 2);
-                    values += "]";
-                }
-                if ((param.ValueTypes & (int)OBDParameter.EnumValueTypes.BitFlags) == (int)OBDParameter.EnumValueTypes.BitFlags) {
-                    values += "[BitFlags: ";
-                    for (int idx = 0; idx < 32; idx++) {
-                        values += (obdParameterValue.GetBitFlag(idx) ? "T" : "F");
-                    }
-                    values += "]";
-                }
-                m_log.TraceInfo(values);
-                return obdParameterValue;
             }
+            m_log.TraceInfo(strItem);
+            OBDParameterValue obdValue = m_obdInterpreter.GetValue(param, responses, bEnglishUnits);
+            if (obdValue.ErrorDetected) {
+                m_log.TraceError("Error Detected in OBDParameterValue!");
+            } else {
+                m_log.TraceInfo(GetLogString(param, obdValue));
+            }
+            return obdValue;
+        }
+
+        public List<OBDParameterValue> GetValueList(OBDParameter param, bool bEnglishUnits = false) {
+            List<OBDParameterValue> ValueList = new List<OBDParameterValue>();
+
+            if (param.PID.Length > 0) {
+                m_log.TraceInfo("Requesting: " + param.PID);
+            } else {
+                m_log.TraceInfo("Requesting: " + param.OBDRequest);
+            }
+            OBDResponseList responses = m_obdDevice.Query(param);
+            string strItem = "Responses: ";
+            if (responses.ErrorDetected) {
+                strItem += "Error Detected!";
+                OBDParameterValue value = new OBDParameterValue {
+                    ErrorDetected = true,
+                    StringValue = "Error Detected in OBDResponseList!",
+                    ShortStringValue = "ERROR_RESP"
+                };
+                ValueList.Add(value);
+                m_log.TraceInfo(strItem);
+                return ValueList;
+            } else {
+                for (int i = 0; i < responses.ResponseCount; i++) {
+                    strItem += string.Format("[{0}] ", responses.GetOBDResponse(i).Data);
+                }
+                strItem = strItem.TrimEnd();
+                m_log.TraceInfo(strItem);
+            }
+
+            for (int i = 0; i < responses.ResponseCount; i++) {
+                OBDParameterValue obdValue = m_obdInterpreter.GetValue(param, responses.GetOBDResponse(i), bEnglishUnits);
+                if (obdValue.ErrorDetected) {
+                    m_log.TraceError("Error Detected in OBDParameterValue!");
+                } else {
+                    m_log.TraceInfo(GetLogString(param, obdValue));
+                }
+                ValueList.Add(obdValue);
+            }
+            return ValueList;
+        }
+
+        private string GetLogString(OBDParameter param, OBDParameterValue obdValue) {
+            string strRet = "Values: ";
+            if ((param.ValueTypes & (int)OBDParameter.EnumValueTypes.Double) == (int)OBDParameter.EnumValueTypes.Double) {
+                strRet += string.Format("[Double: {0}] ", obdValue.DoubleValue.ToString());
+            }
+            if ((param.ValueTypes & (int)OBDParameter.EnumValueTypes.Bool) == (int)OBDParameter.EnumValueTypes.Bool) {
+                strRet += string.Format("[Bool: {0}] ", obdValue.BoolValue.ToString());
+            }
+            if ((param.ValueTypes & (int)OBDParameter.EnumValueTypes.String) == (int)OBDParameter.EnumValueTypes.String) {
+                strRet += string.Format("[String: {0} / {1}] ", obdValue.StringValue, obdValue.ShortStringValue);
+            }
+            if ((param.ValueTypes & (int)OBDParameter.EnumValueTypes.ListString) == (int)OBDParameter.EnumValueTypes.ListString) {
+                strRet += "[ListString: ";
+                foreach (string strx in obdValue.ListStringValue) {
+                    strRet = string.Concat(strRet, strx + ", ");
+                }
+                strRet = strRet.Substring(0, strRet.Length - 2);
+                strRet += "]";
+            }
+            if ((param.ValueTypes & (int)OBDParameter.EnumValueTypes.BitFlags) == (int)OBDParameter.EnumValueTypes.BitFlags) {
+                strRet += "[BitFlags: ";
+                for (int idx = 0; idx < 32; idx++) {
+                    strRet += (obdValue.GetBitFlag(idx) ? "1" : "0");
+                }
+                strRet += "]";
+            }
+            return strRet;
         }
 
         public OBDParameterValue SpecialValue(OBDParameter param) {
@@ -229,6 +257,16 @@ namespace SH_OBD {
 
         public string GetRawResponse(string strCmd) {
             return m_obdDevice.Query(strCmd);
+        }
+
+        public OBDResponseList GetResponseList(OBDParameter param) {
+            OBDResponseList responses = m_obdDevice.Query(param);
+            string strItem = "Responses: ";
+            for (int i = 0; i < responses.ResponseCount; i++) {
+                strItem += string.Format("[{0}] ", responses.GetOBDResponse(i).Data);
+            }
+            m_log.TraceInfo(strItem);
+            return responses;
         }
 
         public bool ClearCodes() {
@@ -308,7 +346,7 @@ namespace SH_OBD {
                             param.Manufacturer = 1; break;
                         case "Ford":
                             param.Manufacturer = 2; break;
-                        case "ProScan":
+                        case "SH_OBD":
                             param.Manufacturer = 3; break;
                         }
 
@@ -421,6 +459,16 @@ namespace SH_OBD {
             }
         }
 
+        public void SaveDBandMES(DBandMES dBandMES) {
+            this.DBandMES = dBandMES;
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(DBandMES));
+            using (TextWriter writer = new StreamWriter(m_dbandMES_xml)) {
+                xmlSerializer.Serialize(writer, this.DBandMES);
+                writer.Close();
+            }
+        }
+
+
         public void SaveCommSettings(Settings settings) {
             CommSettings = settings;
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(Settings));
@@ -437,6 +485,20 @@ namespace SH_OBD {
                 xmlSerializer.Serialize(writer, UserPreferences);
                 writer.Close();
             }
+        }
+
+        public DBandMES LoadDBandMES() {
+            try {
+                XmlSerializer serializer = new XmlSerializer(typeof(DBandMES));
+                using (FileStream reader = new FileStream(m_dbandMES_xml, FileMode.Open)) {
+                    DBandMES = (DBandMES)serializer.Deserialize(reader);
+                    reader.Close();
+                }
+            } catch (Exception e) {
+                m_log.TraceError("Using default DB and MES settings because of failed to load them, reason: " + e.Message);
+                DBandMES = new DBandMES();
+            }
+            return DBandMES;
         }
 
         public Settings LoadCommSettings() {

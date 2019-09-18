@@ -43,31 +43,33 @@ namespace SH_OBD {
             m_ListNonConTests = GetNonContinuousTestList();
             gridConTests.DataSource = m_ListConTests;
             gridNonConTests.DataSource = m_ListNonConTests;
-            gridConTests.Columns[0].HeaderText = "名称";
-            gridConTests.Columns[1].HeaderText = "完成状态";
-            gridNonConTests.Columns[0].HeaderText = "名称";
-            gridNonConTests.Columns[1].HeaderText = "完成状态";
+            gridConTests.Columns[0].HeaderText = "序号";
+            gridConTests.Columns[1].HeaderText = "名称";
+            gridConTests.Columns[2].HeaderText = "完成状态";
+            gridNonConTests.Columns[0].HeaderText = "序号";
+            gridNonConTests.Columns[1].HeaderText = "名称";
+            gridNonConTests.Columns[2].HeaderText = "完成状态";
         }
 
         private List<TestStatus> GetContinuousTestList() {
             List<TestStatus> list = new List<TestStatus> {
-                new TestStatus("失火", ""),
-                new TestStatus("燃油系统", ""),
-                new TestStatus("综合组件", "")
+                new TestStatus(1, "失火", ""),
+                new TestStatus(2, "燃油系统", ""),
+                new TestStatus(3, "综合组件", "")
             };
             return list;
         }
 
         private List<TestStatus> GetNonContinuousTestList() {
             List<TestStatus> list = new List<TestStatus> {
-                new TestStatus("催化器", ""),
-                new TestStatus("加热催化器", ""),
-                new TestStatus("蒸发系统", ""),
-                new TestStatus("二次空气系统", ""),
-                new TestStatus("A/C 系统制冷剂", ""),
-                new TestStatus("氧气传感器", ""),
-                new TestStatus("加热氧气传感器", ""),
-                new TestStatus("EGR 系统", "")
+                new TestStatus(1, "催化器", ""),
+                new TestStatus(2, "加热催化器", ""),
+                new TestStatus(3, "蒸发系统", ""),
+                new TestStatus(4, "二次空气系统", ""),
+                new TestStatus(5, "A/C 系统制冷剂", ""),
+                new TestStatus(6, "氧气传感器", ""),
+                new TestStatus(7, "加热氧气传感器", ""),
+                new TestStatus(8, "EGR 系统", "")
             };
             return list;
         }
@@ -564,12 +566,13 @@ namespace SH_OBD {
 
     }
 
-    [Serializable]
     public class TestStatus {
+        public int NO { get; set; }
         public string Name { get; set; }
         public string Status { get; set; }
 
-        public TestStatus(string strName, string strStatus) {
+        public TestStatus(int NO, string strName, string strStatus) {
+            this.NO = NO;
             Name = strName;
             Status = strStatus;
         }

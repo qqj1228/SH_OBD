@@ -10,11 +10,13 @@ using System.Windows.Forms;
 
 namespace SH_OBD {
     public partial class SettingsForm : Form {
-        private Settings m_settings;
+        private readonly Settings m_settings;
+        private readonly DBandMES m_dbandMES;
 
-        public SettingsForm(Settings settings) {
+        public SettingsForm(Settings settings, DBandMES dbandMES) {
             InitializeComponent();
             m_settings = settings;
+            m_dbandMES = dbandMES;
         }
 
         private void SettingsForm_Load(object sender, EventArgs e) {
@@ -44,6 +46,16 @@ namespace SH_OBD {
                 } else {
                     checkBoxAutoDetect.Checked = false;
                 }
+
+                this.txtBoxUser.Text = m_dbandMES.UserName;
+                this.txtBoxPwd.Text = m_dbandMES.PassWord;
+                this.txtBoxDBName.Text = m_dbandMES.DBName;
+                this.txtBoxIP.Text = m_dbandMES.IP;
+                this.txtBoxPort.Text = m_dbandMES.Port;
+                this.txtBoxWebSvcAddress.Text = m_dbandMES.WebServiceAddress;
+                this.txtBoxWebSvcName.Text = m_dbandMES.WebServiceName;
+                this.txtBoxWebSvcMethods.Text = m_dbandMES.WebServiceMethods;
+
             } catch (Exception ex) {
                 MessageBox.Show(ex.ToString());
             }
@@ -59,6 +71,16 @@ namespace SH_OBD {
             m_settings.HardwareIndexInt = comboHardware.SelectedIndex;
             m_settings.ProtocolIndexInt = comboProtocol.SelectedIndex;
             m_settings.DoInitialization = (comboInitialize.SelectedIndex == 0);
+
+            m_dbandMES.UserName = this.txtBoxUser.Text;
+            m_dbandMES.PassWord = this.txtBoxPwd.Text;
+            m_dbandMES.DBName = this.txtBoxDBName.Text;
+            m_dbandMES.IP = this.txtBoxIP.Text;
+            m_dbandMES.Port = this.txtBoxPort.Text;
+            m_dbandMES.WebServiceAddress = this.txtBoxWebSvcAddress.Text;
+            m_dbandMES.WebServiceName = this.txtBoxWebSvcName.Text;
+            m_dbandMES.WebServiceMethods = this.txtBoxWebSvcMethods.Text;
+
             Close();
         }
 

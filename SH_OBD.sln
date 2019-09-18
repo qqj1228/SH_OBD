@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.645
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SH_OBD", "SH_OBD\SH_OBD.csproj", "{FB88A49A-58E0-43C1-ACB7-0F287278729B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServiceDemo", "WebServiceDemo\WebServiceDemo.csproj", "{28851350-6F65-49B8-AD2A-D79228DC49AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{FB88A49A-58E0-43C1-ACB7-0F287278729B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB88A49A-58E0-43C1-ACB7-0F287278729B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB88A49A-58E0-43C1-ACB7-0F287278729B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28851350-6F65-49B8-AD2A-D79228DC49AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28851350-6F65-49B8-AD2A-D79228DC49AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28851350-6F65-49B8-AD2A-D79228DC49AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28851350-6F65-49B8-AD2A-D79228DC49AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

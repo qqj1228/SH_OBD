@@ -8,12 +8,13 @@ namespace SH_OBD {
     /// 用于接收OBD的返回值
     /// </summary>
     public class OBDParameterValue {
-        public bool ErrorDetected { get; set; }
         public List<string> ListStringValue { get; set; }
+        public bool ErrorDetected { get; set; }
         public bool BoolValue { get; set; }
         public double DoubleValue { get; set; }
         public string StringValue { get; set; }
         public string ShortStringValue { get; set; }
+        public string ECUResponseID { get; set; }
         private readonly bool[] m_bBitFlags;
 
         public OBDParameterValue(bool bValue, double dValue, string strValue, string shortValue) {

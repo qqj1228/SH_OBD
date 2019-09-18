@@ -31,6 +31,7 @@
             this.StatusLabelDeviceType = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusLabelPort = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonOBDTest = new System.Windows.Forms.Button();
             this.buttonReport = new System.Windows.Forms.Button();
             this.buttonTerminal = new System.Windows.Forms.Button();
             this.buttonFuel = new System.Windows.Forms.Button();
@@ -54,6 +55,8 @@
             this.toolStripBtnUserPrefs = new System.Windows.Forms.ToolStripButton();
             this.toolStripBtnVehicles = new System.Windows.Forms.ToolStripButton();
             this.toolStripBtnSettings = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripCmbBoxECU = new System.Windows.Forms.ToolStripComboBox();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -120,6 +123,7 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.buttonOBDTest);
             this.panel1.Controls.Add(this.buttonReport);
             this.panel1.Controls.Add(this.buttonTerminal);
             this.panel1.Controls.Add(this.buttonFuel);
@@ -136,9 +140,19 @@
             this.panel1.Size = new System.Drawing.Size(120, 551);
             this.panel1.TabIndex = 1;
             // 
+            // buttonOBDTest
+            // 
+            this.buttonOBDTest.Location = new System.Drawing.Point(3, 3);
+            this.buttonOBDTest.Name = "buttonOBDTest";
+            this.buttonOBDTest.Size = new System.Drawing.Size(110, 23);
+            this.buttonOBDTest.TabIndex = 12;
+            this.buttonOBDTest.Text = "buttonOBDTest";
+            this.buttonOBDTest.UseVisualStyleBackColor = true;
+            this.buttonOBDTest.Click += new System.EventHandler(this.Button_Click);
+            // 
             // buttonReport
             // 
-            this.buttonReport.Location = new System.Drawing.Point(5, 266);
+            this.buttonReport.Location = new System.Drawing.Point(3, 295);
             this.buttonReport.Name = "buttonReport";
             this.buttonReport.Size = new System.Drawing.Size(110, 23);
             this.buttonReport.TabIndex = 10;
@@ -148,7 +162,7 @@
             // 
             // buttonTerminal
             // 
-            this.buttonTerminal.Location = new System.Drawing.Point(5, 295);
+            this.buttonTerminal.Location = new System.Drawing.Point(3, 324);
             this.buttonTerminal.Name = "buttonTerminal";
             this.buttonTerminal.Size = new System.Drawing.Size(110, 23);
             this.buttonTerminal.TabIndex = 11;
@@ -158,7 +172,7 @@
             // 
             // buttonFuel
             // 
-            this.buttonFuel.Location = new System.Drawing.Point(5, 237);
+            this.buttonFuel.Location = new System.Drawing.Point(3, 266);
             this.buttonFuel.Name = "buttonFuel";
             this.buttonFuel.Size = new System.Drawing.Size(110, 23);
             this.buttonFuel.TabIndex = 9;
@@ -168,7 +182,7 @@
             // 
             // buttonDyno
             // 
-            this.buttonDyno.Location = new System.Drawing.Point(5, 208);
+            this.buttonDyno.Location = new System.Drawing.Point(3, 237);
             this.buttonDyno.Name = "buttonDyno";
             this.buttonDyno.Size = new System.Drawing.Size(110, 23);
             this.buttonDyno.TabIndex = 8;
@@ -178,7 +192,7 @@
             // 
             // buttonTrack
             // 
-            this.buttonTrack.Location = new System.Drawing.Point(5, 179);
+            this.buttonTrack.Location = new System.Drawing.Point(3, 208);
             this.buttonTrack.Name = "buttonTrack";
             this.buttonTrack.Size = new System.Drawing.Size(110, 23);
             this.buttonTrack.TabIndex = 7;
@@ -188,7 +202,7 @@
             // 
             // buttonSensorGraph
             // 
-            this.buttonSensorGraph.Location = new System.Drawing.Point(5, 150);
+            this.buttonSensorGraph.Location = new System.Drawing.Point(3, 179);
             this.buttonSensorGraph.Name = "buttonSensorGraph";
             this.buttonSensorGraph.Size = new System.Drawing.Size(110, 23);
             this.buttonSensorGraph.TabIndex = 6;
@@ -198,7 +212,7 @@
             // 
             // buttonSensorGrid
             // 
-            this.buttonSensorGrid.Location = new System.Drawing.Point(5, 121);
+            this.buttonSensorGrid.Location = new System.Drawing.Point(3, 150);
             this.buttonSensorGrid.Name = "buttonSensorGrid";
             this.buttonSensorGrid.Size = new System.Drawing.Size(110, 23);
             this.buttonSensorGrid.TabIndex = 5;
@@ -208,7 +222,7 @@
             // 
             // buttonO2
             // 
-            this.buttonO2.Location = new System.Drawing.Point(5, 92);
+            this.buttonO2.Location = new System.Drawing.Point(3, 121);
             this.buttonO2.Name = "buttonO2";
             this.buttonO2.Size = new System.Drawing.Size(110, 23);
             this.buttonO2.TabIndex = 4;
@@ -218,7 +232,7 @@
             // 
             // buttonFF
             // 
-            this.buttonFF.Location = new System.Drawing.Point(5, 63);
+            this.buttonFF.Location = new System.Drawing.Point(3, 92);
             this.buttonFF.Name = "buttonFF";
             this.buttonFF.Size = new System.Drawing.Size(110, 23);
             this.buttonFF.TabIndex = 3;
@@ -228,7 +242,7 @@
             // 
             // buttonDTC
             // 
-            this.buttonDTC.Location = new System.Drawing.Point(5, 33);
+            this.buttonDTC.Location = new System.Drawing.Point(3, 62);
             this.buttonDTC.Name = "buttonDTC";
             this.buttonDTC.Size = new System.Drawing.Size(110, 23);
             this.buttonDTC.TabIndex = 2;
@@ -238,7 +252,7 @@
             // 
             // buttonTests
             // 
-            this.buttonTests.Location = new System.Drawing.Point(5, 3);
+            this.buttonTests.Location = new System.Drawing.Point(3, 32);
             this.buttonTests.Name = "buttonTests";
             this.buttonTests.Size = new System.Drawing.Size(110, 23);
             this.buttonTests.TabIndex = 1;
@@ -312,7 +326,9 @@
             this.toolStripSeparator1,
             this.toolStripBtnUserPrefs,
             this.toolStripBtnVehicles,
-            this.toolStripBtnSettings});
+            this.toolStripBtnSettings,
+            this.toolStripSeparator2,
+            this.toolStripCmbBoxECU});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(934, 55);
@@ -369,6 +385,17 @@
             this.toolStripBtnSettings.Size = new System.Drawing.Size(108, 52);
             this.toolStripBtnSettings.Text = "通讯设置";
             this.toolStripBtnSettings.Click += new System.EventHandler(this.toolStripBtnSettings_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 55);
+            // 
+            // toolStripCmbBoxECU
+            // 
+            this.toolStripCmbBoxECU.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.toolStripCmbBoxECU.Name = "toolStripCmbBoxECU";
+            this.toolStripCmbBoxECU.Size = new System.Drawing.Size(121, 55);
             // 
             // MainForm
             // 
@@ -428,6 +455,9 @@
         private System.Windows.Forms.Button buttonDefaultFontStyle;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ToolStripStatusLabel StatusLabelDeviceType;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripComboBox toolStripCmbBoxECU;
+        private System.Windows.Forms.Button buttonOBDTest;
     }
 }
 

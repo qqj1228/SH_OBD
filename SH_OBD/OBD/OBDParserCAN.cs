@@ -87,7 +87,7 @@ namespace SH_OBD {
                 iRet = headLen + 8;
                 break;
             case 9:
-                iRet = headLen + 6;
+                iRet = param.Parameter % 2 == 0 && param.Parameter % 0x20 != 0 ? headLen + 8 : headLen + 6;
                 break;
             default:
                 iRet = headLen + 6;

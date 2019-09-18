@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Preferences xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <UserName>sa</UserName>
+  <PassWord>sh49</PassWord>
+  <DBName>SH_OBD</DBName>
+  <IP>127.0.0.1</IP>
+  <Port>1433</Port>
+  <WebServiceAddress>http://193.28.6.4:1908/</WebServiceAddress>
+  <WebServiceName>Wes_DeviceTestData_MES</WebServiceName>
+  <WebServiceMethods>WriteDataToMes</WebServiceMethods>
+</Preferences>

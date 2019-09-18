@@ -186,16 +186,14 @@
             // 
             // gridNonConTests
             // 
-            this.gridNonConTests.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.gridNonConTests.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.gridNonConTests.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.gridNonConTests.Location = new System.Drawing.Point(12, 20);
+            this.gridNonConTests.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridNonConTests.Location = new System.Drawing.Point(3, 17);
             this.gridNonConTests.Name = "gridNonConTests";
             this.gridNonConTests.ReadOnly = true;
             this.gridNonConTests.RowHeadersVisible = false;
-            this.gridNonConTests.Size = new System.Drawing.Size(380, 190);
+            this.gridNonConTests.Size = new System.Drawing.Size(399, 204);
             this.gridNonConTests.TabIndex = 1;
             // 
             // groupOxygen
@@ -233,16 +231,14 @@
             // 
             // gridConTests
             // 
-            this.gridConTests.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.gridConTests.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.gridConTests.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.gridConTests.Location = new System.Drawing.Point(12, 20);
+            this.gridConTests.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridConTests.Location = new System.Drawing.Point(3, 17);
             this.gridConTests.Name = "gridConTests";
             this.gridConTests.ReadOnly = true;
             this.gridConTests.RowHeadersVisible = false;
-            this.gridConTests.Size = new System.Drawing.Size(340, 122);
+            this.gridConTests.Size = new System.Drawing.Size(359, 136);
             this.gridConTests.TabIndex = 0;
             // 
             // groupPTO

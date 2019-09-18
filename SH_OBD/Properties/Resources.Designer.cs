@@ -133,6 +133,15 @@ namespace SH_OBD.Properties {
         }
         
         /// <summary>
+        ///   查找类似 OBD检测 的本地化字符串。
+        /// </summary>
+        internal static string buttonName_OBDTest {
+            get {
+                return ResourceManager.GetString("buttonName_OBDTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 氧气传感器 的本地化字符串。
         /// </summary>
         internal static string buttonName_OxygenSensors {

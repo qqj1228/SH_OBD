@@ -12,6 +12,7 @@ using System.Windows.Forms;
 namespace SH_OBD {
     public partial class MainForm : Form {
         private Dictionary<string, Form> dicSubForms;
+        private OBDTestForm f_OBDTest;
         private TestForm f_MonitorTests;
         private DTCForm f_DTC;
         private FreezeFramesForm f_FreezeFrames;
@@ -56,6 +57,7 @@ namespace SH_OBD {
         void InitSubForm() {
             dicSubForms = new Dictionary<string, Form>();
 
+            f_OBDTest = new OBDTestForm(m_obdInterface);
             f_MonitorTests = new TestForm(m_obdInterface);
             f_DTC = new DTCForm(m_obdInterface);
             f_FreezeFrames = new FreezeFramesForm(m_obdInterface);
@@ -68,6 +70,7 @@ namespace SH_OBD {
             f_Report = new ReportGeneratorForm(m_obdInterface);
             f_Terminal = new TerminalForm(m_obdInterface);
 
+            buttonOBDTest.Text = Properties.Resources.buttonName_OBDTest;
             buttonTests.Text = Properties.Resources.buttonName_Tests;
             buttonDTC.Text = Properties.Resources.buttonName_DTC;
             buttonFF.Text = Properties.Resources.buttonName_FreezeFrames;
@@ -80,6 +83,7 @@ namespace SH_OBD {
             buttonReport.Text = Properties.Resources.buttonName_Report;
             buttonTerminal.Text = Properties.Resources.buttonName_Terminal;
 
+            dicSubForms.Add(Properties.Resources.buttonName_OBDTest, f_OBDTest);
             dicSubForms.Add(Properties.Resources.buttonName_Tests, f_MonitorTests);
             dicSubForms.Add(Properties.Resources.buttonName_DTC, f_DTC);
             dicSubForms.Add(Properties.Resources.buttonName_FreezeFrames, f_FreezeFrames);
@@ -109,6 +113,8 @@ namespace SH_OBD {
                     (dicSubForms[key] as FuelEconomyForm).CheckConnection();
                 } else if (key == Properties.Resources.buttonName_Terminal) {
                     (dicSubForms[key] as TerminalForm).CheckConnection();
+                } else if (key == Properties.Resources.buttonName_OBDTest) {
+                    (dicSubForms[key] as OBDTestForm).CheckConnection();
                 }
             }
         }
@@ -224,8 +230,10 @@ namespace SH_OBD {
 
         private void toolStripBtnSettings_Click(object sender, EventArgs e) {
             Settings commSettings = m_obdInterface.CommSettings;
-            new SettingsForm(commSettings).ShowDialog();
+            DBandMES dbandMES = m_obdInterface.DBandMES;
+            new SettingsForm(commSettings, dbandMES).ShowDialog();
             m_obdInterface.SaveCommSettings(commSettings);
+            m_obdInterface.SaveDBandMES(dbandMES);
             StatusLabelProtocol.Text = m_obdInterface.GetProtocol().ToString();
             StatusLabelDeviceType.Text = m_obdInterface.GetDevice().ToString();
             if (commSettings.AutoDetect) {

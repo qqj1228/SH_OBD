@@ -23,36 +23,21 @@ namespace SH_OBD {
             set {
                 m_OBDRequest = value;
                 if (m_OBDRequest.Length >= 4) {
-                    bool bRet = int.TryParse(m_OBDRequest.Substring(0, 2), out int result);
-                    if (bRet) {
-                        Service = result;
-                    } else {
-                        try {
-                            Service = Convert.ToInt32(m_OBDRequest.Substring(0, 2), 16);
-                        } catch (Exception) {
-                            Service = 0;
-                        }
+                    try {
+                        Service = Convert.ToInt32(m_OBDRequest.Substring(0, 2), 16);
+                    } catch (Exception) {
+                        Service = 0;
                     }
-                    bRet = int.TryParse(m_OBDRequest.Substring(2, 2), out result);
-                    if (bRet) {
-                        m_parameter = result;
-                    } else {
-                        try {
-                            m_parameter = Convert.ToInt32(m_OBDRequest.Substring(2, 2), 16);
-                        } catch (Exception) {
-                            m_parameter = 0;
-                        }
+                    try {
+                        m_parameter = Convert.ToInt32(m_OBDRequest.Substring(2, 2), 16);
+                    } catch (Exception) {
+                        m_parameter = 0;
                     }
                 } else if (m_OBDRequest.Length >= 2) {
-                    bool bRet = int.TryParse(m_OBDRequest.Substring(0, 2), out int result);
-                    if (bRet) {
-                        Service = result;
-                    } else {
-                        try {
-                            Service = Convert.ToInt32(m_OBDRequest.Substring(0, 2), 16);
-                        } catch (Exception) {
-                            Service = 0;
-                        }
+                    try {
+                        Service = Convert.ToInt32(m_OBDRequest.Substring(0, 2), 16);
+                    } catch (Exception) {
+                        Service = 0;
                     }
                     m_parameter = 0;
                 }

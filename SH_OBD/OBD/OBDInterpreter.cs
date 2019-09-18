@@ -4,21 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace SH_OBD {
     public partial class OBDInterpreter {
-        public static OBDParameterValue GetPIDSupport(OBDResponse response) {
-            OBDParameterValue value2 = new OBDParameterValue();
-            if (response.GetDataByteCount() < 4) {
-                value2.ErrorDetected = true;
-                return value2;
-            }
-            int dataA = Utility.Hex2Int(response.GetDataByte(0));
-            int dataB = Utility.Hex2Int(response.GetDataByte(1));
-            int dataC = Utility.Hex2Int(response.GetDataByte(2));
-            int dataD = Utility.Hex2Int(response.GetDataByte(3));
-            value2.SetBitFlagBAT(dataA, dataB, dataC, dataD);
-            return value2;
-        }
-
-        public static OBDParameterValue GetMode0102Value(OBDParameter param, OBDResponse response, bool bEnglishUnits = false) {
+        public OBDParameterValue GetMode0102Value(OBDParameter param, OBDResponse response, bool bEnglishUnits = false) {
             OBDParameterValue value2 = new OBDParameterValue();
             int num;
 
@@ -29,37 +15,40 @@ namespace SH_OBD {
             case 0x60:
             case 0x80:
             case 0xA0:
-                return GetPIDSupport(response);
+                value2 = GetPIDSupport(response);
+                break;
             case 1:
-                return GetPID01Value(param, response);
+                value2 = GetPID01Value(param, response);
+                break;
             case 2:
                 // 引起冻结帧的DTC
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.StringValue = GetDTCName(response.Data);
-                return value2;
+                break;
             case 3:
-                return GetPID03Value(param, response);
+                value2 = GetPID03Value(param, response);
+                break;
             case 4:
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Math.Round(Utility.Hex2Int(response.GetDataByte(0)) * 100.0 / 255.0, 2);
-                return value2;
+                break;
             case 5:
                 // 引擎冷却液温度
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0)) - 40.0;
                 if (bEnglishUnits) {
                     value2.DoubleValue = Math.Round((value2.DoubleValue * 1.8) + 32.0, 2);
                 }
-                return value2;
+                break;
             case 6:
             case 7:
             case 8:
@@ -67,7 +56,7 @@ namespace SH_OBD {
                 // 长/短时燃油修正 组 1/2/3/4
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 if (param.SubParameter == 0) {
                     // 组 1/2
@@ -77,115 +66,113 @@ namespace SH_OBD {
                     num = Utility.Hex2Int(response.GetDataByte(1));
                 }
                 value2.DoubleValue = Math.Round((num * 0.78125) - 100.0, 2);
-                return value2;
+                break;
             case 0x0A:
                 // 燃油导轨压力（表压）
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0)) * 3.0;
                 if (bEnglishUnits) {
                     value2.DoubleValue *= 0.145037738;
                     value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
                 }
-                return value2;
+                break;
             case 0x0B:
                 // 进气歧管绝对压力
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0));
                 if (bEnglishUnits) {
                     value2.DoubleValue *= 0.145037738;
                     value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
                 }
-                return value2;
+                break;
             case 0x0C:
                 // 引擎转速
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = ((Utility.Hex2Int(response.GetDataByte(0)) * 0x100) + Utility.Hex2Int(response.GetDataByte(1))) * 0.25;
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x0D:
                 // 车速
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0));
                 if (bEnglishUnits) {
                     value2.DoubleValue = Math.Round(value2.DoubleValue * 0.621371192, 2);
                 }
-                return value2;
+                break;
             case 0x0E:
                 // #1缸点火正时
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = (Utility.Hex2Int(response.GetDataByte(0)) * 0.5) - 64.0;
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x0F:
                 // 进气温度
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0)) - 40.0;
                 if (bEnglishUnits) {
                     value2.DoubleValue = Math.Round((value2.DoubleValue * 1.8) + 32.0, 2);
                 }
-                return value2;
+                break;
             case 0x10:
                 // 空气质量流量率
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = ((Utility.Hex2Int(response.GetDataByte(0)) * 256.0) + Utility.Hex2Int(response.GetDataByte(1))) * 0.01;
                 if (bEnglishUnits) {
                     value2.DoubleValue *= 0.13227735731092655;
                 }
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x11:
                 // 节气门绝对位置
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Math.Round(Utility.Hex2Int(response.GetDataByte(0)) * 100.0 / 255.0, 2);
-                return value2;
+                break;
             case 0x12:
                 // 指令的二次空气状态
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 num = Utility.Hex2Int(response.GetDataByte(0));
+                value2.SetBitFlagBAT(num);
                 if ((num & 1) != 0) {
                     value2.StringValue = "第一催化转化器的上游";
                     value2.ShortStringValue = "UPS";
-                    return value2;
-                }
-                if ((num & 2) != 0) {
+                } else if ((num & 2) != 0) {
                     value2.StringValue = "第一催化转化器入口的下游";
                     value2.ShortStringValue = "DNS";
-                    return value2;
-                }
-                if ((num & 4) != 0) {
+                } else if ((num & 4) != 0) {
                     value2.StringValue = "大气 / 关闭";
                     value2.ShortStringValue = "OFF";
                 }
-                return value2;
+                break;
             case 0x13:
-                return GetPID13or1DValue(param, response);
+                value2 = GetPID13or1DValue(param, response);
+                break;
             case 0x14:
             case 0x15:
             case 0x16:
@@ -194,9 +181,10 @@ namespace SH_OBD {
             case 0x19:
             case 0x1A:
             case 0x1B:
+                // 根据PID$13/$1D支持情况不同，定义不同的氧气传感器位置
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 if (param.SubParameter == 0) {
                     // 氧传感器输出电压
@@ -205,17 +193,19 @@ namespace SH_OBD {
                     // 短时燃油修正
                     value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(1)) * 0.78125 - 100.0;
                 }
-                value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                value2.DoubleValue = Math.Round(value2.DoubleValue, 3);
+                break;
             case 0x1C:
-                return GetPID1CValue(response);
+                value2 = GetPID1CValue(response);
+                break;
             case 0x1D:
-                return GetPID13or1DValue(param, response);
+                value2 = GetPID13or1DValue(param, response);
+                break;
             case 0x1E:
                 // 动力输出PTO状态
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 if ((Utility.Hex2Int(response.GetDataByte(0)) & 1) != 0) {
                     value2.DoubleValue = 1.0;
@@ -228,52 +218,52 @@ namespace SH_OBD {
                     value2.StringValue = "OFF";
                     value2.ShortStringValue = "OFF";
                 }
-                return value2;
+                break;
             case 0x1F:
                 // 引擎点火后运行时间
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = (Utility.Hex2Int(response.GetDataByte(0)) * 256.0) + Utility.Hex2Int(response.GetDataByte(1));
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x21:
                 // MIL亮起后行驶距离
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = (Utility.Hex2Int(response.GetDataByte(0)) * 256.0) + Utility.Hex2Int(response.GetDataByte(1));
                 if (bEnglishUnits) {
                     value2.DoubleValue *= 0.621371192;
                 }
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x22:
-                // 燃油导轨压力（相对于歧管真空压力）
+                // 燃油压力（相对于歧管真空）
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = ((Utility.Hex2Int(response.GetDataByte(0)) * 256.0) + Utility.Hex2Int(response.GetDataByte(1))) * 5178.0 / 65535.0;
                 if (bEnglishUnits) {
                     value2.DoubleValue *= 0.145037738;
                 }
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x23:
                 // 燃油导轨压力
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = ((Utility.Hex2Int(response.GetDataByte(0)) * 256.0) + Utility.Hex2Int(response.GetDataByte(1))) * 10.0;
                 if (bEnglishUnits) {
                     value2.DoubleValue *= 0.145037738;
                 }
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x24:
             case 0x25:
             case 0x26:
@@ -284,7 +274,7 @@ namespace SH_OBD {
             case 0x2B:
                 if (response.GetDataByteCount() < 4) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 if (param.SubParameter == 0) {
                     // 当量比（λ）
@@ -293,58 +283,58 @@ namespace SH_OBD {
                     // 氧气传感器电压
                     value2.DoubleValue = ((Utility.Hex2Int(response.GetDataByte(2)) * 256.0) + Utility.Hex2Int(response.GetDataByte(3))) * 8.0 / 65535.0;
                 }
-                value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                value2.DoubleValue = Math.Round(value2.DoubleValue, 6);
+                break;
             case 0x2C:
                 // 指令的EGR
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Math.Round(Utility.Hex2Int(response.GetDataByte(0)) * 100.0 / 255.0, 2);
-                return value2;
+                break;
             case 0x2D:
-                // EGR错误
+                // EGR误差
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Math.Round(Utility.Hex2Int(response.GetDataByte(0)) * 0.78125 - 100.0, 2);
-                return value2;
+                break;
             case 0x2E:
             case 0x2F:
                 // 指令的燃油蒸发排放, 燃油量输入
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Math.Round(Utility.Hex2Int(response.GetDataByte(0)) * 100.0 / 255.0, 2);
-                return value2;
+                break;
             case 0x30:
                 // DTC清除后热车次数
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0));
-                return value2;
+                break;
             case 0x31:
                 // DTC清除后行驶距离
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = (Utility.Hex2Int(response.GetDataByte(0)) * 256.0) + Utility.Hex2Int(response.GetDataByte(1));
                 if (bEnglishUnits) {
                     value2.DoubleValue *= 0.621371192;
                     value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
                 }
-                return value2;
+                break;
             case 0x32:
                 // 蒸发排放系统燃油蒸汽压力
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 num = Utility.Int2SInt((Utility.Hex2Int(response.GetDataByte(0)) * 256) + Utility.Hex2Int(response.GetDataByte(1)), 2);
                 value2.DoubleValue = num * 0.25;
@@ -352,19 +342,19 @@ namespace SH_OBD {
                     value2.DoubleValue *= 0.000145037738;
                 }
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x33:
                 // 大气压
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0));
                 if (bEnglishUnits) {
                     value2.DoubleValue *= 0.145037738;
                     value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
                 }
-                return value2;
+                break;
             case 0x34:
             case 0x35:
             case 0x36:
@@ -375,7 +365,7 @@ namespace SH_OBD {
             case 0x3B:
                 if (response.GetDataByteCount() < 4) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 if (param.SubParameter == 0) {
                     // 宽量程氧气传感器当量比（λ）
@@ -384,8 +374,8 @@ namespace SH_OBD {
                     // 宽量程氧气传感器电压
                     value2.DoubleValue = (((Utility.Hex2Int(response.GetDataByte(2)) * 256.0) + Utility.Hex2Int(response.GetDataByte(3))) * 128.0 / 32768.0) - 128.0;
                 }
-                value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                value2.DoubleValue = Math.Round(value2.DoubleValue, 6);
+                break;
             case 0x3C:
             case 0x3D:
             case 0x3E:
@@ -393,64 +383,65 @@ namespace SH_OBD {
                 // 催化器温度，组 1/2 传感器 1/2
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = (((Utility.Hex2Int(response.GetDataByte(0)) * 256.0) + Utility.Hex2Int(response.GetDataByte(1))) * 0.1) - 40.0;
                 if (bEnglishUnits) {
                     value2.DoubleValue = (value2.DoubleValue * 1.8) + 32.0;
                 }
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x41:
-                return GetPID41Value(param, response);
+                value2 = GetPID41Value(param, response);
+                break;
             case 0x42:
                 // 控制模块电压
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = ((Utility.Hex2Int(response.GetDataByte(0)) * 256.0) + Utility.Hex2Int(response.GetDataByte(1))) * 0.001;
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 3);
-                return value2;
+                break;
             case 0x43:
                 // 绝对负载值
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = ((Utility.Hex2Int(response.GetDataByte(0)) * 256.0) + Utility.Hex2Int(response.GetDataByte(1))) * 100.0 / 255.0;
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x44:
                 // 指令的当量率
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = ((Utility.Hex2Int(response.GetDataByte(0)) * 256.0) + Utility.Hex2Int(response.GetDataByte(1))) * 2.0 / 65535.0;
-                value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                value2.DoubleValue = Math.Round(value2.DoubleValue, 3);
+                break;
             case 0x45:
                 // 节气门相对位置
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0)) * 100.0 / 255.0;
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x46:
                 // 环境空气温度
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0)) - 40.0;
                 if (bEnglishUnits) {
                     value2.DoubleValue = (value2.DoubleValue * 1.8) + 32.0;
                     value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
                 }
-                return value2;
+                break;
             case 0x47:
             case 0x48:
             case 0x49:
@@ -460,24 +451,24 @@ namespace SH_OBD {
                 // 节气门绝对位置 B/C, 油门踏板位置 D/E/F
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0)) * 100.0 / 255.0;
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x4D:
             case 0x4E:
                 // MIL亮起后引擎运转时间, DTC清除后持续时间
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = (Utility.Hex2Int(response.GetDataByte(0)) * 256.0) + Utility.Hex2Int(response.GetDataByte(1));
-                return value2;
+                break;
             case 0x4F:
                 if (response.GetDataByteCount() < 4) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 switch (param.SubParameter) {
                 case 0:
@@ -493,64 +484,65 @@ namespace SH_OBD {
                     value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(2));
                     break;
                 case 3:
-                    // 进气歧管绝对压力最大值
+                    // 进气歧管绝压最大值
                     value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(3)) * 10.0;
                     break;
                 default:
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
-                return value2;
+                break;
             case 0x50:
                 // 空气质量流量最大值
                 if (response.GetDataByteCount() < 4) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0)) * 10.0;
-                return value2;
+                break;
             case 0x51:
-                return GetPID51Value(response);
+                value2 = GetPID51Value(response);
+                break;
             case 0x52:
                 // 酒精燃料百分比
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0)) * 100.0 / 255.0;
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x53:
                 // 燃料蒸发排放系统蒸汽绝压
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = ((Utility.Hex2Int(response.GetDataByte(0)) * 256.0) + Utility.Hex2Int(response.GetDataByte(1))) * 0.005;
                 if (bEnglishUnits) {
                     value2.DoubleValue *= 0.145037738;
                 }
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x54:
                 // 燃料蒸发排放系统蒸汽压力
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Utility.Int2SInt((Utility.Hex2Int(response.GetDataByte(0)) * 256) + Utility.Hex2Int(response.GetDataByte(1)), 2);
                 if (bEnglishUnits) {
                     value2.DoubleValue *= 0.000145037738;
                 }
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x55:
             case 0x56:
             case 0x57:
             case 0x58:
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 if (param.SubParameter == 0) {
                     // 长/短时第二氧气传感器燃油修正 组1/2
@@ -560,60 +552,60 @@ namespace SH_OBD {
                     value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(1)) * 0.78125 - 100.0;
                 }
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x59:
                 // 燃料导轨压力（绝压）
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = ((Utility.Hex2Int(response.GetDataByte(0)) * 256.0) + Utility.Hex2Int(response.GetDataByte(1))) * 10.0;
                 if (bEnglishUnits) {
                     value2.DoubleValue *= 0.145037738;
                 }
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x5A:
             case 0x5B:
                 // 相对油门踏板位置, 混动/EV电池组剩余电量
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0)) * 100.0 / 255.0;
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x5C:
                 // 引擎润滑油温度
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0)) - 40.0;
-                return value2;
+                break;
             case 0x5D:
                 // 燃油喷射正时
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = ((Utility.Hex2Int(response.GetDataByte(0)) * 256.0) + Utility.Hex2Int(response.GetDataByte(1))) / 128.0 - 210.0;
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x5E:
                 // 发动机燃油消耗率
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = ((Utility.Hex2Int(response.GetDataByte(0)) * 256.0) + Utility.Hex2Int(response.GetDataByte(1))) * 0.05;
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x5F:
                 // 车辆设计的排放要求
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 switch (Utility.Hex2Int(response.GetDataByte(0))) {
                 case 0x0E:
@@ -633,29 +625,29 @@ namespace SH_OBD {
                     value2.ShortStringValue = "——";
                     break;
                 }
-                return value2;
+                break;
             case 0x61:
             case 0x62:
                 // 驾驶员需求的引擎-扭矩百分比, 实际引擎-扭矩百分比
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0)) - 125.0;
-                return value2;
+                break;
             case 0x63:
                 // 引擎参考扭矩
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = (Utility.Hex2Int(response.GetDataByte(0)) * 256.0) + Utility.Hex2Int(response.GetDataByte(1));
-                return value2;
+                break;
             case 0x64:
                 // 引擎百分比扭矩数据
                 if (response.GetDataByteCount() < 5) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 switch (param.SubParameter) {
                 case 0:
@@ -682,57 +674,78 @@ namespace SH_OBD {
                     value2.ErrorDetected = true;
                     break;
                 }
-                return value2;
+                break;
             case 0x65:
-                return GetPID65Value(param, response);
+                value2 = GetPID65Value(param, response);
+                break;
             case 0x66:
-                return GetPID66Value(param, response, bEnglishUnits);
+                value2 = GetPID66Value(param, response, bEnglishUnits);
+                break;
             case 0x67:
-                return GetPID67Value(param, response, bEnglishUnits);
+                value2 = GetPID67Value(param, response, bEnglishUnits);
+                break;
             case 0x68:
-                return GetPID68Value(param, response, bEnglishUnits);
+                value2 = GetPID68Value(param, response, bEnglishUnits);
+                break;
             case 0x69:
-                return GetPID69Value(param, response);
+                value2 = GetPID69Value(param, response);
+                break;
             case 0x6A:
-                return GetPID6AValue(param, response);
+                value2 = GetPID6AValue(param, response);
+                break;
             case 0x6B:
-                return GetPID6BValue(param, response, bEnglishUnits);
+                value2 = GetPID6BValue(param, response, bEnglishUnits);
+                break;
             case 0x6C:
-                return GetPID6CValue(param, response);
+                value2 = GetPID6CValue(param, response);
+                break;
             case 0x6D:
-                return GetPID6DValue(param, response, bEnglishUnits);
+                value2 = GetPID6DValue(param, response, bEnglishUnits);
+                break;
             case 0x6E:
-                return GetPID6EValue(param, response, bEnglishUnits);
+                value2 = GetPID6EValue(param, response, bEnglishUnits);
+                break;
             case 0x6F:
-                return GetPID6FValue(param, response, bEnglishUnits);
+                value2 = GetPID6FValue(param, response, bEnglishUnits);
+                break;
             case 0x70:
-                return GetPID70Value(param, response, bEnglishUnits);
+                value2 = GetPID70Value(param, response, bEnglishUnits);
+                break;
             case 0x71:
-                return GetPID71Value(param, response);
+                value2 = GetPID71Value(param, response);
+                break;
             case 0x72:
-                return GetPID72Value(param, response);
+                value2 = GetPID72Value(param, response);
+                break;
             case 0x73:
-                return GetPID73Value(param, response, bEnglishUnits);
+                value2 = GetPID73Value(param, response, bEnglishUnits);
+                break;
             case 0x74:
-                return GetPID74Value(param, response);
+                value2 = GetPID74Value(param, response);
+                break;
             case 0x75:
             case 0x76:
-                return GetPID75or76Value(param, response, bEnglishUnits);
+                value2 = GetPID75or76Value(param, response, bEnglishUnits);
+                break;
             case 0x77:
-                return GetPID77Value(param, response, bEnglishUnits);
+                value2 = GetPID77Value(param, response, bEnglishUnits);
+                break;
             case 0x78:
             case 0x79:
-                return GetPID78or79Value(param, response, bEnglishUnits);
+                value2 = GetPID78or79Value(param, response, bEnglishUnits);
+                break;
             case 0x7A:
             case 0x7B:
-                return GetPID7Aor7BValue(param, response, bEnglishUnits);
+                value2 = GetPID7Aor7BValue(param, response, bEnglishUnits);
+                break;
             case 0x7C:
-                return GetPID7CValue(param, response, bEnglishUnits);
+                value2 = GetPID7CValue(param, response, bEnglishUnits);
+                break;
             case 0x7D:
                 // NOx NTE控制区状态
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 num = Utility.Hex2Int(response.GetDataByte(0));
                 value2.SetBitFlagBAT(num);
@@ -770,12 +783,12 @@ namespace SH_OBD {
                     value2.ErrorDetected = true;
                     break;
                 }
-                return value2;
+                break;
             case 0x7E:
                 // PM NTE控制区状态
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 num = Utility.Hex2Int(response.GetDataByte(0));
                 value2.SetBitFlagBAT(num);
@@ -813,118 +826,143 @@ namespace SH_OBD {
                     value2.ErrorDetected = true;
                     break;
                 }
-                return value2;
+                break;
             case 0x7F:
-                return GetPID7FValue(param, response);
+                value2 = GetPID7FValue(param, response);
+                break;
             case 0x81:
             case 0x82:
             case 0x89:
             case 0x8A:
-                return GetPID81or82or89or8AValue(param, response);
+                value2 = GetPID81or82or89or8AValue(param, response);
+                break;
             case 0x83:
             case 0xA7:
-                return GetPID83orA7Value(param, response);
+                value2 = GetPID83orA7Value(param, response);
+                break;
             case 0x84:
                 // 歧管表面温度
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0)) - 40.0;
                 if (bEnglishUnits) {
                     value2.DoubleValue = (value2.DoubleValue * 1.8) + 32.0;
                     value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
                 }
-                return value2;
+                break;
             case 0x85:
-                return GetPID85Value(param, response);
+                value2 = GetPID85Value(param, response);
+                break;
             case 0x86:
-                return GetPID86Value(param, response);
+                value2 = GetPID86Value(param, response);
+                break;
             case 0x87:
-                return GetPID87Value(param, response, bEnglishUnits);
+                value2 = GetPID87Value(param, response, bEnglishUnits);
+                break;
             case 0x88:
-                return GetPID88Value(param, response, bEnglishUnits);
+                value2 = GetPID88Value(param, response, bEnglishUnits);
+                break;
             case 0x8B:
-                return GetPID8BValue(param, response, bEnglishUnits);
+                value2 = GetPID8BValue(param, response, bEnglishUnits);
+                break;
             case 0x8C:
             case 0x9C:
-                return GetPID8Cor9CValue(param, response);
+                value2 = GetPID8Cor9CValue(param, response);
+                break;
             case 0x8D:
                 // 节气门绝对位置 G
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0)) * 100.0 / 255.0;
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x8E:
                 // 发动机摩擦力 - 扭矩百分比
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0)) - 125.0;
-                return value2;
+                break;
             case 0x8F:
-                return GetPID8FValue(param, response);
+                value2 = GetPID8FValue(param, response);
+                break;
             case 0x90:
-                return GetPID90Value(param, response);
+                value2 = GetPID90Value(param, response);
+                break;
             case 0x91:
-                return GetPID91Value(param, response);
+                value2 = GetPID91Value(param, response);
+                break;
             case 0x92:
-                return GetPID92Value(param, response);
+                value2 = GetPID92Value(param, response);
+                break;
             case 0x93:
-                return GetPID93Value(param, response);
+                value2 = GetPID93Value(param, response);
+                break;
             case 0x94:
-                return GetPID94Value(param, response);
+                value2 = GetPID94Value(param, response);
+                break;
             case 0x98:
             case 0x99:
-                return GetPID98or99Value(param, response, bEnglishUnits);
+                value2 = GetPID98or99Value(param, response, bEnglishUnits);
+                break;
             case 0x9A:
-                return GetPID9AValue(param, response);
+                value2 = GetPID9AValue(param, response);
+                break;
             case 0x9B:
-                return GetPID9BValue(param, response, bEnglishUnits);
+                value2 = GetPID9BValue(param, response, bEnglishUnits);
+                break;
             case 0x9D:
                 if (response.GetDataByteCount() < 4) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 // 引擎燃油率
                 value2.DoubleValue = ((Utility.Hex2Int(response.GetDataByte(0)) * 256.0) + Utility.Hex2Int(response.GetDataByte(1))) * 0.02;
                 // 车辆燃油率
                 value2.DoubleValue = ((Utility.Hex2Int(response.GetDataByte(2)) * 256.0) + Utility.Hex2Int(response.GetDataByte(3))) * 0.02;
-                return value2;
+                break;
             case 0x9E:
                 // 引擎排气流量率
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = ((Utility.Hex2Int(response.GetDataByte(0)) * 256.0) + Utility.Hex2Int(response.GetDataByte(1))) * 0.2;
-                return value2;
+                break;
             case 0x9F:
-                return GetPID9FValue(param, response);
+                value2 = GetPID9FValue(param, response);
+                break;
             case 0xA1:
             case 0xA8:
-                return GetPIDA1orA8Value(param, response);
+                value2 = GetPIDA1orA8Value(param, response);
+                break;
             case 0xA2:
                 if (response.GetDataByteCount() < 2) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = ((Utility.Hex2Int(response.GetDataByte(0)) * 256.0) + Utility.Hex2Int(response.GetDataByte(1))) * 2048.0 / 65535.0;
-                return value2;
+                break;
             case 0xA3:
-                return GetPIDA3Value(param, response, bEnglishUnits);
+                value2 = GetPIDA3Value(param, response, bEnglishUnits);
+                break;
             case 0xA4:
-                return GetPIDA4Value(param, response);
+                value2 = GetPIDA4Value(param, response);
+                break;
             case 0xA5:
-                return GetPIDA5Value(param, response);
+                value2 = GetPIDA5Value(param, response);
+                break;
             case 0xA6:
-                return GetPIDA6Value(param, response, bEnglishUnits);
+                value2 = GetPIDA6Value(response, bEnglishUnits);
+                break;
             case 0xA9:
-                return GetPIDA9Value(param, response);
+                value2 = GetPIDA9Value(param, response);
+                break;
             default:
                 if (param.Parameter >= 0xA0 && param.Parameter <= 0xFF) {
                     value2.StringValue = "ISO/SAE 保留";
@@ -932,11 +970,12 @@ namespace SH_OBD {
                 } else {
                     value2.ErrorDetected = true;
                 }
-                return value2;
+                break;
             }
+            return value2;
         }
 
-        public static OBDParameterValue GetMode03070AValue(OBDResponse response) {
+        public OBDParameterValue GetMode03070AValue(OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             List<string> strings = new List<string>();
             for (int i = 0; i <= response.Data.Length - 4; i += 4) {
@@ -949,27 +988,28 @@ namespace SH_OBD {
             return value2;
         }
 
-        public static OBDParameterValue GetMode05Value(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetMode05Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             switch (param.Parameter) {
             case 0x00:
-                return GetPIDSupport(response);
+                value2 = GetPIDSupport(response);
+                break;
             case 0x01:
             case 0x02:
             case 0x03:
             case 0x04:
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0)) * 0.005;
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x05:
             case 0x06:
                 if (response.GetDataByteCount() < 3) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 if (param.SubParameter == 0) {
                     // 取计算值
@@ -982,12 +1022,12 @@ namespace SH_OBD {
                     value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(2)) * 0.004;
                 }
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x07:
             case 0x08:
                 if (response.GetDataByteCount() < 3) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 if (param.SubParameter == 0) {
                     // 取计算值
@@ -1000,12 +1040,12 @@ namespace SH_OBD {
                     value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(2)) * 0.005;
                 }
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             case 0x09:
             case 0x0A:
                 if (response.GetDataByteCount() < 3) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 if (param.SubParameter == 0) {
                     // 取计算值
@@ -1018,69 +1058,66 @@ namespace SH_OBD {
                     value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(2)) * 0.04;
                 }
                 value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
-                return value2;
+                break;
             default:
                 value2.ErrorDetected = true;
-                return value2;
+                break;
             }
+            return value2;
         }
 
-        public static OBDParameterValue GetMode09Value(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetMode09Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             List<string> strings = new List<string>();
-            const int NumOffset = 1 * 2;
             int DataOffset;
             int num;
 
             switch (param.Parameter) {
             case 0x00:
-                return GetPIDSupport(response);
+                value2 = GetPIDSupport(response);
+                break;
             case 0x01:
             case 0x03:
             case 0x05:
             case 0x07:
             case 0x09:
+            case 0x0C:
+            case 0x0E:
                 // 获取相关InfoType的消息数量，仅适用于非CAN协议
                 if (response.GetDataByteCount() < 1) {
                     value2.ErrorDetected = true;
-                    return value2;
+                    break;
                 }
                 value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0));
-                return value2;
+                break;
             case 0x02:
-                // VIN
+            case 0x0D:
+            case 0x0F:
+                // VIN / ESN / EROTAN
                 DataOffset = 17 * 2;
-                num = Utility.Hex2Int(response.Data.Substring(0, NumOffset));
-                for (int i = 0; i < num; i++) {
-                    strings.Add(Utility.HexStrToASCIIStr(response.Data.Substring(NumOffset + i * DataOffset, DataOffset)));
-                }
-                value2.ListStringValue = strings;
-                return value2;
+                value2.ListStringValue = SetMode09ASCII(DataOffset, response);
+                break;
             case 0x04:
                 // CAL ID
                 DataOffset = 16 * 2;
-                num = Utility.Hex2Int(response.Data.Substring(0, NumOffset));
-                for (int i = 0; i < num; i++) {
-                    strings.Add(Utility.HexStrToASCIIStr(response.Data.Substring(NumOffset + i * DataOffset, DataOffset)));
-                }
-                value2.ListStringValue = strings;
-                return value2;
+                value2.ListStringValue = SetMode09ASCII(DataOffset, response);
+                break;
             case 0x06:
                 // CVN
                 DataOffset = 4 * 2;
-                num = Utility.Hex2Int(response.Data.Substring(0, NumOffset));
+                num = response.Data.Length / DataOffset;
                 for (int i = 0; i < num; i++) {
-                    strings.Add(response.Data.Substring(NumOffset + i * DataOffset, DataOffset));
+                    strings.Add(response.Data.Substring(i * DataOffset, DataOffset));
                 }
                 value2.ListStringValue = strings;
-                return value2;
+                break;
             case 0x08:
             case 0x0B:
                 // IPT
                 DataOffset = 2 * 2;
-                num = Utility.Hex2Int(response.Data.Substring(0, NumOffset));
+                num = response.Data.Length / DataOffset;
                 for (int i = 0; i < num; i++) {
-                    strings.Add(response.Data.Substring(NumOffset + i * DataOffset, DataOffset));
+                    strings.Add(response.Data.Substring(i * DataOffset, DataOffset));
                 }
                 value2.ListStringValue = strings;
                 if (param.SubParameter >= 0 && param.SubParameter < num) {
@@ -1088,23 +1125,71 @@ namespace SH_OBD {
                 } else {
                     value2.ErrorDetected = true;
                 }
-                return value2;
+                break;
             case 0x0A:
                 // ECU名称
                 DataOffset = 20 * 2;
-                num = Utility.Hex2Int(response.Data.Substring(0, NumOffset));
-                for (int i = 0; i < num; i++) {
-                    strings.Add(Utility.HexStrToASCIIStr(response.Data.Substring(NumOffset + i * DataOffset, DataOffset)));
+                value2.ListStringValue = SetMode09ASCII(DataOffset, response);
+                break;
+            case 0x10:
+                // ECU协议
+                if (response.GetDataByteCount() < 1) {
+                    value2.ErrorDetected = true;
+                    break;
                 }
-                value2.ListStringValue = strings;
-                return value2;
+                num = Utility.Hex2Int(response.GetDataByte(0));
+                value2.DoubleValue = num;
+                switch (num) {
+                case 0:
+                    value2.StringValue = "保留";
+                    value2.ShortStringValue = "--";
+                    break;
+                case 1:
+                    value2.StringValue = "ISO 27145-4";
+                    value2.ShortStringValue = value2.StringValue;
+                    break;
+                default:
+                    value2.StringValue = "保留";
+                    value2.ShortStringValue = "--";
+                    break;
+                }
+                break;
+            case 0x11:
+                // WWH-OBD GTR 编号
+                DataOffset = 11 * 2;
+                value2.ListStringValue = SetMode09ASCII(DataOffset, response);
+                break;
+            case 0x12:
+            case 0x14:
+                // 燃油发动机操作点火循环计数 / 自EVAP监测完成后行驶距离
+                if (response.GetDataByteCount() < 2) {
+                    value2.ErrorDetected = true;
+                    break;
+                }
+                value2.DoubleValue = Utility.Hex2Int(response.GetDataByte(0)) * 256.0 + Utility.Hex2Int(response.GetDataByte(1));
+                break;
             default:
-                value2.ErrorDetected = true;
-                return value2;
+                if (param.Parameter == 0x13 || (param.Parameter >= 0x15 && param.Parameter <= 0xFF)) {
+                    value2.StringValue = "ISO/SAE 保留";
+                    value2.ShortStringValue = "--";
+                } else {
+                    value2.ErrorDetected = true;
+                }
+                break;
             }
+            return value2;
         }
 
-        public static OBDParameterValue GetValue(OBDParameter param, OBDResponse response, bool bEnglishUnits = false) {
+        private List<string> SetMode09ASCII(int DataOffset, OBDResponse response) {
+            List<string> strings = new List<string>();
+            int num = response.Data.Length / DataOffset;
+            for (int i = 0; i < num; i++) {
+                strings.Add(Utility.HexStrToASCIIStr(response.Data.Substring(i * DataOffset, DataOffset)));
+            }
+            return strings;
+        }
+
+        public OBDParameterValue GetValue(OBDParameter param, OBDResponse response, bool bEnglishUnits = false) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response == null) {
                 value2.ErrorDetected = true;
@@ -1113,22 +1198,28 @@ namespace SH_OBD {
             switch (param.Service) {
             case 1:
             case 2:
-                return GetMode0102Value(param, response, bEnglishUnits);
+                value2 = GetMode0102Value(param, response, bEnglishUnits);
+                break;
             case 3:
             case 7:
             case 0x0A:
-                return GetMode03070AValue(response);
+                value2 = GetMode03070AValue(response);
+                break;
             case 5:
-                return GetMode05Value(param, response);
+                value2 = GetMode05Value(param, response);
+                break;
             case 9:
-                return GetMode09Value(param, response);
+                value2 = GetMode09Value(param, response);
+                break;
             default:
                 value2.ErrorDetected = true;
-                return value2;
+                break;
             }
+            value2.ECUResponseID = response.Header;
+            return value2;
         }
 
-        public static OBDParameterValue GetValue(OBDParameter param, OBDResponseList responses, bool bEnglishUnits = false) {
+        public OBDParameterValue GetValue(OBDParameter param, OBDResponseList responses, bool bEnglishUnits = false) {
             if (responses.ResponseCount == 1) {
                 return GetValue(param, responses.GetOBDResponse(0), bEnglishUnits);
             }
@@ -1199,7 +1290,7 @@ namespace SH_OBD {
             return value8;
         }
 
-        public static string GetDTCName(string strHexDTC) {
+        public string GetDTCName(string strHexDTC) {
             if (strHexDTC.Length != 4) {
                 return "P0000";
             } else {
@@ -1207,7 +1298,7 @@ namespace SH_OBD {
             }
         }
 
-        private static string GetDTCSystem(string strSysId) {
+        private string GetDTCSystem(string strSysId) {
             string strSys;
             switch (strSysId) {
             case "0":

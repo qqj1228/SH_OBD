@@ -5,14 +5,7 @@ using System.Text;
 
 namespace SH_OBD {
     public partial class OBDInterpreter {
-
-        /// <summary>
-        /// MIL状态，DTC数量，就绪状态
-        /// </summary>
-        /// <param name="param"></param>
-        /// <param name="response"></param>
-        /// <returns></returns>
-        public static OBDParameterValue GetPID01Value(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPIDSupport(OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 4) {
                 value2.ErrorDetected = true;
@@ -22,6 +15,27 @@ namespace SH_OBD {
             int dataB = Utility.Hex2Int(response.GetDataByte(1));
             int dataC = Utility.Hex2Int(response.GetDataByte(2));
             int dataD = Utility.Hex2Int(response.GetDataByte(3));
+            value2.SetBitFlagBAT(dataA, dataB, dataC, dataD);
+            return value2;
+        }
+
+        /// <summary>
+        /// MIL状态，DTC数量，就绪状态
+        /// </summary>
+        /// <param name="param"></param>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        public OBDParameterValue GetPID01Value(OBDParameter param, OBDResponse response) {
+            OBDParameterValue value2 = new OBDParameterValue();
+            if (response.GetDataByteCount() < 4) {
+                value2.ErrorDetected = true;
+                return value2;
+            }
+            int dataA = Utility.Hex2Int(response.GetDataByte(0));
+            int dataB = Utility.Hex2Int(response.GetDataByte(1));
+            int dataC = Utility.Hex2Int(response.GetDataByte(2));
+            int dataD = Utility.Hex2Int(response.GetDataByte(3));
+            value2.SetBitFlagBAT(dataA, dataB, dataC, dataD);
 
             switch (param.SubParameter) {
             case 0:
@@ -43,7 +57,7 @@ namespace SH_OBD {
             case 3:
             case 4:
             case 5:
-                // 失火 / 燃油系统 / 综合组件 / 压缩点火，监控支持？
+                // 失火 / 燃油系统 / 综合组件 / 压缩点火（0 - 火花点火，1 - 压缩点火），监控支持？
                 value2.SetBoolValueWithData(dataB, param.SubParameter - 2);
                 break;
             case 6:
@@ -60,8 +74,8 @@ namespace SH_OBD {
             case 14:
             case 15:
             case 16:
-                // 火花点火车辆：催化器 / 加热催化器 / 燃油蒸发系统 / 二次空气系统 / 空调系统制冷剂 / 氧气传感器 / 加热氧气传感器 / EGR系统，监控支持？
-                // 压缩点火车辆：NMHC催化器 / NOx/SCR后处理 / ISO/SAE保留 / 增压系统 / ISO/SAE保留 / 排气传感器 / PM过滤器 / EGR/VVT系统，监控支持？
+                // 火花点火车辆：催化器 / 加热催化器 / 燃油蒸发系统 / 二次空气系统 / 空调系统制冷剂 / 氧气传感器 / 加热氧气传感器 / EGR/VVT系统，监控支持？
+                // 压缩点火车辆：NMHC催化器 / NOx/SCR后处理 / ISO/SAE保留 / 增压系统 / ISO/SAE保留 / 废气传感器 / PM过滤器 / EGR/VVT系统，监控支持？
                 value2.SetBoolValueWithData(dataC, param.SubParameter - 9);
                 break;
             case 17:
@@ -89,7 +103,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID03Value(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID03Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 2) {
                 value2.ErrorDetected = true;
@@ -104,25 +118,32 @@ namespace SH_OBD {
                 // 燃油系统 2 状态
                 num = Utility.Hex2Int(response.GetDataByte(1));
             }
+            value2.SetBitFlagBAT(num);
 
             if ((num & 1) != 0) {
-                value2.StringValue = "开环：尚未满足闭环条件";
+                value2.StringValue = "开环，尚未满足闭环条件";
                 value2.ShortStringValue = "OL";
             } else if ((num & 2) != 0) {
-                value2.StringValue = "闭环：使用氧传感器作为燃油控制的反馈";
+                value2.StringValue = "闭环，使用氧传感器作为燃油控制的反馈";
                 value2.ShortStringValue = "CL";
             } else if ((num & 4) != 0) {
-                value2.StringValue = "由于驾驶条件而开环（例如，功率提升、减速消耗）";
+                value2.StringValue = "开环，由于驾驶条件而开环（例如，功率提升、减速消耗）";
                 value2.ShortStringValue = "OL-Drive";
             } else if ((num & 8) != 0) {
-                value2.StringValue = "由于检测到的系统故障而开环";
+                value2.StringValue = "开环，由于检测到的系统故障而开环";
                 value2.ShortStringValue = "OL-Fault";
             } else if ((num & 0x10) != 0) {
                 value2.StringValue = "闭环，但至少有一个氧气故障传感器 - 可能使用单氧传感器作为燃料控制";
                 value2.ShortStringValue = "CL-Fault";
-            } else {
-                value2.StringValue = "不适用";
-                value2.ShortStringValue = value2.StringValue;
+            } else if ((num & 0x20) != 0) {
+                value2.StringValue = "开环，尚未满足闭环条件（组2）";
+                value2.ShortStringValue = "OL B2";
+            } else if ((num & 0x40) != 0) {
+                value2.StringValue = "开环，由于驾驶条件而开环（例如，功率提升、减速消耗）（组2）";
+                value2.ShortStringValue = "OL Drive B2";
+            } else if ((num & 0x80) != 0) {
+                value2.StringValue = "开环，由于检测到的系统故障而开环（组2）";
+                value2.ShortStringValue = "OL Fault B2";
             }
             return value2;
         }
@@ -133,7 +154,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID13or1DValue(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID13or1DValue(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 1) {
                 value2.ErrorDetected = true;
@@ -155,13 +176,14 @@ namespace SH_OBD {
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID1CValue(OBDResponse response) {
+        public OBDParameterValue GetPID1CValue(OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 1) {
                 value2.ErrorDetected = true;
                 return value2;
             }
             int dataA = Utility.Hex2Int(response.GetDataByte(0));
+            value2.DoubleValue = dataA;
             switch (dataA) {
             case 1:
                 value2.StringValue = "OBD II (加利福尼亚 ARB)";
@@ -350,7 +372,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID41Value(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID41Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 4) {
                 value2.ErrorDetected = true;
@@ -412,7 +434,7 @@ namespace SH_OBD {
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID51Value(OBDResponse response) {
+        public OBDParameterValue GetPID51Value(OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 1) {
                 value2.ErrorDetected = true;
@@ -549,7 +571,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID65Value(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID65Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 2) {
                 value2.ErrorDetected = true;
@@ -578,7 +600,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID66Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
+        public OBDParameterValue GetPID66Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 5) {
                 value2.ErrorDetected = true;
@@ -623,7 +645,7 @@ namespace SH_OBD {
         /// <param name="response"></param>
         /// <param name="bEnglishUnits"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID67Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
+        public OBDParameterValue GetPID67Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 3) {
                 value2.ErrorDetected = true;
@@ -665,7 +687,7 @@ namespace SH_OBD {
         /// <param name="response"></param>
         /// <param name="bEnglishUnits"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID68Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
+        public OBDParameterValue GetPID68Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 7) {
                 value2.ErrorDetected = true;
@@ -727,7 +749,7 @@ namespace SH_OBD {
         /// <param name="response"></param>
         /// <param name="bEnglishUnits"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID69Value(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID69Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 7) {
                 value2.ErrorDetected = true;
@@ -785,7 +807,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID6AValue(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID6AValue(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 5) {
                 value2.ErrorDetected = true;
@@ -834,7 +856,7 @@ namespace SH_OBD {
         /// <param name="response"></param>
         /// <param name="bEnglishUnits"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID6BValue(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
+        public OBDParameterValue GetPID6BValue(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 5) {
                 value2.ErrorDetected = true;
@@ -902,7 +924,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID6CValue(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID6CValue(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 5) {
                 value2.ErrorDetected = true;
@@ -951,7 +973,7 @@ namespace SH_OBD {
         /// <param name="response"></param>
         /// <param name="bEnglishUnits"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID6DValue(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
+        public OBDParameterValue GetPID6DValue(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 11) {
                 value2.ErrorDetected = true;
@@ -1017,7 +1039,7 @@ namespace SH_OBD {
         /// <param name="response"></param>
         /// <param name="bEnglishUnits"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID6EValue(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
+        public OBDParameterValue GetPID6EValue(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 9) {
                 value2.ErrorDetected = true;
@@ -1073,7 +1095,7 @@ namespace SH_OBD {
         /// <param name="response"></param>
         /// <param name="bEnglishUnits"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID6FValue(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
+        public OBDParameterValue GetPID6FValue(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 3) {
                 value2.ErrorDetected = true;
@@ -1124,7 +1146,7 @@ namespace SH_OBD {
         /// <param name="response"></param>
         /// <param name="bEnglishUnits"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID70Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
+        public OBDParameterValue GetPID70Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 10) {
                 value2.ErrorDetected = true;
@@ -1230,7 +1252,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID71Value(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID71Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 6) {
                 value2.ErrorDetected = true;
@@ -1329,7 +1351,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID72Value(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID72Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 5) {
                 value2.ErrorDetected = true;
@@ -1378,7 +1400,7 @@ namespace SH_OBD {
         /// <param name="response"></param>
         /// <param name="bEnglishUnits"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID73Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
+        public OBDParameterValue GetPID73Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 5) {
                 value2.ErrorDetected = true;
@@ -1421,7 +1443,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID74Value(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID74Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 5) {
                 value2.ErrorDetected = true;
@@ -1461,7 +1483,7 @@ namespace SH_OBD {
         /// <param name="response"></param>
         /// <param name="bEnglishUnits"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID75or76Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
+        public OBDParameterValue GetPID75or76Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 7) {
                 value2.ErrorDetected = true;
@@ -1515,7 +1537,7 @@ namespace SH_OBD {
         /// <param name="response"></param>
         /// <param name="bEnglishUnits"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID77Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
+        public OBDParameterValue GetPID77Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 5) {
                 value2.ErrorDetected = true;
@@ -1567,7 +1589,7 @@ namespace SH_OBD {
         /// <param name="response"></param>
         /// <param name="bEnglishUnits"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID78or79Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
+        public OBDParameterValue GetPID78or79Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 9) {
                 value2.ErrorDetected = true;
@@ -1623,7 +1645,7 @@ namespace SH_OBD {
         /// <param name="response"></param>
         /// <param name="bEnglishUnits"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID7Aor7BValue(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
+        public OBDParameterValue GetPID7Aor7BValue(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 7) {
                 value2.ErrorDetected = true;
@@ -1673,7 +1695,7 @@ namespace SH_OBD {
         /// <param name="response"></param>
         /// <param name="bEnglishUnits"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID7CValue(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
+        public OBDParameterValue GetPID7CValue(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 9) {
                 value2.ErrorDetected = true;
@@ -1728,7 +1750,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID7FValue(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID7FValue(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 13) {
                 value2.ErrorDetected = true;
@@ -1785,7 +1807,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID81or82or89or8AValue(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID81or82or89or8AValue(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 41) {
                 value2.ErrorDetected = true;
@@ -1908,7 +1930,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID83orA7Value(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID83orA7Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 9) {
                 value2.ErrorDetected = true;
@@ -1962,7 +1984,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID85Value(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID85Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 10) {
                 value2.ErrorDetected = true;
@@ -2020,7 +2042,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID86Value(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID86Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 5) {
                 value2.ErrorDetected = true;
@@ -2061,7 +2083,7 @@ namespace SH_OBD {
         /// <param name="response"></param>
         /// <param name="bEnglishUnits"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID87Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
+        public OBDParameterValue GetPID87Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 5) {
                 value2.ErrorDetected = true;
@@ -2098,7 +2120,7 @@ namespace SH_OBD {
             return value2;
         }
 
-        static void SetPID88Bit(ref OBDParameterValue value2, int data, int index) {
+        void SetPID88Bit(ref OBDParameterValue value2, int data, int index) {
             switch (index) {
             case 0:
             case 5:
@@ -2162,7 +2184,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID88Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
+        public OBDParameterValue GetPID88Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 13) {
                 value2.ErrorDetected = true;
@@ -2239,7 +2261,7 @@ namespace SH_OBD {
         /// <param name="response"></param>
         /// <param name="bEnglishUnits"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID8BValue(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
+        public OBDParameterValue GetPID8BValue(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 7) {
                 value2.ErrorDetected = true;
@@ -2336,7 +2358,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID8Cor9CValue(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID8Cor9CValue(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 17) {
                 value2.ErrorDetected = true;
@@ -2412,7 +2434,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID8FValue(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID8FValue(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 7) {
                 value2.ErrorDetected = true;
@@ -2501,7 +2523,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID90Value(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID90Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 3) {
                 value2.ErrorDetected = true;
@@ -2601,7 +2623,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID91Value(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID91Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 5) {
                 value2.ErrorDetected = true;
@@ -2670,7 +2692,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID92Value(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID92Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 2) {
                 value2.ErrorDetected = true;
@@ -2763,7 +2785,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID93Value(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID93Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 3) {
                 value2.ErrorDetected = true;
@@ -2789,7 +2811,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID94Value(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID94Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 12) {
                 value2.ErrorDetected = true;
@@ -2935,7 +2957,7 @@ namespace SH_OBD {
         /// <param name="response"></param>
         /// <param name="bEnglishUnits"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID98or99Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
+        public OBDParameterValue GetPID98or99Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 9) {
                 value2.ErrorDetected = true;
@@ -2990,7 +3012,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID9AValue(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID9AValue(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 6) {
                 value2.ErrorDetected = true;
@@ -3069,7 +3091,7 @@ namespace SH_OBD {
         /// <param name="response"></param>
         /// <param name="bEnglishUnits"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID9BValue(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
+        public OBDParameterValue GetPID9BValue(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 4) {
                 value2.ErrorDetected = true;
@@ -3145,7 +3167,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPID9FValue(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPID9FValue(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 9) {
                 value2.ErrorDetected = true;
@@ -3213,7 +3235,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPIDA1orA8Value(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPIDA1orA8Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 9) {
                 value2.ErrorDetected = true;
@@ -3268,7 +3290,7 @@ namespace SH_OBD {
         /// <param name="response"></param>
         /// <param name="bEnglishUnits"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPIDA3Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
+        public OBDParameterValue GetPIDA3Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 9) {
                 value2.ErrorDetected = true;
@@ -3323,7 +3345,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPIDA4Value(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPIDA4Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 4) {
                 value2.ErrorDetected = true;
@@ -3362,7 +3384,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPIDA5Value(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPIDA5Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 4) {
                 value2.ErrorDetected = true;
@@ -3402,7 +3424,7 @@ namespace SH_OBD {
         /// <param name="response"></param>
         /// <param name="bEnglishUnits"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPIDA6Value(OBDParameter param, OBDResponse response, bool bEnglishUnits) {
+        public OBDParameterValue GetPIDA6Value(OBDResponse response, bool bEnglishUnits) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 4) {
                 value2.ErrorDetected = true;
@@ -3427,7 +3449,7 @@ namespace SH_OBD {
         /// <param name="param"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static OBDParameterValue GetPIDA9Value(OBDParameter param, OBDResponse response) {
+        public OBDParameterValue GetPIDA9Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response.GetDataByteCount() < 2) {
                 value2.ErrorDetected = true;
