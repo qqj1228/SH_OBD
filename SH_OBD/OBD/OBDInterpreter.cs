@@ -7,7 +7,6 @@ namespace SH_OBD {
         public OBDParameterValue GetMode0102Value(OBDParameter param, OBDResponse response, bool bEnglishUnits = false) {
             OBDParameterValue value2 = new OBDParameterValue();
             int num;
-
             switch (param.Parameter) {
             case 0:
             case 0x20:
@@ -1189,6 +1188,30 @@ namespace SH_OBD {
             return strings;
         }
 
+        private OBDParameterValue Get42DTCValue(OBDResponse response) {
+            return Get19DTCValue(response, 10);
+        }
+
+        private OBDParameterValue Get55DTCValue(OBDResponse response) {
+            return Get19DTCValue(response, 8);
+        }
+
+        private OBDParameterValue Get19DTCValue(OBDResponse response, int offset, int WholeDTCLenInByte = 4) {
+            if (offset - WholeDTCLenInByte * 2 < 0) {
+                return null;
+            }
+            OBDParameterValue value2 = new OBDParameterValue();
+            List<string> strings = new List<string>();
+            for (int i = 0; i <= response.Data.Length - offset; i += offset) {
+                string str = GetDTCName(response.Data.Substring(i + offset - WholeDTCLenInByte * 2, 6));
+                if (str != "P0000") {
+                    strings.Add(str);
+                }
+            }
+            value2.ListStringValue = strings;
+            return value2;
+        }
+
         public OBDParameterValue GetValue(OBDParameter param, OBDResponse response, bool bEnglishUnits = false) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response == null) {
@@ -1210,6 +1233,26 @@ namespace SH_OBD {
                 break;
             case 9:
                 value2 = GetMode09Value(param, response);
+                break;
+            case 0x19:
+                // ISO 27145 ReadDTCInformation
+                string reportType = param.OBDRequest.Substring(2, 2);
+                if (reportType == "42") {
+                    value2 = Get42DTCValue(response);
+                } else if (reportType == "55") {
+                    value2 = Get55DTCValue(response);
+                }
+                break;
+            case 0x22:
+                // ISO 27145 ReadDataByIdentifer
+                int HByte = (param.Parameter >> 8) & 0xFF;
+                int LByte = param.Parameter & 0x00FF;
+                param.Parameter = LByte;
+                if (HByte == 0xF4) {
+                    value2 = GetMode0102Value(param, response, bEnglishUnits);
+                } else if (HByte == 0xF8) {
+                    value2 = GetMode09Value(param, response);
+                }
                 break;
             default:
                 value2.ErrorDetected = true;
@@ -1291,10 +1334,10 @@ namespace SH_OBD {
         }
 
         public string GetDTCName(string strHexDTC) {
-            if (strHexDTC.Length != 4) {
+            if (strHexDTC.Length < 4) {
                 return "P0000";
             } else {
-                return GetDTCSystem(strHexDTC.Substring(0, 1)) + strHexDTC.Substring(1, 3);
+                return GetDTCSystem(strHexDTC.Substring(0, 1)) + strHexDTC.Substring(1);
             }
         }
 

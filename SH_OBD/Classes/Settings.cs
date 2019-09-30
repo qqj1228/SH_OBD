@@ -7,22 +7,39 @@ namespace SH_OBD {
         public bool DoInitialization { get; set; }
         public int ActiveProfileIndex { get; set; }
         public int BaudRateIndex { get; set; }
+        public int ScannerBaudRateIndex { get; set; }
         public int ComPort { get; set; }
+        public int ScannerPort { get; set; }
         public bool AutoDetect { get; set; }
+        public bool UseSerialScanner { get; set; }
 
         public Settings() {
             AutoDetect = true;
             ComPort = 1;
+            ScannerPort = 2;
             ActiveProfileIndex = 0;
             BaudRateIndex = 0;
+            ScannerBaudRateIndex = 0;
             HardwareIndex = HardwareType.Automatic;
             ProtocolIndex = ProtocolType.Automatic;
             DoInitialization = true;
+            UseSerialScanner = true;
         }
 
         public int BaudRate {
             get {
                 switch (BaudRateIndex) {
+                    case 0: return 9600;
+                    case 1: return 38400;
+                    case 2: return 115200;
+                    default: return 9600;
+                }
+            }
+        }
+
+        public int ScannerBaudRate {
+            get {
+                switch (ScannerBaudRateIndex) {
                 case 0: return 9600;
                 case 1: return 38400;
                 case 2: return 115200;
@@ -33,6 +50,10 @@ namespace SH_OBD {
 
         public string ComPortName {
             get { return "COM" + Convert.ToString(ComPort); }
+        }
+
+        public string ScannerPortName {
+            get { return "COM" + Convert.ToString(ScannerPort); }
         }
 
         [XmlIgnore]
@@ -187,6 +208,12 @@ namespace SH_OBD {
         public string WebServiceAddress { get; set; }
         public string WebServiceName { get; set; }
         public string WebServiceMethods { get; set; }
+        public string WebServiceWSDL { get; set; }
+        public bool UseURL { get; set; }
+        [XmlIgnore]
+        public bool ChangeWebService { get; set; }
+        public bool UploadWhenever { get; set; }
+        public bool UseECUName { get; set; }
 
         public DBandMES() {
             UserName = "sa";
@@ -197,6 +224,11 @@ namespace SH_OBD {
             WebServiceAddress = "http://193.28.6.4:1908/";
             WebServiceName = "Wes_DeviceTestData_MES";
             WebServiceMethods = "WriteDataToMes";
+            WebServiceWSDL = "";
+            UseURL = true;
+            ChangeWebService = true;
+            UploadWhenever = false;
+            UseECUName = true;
         }
 
         public string[] GetMethodArray() {

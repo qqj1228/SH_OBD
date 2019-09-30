@@ -35,7 +35,7 @@ namespace SH_OBD {
         /// <summary>
         /// 接口方法字典
         /// </summary>
-        private static Dictionary<string, MethodInfo> m_MethodDic = new Dictionary<string, MethodInfo>();
+        private static readonly Dictionary<string, MethodInfo> m_MethodDic = new Dictionary<string, MethodInfo>();
 
         /// <summary>
         /// 创建WebService，生成客户端代理程序集文件
@@ -43,13 +43,14 @@ namespace SH_OBD {
         /// <param name="error">错误信息</param>
         /// <returns>返回：true或false</returns>
         public static bool CreateWebService(DBandMES dbandMES, out string error) {
+            bool result = false;
             try {
                 error = string.Empty;
                 m_OutputDllFilename = dbandMES.WebServiceName + ".dll";
                 m_ProxyClassName = dbandMES.WebServiceName;
                 m_Methods = dbandMES.GetMethodArray();
-                string webServiceUrl = dbandMES.WebServiceAddress + dbandMES.WebServiceName + ".asmx";
-                webServiceUrl += "?WSDL";
+                string webServiceUrl = dbandMES.WebServiceAddress;
+                string strWSDL = dbandMES.WebServiceWSDL;
 
                 // 如果程序集已存在，直接使用
                 if (File.Exists(Path.Combine(Environment.CurrentDirectory, m_OutputDllFilename))) {
@@ -57,62 +58,82 @@ namespace SH_OBD {
                     return true;
                 }
 
-                //使用 WebClient 下载 WSDL 信息。
-                WebClient web = new WebClient();
-                Stream stream = web.OpenRead(webServiceUrl);
-
-                //创建和格式化 WSDL 文档。
-                if (stream != null) {
-                    // 格式化WSDL
-                    ServiceDescription description = ServiceDescription.Read(stream);
-
-                    // 创建客户端代理类。
-                    ServiceDescriptionImporter importer = new ServiceDescriptionImporter {
-                        ProtocolName = "Soap",
-                        Style = ServiceDescriptionImportStyle.Client,
-                        CodeGenerationOptions =
-                            CodeGenerationOptions.GenerateProperties | CodeGenerationOptions.GenerateNewAsync
-                    };
-
-                    // 添加 WSDL 文档。
-                    importer.AddServiceDescription(description, null, null);
-
-                    //使用 CodeDom 编译客户端代理类。
-                    CodeNamespace nmspace = new CodeNamespace();
-                    CodeCompileUnit unit = new CodeCompileUnit();
-                    unit.Namespaces.Add(nmspace);
-
-                    ServiceDescriptionImportWarnings warning = importer.Import(nmspace, unit);
-                    CodeDomProvider provider = CodeDomProvider.CreateProvider("CSharp");
-
-                    CompilerParameters parameter = new CompilerParameters {
-                        GenerateExecutable = false,
-                        // 指定输出dll文件名。
-                        OutputAssembly = m_OutputDllFilename
-                    };
-
-                    parameter.ReferencedAssemblies.Add("System.dll");
-                    parameter.ReferencedAssemblies.Add("System.XML.dll");
-                    parameter.ReferencedAssemblies.Add("System.Web.Services.dll");
-                    parameter.ReferencedAssemblies.Add("System.Data.dll");
-
-                    // 编译输出程序集
-                    CompilerResults result = provider.CompileAssemblyFromDom(parameter, unit);
-
-                    // 使用 Reflection 调用 WebService。
-                    if (!result.Errors.HasErrors) {
-                        BuildMethods(dbandMES.GetMethodArray());
-                        return true;
+                if (dbandMES.UseURL) {
+                    // 使用 WebClient 下载 WSDL 信息。
+                    WebClient web = new WebClient();
+                    Stream stream = web.OpenRead(webServiceUrl);
+                    if (stream != null) {
+                        // 通过加载stream流来格式化WSDL
+                        ServiceDescription description = ServiceDescription.Read(stream);
+                        // 编译输出 WebService 程序集
+                        result = CreateWebServiceAssembly(description, dbandMES, ref error);
                     } else {
-                        error = "反射生成dll文件时异常";
+                        error = "打开WebServiceUrl失败";
                     }
+                    web.Dispose();
                     stream.Close();
                     stream.Dispose();
                 } else {
-                    error = "打开WebServiceUrl失败";
+                    if (strWSDL != "") {
+                        // 通过加载xml文件来格式化WSDL
+                        ServiceDescription description = ServiceDescription.Read(strWSDL);
+                        // 编译输出 WebService 程序集
+                        result = CreateWebServiceAssembly(description, dbandMES, ref error);
+                    } else {
+                        error = "WSDL文件路径不能为空";
+                    }
                 }
             } catch (Exception ex) {
                 error = ex.Message;
+            }
+            return result;
+        }
+
+        private static bool CreateWebServiceAssembly(ServiceDescription description, DBandMES dbandMES, ref string error) {
+            // 创建客户端代理类。
+            ServiceDescriptionImporter importer = new ServiceDescriptionImporter {
+                ProtocolName = "Soap",
+                Style = ServiceDescriptionImportStyle.Client,
+                CodeGenerationOptions =
+                    CodeGenerationOptions.GenerateProperties | CodeGenerationOptions.GenerateNewAsync
+            };
+
+            // 添加 WSDL 文档。
+            importer.AddServiceDescription(description, null, null);
+
+            //使用 CodeDom 编译客户端代理类。
+            CodeNamespace nmspace = new CodeNamespace();
+            CodeCompileUnit unit = new CodeCompileUnit();
+            unit.Namespaces.Add(nmspace);
+
+            ServiceDescriptionImportWarnings warning = importer.Import(nmspace, unit);
+            error += "ServiceDescriptionImportWarnings\"" + GetWarningMeaning(warning) + "\", ";
+
+            using (CodeDomProvider provider = CodeDomProvider.CreateProvider("CSharp")) {
+                CompilerParameters parameter = new CompilerParameters {
+                    GenerateExecutable = false,
+                    // 指定输出dll文件名。
+                    OutputAssembly = m_OutputDllFilename
+                };
+
+                parameter.ReferencedAssemblies.Add("System.dll");
+                parameter.ReferencedAssemblies.Add("System.XML.dll");
+                parameter.ReferencedAssemblies.Add("System.Web.Services.dll");
+                parameter.ReferencedAssemblies.Add("System.Data.dll");
+
+                // 编译输出程序集
+                CompilerResults result = provider.CompileAssemblyFromDom(parameter, unit);
+
+                // 使用 Reflection 调用 WebService。
+                if (!result.Errors.HasErrors) {
+                    BuildMethods(dbandMES.GetMethodArray());
+                    if (error.Length > 0) {
+                        error = error.Substring(0, error.Length - 3);
+                    }
+                    return true;
+                } else {
+                    error += "反射生成dll文件时异常";
+                }
             }
             return false;
         }
@@ -121,6 +142,9 @@ namespace SH_OBD {
         /// 反射构建Methods
         /// </summary>
         private static void BuildMethods(string[] methods) {
+            if (m_ObjInvoke != null) {
+                return;
+            }
             Assembly asm = Assembly.LoadFrom(m_OutputDllFilename);
             //var types = asm.GetTypes();
             Type asmType = asm.GetType(m_ProxyClassName);
@@ -154,7 +178,7 @@ namespace SH_OBD {
 
         public static string GetResponseOutString(string method, out string strMsg, params object[] paraIn) {
             strMsg = "";
-            string result = null;
+            string result = "";
             object[] para = new object[paraIn.Length + 1];
             for (int i = 0; i < paraIn.Length; i++) {
                 para[i] = paraIn[i];
@@ -178,6 +202,39 @@ namespace SH_OBD {
             }
         }
 
+        private static string GetWarningMeaning(ServiceDescriptionImportWarnings warning) {
+            string strRet;
+            switch (warning) {
+            case ServiceDescriptionImportWarnings.NoCodeGenerated:
+                strRet = "NoCodeGenerated";
+                break;
+            case ServiceDescriptionImportWarnings.NoMethodsGenerated:
+                strRet = "NoMethodsGenerated";
+                break;
+            case ServiceDescriptionImportWarnings.UnsupportedOperationsIgnored:
+                strRet = "UnsupportedOperationsIgnored";
+                break;
+            case ServiceDescriptionImportWarnings.OptionalExtensionsIgnored:
+                strRet = "OptionalExtensionsIgnored";
+                break;
+            case ServiceDescriptionImportWarnings.RequiredExtensionsIgnored:
+                strRet = "RequiredExtensionsIgnored";
+                break;
+            case ServiceDescriptionImportWarnings.UnsupportedBindingsIgnored:
+                strRet = "UnsupportedBindingsIgnored";
+                break;
+            case ServiceDescriptionImportWarnings.SchemaValidation:
+                strRet = "SchemaValidation";
+                break;
+            case ServiceDescriptionImportWarnings.WsiConformance:
+                strRet = "WsiConformance";
+                break;
+            default:
+                strRet = "General Warning";
+                break;
+            }
+            return strRet;
+        }
     }
 
     /// <summary>
@@ -311,11 +368,13 @@ namespace SH_OBD {
         /// <param name="url">待验证 URL</param>
         /// <returns></returns>
         private string VerifyUrl(string url) {
-            if (string.IsNullOrEmpty(url))
+            if (string.IsNullOrEmpty(url)) {
                 throw new Exception("URL 地址不可以为空！");
+            }
 
-            if (url.StartsWith("http://", StringComparison.CurrentCultureIgnoreCase))
+            if (url.StartsWith("http://", StringComparison.CurrentCultureIgnoreCase)) {
                 return url;
+            }
 
             return string.Format("http://{0}", url);
         }

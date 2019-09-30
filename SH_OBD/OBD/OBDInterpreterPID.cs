@@ -187,179 +187,179 @@ namespace SH_OBD {
             switch (dataA) {
             case 1:
                 value2.StringValue = "OBD II (加利福尼亚 ARB)";
-                value2.ShortStringValue = "OBDII CARB";
+                value2.ShortStringValue = dataA.ToString("X") + ",OBDII CARB";
                 break;
             case 2:
                 value2.StringValue = "OBD (联邦环保局)";
-                value2.ShortStringValue = "OBD (Fed)";
+                value2.ShortStringValue = dataA.ToString("X") + ",OBD (Fed)";
                 break;
             case 3:
                 value2.StringValue = "OBD 和 OBD II";
-                value2.ShortStringValue = "OBD/OBDII";
+                value2.ShortStringValue = dataA.ToString("X") + ",OBD/OBDII";
                 break;
             case 4:
                 value2.StringValue = "OBD I";
-                value2.ShortStringValue = "OBDI";
+                value2.ShortStringValue = dataA.ToString("X") + ",OBDI";
                 break;
             case 5:
                 value2.StringValue = "不兼容OBD";
-                value2.ShortStringValue = "NO OBD";
+                value2.ShortStringValue = dataA.ToString("X") + ",NO OBD";
                 break;
             case 6:
                 value2.StringValue = "EOBD（欧洲OBD）";
-                value2.ShortStringValue = "EOBD";
+                value2.ShortStringValue = dataA.ToString("X") + ",EOBD";
                 break;
             case 7:
                 value2.StringValue = "EOBD 和 OBD II";
-                value2.ShortStringValue = "EOBD/OBDII";
+                value2.ShortStringValue = dataA.ToString("X") + ",EOBD/OBDII";
                 break;
             case 8:
                 value2.StringValue = "EOBD 和 OBD";
-                value2.ShortStringValue = "EOBD/OBD";
+                value2.ShortStringValue = dataA.ToString("X") + ",EOBD/OBD";
                 break;
             case 9:
                 value2.StringValue = "EOBD, OBD 和 OBD II";
-                value2.ShortStringValue = "EOBD/OBD/OBDII";
+                value2.ShortStringValue = dataA.ToString("X") + ",EOBD/OBD/OBDII";
                 break;
             case 0x0A:
                 value2.StringValue = "JOBD（日本OBD）";
-                value2.ShortStringValue = "JOBD";
+                value2.ShortStringValue = dataA.ToString("X") + ",JOBD";
                 break;
             case 0x0B:
                 value2.StringValue = "JOBD 和 OBD II";
-                value2.ShortStringValue = "JOBD/OBDII";
+                value2.ShortStringValue = dataA.ToString("X") + ",JOBD/OBDII";
                 break;
             case 0x0C:
                 value2.StringValue = "JOBD 和 EOBD";
-                value2.ShortStringValue = "JOBD/EOBD";
+                value2.ShortStringValue = dataA.ToString("X") + ",JOBD/EOBD";
                 break;
             case 0x0D:
                 value2.StringValue = "JOBD, EOBD, 和 OBD II";
-                value2.ShortStringValue = "JOBD/EOBD/OBDII";
+                value2.ShortStringValue = dataA.ToString("X") + ",JOBD/EOBD/OBDII";
                 break;
             case 0x0E:
                 value2.StringValue = "OBD, EOBD 和 KOBD";
-                value2.ShortStringValue = "OBD/EOBD/KOBD";
+                value2.ShortStringValue = dataA.ToString("X") + ",OBD/EOBD/KOBD";
                 break;
             case 0x0F:
                 value2.StringValue = "OBD, OBD II, EOBD 和 KOBD";
-                value2.ShortStringValue = "OBD/OBD II/EOBD/KOBD";
+                value2.ShortStringValue = dataA.ToString("X") + ",OBD/OBD II/EOBD/KOBD";
                 break;
             case 0x10:
                 value2.StringValue = "ISO/SAE 保留";
-                value2.ShortStringValue = "——";
+                value2.ShortStringValue = dataA.ToString("X") + ",--";
                 break;
             case 0x11:
                 value2.StringValue = "发动机制造商诊断用 (EMD)";
-                value2.ShortStringValue = "EMD";
+                value2.ShortStringValue = dataA.ToString("X") + ",EMD";
                 break;
             case 0x12:
                 value2.StringValue = "发动机制造商诊断用增强型 (EMD+)";
-                value2.ShortStringValue = "EMD+";
+                value2.ShortStringValue = dataA.ToString("X") + ",EMD+";
                 break;
             case 0x13:
                 value2.StringValue = "重型车辆OBD (子类)";
-                value2.ShortStringValue = "HD OBD-C";
+                value2.ShortStringValue = dataA.ToString("X") + ",HD OBD-C";
                 break;
             case 0x14:
                 value2.StringValue = "重型车辆OBD";
-                value2.ShortStringValue = "HD OBD";
+                value2.ShortStringValue = dataA.ToString("X") + ",HD OBD";
                 break;
             case 0x15:
                 value2.StringValue = "全球协调OBD (WWH OBD)";
-                value2.ShortStringValue = "WWH OBD";
+                value2.ShortStringValue = dataA.ToString("X") + ",WWH OBD";
                 break;
             case 0x16:
                 value2.StringValue = "ISO/SAE 保留";
-                value2.ShortStringValue = "——";
+                value2.ShortStringValue = dataA.ToString("X") + ",--";
                 break;
             case 0x17:
                 value2.StringValue = "欧洲重型车辆OBD 阶段I，无NOx控制 (HD EOBD-I)";
-                value2.ShortStringValue = "HD EOBD-I";
+                value2.ShortStringValue = dataA.ToString("X") + ",HD EOBD-I";
                 break;
             case 0x18:
                 value2.StringValue = "欧洲重型车辆OBD 阶段I，有NOx控制 (HD EOBD-I N)";
-                value2.ShortStringValue = "HD EOBD-I N";
+                value2.ShortStringValue = dataA.ToString("X") + ",HD EOBD-I N";
                 break;
             case 0x19:
                 value2.StringValue = "欧洲重型车辆OBD 阶段II，无NOx控制 (HD EOBD-II)";
-                value2.ShortStringValue = "HD EOBD-II";
+                value2.ShortStringValue = dataA.ToString("X") + ",HD EOBD-II";
                 break;
             case 0x1A:
                 value2.StringValue = "欧洲重型车辆OBD 阶段II，有NOx控制 (HD EOBD-II N)";
-                value2.ShortStringValue = "HD EOBD-II N";
+                value2.ShortStringValue = dataA.ToString("X") + ",HD EOBD-II N";
                 break;
             case 0x1B:
                 value2.StringValue = "ISO/SAE 保留";
-                value2.ShortStringValue = "——";
+                value2.ShortStringValue = dataA.ToString("X") + ",--";
                 break;
             case 0x1C:
                 value2.StringValue = "巴西OBD 阶段1";
-                value2.ShortStringValue = "OBDBr-1";
+                value2.ShortStringValue = dataA.ToString("X") + ",OBDBr-1";
                 break;
             case 0x1D:
                 value2.StringValue = "巴西OBD 阶段2和2+";
-                value2.ShortStringValue = "OBDBr-2";
+                value2.ShortStringValue = dataA.ToString("X") + ",OBDBr-2";
                 break;
             case 0x1E:
                 value2.StringValue = "韩国 OBD (KOBD)";
-                value2.ShortStringValue = "KOBD";
+                value2.ShortStringValue = dataA.ToString("X") + ",KOBD";
                 break;
             case 0x1F:
                 value2.StringValue = "印度 OBD I (IOBD I)";
-                value2.ShortStringValue = "IOBD I";
+                value2.ShortStringValue = dataA.ToString("X") + ",IOBD I";
                 break;
             case 0x20:
                 value2.StringValue = "印度 OBD II (IOBD II)";
-                value2.ShortStringValue = "IOBD II";
+                value2.ShortStringValue = dataA.ToString("X") + ",IOBD II";
                 break;
             case 0x21:
                 value2.StringValue = "欧洲重型车辆OBD 阶段VI (HD EOBD-VI)";
-                value2.ShortStringValue = "HD EOBD-VI";
+                value2.ShortStringValue = dataA.ToString("X") + ",HD EOBD-VI";
                 break;
             case 0x22:
                 value2.StringValue = "OBD, OBD II 和 HD OBD";
-                value2.ShortStringValue = "OBD/OBD II/HD OBD";
+                value2.ShortStringValue = dataA.ToString("X") + ",OBD/OBD II/HD OBD";
                 break;
             case 0x23:
                 value2.StringValue = "巴西OBD 阶段3";
-                value2.ShortStringValue = "OBDBr-3";
+                value2.ShortStringValue = dataA.ToString("X") + ",OBDBr-3";
                 break;
             case 0x24:
                 value2.StringValue = "摩托车，欧洲OBD-I（MC EOBD-I）";
-                value2.ShortStringValue = "MC EOBD-I";
+                value2.ShortStringValue = dataA.ToString("X") + ",MC EOBD-I";
                 break;
             case 0x25:
                 value2.StringValue = "摩托车，欧洲OBD-II（MC EOBD-II）";
-                value2.ShortStringValue = "MC EOBD-II";
+                value2.ShortStringValue = dataA.ToString("X") + ",MC EOBD-II";
                 break;
             case 0x26:
                 value2.StringValue = "摩托车，中国OBD-I（MC COBD-I）";
-                value2.ShortStringValue = "MC COBD-I";
+                value2.ShortStringValue = dataA.ToString("X") + ",MC COBD-I";
                 break;
             case 0x27:
                 value2.StringValue = "摩托车，台湾OBD-I（MC TOBD-I）";
-                value2.ShortStringValue = "MC TOBD-I";
+                value2.ShortStringValue = dataA.ToString("X") + ",MC TOBD-I";
                 break;
             case 0x28:
                 value2.StringValue = "摩托车，日本OBD-I（MC JOBD-I）";
-                value2.ShortStringValue = "MC JOBD-I";
+                value2.ShortStringValue = dataA.ToString("X") + ",MC JOBD-I";
                 break;
             case 0x29:
                 value2.StringValue = "中国国家范围第六阶段（CN-OBD-6）";
-                value2.ShortStringValue = "CN-OBD-6";
+                value2.ShortStringValue = dataA.ToString("X") + ",CN-OBD-6";
                 break;
             case 0x2A:
                 value2.StringValue = "巴西 OBD 柴油（OBDBr-D）";
-                value2.ShortStringValue = "OBDBr-D";
+                value2.ShortStringValue = dataA.ToString("X") + ",OBDBr-D";
                 break;
             default:
                 if (dataA >= 0x2B && dataA <= 0xFA) {
                     value2.StringValue = "ISO/SAE 保留";
-                    value2.ShortStringValue = "---";
+                    value2.ShortStringValue = dataA.ToString("X") + ",--";
                 } else if (dataA >= 0xFB && dataA <= 0xFF) {
                     value2.StringValue = "ISO/SAE - 不用于分配";
-                    value2.ShortStringValue = "SAE J1939 特殊用途";
+                    value2.ShortStringValue = dataA.ToString("X") + ",SAE J1939 特殊用途";
                 }
                 break;
             }
@@ -3438,8 +3438,8 @@ namespace SH_OBD {
             value2.DoubleValue = ((dataA * 0x1000000) + (dataB * 0x10000) + (dataC * 0x100) + dataD) * 0.1;
             if (bEnglishUnits) {
                 value2.DoubleValue *= 0.621371192;
-                value2.DoubleValue = Math.Round(value2.DoubleValue, 2);
             }
+            value2.DoubleValue = Math.Round(value2.DoubleValue, 1);
             return value2;
         }
 

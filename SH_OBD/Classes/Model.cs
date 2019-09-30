@@ -73,8 +73,8 @@ namespace SH_OBD {
                         sqlConn.Open();
                         m_log.TraceInfo(string.Format("==> T-SQL: {0}", strSQL));
                         m_log.TraceInfo(string.Format("==> Insert {0} record(s)", sqlCmd.ExecuteNonQuery()));
-                    } catch (Exception e) {
-                        m_log.TraceError("==> SQL ERROR: " + e.Message);
+                    } catch (Exception ex) {
+                        m_log.TraceError("==> SQL ERROR: " + ex.Message);
                     } finally {
                         sqlCmd.Dispose();
                         sqlConn.Close();
@@ -102,8 +102,8 @@ namespace SH_OBD {
                         sqlConn.Open();
                         m_log.TraceInfo(string.Format("==> T-SQL: {0}", strSQL));
                         m_log.TraceInfo(string.Format("==> Update {0} record(s)", sqlCmd.ExecuteNonQuery()));
-                    } catch (Exception e) {
-                        m_log.TraceError("==> SQL ERROR: " + e.Message);
+                    } catch (Exception ex) {
+                        m_log.TraceError("==> SQL ERROR: " + ex.Message);
                     } finally {
                         sqlCmd.Dispose();
                         sqlConn.Close();
@@ -115,21 +115,28 @@ namespace SH_OBD {
 
         int RunSQL(string strSQL) {
             int count = 0;
-            using (SqlConnection sqlConn = new SqlConnection(StrConn)) {
-                SqlCommand sqlCmd = new SqlCommand(strSQL, sqlConn);
-                try {
-                    sqlConn.Open();
-                    count = sqlCmd.ExecuteNonQuery();
-                    m_log.TraceInfo(string.Format("==> T-SQL: {0}", strSQL));
-                    m_log.TraceInfo(string.Format("==> {0} record(s) affected", count));
-                } catch (Exception e) {
-                    m_log.TraceError("==> SQL ERROR: " + e.Message);
-                } finally {
-                    sqlCmd.Dispose();
-                    sqlConn.Close();
-                }
-                return count;
+            if (strSQL == "") {
+                return -1;
             }
+            try {
+                using (SqlConnection sqlConn = new SqlConnection(StrConn)) {
+                    SqlCommand sqlCmd = new SqlCommand(strSQL, sqlConn);
+                    try {
+                        sqlConn.Open();
+                        count = sqlCmd.ExecuteNonQuery();
+                        m_log.TraceInfo(string.Format("==> T-SQL: {0}", strSQL));
+                        m_log.TraceInfo(string.Format("==> {0} record(s) affected", count));
+                    } catch (Exception ex) {
+                        m_log.TraceError("==> SQL ERROR: " + ex.Message);
+                    } finally {
+                        sqlCmd.Dispose();
+                        sqlConn.Close();
+                    }
+                }
+            } catch (Exception ex) {
+                m_log.TraceError("==> SQL ERROR: " + ex.Message);
+            }
+            return count;
         }
 
         string[,] SelectDB(string strSQL) {
@@ -165,8 +172,8 @@ namespace SH_OBD {
                     }
                 }
                 return records;
-            } catch (Exception e) {
-                m_log.TraceError("==> SQL ERROR: " + e.Message);
+            } catch (Exception ex) {
+                m_log.TraceError("==> SQL ERROR: " + ex.Message);
             }
             return records;
         }
@@ -179,27 +186,32 @@ namespace SH_OBD {
             strSQL = strSQL.Substring(0, strSQL.Length - 5);
             m_log.TraceInfo("==> T-SQL: " + strSQL);
             string[,] strArr = SelectDB(strSQL);
-            return strArr.GetLength(0);
+            if (strArr != null) {
+                return strArr.GetLength(0);
+            } else {
+                return -1;
+            }
         }
 
-        public void ModifyDB(string strTable, DataTable dt) {
+        public bool ModifyDB(string strTable, DataTable dt) {
             for (int i = 0; i < dt.Rows.Count; i++) {
                 Dictionary<string, string> whereDic = new Dictionary<string, string> {
                     { "VIN", dt.Rows[i][0].ToString() },
                     { "ECU_ID", dt.Rows[i][1].ToString() }
                 };
-                string strSQL;
-                if (GetRecordCount(strTable, whereDic) > 0) {
+                string strSQL = "";
+                int count = GetRecordCount(strTable, whereDic);
+                if (count > 0) {
                     strSQL = "update " + strTable + " set ";
                     for (int j = 0; j < dt.Columns.Count; j++) {
                         strSQL += dt.Columns[j].ColumnName + " = '" + dt.Rows[i][j].ToString() + "', ";
                     }
-                    strSQL += "WriteTime = '" + DateTime.Now.ToLocalTime().ToString() +"' where ";
+                    strSQL += "WriteTime = '" + DateTime.Now.ToLocalTime().ToString() + "' where ";
                     foreach (string key in whereDic.Keys) {
                         strSQL += key + " = '" + whereDic[key] + "' and ";
                     }
                     strSQL = strSQL.Substring(0, strSQL.Length - 5);
-                } else {
+                } else if (count == 0) {
                     strSQL = "insert " + strTable + " (";
                     for (int j = 0; j < dt.Columns.Count; j++) {
                         strSQL += dt.Columns[j].ColumnName + ", ";
@@ -210,9 +222,12 @@ namespace SH_OBD {
                         strSQL += dt.Rows[i][j].ToString() + "', '";
                     }
                     strSQL = strSQL.Substring(0, strSQL.Length - 3) + ")";
+                } else if (count < 0) {
+                    return false;
                 }
                 RunSQL(strSQL);
             }
+            return true;
         }
 
     }

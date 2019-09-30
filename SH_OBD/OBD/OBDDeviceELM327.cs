@@ -36,8 +36,6 @@ namespace SH_OBD {
                     m_CommELM.Close();
                     return false;
                 }
-                // 使用当前版本的obdsim不支持"ATCAF1"命令，故不判断该命令是否可用，只需执行过即可
-                //ConfirmAT("ATCAF1");
 
                 base.m_DeviceDes = GetDeviceDes().Trim();
                 base.m_DeviceID = GetDeviceID().Trim();
@@ -49,7 +47,7 @@ namespace SH_OBD {
 
                     m_CommELM.SetTimeout(5000);
                     bool flag = false;
-                    if (GetOBDResponse("0100").Replace(" ", "").IndexOf("4100") >= 0) {
+                    if (GetOBDResponse("0100").Replace(" ", "").IndexOf("4100") >= 0 || GetOBDResponse("22F810").Replace(" ", "").IndexOf("62F810") >= 0) {
                         flag = true;
                         if (m_Parser == null) {
                             SetProtocol((ProtocolType)int.Parse(GetOBDResponse("ATDPN").Replace("A", "")));
@@ -63,8 +61,6 @@ namespace SH_OBD {
                         m_CommELM.Close();
                         return false;
                     }
-                    // 使用当前版本的obdsim不支持"ATM0"命令，故不判断该命令是否可用，只需执行过即可
-                    //ConfirmAT("ATM0");
 
                     m_CommELM.SetTimeout(5000);
                     int[] xattr = new int[] { 6, 7, 2, 3, 1, 8, 9, 4, 5 };
@@ -73,7 +69,7 @@ namespace SH_OBD {
                             m_CommELM.Close();
                             return false;
                         }
-                        if (GetOBDResponse("0100").Replace(" ", "").IndexOf("4100") >= 0) {
+                        if (GetOBDResponse("0100").Replace(" ", "").IndexOf("4100") >= 0 || GetOBDResponse("22F810").Replace(" ", "").IndexOf("62F810") >= 0) {
                             if (m_Parser == null) {
                                 SetProtocol((ProtocolType)xattr[idx]);
                             }

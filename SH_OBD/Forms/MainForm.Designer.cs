@@ -27,7 +27,8 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLabelConnStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusLabelDeviceName = new System.Windows.Forms.ToolStripStatusLabel();
-            this.StatusLabelProtocol = new System.Windows.Forms.ToolStripStatusLabel();
+            this.StatusLabelAppProtocol = new System.Windows.Forms.ToolStripStatusLabel();
+            this.StatusLabelCommProtocol = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusLabelDeviceType = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusLabelPort = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -70,7 +71,8 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.StatusLabelConnStatus,
             this.StatusLabelDeviceName,
-            this.StatusLabelProtocol,
+            this.StatusLabelAppProtocol,
+            this.StatusLabelCommProtocol,
             this.StatusLabelDeviceType,
             this.StatusLabelPort});
             this.statusStrip1.Location = new System.Drawing.Point(0, 605);
@@ -84,7 +86,7 @@
             // 
             this.StatusLabelConnStatus.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.StatusLabelConnStatus.Name = "StatusLabelConnStatus";
-            this.StatusLabelConnStatus.Size = new System.Drawing.Size(265, 21);
+            this.StatusLabelConnStatus.Size = new System.Drawing.Size(289, 21);
             this.StatusLabelConnStatus.Spring = true;
             this.StatusLabelConnStatus.Text = "OBD通讯接口状态";
             // 
@@ -92,17 +94,23 @@
             // 
             this.StatusLabelDeviceName.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.StatusLabelDeviceName.Name = "StatusLabelDeviceName";
-            this.StatusLabelDeviceName.Size = new System.Drawing.Size(265, 21);
+            this.StatusLabelDeviceName.Size = new System.Drawing.Size(289, 21);
             this.StatusLabelDeviceName.Spring = true;
             this.StatusLabelDeviceName.Text = "OBD设备名称";
             // 
-            // StatusLabelProtocol
+            // StatusLabelAppProtocol
             // 
-            this.StatusLabelProtocol.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
-            this.StatusLabelProtocol.Name = "StatusLabelProtocol";
-            this.StatusLabelProtocol.Size = new System.Drawing.Size(265, 21);
-            this.StatusLabelProtocol.Spring = true;
-            this.StatusLabelProtocol.Text = "OBD连接协议";
+            this.StatusLabelAppProtocol.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
+            this.StatusLabelAppProtocol.Name = "StatusLabelAppProtocol";
+            this.StatusLabelAppProtocol.Size = new System.Drawing.Size(99, 21);
+            this.StatusLabelAppProtocol.Text = "OBD应用层协议";
+            // 
+            // StatusLabelCommProtocol
+            // 
+            this.StatusLabelCommProtocol.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
+            this.StatusLabelCommProtocol.Name = "StatusLabelCommProtocol";
+            this.StatusLabelCommProtocol.Size = new System.Drawing.Size(87, 21);
+            this.StatusLabelCommProtocol.Text = "OBD连接协议";
             // 
             // StatusLabelDeviceType
             // 
@@ -343,7 +351,7 @@
             this.toolStripBtnConnect.Name = "toolStripBtnConnect";
             this.toolStripBtnConnect.Size = new System.Drawing.Size(108, 52);
             this.toolStripBtnConnect.Text = "建立连接";
-            this.toolStripBtnConnect.Click += new System.EventHandler(this.toolStripBtnConnect_Click);
+            this.toolStripBtnConnect.Click += new System.EventHandler(this.ToolStripBtnConnect_Click);
             // 
             // toolStripBtnDisconnect
             // 
@@ -352,7 +360,7 @@
             this.toolStripBtnDisconnect.Name = "toolStripBtnDisconnect";
             this.toolStripBtnDisconnect.Size = new System.Drawing.Size(108, 52);
             this.toolStripBtnDisconnect.Text = "断开连接";
-            this.toolStripBtnDisconnect.Click += new System.EventHandler(this.toolStripBtnDisconnect_Click);
+            this.toolStripBtnDisconnect.Click += new System.EventHandler(this.ToolStripBtnDisconnect_Click);
             // 
             // toolStripSeparator1
             // 
@@ -366,7 +374,7 @@
             this.toolStripBtnUserPrefs.Name = "toolStripBtnUserPrefs";
             this.toolStripBtnUserPrefs.Size = new System.Drawing.Size(108, 52);
             this.toolStripBtnUserPrefs.Text = "用户设置";
-            this.toolStripBtnUserPrefs.Click += new System.EventHandler(this.toolStripBtnUserPrefs_Click);
+            this.toolStripBtnUserPrefs.Click += new System.EventHandler(this.ToolStripBtnUserPrefs_Click);
             // 
             // toolStripBtnVehicles
             // 
@@ -375,7 +383,7 @@
             this.toolStripBtnVehicles.Name = "toolStripBtnVehicles";
             this.toolStripBtnVehicles.Size = new System.Drawing.Size(108, 52);
             this.toolStripBtnVehicles.Text = "车辆设置";
-            this.toolStripBtnVehicles.Click += new System.EventHandler(this.toolStripBtnVehicles_Click);
+            this.toolStripBtnVehicles.Click += new System.EventHandler(this.ToolStripBtnVehicles_Click);
             // 
             // toolStripBtnSettings
             // 
@@ -384,7 +392,7 @@
             this.toolStripBtnSettings.Name = "toolStripBtnSettings";
             this.toolStripBtnSettings.Size = new System.Drawing.Size(108, 52);
             this.toolStripBtnSettings.Text = "通讯设置";
-            this.toolStripBtnSettings.Click += new System.EventHandler(this.toolStripBtnSettings_Click);
+            this.toolStripBtnSettings.Click += new System.EventHandler(this.ToolStripBtnSettings_Click);
             // 
             // toolStripSeparator2
             // 
@@ -441,7 +449,7 @@
         private System.Windows.Forms.Button buttonDyno;
         private System.Windows.Forms.Button buttonTrack;
         private System.Windows.Forms.Button buttonReport;
-        private System.Windows.Forms.ToolStripStatusLabel StatusLabelProtocol;
+        private System.Windows.Forms.ToolStripStatusLabel StatusLabelCommProtocol;
         private System.Windows.Forms.ToolStripStatusLabel StatusLabelPort;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton toolStripBtnConnect;
@@ -458,6 +466,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripComboBox toolStripCmbBoxECU;
         private System.Windows.Forms.Button buttonOBDTest;
+        private System.Windows.Forms.ToolStripStatusLabel StatusLabelAppProtocol;
     }
 }
 

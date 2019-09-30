@@ -30,6 +30,7 @@ namespace SH_OBD {
         public Settings CommSettings { get; private set; }
         public DBandMES DBandMES { get; private set; }
         public List<VehicleProfile> VehicleProfiles { get; private set; }
+        public bool UseISO27145 { get; set; }
 
         public OBDInterface() {
             m_log = new Logger("./log", EnumLogLevel.LogLevelAll, true, 100);
@@ -43,6 +44,7 @@ namespace SH_OBD {
             DBandMES = LoadDBandMES();
             VehicleProfiles = LoadVehicleProfiles();
             SetDevice(HardwareType.ELM327);
+            UseISO27145 = false;
         }
 
         public Logger GetLogger() { return m_log; }
@@ -96,7 +98,8 @@ namespace SH_OBD {
         }
 
         public bool InitOBD() {
-            // 获取PID支持情况
+            bool bRet = true;
+            // 获取ISO15031 Mode01 PID支持情况
             OBDParameter param = new OBDParameter(1, 0, 0) {
                 ValueTypes = 32
             };
@@ -104,9 +107,10 @@ namespace SH_OBD {
 
             for (int i = 0; (i * 0x20) < 0x100; i++) {
                 param.Parameter = i * 0x20;
-                OBDParameterValue value = GetValue(param, true);
+                OBDParameterValue value = GetValue(param);
                 if (value.ErrorDetected) {
-                    return false;
+                    bRet = false;
+                    break;
                 }
                 foreach (OBDParameter param2 in m_listAllParameters) {
                     if (param2.Parameter > 2 && param2.Parameter > (i * 0x20) && param2.Parameter < ((i + 1) * 0x20) && value.GetBitFlag(param2.Parameter - param.Parameter - 1)) {
@@ -118,7 +122,34 @@ namespace SH_OBD {
                 }
             }
 
-            return true;
+            if (!bRet) {
+                // 获取ISO27145 PID支持情况
+                bRet = true;
+                param = new OBDParameter(0x22, 0, 0) {
+                    ValueTypes = 32
+                };
+                m_listSupportedParameters.Clear();
+
+                for (int i = 0; (i * 0x20) < 0x100; i++) {
+                    param.Parameter = 0xF400 + i * 0x20;
+                    OBDParameterValue value = GetValue(param);
+                    if (value.ErrorDetected) {
+                        bRet = false;
+                        break;
+                    }
+                    foreach (OBDParameter param2 in m_listAllParameters) {
+                        if (param2.Parameter > 2 && param2.Parameter > (i * 0x20) && param2.Parameter < ((i + 1) * 0x20) && value.GetBitFlag(param2.Parameter - param.Parameter - 1)) {
+                            m_listSupportedParameters.Add(param2);
+                        }
+                    }
+                    if (!value.GetBitFlag(31)) {
+                        break;
+                    }
+                }
+                UseISO27145 = bRet;
+                m_log.TraceInfo("Current vehicle support ISO 27145 only!");
+            }
+            return bRet;
         }
 
         public bool IsParameterSupported(string strPID) {
@@ -156,6 +187,8 @@ namespace SH_OBD {
             string strItem = "Responses: ";
             if (responses.ErrorDetected) {
                 strItem += "Error Detected!";
+                m_log.TraceInfo(strItem);
+                return new OBDParameterValue { ErrorDetected = true };
             } else {
                 for (int i = 0; i < responses.ResponseCount; i++) {
                     strItem += string.Format("[{0}] ", responses.GetOBDResponse(i).Data);
@@ -220,7 +253,7 @@ namespace SH_OBD {
                 strRet += string.Format("[Bool: {0}] ", obdValue.BoolValue.ToString());
             }
             if ((param.ValueTypes & (int)OBDParameter.EnumValueTypes.String) == (int)OBDParameter.EnumValueTypes.String) {
-                strRet += string.Format("[String: {0} / {1}] ", obdValue.StringValue, obdValue.ShortStringValue);
+                strRet += string.Format("[String: {0}] ", obdValue.StringValue, obdValue.ShortStringValue);
             }
             if ((param.ValueTypes & (int)OBDParameter.EnumValueTypes.ListString) == (int)OBDParameter.EnumValueTypes.ListString) {
                 strRet += "[ListString: ";
@@ -229,6 +262,9 @@ namespace SH_OBD {
                 }
                 strRet = strRet.Substring(0, strRet.Length - 2);
                 strRet += "]";
+            }
+            if ((param.ValueTypes & (int)OBDParameter.EnumValueTypes.ShortString) == (int)OBDParameter.EnumValueTypes.ShortString) {
+                strRet += string.Format("[ShortString: {0}] ", obdValue.ShortStringValue);
             }
             if ((param.ValueTypes & (int)OBDParameter.EnumValueTypes.BitFlags) == (int)OBDParameter.EnumValueTypes.BitFlags) {
                 strRet += "[BitFlags: ";
@@ -276,6 +312,7 @@ namespace SH_OBD {
         public void Disconnect() {
             m_obdDevice.Disconnect();
             m_obdDevice.SetConnected(false);
+            UseISO27145 = false;
             OnDisconnect?.Invoke();
         }
 

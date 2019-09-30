@@ -30,7 +30,7 @@ namespace SH_OBD.MES1 {
     [System.Web.Services.WebServiceBindingAttribute(Name="WebServiceDemoSoap", Namespace="http://tempuri.org/")]
     public partial class WebServiceDemo : System.Web.Services.Protocols.SoapHttpClientProtocol {
         
-        private System.Threading.SendOrPostCallback HelloWorldOperationCompleted;
+        private System.Threading.SendOrPostCallback ReceiveDeviceDataOperationCompleted;
         
         private System.Threading.SendOrPostCallback WriteDataToMesOperationCompleted;
         
@@ -73,35 +73,37 @@ namespace SH_OBD.MES1 {
         }
         
         /// <remarks/>
-        public event HelloWorldCompletedEventHandler HelloWorldCompleted;
+        public event ReceiveDeviceDataCompletedEventHandler ReceiveDeviceDataCompleted;
         
         /// <remarks/>
         public event WriteDataToMesCompletedEventHandler WriteDataToMesCompleted;
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/HelloWorld", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public string HelloWorld() {
-            object[] results = this.Invoke("HelloWorld", new object[0]);
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/ReceiveDeviceData", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public string ReceiveDeviceData(string strIN) {
+            object[] results = this.Invoke("ReceiveDeviceData", new object[] {
+                        strIN});
             return ((string)(results[0]));
         }
         
         /// <remarks/>
-        public void HelloWorldAsync() {
-            this.HelloWorldAsync(null);
+        public void ReceiveDeviceDataAsync(string strIN) {
+            this.ReceiveDeviceDataAsync(strIN, null);
         }
         
         /// <remarks/>
-        public void HelloWorldAsync(object userState) {
-            if ((this.HelloWorldOperationCompleted == null)) {
-                this.HelloWorldOperationCompleted = new System.Threading.SendOrPostCallback(this.OnHelloWorldOperationCompleted);
+        public void ReceiveDeviceDataAsync(string strIN, object userState) {
+            if ((this.ReceiveDeviceDataOperationCompleted == null)) {
+                this.ReceiveDeviceDataOperationCompleted = new System.Threading.SendOrPostCallback(this.OnReceiveDeviceDataOperationCompleted);
             }
-            this.InvokeAsync("HelloWorld", new object[0], this.HelloWorldOperationCompleted, userState);
+            this.InvokeAsync("ReceiveDeviceData", new object[] {
+                        strIN}, this.ReceiveDeviceDataOperationCompleted, userState);
         }
         
-        private void OnHelloWorldOperationCompleted(object arg) {
-            if ((this.HelloWorldCompleted != null)) {
+        private void OnReceiveDeviceDataOperationCompleted(object arg) {
+            if ((this.ReceiveDeviceDataCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.HelloWorldCompleted(this, new HelloWorldCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+                this.ReceiveDeviceDataCompleted(this, new ReceiveDeviceDataCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -158,17 +160,17 @@ namespace SH_OBD.MES1 {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
-    public delegate void HelloWorldCompletedEventHandler(object sender, HelloWorldCompletedEventArgs e);
+    public delegate void ReceiveDeviceDataCompletedEventHandler(object sender, ReceiveDeviceDataCompletedEventArgs e);
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class HelloWorldCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class ReceiveDeviceDataCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        internal HelloWorldCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        internal ReceiveDeviceDataCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }

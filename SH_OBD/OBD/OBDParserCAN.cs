@@ -89,6 +89,21 @@ namespace SH_OBD {
             case 9:
                 iRet = param.Parameter % 2 == 0 && param.Parameter % 0x20 != 0 ? headLen + 8 : headLen + 6;
                 break;
+            case 0x19:
+                // ISO 27145 ReadDTCInformation
+                string reportType = param.OBDRequest.Substring(2, 2);
+                if (reportType == "42") {
+                    iRet = headLen + 14;
+                } else if (reportType == "55") {
+                    iRet = headLen + 12;
+                } else {
+                    iRet = headLen + 6;
+                }
+                break;
+            case 0x22:
+                // ISO 27145 ReadDataByIdentifer
+                iRet = headLen + 8;
+                break;
             default:
                 iRet = headLen + 6;
                 break;
