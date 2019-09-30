@@ -43,6 +43,19 @@ namespace SH_OBD {
         }
 
         private void btnSend_Click(object sender, EventArgs e) {
+            if (txtCommand.Text.Contains("test")) {
+                // 用于测试代码，生产环境中无用处
+                int num1 = 0x11;
+                int num2 = 0x22;
+                int num3 = 0x33;
+                int num4 = 0x44;
+                int num0 = (num1 * 0x1000000) + (num2 * 0x10000) + (num3 * 0x100) + num4;
+                string s = (num0 / 3600).ToString() + " hrs, ";
+                s += ((num0 % 3600) / 60).ToString() + " min, ";
+                s += ((num0 % 3600) % 60).ToString() + " sec";
+                MessageBox.Show(s);
+                return;
+            }
             richText.SelectionStart = richText.Text.Length;
             richText.Focus();
 
@@ -69,6 +82,12 @@ namespace SH_OBD {
         private void TerminalForm_VisibleChanged(object sender, EventArgs e) {
             if (this.Visible) {
                 lblPrompt.Text = m_strPmt;
+            }
+        }
+
+        private void TxtCommand_KeyPress(object sender, KeyPressEventArgs e) {
+            if (e.KeyChar == (char)Keys.Enter && sender is TextBox tb && tb.Name == "txtCommand") {
+                btnSend_Click(btnSend, null);
             }
         }
     }

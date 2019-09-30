@@ -144,6 +144,7 @@ namespace SH_OBD {
         public string Label { get; set; }
         public double DriveRatio { get; set; }
         public List<DatedValue> RpmList { get; set; }
+        public List<DatedValue> KphList { get; set; }
     }
 
     [Serializable]

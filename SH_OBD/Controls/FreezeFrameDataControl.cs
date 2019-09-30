@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -122,20 +123,20 @@ namespace SH_OBD {
                 return Utility.Text2Double(lblEnglishValue0E.Text);
             }
             set {
-                lblEnglishValue0E.Text = value.ToString("##0.##");
                 lblMetricValue0E.Text = value.ToString("##0.##");
+                lblEnglishValue0E.Text = value.ToString("##0.##");
             }
         }
 
-        [Description("Vehicle Speed (mph)")]
+        [Description("Vehicle Speed (kmh)")]
         [Category("FreezeFrame")]
         public double VehicleSpeed {
             get {
                 return Utility.Text2Double(lblEnglishValue0D.Text);
             }
             set {
-                lblEnglishValue0D.Text = value.ToString("##0.##");
-                lblMetricValue0D.Text = (VehicleSpeed * 1.609344).ToString("##0.##");
+                lblMetricValue0D.Text = value.ToString("##0.##");
+                lblEnglishValue0D.Text = (VehicleSpeed * 0.6214).ToString("##0.##");
             }
         }
 
@@ -146,20 +147,20 @@ namespace SH_OBD {
                 return Utility.Text2Double(lblEnglishValue0C.Text);
             }
             set {
-                lblEnglishValue0C.Text = value.ToString("##0.##");
                 lblMetricValue0C.Text = value.ToString("##0.##");
+                lblEnglishValue0C.Text = value.ToString("##0.##");
             }
         }
 
-        [Description("Intake Manifold Pressure (inHg)")]
+        [Description("Intake Manifold Pressure (kPa)")]
         [Category("FreezeFrame")]
         public double IntakePressure {
             get {
                 return Utility.Text2Double(lblEnglishValue0B.Text);
             }
             set {
-                lblEnglishValue0B.Text = value.ToString("##0.##");
-                lblMetricValue0B.Text = (IntakePressure * 3.38639).ToString("##0.##");
+                lblMetricValue0B.Text = value.ToString("##0.##");
+                lblEnglishValue0B.Text = (IntakePressure * 0.2953).ToString("##0.##");
             }
         }
 
@@ -170,8 +171,8 @@ namespace SH_OBD {
                 return Utility.Text2Double(lblEnglishValue09b.Text);
             }
             set {
-                lblEnglishValue09b.Text = value.ToString("##0.##");
                 lblMetricValue09b.Text = value.ToString("##0.##");
+                lblEnglishValue09b.Text = value.ToString("##0.##");
             }
         }
 
@@ -182,8 +183,8 @@ namespace SH_OBD {
                 return Utility.Text2Double(lblEnglishValue07b.Text);
             }
             set {
-                lblEnglishValue07b.Text = value.ToString("##0.##");
                 lblMetricValue07b.Text = value.ToString("##0.##");
+                lblEnglishValue07b.Text = value.ToString("##0.##");
             }
         }
 
@@ -194,8 +195,8 @@ namespace SH_OBD {
                 return Utility.Text2Double(lblEnglishValue09a.Text);
             }
             set {
-                lblEnglishValue09a.Text = value.ToString("##0.##");
                 lblMetricValue09a.Text = value.ToString("##0.##");
+                lblEnglishValue09a.Text = value.ToString("##0.##");
             }
         }
 
@@ -206,8 +207,8 @@ namespace SH_OBD {
                 return Utility.Text2Double(lblEnglishValue07a.Text);
             }
             set {
-                lblEnglishValue07a.Text = value.ToString("##0.##");
                 lblMetricValue07a.Text = value.ToString("##0.##");
+                lblEnglishValue07a.Text = value.ToString("##0.##");
             }
         }
 
@@ -218,8 +219,8 @@ namespace SH_OBD {
                 return Utility.Text2Double(lblEnglishValue08b.Text);
             }
             set {
-                lblEnglishValue08b.Text = value.ToString("##0.##");
                 lblMetricValue08b.Text = value.ToString("##0.##");
+                lblEnglishValue08b.Text = value.ToString("##0.##");
             }
         }
 
@@ -230,8 +231,8 @@ namespace SH_OBD {
                 return Utility.Text2Double(lblEnglishValue06b.Text);
             }
             set {
-                lblEnglishValue06b.Text = value.ToString("##0.##");
                 lblMetricValue06b.Text = value.ToString("##0.##");
+                lblEnglishValue06b.Text = value.ToString("##0.##");
             }
         }
 
@@ -242,8 +243,8 @@ namespace SH_OBD {
                 return Utility.Text2Double(lblEnglishValue08a.Text);
             }
             set {
-                lblEnglishValue08a.Text = value.ToString("##0.##");
                 lblMetricValue08a.Text = value.ToString("##0.##");
+                lblEnglishValue08a.Text = value.ToString("##0.##");
             }
         }
 
@@ -254,20 +255,20 @@ namespace SH_OBD {
                 return Utility.Text2Double(lblEnglishValue06a.Text);
             }
             set {
-                lblEnglishValue06a.Text = value.ToString("##0.##");
                 lblMetricValue06a.Text = value.ToString("##0.##");
+                lblEnglishValue06a.Text = value.ToString("##0.##");
             }
         }
 
-        [Description("Engine Coolant Temperature (Fahrenheit)")]
+        [Description("Engine Coolant Temperature (C)")]
         [Category("FreezeFrame")]
         public double EngineCoolantTemp {
             get {
                 return Utility.Text2Double(lblEnglishValue05.Text);
             }
             set {
-                lblEnglishValue05.Text = value.ToString("##0.##");
-                lblMetricValue05.Text = ((EngineCoolantTemp - 32.0) * 0.55555555555555558).ToString("##0.##");
+                lblMetricValue05.Text = value.ToString("##0.##");
+                lblEnglishValue05.Text = (EngineCoolantTemp * 1.8 + 32.0).ToString("##0.##");
             }
         }
 
@@ -278,8 +279,8 @@ namespace SH_OBD {
                 return Utility.Text2Double(lblEnglishValue04.Text);
             }
             set {
-                lblEnglishValue04.Text = value.ToString("##0.##");
                 lblMetricValue04.Text = value.ToString("##0.##");
+                lblEnglishValue04.Text = value.ToString("##0.##");
             }
         }
 
@@ -290,8 +291,8 @@ namespace SH_OBD {
                 return lblEnglishValue03b.Text;
             }
             set {
-                lblEnglishValue03b.Text = value;
                 lblMetricValue03b.Text = value;
+                lblEnglishValue03b.Text = value;
             }
         }
 
@@ -302,8 +303,8 @@ namespace SH_OBD {
                 return lblEnglishValue03a.Text;
             }
             set {
-                lblEnglishValue03a.Text = value;
                 lblMetricValue03a.Text = value;
+                lblEnglishValue03a.Text = value;
             }
         }
 
@@ -314,8 +315,8 @@ namespace SH_OBD {
                 return lblEnglishValue02.Text;
             }
             set {
-                lblEnglishValue02.Text = value;
                 lblMetricValue02.Text = value;
+                lblEnglishValue02.Text = value;
             }
         }
 

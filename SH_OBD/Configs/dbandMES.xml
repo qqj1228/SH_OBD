@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DBandMES xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <UserName>sa</UserName>
+  <PassWord>1228</PassWord>
+  <DBName>SH_OBD</DBName>
+  <IP>127.0.0.1</IP>
+  <Port>1433</Port>
+  <WebServiceAddress>http://localhost:53827/webservicedemo.asmx?wsdl</WebServiceAddress>
+  <WebServiceName>WebServiceDemo</WebServiceName>
+  <WebServiceMethods>WriteDataToMes</WebServiceMethods>
+  <WebServiceWSDL>JmcJesService.wsdl</WebServiceWSDL>
+  <UseURL>true</UseURL>
+  <UploadWhenever>false</UploadWhenever>
+  <UseECUName>true</UseECUName>
+</DBandMES>

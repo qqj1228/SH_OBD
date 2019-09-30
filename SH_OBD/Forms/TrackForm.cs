@@ -78,7 +78,7 @@ namespace SH_OBD {
 
 
         private void timerClock_Tick(object sender, EventArgs e) {
-            m_dClock = Convert.ToDouble((long)(DateTime.Now.Ticks - m_iClockStartTicks)) * 1E-07;
+            m_dClock = Convert.ToDouble(DateTime.Now.Ticks - m_iClockStartTicks) * 1E-07;
             Graphics graphics = base.CreateGraphics();
             graphics.DrawImage(picTrack.Image, 0, 0, picTrack.Width, picTrack.Height);
 
@@ -116,7 +116,7 @@ namespace SH_OBD {
 
         private void btnStage_Click(object sender, EventArgs e) {
             if (!m_obdInterface.ConnectedStatus) {
-                MessageBox.Show(string.Concat((object)"必须首先与车辆进行连接，才能进行后续操作！"), "需要车辆连接", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("必须首先与车辆进行连接，才能进行后续操作！", "需要车辆连接", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             } else {
                 btnStage.Enabled = false;
                 btnReset.Enabled = true;
@@ -129,7 +129,7 @@ namespace SH_OBD {
         private new void Capture() {
             m_KphValues = new List<DatedValue>();
             while (m_bCapture) {
-                OBDParameterValue obdParameterValue = m_obdInterface.GetValue("SAE.VSS", false);
+                OBDParameterValue obdParameterValue = m_obdInterface.GetValue("SAE.VSS");
 
                 if (!obdParameterValue.ErrorDetected && obdParameterValue.DoubleValue > 0.0) {
                     if (m_KphValues.Count == 0) {
@@ -137,7 +137,7 @@ namespace SH_OBD {
                             StartTimer();
                         });
                     }
-                    m_KphValues.Add(new DatedValue(obdParameterValue.DoubleValue * (double)m_obdInterface.ActiveProfile.SpeedCalibrationFactor));
+                    m_KphValues.Add(new DatedValue(obdParameterValue.DoubleValue * m_obdInterface.ActiveProfile.SpeedCalibrationFactor));
                     this.CalculateTimeslip();
                 }
             }
@@ -265,7 +265,6 @@ namespace SH_OBD {
 
             float width = right - left;
             RectangleF layoutRectangle1 = new RectangleF(left, top, width, 20f);
-            RectangleF layoutRectangle2 = new RectangleF(left, top + 40f, width, 17.5f);
             RectangleF layoutRectangle3 = new RectangleF(left, top + 55f, width, 40f);
             RectangleF layoutRectangle4 = new RectangleF(left, top + 110f, width, 140f);
             e.Graphics.DrawString("加速性能", new Font("Courier New", 14f, FontStyle.Bold), Brushes.Blue, layoutRectangle1, format);

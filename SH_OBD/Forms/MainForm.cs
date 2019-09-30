@@ -12,6 +12,7 @@ using System.Windows.Forms;
 namespace SH_OBD {
     public partial class MainForm : Form {
         private Dictionary<string, Form> dicSubForms;
+        private OBDTestForm f_OBDTest;
         private TestForm f_MonitorTests;
         private DTCForm f_DTC;
         private FreezeFramesForm f_FreezeFrames;
@@ -39,7 +40,8 @@ namespace SH_OBD {
             StatusLabelConnStatus.ForeColor = Color.Red;
             StatusLabelConnStatus.Text = "OBD通讯接口未连接";
             StatusLabelDeviceName.Text = "未获取到设备名";
-            StatusLabelProtocol.Text = m_obdInterface.GetProtocol().ToString();
+            StatusLabelAppProtocol.Text = "应用层协议待定";
+            StatusLabelCommProtocol.Text = m_obdInterface.GetProtocol().ToString();
             StatusLabelDeviceType.Text = m_obdInterface.GetDevice().ToString();
             if (m_obdInterface.CommSettings != null) {
                 if (m_obdInterface.CommSettings.AutoDetect) {
@@ -53,9 +55,26 @@ namespace SH_OBD {
             this.Text = "SH_OBD - Ver " + MainFileVersion.AssemblyVersion;
         }
 
+        ~MainForm() {
+            f_OBDTest.Dispose();
+            f_MonitorTests.Dispose();
+            f_DTC.Dispose();
+            f_FreezeFrames.Dispose();
+            f_OxygenSensors.Dispose();
+            f_SensorGrid.Dispose();
+            f_SensorChart.Dispose();
+            f_Track.Dispose();
+            f_Dyno.Dispose();
+            f_FuelEconomy.Dispose();
+            f_Report.Dispose();
+            f_Terminal.Dispose();
+            m_boldFont.Dispose();
+        }
+
         void InitSubForm() {
             dicSubForms = new Dictionary<string, Form>();
 
+            f_OBDTest = new OBDTestForm(m_obdInterface);
             f_MonitorTests = new TestForm(m_obdInterface);
             f_DTC = new DTCForm(m_obdInterface);
             f_FreezeFrames = new FreezeFramesForm(m_obdInterface);
@@ -68,6 +87,7 @@ namespace SH_OBD {
             f_Report = new ReportGeneratorForm(m_obdInterface);
             f_Terminal = new TerminalForm(m_obdInterface);
 
+            buttonOBDTest.Text = Properties.Resources.buttonName_OBDTest;
             buttonTests.Text = Properties.Resources.buttonName_Tests;
             buttonDTC.Text = Properties.Resources.buttonName_DTC;
             buttonFF.Text = Properties.Resources.buttonName_FreezeFrames;
@@ -80,6 +100,7 @@ namespace SH_OBD {
             buttonReport.Text = Properties.Resources.buttonName_Report;
             buttonTerminal.Text = Properties.Resources.buttonName_Terminal;
 
+            dicSubForms.Add(Properties.Resources.buttonName_OBDTest, f_OBDTest);
             dicSubForms.Add(Properties.Resources.buttonName_Tests, f_MonitorTests);
             dicSubForms.Add(Properties.Resources.buttonName_DTC, f_DTC);
             dicSubForms.Add(Properties.Resources.buttonName_FreezeFrames, f_FreezeFrames);
@@ -109,6 +130,8 @@ namespace SH_OBD {
                     (dicSubForms[key] as FuelEconomyForm).CheckConnection();
                 } else if (key == Properties.Resources.buttonName_Terminal) {
                     (dicSubForms[key] as TerminalForm).CheckConnection();
+                } else if (key == Properties.Resources.buttonName_OBDTest) {
+                    (dicSubForms[key] as OBDTestForm).CheckConnection();
                 }
             }
         }
@@ -122,7 +145,7 @@ namespace SH_OBD {
                 StatusLabelConnStatus.Text = "OBD通讯接口已连接";
                 StatusLabelConnStatus.ForeColor = Color.Green;
                 StatusLabelDeviceName.Text = m_obdInterface.GetDeviceIDString();
-                StatusLabelProtocol.Text = m_obdInterface.GetProtocol().ToString();
+                StatusLabelCommProtocol.Text = m_obdInterface.GetProtocol().ToString();
                 toolStripBtnUserPrefs.Enabled = false;
                 toolStripBtnVehicles.Enabled = false;
                 toolStripBtnSettings.Enabled = false;
@@ -143,7 +166,7 @@ namespace SH_OBD {
 
         private void Button_Click(object sender, EventArgs e) {
             if (sender is Button button) {
-                if (panel2.Controls.Count > 0 && panel2.Controls[0] is Form activeForm) {
+                if (panel2.Controls.Count > 0 && panel2.Controls[0] is Form activeForm && activeForm != dicSubForms[button.Text]) {
                     if (activeForm == dicSubForms[Properties.Resources.buttonName_SensorGrid] && f_SensorGrid.IsLogging) {
                         if (DialogResult.Yes == MessageBox.Show("当前记录过程将会中断.\r\n是否继续?", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation)) {
                             f_SensorGrid.PauseLogging();
@@ -181,7 +204,7 @@ namespace SH_OBD {
                     panel2.Controls.Clear();
                     form.TopLevel = false;
                     panel2.Controls.Add(form);
-                    panel2.Resize += new EventHandler(panel2_Resize);
+                    panel2.Resize += new EventHandler(Panel2_Resize);
                     //form.MdiParent = this; // 指定当前窗体为顶级Mdi窗体
                     //form.Parent = this.panel2; // 指定子窗体的父容器为
                     form.FormBorderStyle = FormBorderStyle.None;
@@ -191,7 +214,7 @@ namespace SH_OBD {
             }
         }
 
-        private void panel2_Resize(object sender, EventArgs e) {
+        private void Panel2_Resize(object sender, EventArgs e) {
             if (panel2.Controls.Count > 0) {
                 if (panel2.Controls[0] is Form form) {
                     if (form != null) {
@@ -212,30 +235,38 @@ namespace SH_OBD {
             }
         }
 
-        private void toolStripBtnUserPrefs_Click(object sender, EventArgs e) {
+        private void ToolStripBtnUserPrefs_Click(object sender, EventArgs e) {
             UserPreferences userPreferences = m_obdInterface.UserPreferences;
-            new UserPreferencesForm(userPreferences).ShowDialog();
+            UserPreferencesForm userForm = new UserPreferencesForm(userPreferences);
+            userForm.ShowDialog();
             m_obdInterface.SaveUserPreferences(userPreferences);
+            userForm.Dispose();
         }
 
-        private void toolStripBtnVehicles_Click(object sender, EventArgs e) {
-            new VehicleForm(m_obdInterface).ShowDialog();
+        private void ToolStripBtnVehicles_Click(object sender, EventArgs e) {
+            VehicleForm vehicleForm = new VehicleForm(m_obdInterface);
+            vehicleForm.ShowDialog();
+            vehicleForm.Dispose();
         }
 
-        private void toolStripBtnSettings_Click(object sender, EventArgs e) {
+        private void ToolStripBtnSettings_Click(object sender, EventArgs e) {
             Settings commSettings = m_obdInterface.CommSettings;
-            new SettingsForm(commSettings).ShowDialog();
+            DBandMES dbandMES = m_obdInterface.DBandMES;
+            SettingsForm settingsForm = new SettingsForm(commSettings, dbandMES);
+            settingsForm.ShowDialog();
             m_obdInterface.SaveCommSettings(commSettings);
-            StatusLabelProtocol.Text = m_obdInterface.GetProtocol().ToString();
+            m_obdInterface.SaveDBandMES(dbandMES);
+            StatusLabelCommProtocol.Text = m_obdInterface.GetProtocol().ToString();
             StatusLabelDeviceType.Text = m_obdInterface.GetDevice().ToString();
             if (commSettings.AutoDetect) {
                 StatusLabelPort.Text = "自动探测";
             } else {
                 StatusLabelPort.Text = commSettings.ComPortName;
             }
+            settingsForm.Dispose();
         }
 
-        private void toolStripBtnConnect_Click(object sender, EventArgs e) {
+        private void ToolStripBtnConnect_Click(object sender, EventArgs e) {
             toolStripBtnConnect.Enabled = false;
             toolStripBtnDisconnect.Enabled = true;
 
@@ -285,7 +316,7 @@ namespace SH_OBD {
             Task.Factory.StartNew(ConnectThreadNew);
         }
 
-        private void toolStripBtnDisconnect_Click(object sender, EventArgs e) {
+        private void ToolStripBtnDisconnect_Click(object sender, EventArgs e) {
             ShowDisconnectedLabel();
             m_obdInterface.Disconnect();
         }
@@ -337,6 +368,7 @@ namespace SH_OBD {
             this.Invoke((EventHandler)delegate {
                 StatusLabelConnStatus.ForeColor = Color.Green;
                 StatusLabelConnStatus.Text = "OBD通讯接口已连接";
+                StatusLabelAppProtocol.Text = m_obdInterface.UseISO27145 ? "ISO_27145" : "ISO_15031";
             });
         }
 
@@ -355,6 +387,7 @@ namespace SH_OBD {
             } else {
                 StatusLabelConnStatus.ForeColor = Color.Red;
                 StatusLabelConnStatus.Text = "OBD通讯接口未连接";
+                StatusLabelAppProtocol.Text = "应用层协议待定";
                 toolStripBtnConnect.Enabled = true;
                 toolStripBtnDisconnect.Enabled = false;
             }

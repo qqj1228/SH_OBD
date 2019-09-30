@@ -21,7 +21,6 @@ namespace SH_OBD {
             return Initialize(iPort, iBaud);
         }
 
-
         public override bool Initialize(int iPort, int iBaud) {
             try {
                 if (m_CommELM.Online) {
@@ -37,8 +36,6 @@ namespace SH_OBD {
                     m_CommELM.Close();
                     return false;
                 }
-                // 使用当前版本的obdsim不支持"ATCAF1"命令，故不判断该命令是否可用，只需执行过即可
-                //ConfirmAT("ATCAF1");
 
                 base.m_DeviceDes = GetDeviceDes().Trim();
                 base.m_DeviceID = GetDeviceID().Trim();
@@ -50,39 +47,43 @@ namespace SH_OBD {
 
                     m_CommELM.SetTimeout(5000);
                     bool flag = false;
-                    if (GetOBDResponse("0100").Replace(" ", "").IndexOf("4100") >= 0) {
+                    if (GetOBDResponse("0100").Replace(" ", "").IndexOf("4100") >= 0 || GetOBDResponse("22F810").Replace(" ", "").IndexOf("62F810") >= 0) {
                         flag = true;
-                        SetProtocol((ProtocolType)int.Parse(GetOBDResponse("ATDPN").Replace("A", "")));
+                        if (m_Parser == null) {
+                            SetProtocol((ProtocolType)int.Parse(GetOBDResponse("ATDPN").Replace("A", "")));
+                        }
                     }
 
                     m_CommELM.SetTimeout(500);
                     return flag;
-                }
-                //if (!ConfirmAT("ATM0")) {
-                //    m_CommELM.Close();
-                //    return false;
-                //}
-                // 使用当前版本的obdsim不支持"ATM0"命令，故不判断该命令是否可用，只需执行过即可
-                ConfirmAT("ATM0");
-
-                m_CommELM.SetTimeout(5000);
-                int[] xattr = new int[] { 6, 7, 2, 3, 1, 8, 9, 4, 5 };
-                for (int idx = 0; idx < xattr.Length; idx++) {
-                    if (!ConfirmAT("ATTP" + xattr[idx].ToString())) {
+                } else {
+                    if (!ConfirmAT("ATM0")) {
                         m_CommELM.Close();
                         return false;
                     }
-                    if (GetOBDResponse("0100").Replace(" ", "").IndexOf("4100") >= 0) {
-                        SetProtocol((ProtocolType)xattr[idx]);
-                        SetBaudRateIndex(iBaud);
-                        m_iComPortIndex = iPort;
-                        m_CommELM.SetTimeout(500);
-                        ConfirmAT("ATM1");
-                        return true;
+
+                    m_CommELM.SetTimeout(5000);
+                    int[] xattr = new int[] { 6, 7, 2, 3, 1, 8, 9, 4, 5 };
+                    for (int idx = 0; idx < xattr.Length; idx++) {
+                        if (!ConfirmAT("ATTP" + xattr[idx].ToString())) {
+                            m_CommELM.Close();
+                            return false;
+                        }
+                        if (GetOBDResponse("0100").Replace(" ", "").IndexOf("4100") >= 0 || GetOBDResponse("22F810").Replace(" ", "").IndexOf("62F810") >= 0) {
+                            if (m_Parser == null) {
+                                SetProtocol((ProtocolType)xattr[idx]);
+                            }
+                            SetBaudRateIndex(iBaud);
+                            m_iComPortIndex = iPort;
+                            m_CommELM.SetTimeout(500);
+                            ConfirmAT("ATM1");
+                            return true;
+                        }
                     }
-                }
-                if (m_CommELM.Online) {
-                    m_CommELM.Close();
+                    // 每个协议都无法连接的话就关闭端口准备退出
+                    if (m_CommELM.Online) {
+                        m_CommELM.Close();
+                    }
                 }
             } catch (Exception e) {
                 if (m_CommELM.Online) {
@@ -142,33 +143,33 @@ namespace SH_OBD {
             m_iProtocol = iProtocol;
             m_log.TraceInfo(string.Format("Protocol switched to: {0}", Settings.ProtocolNames[(int)iProtocol]));
             switch (iProtocol) {
-                case ProtocolType.J1850_PWM:
-                    m_Parser = new OBDParser_J1850_PWM();
-                    break;
-                case ProtocolType.J1850_VPW:
-                    m_Parser = new OBDParser_J1850_VPW();
-                    break;
-                case ProtocolType.ISO9141_2:
-                    m_Parser = new OBDParser_ISO9141_2();
-                    break;
-                case ProtocolType.ISO_14230_4_KWP_5BAUDINIT:
-                    m_Parser = new OBDParser_ISO14230_4_KWP();
-                    break;
-                case ProtocolType.ISO_14230_4_KWP_FASTINIT:
-                    m_Parser = new OBDParser_ISO14230_4_KWP();
-                    break;
-                case ProtocolType.ISO_15765_4_CAN_11BIT_500KBAUD:
-                    m_Parser = new OBDParser_ISO15765_4_CAN11();
-                    break;
-                case ProtocolType.ISO_15765_4_CAN_29BIT_500KBAUD:
-                    m_Parser = new OBDParser_ISO15765_4_CAN29();
-                    break;
-                case ProtocolType.ISO_15765_4_CAN_11BIT_250KBAUD:
-                    m_Parser = new OBDParser_ISO15765_4_CAN11();
-                    break;
-                case ProtocolType.ISO_15765_4_CAN_29BIT_250KBAUD:
-                    m_Parser = new OBDParser_ISO15765_4_CAN29();
-                    break;
+            case ProtocolType.J1850_PWM:
+                m_Parser = new OBDParser_J1850_PWM();
+                break;
+            case ProtocolType.J1850_VPW:
+                m_Parser = new OBDParser_J1850_VPW();
+                break;
+            case ProtocolType.ISO9141_2:
+                m_Parser = new OBDParser_ISO9141_2();
+                break;
+            case ProtocolType.ISO_14230_4_KWP_5BAUDINIT:
+                m_Parser = new OBDParser_ISO14230_4_KWP();
+                break;
+            case ProtocolType.ISO_14230_4_KWP_FASTINIT:
+                m_Parser = new OBDParser_ISO14230_4_KWP();
+                break;
+            case ProtocolType.ISO_15765_4_CAN_11BIT_500KBAUD:
+                m_Parser = new OBDParser_ISO15765_4_CAN11();
+                break;
+            case ProtocolType.ISO_15765_4_CAN_29BIT_500KBAUD:
+                m_Parser = new OBDParser_ISO15765_4_CAN29();
+                break;
+            case ProtocolType.ISO_15765_4_CAN_11BIT_250KBAUD:
+                m_Parser = new OBDParser_ISO15765_4_CAN11();
+                break;
+            case ProtocolType.ISO_15765_4_CAN_29BIT_250KBAUD:
+                m_Parser = new OBDParser_ISO15765_4_CAN29();
+                break;
             }
         }
 
@@ -226,18 +227,18 @@ namespace SH_OBD {
         public override int GetBaudRateIndex() { return m_iBaudRateIndex; }
         public void SetBaudRateIndex(int iBaud) {
             switch (iBaud) {
-                case 9600:
-                    m_iBaudRateIndex = 0;
-                    break;
-                case 38400:
-                    m_iBaudRateIndex = 1;
-                    break;
-                case 115200:
-                    m_iBaudRateIndex = 2;
-                    break;
-                default:
-                    m_iBaudRateIndex = -1;
-                    break;
+            case 9600:
+                m_iBaudRateIndex = 0;
+                break;
+            case 38400:
+                m_iBaudRateIndex = 1;
+                break;
+            case 115200:
+                m_iBaudRateIndex = 2;
+                break;
+            default:
+                m_iBaudRateIndex = -1;
+                break;
             }
         }
         public override int GetComPortIndex() { return m_iComPortIndex; }

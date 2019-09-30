@@ -141,6 +141,9 @@
   <data name="buttonName_Log" xml:space="preserve">
     <value>日志</value>
   </data>
+  <data name="buttonName_OBDTest" xml:space="preserve">
+    <value>OBD检测</value>
+  </data>
   <data name="buttonName_OxygenSensors" xml:space="preserve">
     <value>氧气传感器</value>
   </data>

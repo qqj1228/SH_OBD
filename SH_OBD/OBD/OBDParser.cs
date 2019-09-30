@@ -31,7 +31,6 @@ namespace SH_OBD {
             return list;
         }
 
-
         protected bool ErrorCheck(string input) {
             return (
                 input.IndexOf("TIMEOUT") >= 0 ||

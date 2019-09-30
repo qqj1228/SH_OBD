@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Preferences xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<Settings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <DoInitialization>true</DoInitialization>
   <ActiveProfileIndex>0</ActiveProfileIndex>
-  <BaudRateIndex>0</BaudRateIndex>
-  <ProtocolIndex>0</ProtocolIndex>
+  <BaudRateIndex>1</BaudRateIndex>
+  <ScannerBaudRateIndex>0</ScannerBaudRateIndex>
+  <ComPort>4</ComPort>
+  <ScannerPort>5</ScannerPort>
+  <AutoDetect>false</AutoDetect>
+  <UseSerialScanner>true</UseSerialScanner>
+  <ProtocolIndex>6</ProtocolIndex>
   <HardwareIndex>1</HardwareIndex>
-  <ComPort>1</ComPort>
-  <AutoDetect>true</AutoDetect>
-</Preferences>
+</Settings>

@@ -51,31 +51,31 @@ namespace SH_OBD {
             m_ListPermanent.Clear();
             OBDParameterValue value;
 
-            value = m_obdInterface.GetValue("SAE.MIL", true);
+            value = m_obdInterface.GetValue("SAE.MIL");
             if (!value.ErrorDetected) {
                 SetMilStatus(value.BoolValue);
             }
 
-            value = m_obdInterface.GetValue("SAE.DTC_COUNT", true);
+            value = m_obdInterface.GetValue("SAE.DTC_COUNT");
             if (!value.ErrorDetected) {
                 SetDTCTotal((int)value.DoubleValue);
             }
 
-            value = m_obdInterface.GetValue("SAE.STORED_DTCS", true);
+            value = m_obdInterface.GetValue("SAE.STORED_DTCS");
             if (!value.ErrorDetected) {
                 foreach (string dtc in value.ListStringValue) {
                     m_ListDTC.Add(m_obdInterface.GetDTC(dtc));
                 }
             }
 
-            value = m_obdInterface.GetValue("SAE.PENDING_DTCS", true);
+            value = m_obdInterface.GetValue("SAE.PENDING_DTCS");
             if (!value.ErrorDetected) {
                 foreach (string dtc in value.ListStringValue) {
                     m_ListPending.Add(m_obdInterface.GetDTC(dtc));
                 }
             }
 
-            value = m_obdInterface.GetValue("SAE.PERMANENT_DTCS", true);
+            value = m_obdInterface.GetValue("SAE.PERMANENT_DTCS");
             if (!value.ErrorDetected) {
                 foreach (string dtc in value.ListStringValue) {
                     m_ListPermanent.Add(m_obdInterface.GetDTC(dtc));

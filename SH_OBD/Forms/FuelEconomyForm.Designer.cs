@@ -130,22 +130,22 @@
             // radioMetricUnits
             // 
             this.radioMetricUnits.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.radioMetricUnits.Checked = true;
             this.radioMetricUnits.Location = new System.Drawing.Point(132, 51);
             this.radioMetricUnits.Name = "radioMetricUnits";
             this.radioMetricUnits.Size = new System.Drawing.Size(124, 26);
             this.radioMetricUnits.TabIndex = 2;
+            this.radioMetricUnits.TabStop = true;
             this.radioMetricUnits.Text = "公制单位(&M)";
             this.radioMetricUnits.CheckedChanged += new System.EventHandler(this.radioEnglishUnits_CheckedChanged);
             // 
             // radioEnglishUnits
             // 
             this.radioEnglishUnits.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.radioEnglishUnits.Checked = true;
             this.radioEnglishUnits.Location = new System.Drawing.Point(132, 17);
             this.radioEnglishUnits.Name = "radioEnglishUnits";
             this.radioEnglishUnits.Size = new System.Drawing.Size(124, 26);
             this.radioEnglishUnits.TabIndex = 1;
-            this.radioEnglishUnits.TabStop = true;
             this.radioEnglishUnits.Text = "英制单位(&E)";
             this.radioEnglishUnits.CheckedChanged += new System.EventHandler(this.radioEnglishUnits_CheckedChanged);
             // 
