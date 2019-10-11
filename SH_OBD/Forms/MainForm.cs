@@ -13,6 +13,7 @@ namespace SH_OBD {
     public partial class MainForm : Form {
         private Dictionary<string, Form> dicSubForms;
         private OBDTestForm f_OBDTest;
+        private ShowResultForm f_ShowResult;
         private TestForm f_MonitorTests;
         private DTCForm f_DTC;
         private FreezeFramesForm f_FreezeFrames;
@@ -25,12 +26,14 @@ namespace SH_OBD {
         private ReportGeneratorForm f_Report;
         private TerminalForm f_Terminal;
         private readonly OBDInterface m_obdInterface;
+        private readonly OBDTest m_obdTest;
         private readonly Font m_boldFont;
         private readonly Font m_originFont;
 
-        public MainForm() {
+        public MainForm(OBDInterface obd, OBDTest obdTest) {
             InitializeComponent();
-            m_obdInterface = new OBDInterface();
+            m_obdInterface = obd;
+            m_obdTest = obdTest;
             m_obdInterface.OnConnect += new OBDInterface.__Delegate_OnConnect(On_OBD_Connect);
             m_obdInterface.OnDisconnect += new OBDInterface.__Delegate_OnDisconnect(On_OBD_Disconnect);
 
@@ -55,26 +58,13 @@ namespace SH_OBD {
             this.Text = "SH_OBD - Ver " + MainFileVersion.AssemblyVersion;
         }
 
-        ~MainForm() {
-            f_OBDTest.Dispose();
-            f_MonitorTests.Dispose();
-            f_DTC.Dispose();
-            f_FreezeFrames.Dispose();
-            f_OxygenSensors.Dispose();
-            f_SensorGrid.Dispose();
-            f_SensorChart.Dispose();
-            f_Track.Dispose();
-            f_Dyno.Dispose();
-            f_FuelEconomy.Dispose();
-            f_Report.Dispose();
-            f_Terminal.Dispose();
-            m_boldFont.Dispose();
-        }
+        ~MainForm() { f_OBDTest.Close(); }
 
         void InitSubForm() {
             dicSubForms = new Dictionary<string, Form>();
 
-            f_OBDTest = new OBDTestForm(m_obdInterface);
+            f_OBDTest = new OBDTestForm(m_obdInterface, m_obdTest);
+            f_ShowResult = new ShowResultForm();
             f_MonitorTests = new TestForm(m_obdInterface);
             f_DTC = new DTCForm(m_obdInterface);
             f_FreezeFrames = new FreezeFramesForm(m_obdInterface);
@@ -88,6 +78,7 @@ namespace SH_OBD {
             f_Terminal = new TerminalForm(m_obdInterface);
 
             buttonOBDTest.Text = Properties.Resources.buttonName_OBDTest;
+            buttonShowResult.Text = Properties.Resources.buttonName_ShowResult;
             buttonTests.Text = Properties.Resources.buttonName_Tests;
             buttonDTC.Text = Properties.Resources.buttonName_DTC;
             buttonFF.Text = Properties.Resources.buttonName_FreezeFrames;
@@ -101,6 +92,7 @@ namespace SH_OBD {
             buttonTerminal.Text = Properties.Resources.buttonName_Terminal;
 
             dicSubForms.Add(Properties.Resources.buttonName_OBDTest, f_OBDTest);
+            dicSubForms.Add(Properties.Resources.buttonName_ShowResult, f_ShowResult);
             dicSubForms.Add(Properties.Resources.buttonName_Tests, f_MonitorTests);
             dicSubForms.Add(Properties.Resources.buttonName_DTC, f_DTC);
             dicSubForms.Add(Properties.Resources.buttonName_FreezeFrames, f_FreezeFrames);
@@ -225,19 +217,30 @@ namespace SH_OBD {
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
-            if (!m_obdInterface.LoadParameters(".\\configs\\generic.csv")) {
+            if (!m_obdInterface.LoadParameters(".\\Configs\\generic.csv")) {
                 m_obdInterface.GetLogger().TraceError("Failed to load generic parameter definitions!");
                 MessageBox.Show("加载generic.csv配置文件失败!", "出错", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
-            if (m_obdInterface.LoadDTCDefinitions(".\\configs\\dtc.xml") == 0) {
+            if (m_obdInterface.LoadDTCDefinitions(".\\Configs\\dtc.xml") == 0) {
                 m_obdInterface.GetLogger().TraceError("Failed to load DTC definitions!");
                 MessageBox.Show("加载dtc.xml配置文件失败!", "出错", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            if (m_obdInterface.ConnectedStatus) {
+                toolStripBtnConnect.Enabled = false;
+                toolStripBtnDisconnect.Enabled = true;
+                ShowConnectedLabel();
+                StatusLabelDeviceName.Text = m_obdInterface.GetDeviceIDString();
+            } else {
+                toolStripBtnConnect.Enabled = true;
+                toolStripBtnDisconnect.Enabled = false;
+                ShowDisconnectedLabel();
+                StatusLabelDeviceName.Text = "未获取到设备名";
             }
         }
 
         private void ToolStripBtnUserPrefs_Click(object sender, EventArgs e) {
             UserPreferences userPreferences = m_obdInterface.UserPreferences;
-            UserPreferencesForm userForm = new UserPreferencesForm(userPreferences);
+            UserPreferencesForm userForm = new UserPreferencesForm(userPreferences, m_obdTest);
             userForm.ShowDialog();
             m_obdInterface.SaveUserPreferences(userPreferences);
             userForm.Dispose();
@@ -282,27 +285,27 @@ namespace SH_OBD {
             m_obdInterface.GetLogger().TraceInfo(string.Format("   Default Port: {0}", m_obdInterface.CommSettings.ComPortName));
 
             switch (m_obdInterface.CommSettings.HardwareIndex) {
-                case HardwareType.Automatic:
-                    m_obdInterface.GetLogger().TraceInfo("   Interface: Auto-Detect");
-                    break;
-                case HardwareType.ELM327:
-                    m_obdInterface.GetLogger().TraceInfo("   Interface: ELM327");
-                    break;
-                case HardwareType.ELM320:
-                    m_obdInterface.GetLogger().TraceInfo("   Interface: ELM320");
-                    break;
-                case HardwareType.ELM322:
-                    m_obdInterface.GetLogger().TraceInfo("   Interface: ELM322");
-                    break;
-                case HardwareType.ELM323:
-                    m_obdInterface.GetLogger().TraceInfo("   Interface: ELM323");
-                    break;
-                case HardwareType.CANtact:
-                    m_obdInterface.GetLogger().TraceInfo("   Interface: CANtact");
-                    break;
-                default:
-                    m_obdInterface.GetLogger().TraceInfo("Bad hardware type.");
-                    throw new Exception("Bad hardware type.");
+            case HardwareType.Automatic:
+                m_obdInterface.GetLogger().TraceInfo("   Interface: Auto-Detect");
+                break;
+            case HardwareType.ELM327:
+                m_obdInterface.GetLogger().TraceInfo("   Interface: ELM327");
+                break;
+            case HardwareType.ELM320:
+                m_obdInterface.GetLogger().TraceInfo("   Interface: ELM320");
+                break;
+            case HardwareType.ELM322:
+                m_obdInterface.GetLogger().TraceInfo("   Interface: ELM322");
+                break;
+            case HardwareType.ELM323:
+                m_obdInterface.GetLogger().TraceInfo("   Interface: ELM323");
+                break;
+            case HardwareType.CANtact:
+                m_obdInterface.GetLogger().TraceInfo("   Interface: CANtact");
+                break;
+            default:
+                m_obdInterface.GetLogger().TraceInfo("Bad hardware type.");
+                throw new Exception("Bad hardware type.");
             }
 
             m_obdInterface.GetLogger().TraceInfo(string.Format("   Protocol: {0}", m_obdInterface.CommSettings.ProtocolName));
@@ -322,11 +325,22 @@ namespace SH_OBD {
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
-            Monitor.Enter(m_obdInterface);
-            if (m_obdInterface.ConnectedStatus) {
-                m_obdInterface.Disconnect();
-            }
-            Monitor.Exit(m_obdInterface);
+            f_OBDTest.Close();
+            f_MonitorTests.Close();
+            f_DTC.Close();
+            f_FreezeFrames.Close();
+            f_OxygenSensors.Close();
+            f_SensorGrid.Close();
+            f_SensorChart.Close();
+            f_Track.Close();
+            f_Dyno.Close();
+            f_FuelEconomy.Close();
+            f_Report.Close();
+            f_Terminal.Close();
+            m_boldFont.Dispose();
+            m_obdInterface.OnConnect -= new OBDInterface.__Delegate_OnConnect(On_OBD_Connect);
+            m_obdInterface.OnDisconnect -= new OBDInterface.__Delegate_OnDisconnect(On_OBD_Disconnect);
+            m_obdTest.AdvanceMode = false;
         }
 
         private void ConnectThreadNew() {

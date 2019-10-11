@@ -187,6 +187,15 @@ namespace SH_OBD.Properties {
         }
         
         /// <summary>
+        ///   查找类似 查看检测结果 的本地化字符串。
+        /// </summary>
+        internal static string buttonName_ShowResult {
+            get {
+                return ResourceManager.GetString("buttonName_ShowResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 开始 的本地化字符串。
         /// </summary>
         internal static string buttonName_Start {

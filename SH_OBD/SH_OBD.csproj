@@ -38,12 +38,18 @@
     <Reference Include="DundasWinGauge">
       <HintPath>lib\DundasWinGauge.dll</HintPath>
     </Reference>
+    <Reference Include="EPPlus, Version=4.5.3.2, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.5.3.2\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -121,11 +127,29 @@
     <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\OBDStartForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\OBDStartForm.Designer.cs">
+      <DependentUpon>OBDStartForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\OBDTestForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\OBDTestForm.Designer.cs">
       <DependentUpon>OBDTestForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PassWordForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PassWordForm.Designer.cs">
+      <DependentUpon>PassWordForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ShowResultForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ShowResultForm.Designer.cs">
+      <DependentUpon>ShowResultForm.cs</DependentUpon>
     </Compile>
     <Compile Include="OBD\OBDCommELM.cs" />
     <Compile Include="OBD\OBDDevice.cs" />
@@ -148,6 +172,7 @@
     <Compile Include="Forms\OxygenSensorsForm.Designer.cs">
       <DependentUpon>OxygenSensorsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="OBD\OBDTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Forms\TestForm.cs">
@@ -244,11 +269,17 @@
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\OBDStartForm.resx">
+      <DependentUpon>OBDStartForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\OBDTestForm.resx">
       <DependentUpon>OBDTestForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\OxygenSensorsForm.resx">
       <DependentUpon>OxygenSensorsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PassWordForm.resx">
+      <DependentUpon>PassWordForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ReportForm.resx">
       <DependentUpon>ReportForm.cs</DependentUpon>
@@ -294,6 +325,7 @@
       <DependentUpon>UserPreferencesForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="Configs\OBD_Result.xlsx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -35,21 +35,8 @@ namespace SH_OBD {
                     comboPorts.SelectedIndex = 0;
                 }
 
-                if (CommBase.IsPortAvailable(m_settings.ScannerPort)) {
-                    cmbBoxScannerPort.SelectedItem = m_settings.ScannerPortName;
-                } else {
-                    for (int i = 0; i < cmbBoxScannerPort.Items.Count; i++) {
-                        if (i != comboPorts.SelectedIndex) {
-                            cmbBoxScannerPort.SelectedIndex = i;
-                            break;
-                            // 自动设置可用串口
-                            //if (CommBase.IsPortAvailable(Convert.ToInt32(cmbBoxScannerPort.Items[i].ToString().Remove(0, 3)))) {
-                            //    cmbBoxScannerPort.SelectedIndex = i;
-                            //    break;
-                            //}
-                        }
-                    }
-                }
+                // 打开设置窗口时扫码枪串口已经被打开了，故无需判断串口是否可用
+                cmbBoxScannerPort.SelectedItem = m_settings.ScannerPortName;
 
                 comboHardware.SelectedIndex = m_settings.HardwareIndexInt;
                 comboBaud.SelectedIndex = m_settings.BaudRateIndex;

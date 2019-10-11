@@ -1204,7 +1204,7 @@ namespace SH_OBD {
             List<string> strings = new List<string>();
             for (int i = 0; i <= response.Data.Length - offset; i += offset) {
                 string str = GetDTCName(response.Data.Substring(i + offset - WholeDTCLenInByte * 2, 6));
-                if (str != "P0000") {
+                if (!str.StartsWith("P0000")) {
                     strings.Add(str);
                 }
             }

@@ -38,7 +38,7 @@
             this.btnSend.Size = new System.Drawing.Size(72, 26);
             this.btnSend.TabIndex = 7;
             this.btnSend.Text = "发送(&S)";
-            this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
+            this.btnSend.Click += new System.EventHandler(this.BtnSend_Click);
             // 
             // txtCommand
             // 

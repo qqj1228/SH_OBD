@@ -32,6 +32,7 @@
             this.StatusLabelDeviceType = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusLabelPort = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonShowResult = new System.Windows.Forms.Button();
             this.buttonOBDTest = new System.Windows.Forms.Button();
             this.buttonReport = new System.Windows.Forms.Button();
             this.buttonTerminal = new System.Windows.Forms.Button();
@@ -86,7 +87,7 @@
             // 
             this.StatusLabelConnStatus.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.StatusLabelConnStatus.Name = "StatusLabelConnStatus";
-            this.StatusLabelConnStatus.Size = new System.Drawing.Size(289, 21);
+            this.StatusLabelConnStatus.Size = new System.Drawing.Size(305, 21);
             this.StatusLabelConnStatus.Spring = true;
             this.StatusLabelConnStatus.Text = "OBD通讯接口状态";
             // 
@@ -94,7 +95,7 @@
             // 
             this.StatusLabelDeviceName.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.StatusLabelDeviceName.Name = "StatusLabelDeviceName";
-            this.StatusLabelDeviceName.Size = new System.Drawing.Size(289, 21);
+            this.StatusLabelDeviceName.Size = new System.Drawing.Size(305, 21);
             this.StatusLabelDeviceName.Spring = true;
             this.StatusLabelDeviceName.Text = "OBD设备名称";
             // 
@@ -131,6 +132,7 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.buttonShowResult);
             this.panel1.Controls.Add(this.buttonOBDTest);
             this.panel1.Controls.Add(this.buttonReport);
             this.panel1.Controls.Add(this.buttonTerminal);
@@ -148,6 +150,17 @@
             this.panel1.Size = new System.Drawing.Size(120, 551);
             this.panel1.TabIndex = 1;
             // 
+            // buttonShowResult
+            // 
+            this.buttonShowResult.Location = new System.Drawing.Point(3, 32);
+            this.buttonShowResult.Name = "buttonShowResult";
+            this.buttonShowResult.Size = new System.Drawing.Size(110, 23);
+            this.buttonShowResult.TabIndex = 13;
+            this.buttonShowResult.Text = "buttonShowResult";
+            this.buttonShowResult.UseVisualStyleBackColor = true;
+            this.buttonShowResult.Visible = false;
+            this.buttonShowResult.Click += new System.EventHandler(this.Button_Click);
+            // 
             // buttonOBDTest
             // 
             this.buttonOBDTest.Location = new System.Drawing.Point(3, 3);
@@ -160,7 +173,7 @@
             // 
             // buttonReport
             // 
-            this.buttonReport.Location = new System.Drawing.Point(3, 295);
+            this.buttonReport.Location = new System.Drawing.Point(3, 324);
             this.buttonReport.Name = "buttonReport";
             this.buttonReport.Size = new System.Drawing.Size(110, 23);
             this.buttonReport.TabIndex = 10;
@@ -170,7 +183,7 @@
             // 
             // buttonTerminal
             // 
-            this.buttonTerminal.Location = new System.Drawing.Point(3, 324);
+            this.buttonTerminal.Location = new System.Drawing.Point(3, 353);
             this.buttonTerminal.Name = "buttonTerminal";
             this.buttonTerminal.Size = new System.Drawing.Size(110, 23);
             this.buttonTerminal.TabIndex = 11;
@@ -180,7 +193,7 @@
             // 
             // buttonFuel
             // 
-            this.buttonFuel.Location = new System.Drawing.Point(3, 266);
+            this.buttonFuel.Location = new System.Drawing.Point(3, 295);
             this.buttonFuel.Name = "buttonFuel";
             this.buttonFuel.Size = new System.Drawing.Size(110, 23);
             this.buttonFuel.TabIndex = 9;
@@ -190,7 +203,7 @@
             // 
             // buttonDyno
             // 
-            this.buttonDyno.Location = new System.Drawing.Point(3, 237);
+            this.buttonDyno.Location = new System.Drawing.Point(3, 266);
             this.buttonDyno.Name = "buttonDyno";
             this.buttonDyno.Size = new System.Drawing.Size(110, 23);
             this.buttonDyno.TabIndex = 8;
@@ -200,7 +213,7 @@
             // 
             // buttonTrack
             // 
-            this.buttonTrack.Location = new System.Drawing.Point(3, 208);
+            this.buttonTrack.Location = new System.Drawing.Point(3, 237);
             this.buttonTrack.Name = "buttonTrack";
             this.buttonTrack.Size = new System.Drawing.Size(110, 23);
             this.buttonTrack.TabIndex = 7;
@@ -210,7 +223,7 @@
             // 
             // buttonSensorGraph
             // 
-            this.buttonSensorGraph.Location = new System.Drawing.Point(3, 179);
+            this.buttonSensorGraph.Location = new System.Drawing.Point(3, 208);
             this.buttonSensorGraph.Name = "buttonSensorGraph";
             this.buttonSensorGraph.Size = new System.Drawing.Size(110, 23);
             this.buttonSensorGraph.TabIndex = 6;
@@ -220,7 +233,7 @@
             // 
             // buttonSensorGrid
             // 
-            this.buttonSensorGrid.Location = new System.Drawing.Point(3, 150);
+            this.buttonSensorGrid.Location = new System.Drawing.Point(3, 179);
             this.buttonSensorGrid.Name = "buttonSensorGrid";
             this.buttonSensorGrid.Size = new System.Drawing.Size(110, 23);
             this.buttonSensorGrid.TabIndex = 5;
@@ -230,7 +243,7 @@
             // 
             // buttonO2
             // 
-            this.buttonO2.Location = new System.Drawing.Point(3, 121);
+            this.buttonO2.Location = new System.Drawing.Point(3, 150);
             this.buttonO2.Name = "buttonO2";
             this.buttonO2.Size = new System.Drawing.Size(110, 23);
             this.buttonO2.TabIndex = 4;
@@ -240,7 +253,7 @@
             // 
             // buttonFF
             // 
-            this.buttonFF.Location = new System.Drawing.Point(3, 92);
+            this.buttonFF.Location = new System.Drawing.Point(3, 121);
             this.buttonFF.Name = "buttonFF";
             this.buttonFF.Size = new System.Drawing.Size(110, 23);
             this.buttonFF.TabIndex = 3;
@@ -250,7 +263,7 @@
             // 
             // buttonDTC
             // 
-            this.buttonDTC.Location = new System.Drawing.Point(3, 62);
+            this.buttonDTC.Location = new System.Drawing.Point(3, 91);
             this.buttonDTC.Name = "buttonDTC";
             this.buttonDTC.Size = new System.Drawing.Size(110, 23);
             this.buttonDTC.TabIndex = 2;
@@ -260,7 +273,7 @@
             // 
             // buttonTests
             // 
-            this.buttonTests.Location = new System.Drawing.Point(3, 32);
+            this.buttonTests.Location = new System.Drawing.Point(3, 61);
             this.buttonTests.Name = "buttonTests";
             this.buttonTests.Size = new System.Drawing.Size(110, 23);
             this.buttonTests.TabIndex = 1;
@@ -467,6 +480,7 @@
         private System.Windows.Forms.ToolStripComboBox toolStripCmbBoxECU;
         private System.Windows.Forms.Button buttonOBDTest;
         private System.Windows.Forms.ToolStripStatusLabel StatusLabelAppProtocol;
+        private System.Windows.Forms.Button buttonShowResult;
     }
 }
 

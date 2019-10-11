@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
+using System.IO.Ports;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -10,10 +11,10 @@ using System.Xml.Serialization;
 
 namespace SH_OBD {
     public class OBDInterface {
-        private const string m_vehicles_db = ".\\configs\\vehicles.db";
-        private const string m_settings_xml = ".\\configs\\settings.xml";
-        private const string m_userprefs_xml = ".\\configs\\userprefs.xml";
-        private const string m_dbandMES_xml = ".\\configs\\dbandMES.xml";
+        private const string m_vehicles_db = ".\\Configs\\vehicles.db";
+        private const string m_settings_xml = ".\\Configs\\settings.xml";
+        private const string m_userprefs_xml = ".\\Configs\\userprefs.xml";
+        private const string m_dbandMES_xml = ".\\Configs\\dbandMES.xml";
 
         public delegate void __Delegate_OnConnect();
         public delegate void __Delegate_OnDisconnect();
@@ -25,12 +26,15 @@ namespace SH_OBD {
         private List<DTC> m_listDTC;
         private readonly List<OBDParameter> m_listAllParameters;
         private readonly List<OBDParameter> m_listSupportedParameters;
+        public readonly SerialPortClass m_sp;
         public readonly Logger m_log;
+
         public UserPreferences UserPreferences { get; private set; }
         public Settings CommSettings { get; private set; }
         public DBandMES DBandMES { get; private set; }
         public List<VehicleProfile> VehicleProfiles { get; private set; }
         public bool UseISO27145 { get; set; }
+        public bool ScannerPortOpened { get; set; }
 
         public OBDInterface() {
             m_log = new Logger("./log", EnumLogLevel.LogLevelAll, true, 100);
@@ -45,6 +49,28 @@ namespace SH_OBD {
             VehicleProfiles = LoadVehicleProfiles();
             SetDevice(HardwareType.ELM327);
             UseISO27145 = false;
+            ScannerPortOpened = false;
+            if (CommSettings.UseSerialScanner) {
+                m_sp = new SerialPortClass(
+                    CommSettings.ScannerPortName,
+                    CommSettings.ScannerBaudRate,
+                    Parity.None,
+                    8,
+                    StopBits.One
+                );
+                try {
+                    m_sp.OpenPort();
+                    ScannerPortOpened = true;
+                } catch (Exception ex) {
+                    m_log.TraceError("打开扫码枪串口出错: " + ex.Message);
+                }
+            }
+        }
+
+        ~OBDInterface() {
+            if (m_sp != null) {
+                m_sp.ClosePort();
+            }
         }
 
         public Logger GetLogger() { return m_log; }

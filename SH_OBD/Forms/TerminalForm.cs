@@ -10,7 +10,7 @@ using System.Windows.Forms;
 namespace SH_OBD {
     public partial class TerminalForm : Form {
         private string m_strPmt;
-        private OBDInterface m_obdInterface;
+        private readonly OBDInterface m_obdInterface;
 
         public TerminalForm(OBDInterface obd) {
             m_obdInterface = obd;
@@ -42,26 +42,21 @@ namespace SH_OBD {
             };
         }
 
-        private void btnSend_Click(object sender, EventArgs e) {
-            if (txtCommand.Text.Contains("test")) {
-                // 用于测试代码，生产环境中无用处
-                int num1 = 0x11;
-                int num2 = 0x22;
-                int num3 = 0x33;
-                int num4 = 0x44;
-                int num0 = (num1 * 0x1000000) + (num2 * 0x10000) + (num3 * 0x100) + num4;
-                string s = (num0 / 3600).ToString() + " hrs, ";
-                s += ((num0 % 3600) / 60).ToString() + " min, ";
-                s += ((num0 % 3600) % 60).ToString() + " sec";
-                MessageBox.Show(s);
-                return;
-            }
+        private void BtnSend_Click(object sender, EventArgs e) {
             richText.SelectionStart = richText.Text.Length;
             richText.Focus();
 
             if (!m_obdInterface.ConnectedStatus) {
                 MessageBox.Show("必须首先与车辆进行连接", "出错", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
+            }
+
+            if (txtCommand.Text.Trim() == "ClearDTC") {
+                if (m_obdInterface.UseISO27145) {
+                    txtCommand.Text = "14FFFF33";
+                } else {
+                    txtCommand.Text = "04";
+                }
             }
 
             richText.SelectionFont = new Font("Microsoft Sans Serif", 9f, FontStyle.Regular);
@@ -87,7 +82,7 @@ namespace SH_OBD {
 
         private void TxtCommand_KeyPress(object sender, KeyPressEventArgs e) {
             if (e.KeyChar == (char)Keys.Enter && sender is TextBox tb && tb.Name == "txtCommand") {
-                btnSend_Click(btnSend, null);
+                BtnSend_Click(btnSend, null);
             }
         }
     }

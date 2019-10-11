@@ -158,6 +158,7 @@
             this.btnErase.Size = new System.Drawing.Size(156, 27);
             this.btnErase.TabIndex = 11;
             this.btnErase.Text = "清除故障码(&E)";
+            this.btnErase.Visible = false;
             this.btnErase.Click += new System.EventHandler(this.btnErase_Click);
             // 
             // btnRefresh

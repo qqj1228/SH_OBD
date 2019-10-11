@@ -48,8 +48,8 @@ namespace SH_OBD {
                 DateTime now2 = DateTime.Now;
                 m_bReportForm.ReportPage1.GenerationDate = DateTime.Now.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss");
                 richTextStatus.Text = "";
-                progressBar.Value = 0;
-                progressBar.Maximum = 22;
+                //progressBar.Value = 0;
+                //progressBar.Maximum = 22;
                 Task.Factory.StartNew(CollectData);
             }
         }

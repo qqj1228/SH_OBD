@@ -230,5 +230,21 @@ namespace SH_OBD {
             return true;
         }
 
+        public string GetPassWord() {
+            string strSQL = "select PassWord from OBDUser where UserName = 'admin'";
+            m_log.TraceInfo("==> T-SQL: " + strSQL);
+            string[,] strArr = SelectDB(strSQL);
+            if (strArr != null) {
+                return strArr[0, 0];
+            } else {
+                return "";
+            }
+        }
+
+        public int SetPassWord(string strPwd) {
+            string strSQL = "update OBDUser set PassWord = '" + strPwd + "' where UserName = 'admin'";
+            m_log.TraceInfo("==> T-SQL: " + strSQL);
+            return RunSQL(strSQL);
+        }
     }
 }
