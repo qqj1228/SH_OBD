@@ -1152,9 +1152,9 @@ namespace SH_OBD {
                 worksheet1.Cells["C12"].Value = dt.Rows[0][3].ToString(); // MIL灯点亮后行驶里程（km）
                 // 检测结果
                 string Result = OBDResult ? "合格" : "不合格";
-                Result += DTCResult ? "" : ",有DTC";
-                Result += ReadinessResult ? "" : ",就绪状态未完成项超过2项";
-                Result += VINResult ? "" : ",VIN号不匹配";
+                Result += DTCResult ? "" : "\n有DTC";
+                Result += ReadinessResult ? "" : "\n就绪状态未完成项超过2项";
+                Result += VINResult ? "" : "\nVIN号不匹配";
                 worksheet1.Cells["B13"].Value = Result;
 
                 byte[] bin = package.GetAsByteArray();

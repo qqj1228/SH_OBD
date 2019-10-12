@@ -197,6 +197,7 @@
             this.BackColor = System.Drawing.Color.SteelBlue;
             this.ClientSize = new System.Drawing.Size(784, 561);
             this.Controls.Add(this.tblLayoutMain);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "OBDStartForm";
             this.Text = "江铃OBD检测";
