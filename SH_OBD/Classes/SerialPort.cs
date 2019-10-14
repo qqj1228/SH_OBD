@@ -34,24 +34,16 @@ namespace SH_OBD {
         public bool ReceiveEventFlag = false;
 
         #region 获取串口名
-        private string protName;
         public string PortName {
             get { return _serialPort.PortName; }
-            set {
-                _serialPort.PortName = value;
-                protName = value;
-            }
+            set { _serialPort.PortName = value; }
         }
         #endregion
 
         #region 获取比特率
-        private int baudRate;
         public int BaudRate {
             get { return _serialPort.BaudRate; }
-            set {
-                _serialPort.BaudRate = value;
-                baudRate = value;
-            }
+            set { _serialPort.BaudRate = value; }
         }
         #endregion
 
@@ -148,7 +140,7 @@ namespace SH_OBD {
                 //接收到一个字节时，也会触发DataReceived事件
                 _serialPort.DataReceived += new SerialDataReceivedEventHandler(SerialPort_DataReceived);
                 //接收数据出错,触发事件
-                _serialPort.ErrorReceived += new SerialErrorReceivedEventHandler(_serialPort_ErrorReceived);
+                _serialPort.ErrorReceived += new SerialErrorReceivedEventHandler(SerialPort_ErrorReceived);
                 //打开串口
                 //openPort();
             }
@@ -161,19 +153,17 @@ namespace SH_OBD {
         /// <returns>返回bool类型</returns>
         /// </summary>
         public bool OpenPort() {
-            bool ok = false;
             //如果串口是打开的，先关闭
-            if (_serialPort.IsOpen) {
-                _serialPort.Close();
-            }
             try {
+                if (_serialPort.IsOpen) {
+                    _serialPort.Close();
+                }
                 //打开串口
                 _serialPort.Open();
-                ok = true;
             } catch (Exception) {
                 throw;
             }
-            return ok;
+            return true;
         }
         #endregion
 
@@ -219,7 +209,7 @@ namespace SH_OBD {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void _serialPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e) {
+        void SerialPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e) {
 
         }
         #endregion
@@ -304,7 +294,7 @@ namespace SH_OBD {
         /// 获得当前电脑上的所有串口资源
         /// </summary>
         /// <returns></returns>
-        public string[] GetSerials() {
+        public static string[] GetSerials() {
             return SerialPort.GetPortNames();
         }
         #endregion

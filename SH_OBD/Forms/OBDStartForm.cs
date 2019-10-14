@@ -34,8 +34,6 @@ namespace SH_OBD {
             m_obdTest.UploadDataDone += new Action(OnUploadDataDone);
         }
 
-        ~OBDStartForm() { }
-
         void OnOBDTestStart() {
             this.Invoke((EventHandler)delegate {
                 this.labelResult.ForeColor = Color.Black;

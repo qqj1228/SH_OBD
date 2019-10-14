@@ -22,8 +22,6 @@ namespace SH_OBD {
             btnStartOBDTest.Enabled = false;
         }
 
-        ~OBDTestForm() { }
-
         void OnOBDTestStart() {
             this.Invoke((EventHandler)delegate {
                 this.labelInfo.ForeColor = Color.Black;
@@ -39,11 +37,11 @@ namespace SH_OBD {
             GridViewInfo.Columns[0].Width = 30;
             GridViewInfo.Columns[1].Width = 150;
             GridViewECUInfo.Columns[0].Width = GridViewInfo.Columns[0].Width;
-            GridViewIUPR.Columns[0].Width = GridViewInfo.Columns[0].Width;
-            GridViewIUPR.Columns[1].Width = 230;
+            //GridViewIUPR.Columns[0].Width = GridViewInfo.Columns[0].Width;
+            //GridViewIUPR.Columns[1].Width = 230;
             SetGridViewColumnsSortMode(this.GridViewInfo, DataGridViewColumnSortMode.Programmatic);
             SetGridViewColumnsSortMode(this.GridViewECUInfo, DataGridViewColumnSortMode.Programmatic);
-            SetGridViewColumnsSortMode(this.GridViewIUPR, DataGridViewColumnSortMode.Programmatic);
+            //SetGridViewColumnsSortMode(this.GridViewIUPR, DataGridViewColumnSortMode.Programmatic);
         }
 
         void OnWriteDbStart() {
@@ -111,7 +109,7 @@ namespace SH_OBD {
         private void OBDTestForm_Load(object sender, EventArgs e) {
             this.GridViewInfo.DataSource = m_obdTest.GetDataTable(0);
             this.GridViewECUInfo.DataSource = m_obdTest.GetDataTable(1);
-            this.GridViewIUPR.DataSource = m_obdTest.GetDataTable(2);
+            //this.GridViewIUPR.DataSource = m_obdTest.GetDataTable(2);
             if (m_obdInterface.ScannerPortOpened) {
                 m_obdInterface.m_sp.DataReceived += new SerialPortClass.SerialPortDataReceiveEventArgs(SerialDataReceived);
             }
@@ -130,25 +128,32 @@ namespace SH_OBD {
                 GridViewECUInfo.Columns[0].Width = GridViewInfo.Columns[0].Width;
                 SetGridViewColumnsSortMode(this.GridViewECUInfo, DataGridViewColumnSortMode.Programmatic);
             }
-            if (this.GridViewIUPR.Columns.Count > 1) {
-                GridViewIUPR.Columns[0].Width = GridViewInfo.Columns[0].Width;
-                GridViewIUPR.Columns[1].Width = 230;
-                SetGridViewColumnsSortMode(this.GridViewIUPR, DataGridViewColumnSortMode.Programmatic);
-            }
+            //if (this.GridViewIUPR.Columns.Count > 1) {
+            //    GridViewIUPR.Columns[0].Width = GridViewInfo.Columns[0].Width;
+            //    GridViewIUPR.Columns[1].Width = 230;
+            //    SetGridViewColumnsSortMode(this.GridViewIUPR, DataGridViewColumnSortMode.Programmatic);
+            //}
             this.txtBoxVIN.Text = m_obdTest.StrVIN_IN;
         }
 
         private void OBDTestForm_Resize(object sender, EventArgs e) {
             int margin = groupInfo.Location.X;
             groupInfo.Width = (Width - margin * 3) / 2;
-            groupInfo.Height = (Height - margin * 3 - btnStartOBDTest.Location.Y - btnStartOBDTest.Height) * 2 / 3;
-            groupECUInfo.Location = new Point(groupInfo.Location.X, groupInfo.Location.Y + groupInfo.Height + margin);
+            groupInfo.Height = Height - margin * 3 - btnStartOBDTest.Location.Y - btnStartOBDTest.Height;
+            groupECUInfo.Location = new Point(groupInfo.Width + margin * 2, groupInfo.Location.Y);
             groupECUInfo.Width = groupInfo.Width;
-            groupECUInfo.Height = groupInfo.Height / 2;
-            groupIUPR.Location = new Point(groupInfo.Width + margin * 2, groupInfo.Location.Y);
-            groupIUPR.Width = groupInfo.Width;
-            groupIUPR.Height = groupInfo.Height * 3 / 2 + margin;
-            labelMESInfo.Location = new Point(groupIUPR.Location.X + groupIUPR.Width * 2 / 3, labelInfo.Location.Y);
+            groupECUInfo.Height = groupInfo.Height;
+            labelMESInfo.Location = new Point(groupECUInfo.Location.X + groupECUInfo.Width * 2 / 3, labelInfo.Location.Y);
+            // 显示IUPR的UI布局，现已取消
+            //groupInfo.Width = (Width - margin * 3) / 2;
+            //groupInfo.Height = (Height - margin * 3 - btnStartOBDTest.Location.Y - btnStartOBDTest.Height) * 2 / 3;
+            //groupECUInfo.Location = new Point(groupInfo.Location.X, groupInfo.Location.Y + groupInfo.Height + margin);
+            //groupECUInfo.Width = groupInfo.Width;
+            //groupECUInfo.Height = groupInfo.Height / 2;
+            //groupIUPR.Location = new Point(groupInfo.Width + margin * 2, groupInfo.Location.Y);
+            //groupIUPR.Width = groupInfo.Width;
+            //groupIUPR.Height = groupInfo.Height * 3 / 2 + margin;
+            //labelMESInfo.Location = new Point(groupIUPR.Location.X + groupIUPR.Width * 2 / 3, labelInfo.Location.Y);
         }
 
         private void OBDTestForm_VisibleChanged(object sender, EventArgs e) {
