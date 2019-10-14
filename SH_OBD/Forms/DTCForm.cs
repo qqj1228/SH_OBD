@@ -191,11 +191,11 @@ namespace SH_OBD {
             }
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e) {
+        private void BtnRefresh_Click(object sender, EventArgs e) {
             RefreshDiagnosticData();
         }
 
-        private void btnErase_Click(object sender, EventArgs e) {
+        private void BtnErase_Click(object sender, EventArgs e) {
             if (!m_obdInterface.ConnectedStatus) {
                 m_obdInterface.GetLogger().TraceError("DTC Form, Attempted to erase codes without vehicle connection.");
                 MessageBox.Show("必须首先与车辆进行连接，才能进行后续操作！", "出错", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);

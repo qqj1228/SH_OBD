@@ -6,8 +6,7 @@ using System.Text;
 
 namespace SH_OBD {
     public class SerialPortClass {
-
-        SerialPort _serialPort = null;
+        readonly SerialPort _serialPort = null;
 
         /// <summary>
         /// 发送数据超时时间，单位ms
@@ -147,7 +146,7 @@ namespace SH_OBD {
                 //设置触发DataReceived事件的字节数为1
                 _serialPort.ReceivedBytesThreshold = 1;
                 //接收到一个字节时，也会触发DataReceived事件
-                _serialPort.DataReceived += new SerialDataReceivedEventHandler(_serialPort_DataReceived);
+                _serialPort.DataReceived += new SerialDataReceivedEventHandler(SerialPort_DataReceived);
                 //接收数据出错,触发事件
                 _serialPort.ErrorReceived += new SerialErrorReceivedEventHandler(_serialPort_ErrorReceived);
                 //打开串口
@@ -171,8 +170,8 @@ namespace SH_OBD {
                 //打开串口
                 _serialPort.Open();
                 ok = true;
-            } catch (Exception Ex) {
-                throw Ex;
+            } catch (Exception) {
+                throw;
             }
             return ok;
         }
@@ -196,7 +195,7 @@ namespace SH_OBD {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void _serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e) {
+        void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e) {
             //禁止接收事件时直接退出
             if (ReceiveEventFlag) {
                 return;
@@ -208,8 +207,8 @@ namespace SH_OBD {
                 if (_data.Length == 0) { return; }
                 DataReceived?.Invoke(sender, e, _data);
                 //_serialPort.DiscardInBuffer();  //清空接收缓冲区  
-            } catch (Exception ex) {
-                throw ex;
+            } catch (Exception) {
+                throw;
             }
         }
         #endregion
@@ -253,8 +252,8 @@ namespace SH_OBD {
                     //_serialPort.DiscardInBuffer();//清空接收缓冲区
                     _serialPort.Write(data, offset, count);
                 }
-            } catch (Exception ex) {
-                throw ex;
+            } catch (Exception) {
+                throw;
             }
         }
         #endregion
@@ -291,9 +290,9 @@ namespace SH_OBD {
                     }
                     ReceiveEventFlag = false;      //打开事件
                     return ret;
-                } catch (Exception ex) {
+                } catch (Exception) {
                     ReceiveEventFlag = false;
-                    throw ex;
+                    throw;
                 }
             }
             return -1;
@@ -319,7 +318,7 @@ namespace SH_OBD {
         public static string ByteToString(byte[] InBytes) {
             string StringOut = "";
             foreach (byte InByte in InBytes) {
-                StringOut = StringOut + String.Format("{0:X2} ", InByte);
+                StringOut += string.Format("{0:X2} ", InByte);
             }
             return StringOut;
         }

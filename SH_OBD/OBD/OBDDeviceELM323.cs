@@ -10,8 +10,8 @@ namespace SH_OBD {
             try {
                 m_Parser = new OBDParser_ISO9141_2();
                 m_bConnected = false;
-            } catch (Exception ex) {
-                throw ex;
+            } catch (Exception) {
+                throw;
             }
         }
 

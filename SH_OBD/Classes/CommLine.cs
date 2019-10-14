@@ -1,9 +1,11 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using System.Threading;
 
 namespace SH_OBD {
     public abstract class CommLine : CommBase {
+        private static readonly Object locker = new Object();
         private int m_RxIndex = 0;
         private string m_RxString = "";
         private ManualResetEvent m_TransFlag = new ManualResetEvent(true);
@@ -46,7 +48,7 @@ namespace SH_OBD {
             if (!m_TransFlag.WaitOne(m_TransTimeout, false)) {
                 ThrowException("Timeout");
             }
-            lock (m_RxString) {
+            lock (locker) {
                 return m_RxString;
             }
         }
@@ -65,7 +67,7 @@ namespace SH_OBD {
         protected override void OnRxChar(byte ch) {
             CommBase.ASCII ascii = (CommBase.ASCII)ch;
             if (ascii == m_RxTerm || m_RxIndex >= m_RxBuffer.Length) {
-                lock (m_RxString) {
+                lock (locker) {
                     m_RxString = Encoding.ASCII.GetString(m_RxBuffer, 0, m_RxIndex);
                 }
                 m_RxIndex = 0;

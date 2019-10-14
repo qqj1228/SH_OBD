@@ -11,8 +11,8 @@ namespace SH_OBD {
             try {
                 m_iProtocol = ProtocolType.Unknown;
                 m_bConnected = false;
-            } catch (Exception ex) {
-                throw ex;
+            } catch (Exception) {
+                throw;
             }
         }
 

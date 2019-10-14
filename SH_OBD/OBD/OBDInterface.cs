@@ -279,7 +279,7 @@ namespace SH_OBD {
                 strRet += string.Format("[Bool: {0}] ", obdValue.BoolValue.ToString());
             }
             if ((param.ValueTypes & (int)OBDParameter.EnumValueTypes.String) == (int)OBDParameter.EnumValueTypes.String) {
-                strRet += string.Format("[String: {0}] ", obdValue.StringValue, obdValue.ShortStringValue);
+                strRet += string.Format("[String: {0}] ", obdValue.StringValue);
             }
             if ((param.ValueTypes & (int)OBDParameter.EnumValueTypes.ListString) == (int)OBDParameter.EnumValueTypes.ListString) {
                 strRet += "[ListString: ";

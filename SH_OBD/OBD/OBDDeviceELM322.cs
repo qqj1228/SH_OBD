@@ -9,8 +9,8 @@ namespace SH_OBD {
             try {
                 m_Parser = new OBDParser_J1850_VPW();
                 m_bConnected = false;
-            } catch (Exception ex) {
-                throw ex;
+            } catch (Exception) {
+                throw;
             }
         }
 

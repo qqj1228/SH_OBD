@@ -159,7 +159,7 @@
             this.btnErase.TabIndex = 11;
             this.btnErase.Text = "清除故障码(&E)";
             this.btnErase.Visible = false;
-            this.btnErase.Click += new System.EventHandler(this.btnErase_Click);
+            this.btnErase.Click += new System.EventHandler(this.BtnErase_Click);
             // 
             // btnRefresh
             // 
@@ -168,7 +168,7 @@
             this.btnRefresh.Size = new System.Drawing.Size(156, 27);
             this.btnRefresh.TabIndex = 10;
             this.btnRefresh.Text = "刷新(&R)";
-            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            this.btnRefresh.Click += new System.EventHandler(this.BtnRefresh_Click);
             // 
             // groupCodes
             // 
