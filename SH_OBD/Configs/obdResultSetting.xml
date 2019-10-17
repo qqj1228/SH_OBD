@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<OBDResultSetting xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <!-- 无论何种情况都上传数据，即使结果为不合格 -->
+  <UploadWhenever>false</UploadWhenever>
+  <!-- 使用ECU名称简写填充ModuleID -->
+  <UseECUName>true</UseECUName>
+  <!-- 使用SCR填充第二个ModuleID -->
+  <UseSCRName>true</UseSCRName>
+  <!-- OBD检测结果是否需要判断“存在存储DTC” -->
+  <DTC03>false</DTC03>
+  <!-- OBD检测结果是否需要判断“存在未决DTC” -->
+  <DTC07>false</DTC07>
+  <!-- OBD检测结果是否需要判断“存在永久DTC” -->
+  <DTC0A>false</DTC0A>
+  <!-- OBD检测结果是否需要判断“未完成就绪状态超过2项” -->
+  <Readiness>false</Readiness>
+  <!-- OBD检测结果是否需要判断“扫码VIN号、读取VIN号，这两个VIN号匹配” -->
+  <VINError>true</VINError>
+  <!-- 每天几点定时上传以前上传失败的数据（24小时制） -->
+  <UploadTime>20</UploadTime>
+</OBDResultSetting>

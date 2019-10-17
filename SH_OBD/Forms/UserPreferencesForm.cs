@@ -25,7 +25,7 @@ namespace SH_OBD {
             m_userpreferences.Address2 = txtAddress2.Text;
             m_userpreferences.Telephone = txtTelephone.Text;
             bool CanClose = true;
-            if (this.txtBoxOriPwd.Text != "" && this.txtBoxNewPwd1.Text != "" && this.txtBoxNewPwd2.Text != "") {
+            if (this.txtBoxOriPwd.Text.Length > 0 && this.txtBoxNewPwd1.Text.Length > 0 && this.txtBoxNewPwd2.Text.Length > 0) {
                 MD5 md5 = new MD5CryptoServiceProvider();
                 byte[] output = md5.ComputeHash(Encoding.Default.GetBytes(this.txtBoxOriPwd.Text.Trim()));
                 string strValue = BitConverter.ToString(output).Replace("-", "");

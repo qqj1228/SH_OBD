@@ -8,7 +8,7 @@ namespace SH_OBD {
         private static readonly Object locker = new Object();
         private int m_RxIndex = 0;
         private string m_RxString = "";
-        private ManualResetEvent m_TransFlag = new ManualResetEvent(true);
+        private readonly ManualResetEvent m_TransFlag = new ManualResetEvent(true);
         private byte[] m_RxBuffer;
         private CommBase.ASCII m_RxTerm;
         private CommBase.ASCII[] m_TxTerm;

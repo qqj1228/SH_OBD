@@ -212,8 +212,6 @@ namespace SH_OBD {
         public bool UseURL { get; set; }
         [XmlIgnore]
         public bool ChangeWebService { get; set; }
-        public bool UploadWhenever { get; set; }
-        public bool UseECUName { get; set; }
 
         public DBandMES() {
             UserName = "sa";
@@ -227,12 +225,35 @@ namespace SH_OBD {
             WebServiceWSDL = "";
             UseURL = true;
             ChangeWebService = true;
-            UploadWhenever = false;
-            UseECUName = true;
         }
 
         public string[] GetMethodArray() {
             return WebServiceMethods.Split(',');
+        }
+    }
+
+    [Serializable]
+    public class OBDResultSetting {
+        public bool UploadWhenever { get; set; }
+        public bool UseECUName { get; set; }
+        public bool UseSCRName { get; set; }
+        public bool DTC03 { get; set; }
+        public bool DTC07 { get; set; }
+        public bool DTC0A { get; set; }
+        public bool Readiness { get; set; }
+        public bool VINError { get; set; }
+        public int UploadTime { get; set; }
+
+        public OBDResultSetting() {
+            UploadWhenever = false;
+            UseECUName = true;
+            UseSCRName = true;
+            DTC03 = true;
+            DTC07 = true;
+            DTC0A = false;
+            Readiness = false;
+            VINError = true;
+            UploadTime = 20;
         }
     }
 

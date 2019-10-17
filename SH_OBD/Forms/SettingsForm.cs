@@ -80,8 +80,6 @@ namespace SH_OBD {
                 m_lastURLStatus = this.radioBtnURL.Checked;
                 this.radioBtnURL.Enabled = m_dbandMES.ChangeWebService;
                 this.radioBtnWSDL.Enabled = m_dbandMES.ChangeWebService;
-                this.chkBoxUploadWhenever.Checked = m_dbandMES.UploadWhenever;
-                this.chkBoxUseECUName.Checked = m_dbandMES.UseECUName;
             } catch (Exception ex) {
                 MessageBox.Show(ex.ToString());
             }
@@ -112,8 +110,6 @@ namespace SH_OBD {
             m_dbandMES.WebServiceMethods = this.txtBoxWebSvcMethods.Text;
             m_dbandMES.WebServiceWSDL = this.txtBoxWebSvcWSDL.Text;
             m_dbandMES.UseURL = this.radioBtnURL.Checked;
-            m_dbandMES.UploadWhenever = this.chkBoxUploadWhenever.Checked;
-            m_dbandMES.UseECUName = this.chkBoxUseECUName.Checked;
             Close();
         }
 

@@ -7,6 +7,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SH_OBD {
@@ -16,6 +17,7 @@ namespace SH_OBD {
         private MainForm f_MainForm;
         private readonly Color m_backColor;
         private float m_lastHeight;
+        readonly System.Timers.Timer m_timer;
 
         public OBDStartForm() {
             InitializeComponent();
@@ -32,20 +34,51 @@ namespace SH_OBD {
             m_obdTest.WriteDbDone += new Action(OnWriteDbDone);
             m_obdTest.UploadDataStart += new Action(OnUploadDataStart);
             m_obdTest.UploadDataDone += new Action(OnUploadDataDone);
+            // 每日定时上传以前上传失败的数据
+            m_timer = new System.Timers.Timer(60 * 60 * 1000);
+            m_timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimeUpload);
+            m_timer.AutoReset = true;
+            m_timer.Enabled = true;
+        }
+
+        ~OBDStartForm() {
+            f_MainForm.Close();
+            m_timer.Dispose();
+        }
+
+        private void OnTimeUpload(object source, System.Timers.ElapsedEventArgs e) {
+            string Hour = DateTime.Now.ToLocalTime().ToString("HH");
+            bool result = int.TryParse(Hour, out int iHour);
+            if (result) {
+                if (iHour == m_obdInterface.OBDResultSetting.UploadTime) {
+                    try {
+                        m_obdTest.UploadDataFromDBOnTime(out string errorMsg);
+#if DEBUG
+                        MessageBox.Show(errorMsg, WSHelper.GetMethodName(0));
+#endif
+                    } catch (Exception ex) {
+                        m_obdInterface.m_log.TraceError("集中上传数据出错" + ex.Message);
+                    }
+                }
+            }
         }
 
         void OnOBDTestStart() {
-            this.Invoke((EventHandler)delegate {
-                this.labelResult.ForeColor = Color.Black;
-                this.labelResult.Text = "OBD检测中。。。";
-            });
+            if (!m_obdTest.AdvanceMode) {
+                this.Invoke((EventHandler)delegate {
+                    this.labelResult.ForeColor = Color.Black;
+                    this.labelResult.Text = "OBD检测中。。。";
+                });
+            }
         }
 
         void OnSetupColumnsDone() {
-            this.Invoke((EventHandler)delegate {
-                this.labelResult.ForeColor = Color.Black;
-                this.labelResult.Text = "正在处理结果。。。";
-            });
+            if (!m_obdTest.AdvanceMode) {
+                this.Invoke((EventHandler)delegate {
+                    this.labelResult.ForeColor = Color.Black;
+                    this.labelResult.Text = "正在处理结果。。。";
+                });
+            }
         }
 
         void OnWriteDbStart() { }
@@ -152,10 +185,10 @@ namespace SH_OBD {
             this.Invoke((EventHandler)delegate {
                 this.labelResult.ForeColor = Color.Black;
                 this.labelResult.Text = "准备OBD检测";
-                this.labelDTC.BackColor = m_backColor;
-                this.labelDTC.ForeColor = Color.Gray;
-                this.labelReadiness.BackColor = m_backColor;
-                this.labelReadiness.ForeColor = Color.Gray;
+                //this.labelDTC.BackColor = m_backColor;
+                //this.labelDTC.ForeColor = Color.Gray;
+                //this.labelReadiness.BackColor = m_backColor;
+                //this.labelReadiness.ForeColor = Color.Gray;
                 this.labelVINError.BackColor = m_backColor;
                 this.labelVINError.ForeColor = Color.Gray;
             });
@@ -187,14 +220,14 @@ namespace SH_OBD {
                     this.labelResult.ForeColor = Color.GreenYellow;
                     this.labelResult.Text = "OBD检测结果：合格";
                 } else {
-                    if (!m_obdTest.DTCResult) {
-                        this.labelDTC.BackColor = Color.Red;
-                        this.labelDTC.ForeColor = Color.Black;
-                    }
-                    if (!m_obdTest.ReadinessResult) {
-                        this.labelReadiness.BackColor = Color.Red;
-                        this.labelReadiness.ForeColor = Color.Black;
-                    }
+                    //if (!m_obdTest.DTCResult) {
+                    //    this.labelDTC.BackColor = Color.Red;
+                    //    this.labelDTC.ForeColor = Color.Black;
+                    //}
+                    //if (!m_obdTest.ReadinessResult) {
+                    //    this.labelReadiness.BackColor = Color.Red;
+                    //    this.labelReadiness.ForeColor = Color.Black;
+                    //}
                     if (!m_obdTest.VINResult) {
                         this.labelVINError.BackColor = Color.Red;
                         this.labelVINError.ForeColor = Color.Black;
@@ -214,8 +247,8 @@ namespace SH_OBD {
             ResizeFont(this.txtBoxVIN, scale);
             ResizeFont(this.label1, scale);
             ResizeFont(this.labelResult, scale);
-            ResizeFont(this.labelDTC, scale);
-            ResizeFont(this.labelReadiness, scale);
+            //ResizeFont(this.labelDTC, scale);
+            //ResizeFont(this.labelReadiness, scale);
             ResizeFont(this.labelVINError, scale);
             ResizeFont(this.btnAdvanceMode, scale);
             m_lastHeight = this.Height;
@@ -254,9 +287,20 @@ namespace SH_OBD {
             this.labelResult.ForeColor = Color.Black;
             this.labelResult.Text = "准备OBD检测";
             this.txtBoxVIN.Focus();
-            this.labelDTC.ForeColor = Color.Gray;
-            this.labelReadiness.ForeColor = Color.Gray;
+            //this.labelDTC.ForeColor = Color.Gray;
+            //this.labelReadiness.ForeColor = Color.Gray;
             this.labelVINError.ForeColor = Color.Gray;
+
+#if DEBUG
+            //////////////////////////////// TEST!!! ////////////////////////////////
+            //try {
+            //    m_obdTest.UploadDataFromDBOnTime(out string errorMsg);
+            //    MessageBox.Show(errorMsg, WSHelper.GetMethodName(0));
+            //} catch (Exception ex) {
+            //    m_obdInterface.m_log.TraceError("集中上传数据出错" + ex.Message);
+            //}
+            /////////////////////////////////////////////////////////////////////////
+#endif
         }
 
         private void TxtBoxVIN_TextChanged(object sender, EventArgs e) {

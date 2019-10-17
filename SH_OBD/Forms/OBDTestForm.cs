@@ -73,11 +73,18 @@ namespace SH_OBD {
             });
         }
 
+        void OnSetDataTableColumnsError(object sender, SetDataTableColumnsErrorEventArgs e) {
+            this.Invoke((EventHandler)delegate {
+                this.labelMESInfo.ForeColor = Color.Red;
+                this.labelMESInfo.Text = e.ErrorMsg;
+            });
+        }
+
         void SerialDataReceived(object sender, SerialDataReceivedEventArgs e, byte[] bits) {
             // 跨UI线程调用UI控件要使用Invoke
             this.Invoke((EventHandler)delegate {
                 this.txtBoxVIN.Text = Encoding.Default.GetString(bits).Trim();
-                if (this.txtBoxVIN.Text.Length == 17) {
+                if (this.txtBoxVIN.Text.Length == 17 && !this.chkBoxManualUpload.Checked) {
                     this.btnStartOBDTest.PerformClick();
                 }
             });
@@ -119,6 +126,7 @@ namespace SH_OBD {
             m_obdTest.WriteDbDone += new Action(OnWriteDbDone);
             m_obdTest.UploadDataStart += new Action(OnUploadDataStart);
             m_obdTest.UploadDataDone += new Action(OnUploadDataDone);
+            m_obdTest.SetDataTableColumnsError += OnSetDataTableColumnsError;
             if (this.GridViewInfo.Columns.Count > 1) {
                 GridViewInfo.Columns[0].Width = 30;
                 GridViewInfo.Columns[1].Width = 150;
@@ -143,7 +151,7 @@ namespace SH_OBD {
             groupECUInfo.Location = new Point(groupInfo.Width + margin * 2, groupInfo.Location.Y);
             groupECUInfo.Width = groupInfo.Width;
             groupECUInfo.Height = groupInfo.Height;
-            labelMESInfo.Location = new Point(groupECUInfo.Location.X + groupECUInfo.Width * 2 / 3, labelInfo.Location.Y);
+            labelMESInfo.Location = new Point(groupECUInfo.Location.X + groupECUInfo.Width / 3, labelInfo.Location.Y);
             // 显示IUPR的UI布局，现已取消
             //groupInfo.Width = (Width - margin * 3) / 2;
             //groupInfo.Height = (Height - margin * 3 - btnStartOBDTest.Location.Y - btnStartOBDTest.Height) * 2 / 3;
@@ -163,10 +171,36 @@ namespace SH_OBD {
         }
 
         private void TxtBoxVIN_TextChanged(object sender, EventArgs e) {
-            if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Length == 17) {
-                this.btnStartOBDTest.PerformClick();
-                this.txtBoxVIN.ReadOnly = true;
+            if (this.chkBoxManualUpload.Checked) {
+                if (this.txtBoxVIN.Text.Length == 17) {
+                    ManualUpload();
+                }
+            } else {
+                if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Length == 17) {
+                    this.btnStartOBDTest.PerformClick();
+                    this.txtBoxVIN.ReadOnly = true;
+                }
             }
+        }
+
+        private void ManualUpload() {
+            if (!m_obdTest.AdvanceMode) {
+                return;
+            }
+            this.labelInfo.ForeColor = Color.Black;
+            this.labelInfo.Text = "手动读取数据";
+            this.labelMESInfo.ForeColor = Color.Black;
+            this.labelMESInfo.Text = "准备手动上传数据";
+            try {
+                m_obdTest.UploadDataFromDB(this.txtBoxVIN.Text, out string errorMsg);
+#if DEBUG
+                MessageBox.Show(errorMsg, WSHelper.GetMethodName(0));
+#endif
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message, "手动上传数据出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            this.labelInfo.ForeColor = Color.Black;
+            this.labelInfo.Text = "结果数据显示完毕";
         }
 
         private void BtnStartOBDTest_Click(object sender, EventArgs e) {
@@ -218,6 +252,7 @@ namespace SH_OBD {
             m_obdTest.WriteDbDone -= new Action(OnWriteDbDone);
             m_obdTest.UploadDataStart -= new Action(OnUploadDataStart);
             m_obdTest.UploadDataDone -= new Action(OnUploadDataDone);
+            m_obdTest.SetDataTableColumnsError -= OnSetDataTableColumnsError;
         }
     }
 

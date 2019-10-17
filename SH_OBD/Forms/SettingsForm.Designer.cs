@@ -48,9 +48,6 @@
             this.label10 = new System.Windows.Forms.Label();
             this.txtBoxWebSvcAddress = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.chkBoxUploadWhenever = new System.Windows.Forms.CheckBox();
-            this.chkBoxUseECUName = new System.Windows.Forms.CheckBox();
-            this.groupUpload = new System.Windows.Forms.GroupBox();
             this.comboHardware = new System.Windows.Forms.ComboBox();
             this.comboPorts = new System.Windows.Forms.ComboBox();
             this.checkBoxAutoDetect = new System.Windows.Forms.CheckBox();
@@ -71,7 +68,6 @@
             this.label17 = new System.Windows.Forms.Label();
             this.groupDB.SuspendLayout();
             this.groupMES.SuspendLayout();
-            this.groupUpload.SuspendLayout();
             this.groupELM.SuspendLayout();
             this.groupScanner.SuspendLayout();
             this.SuspendLayout();
@@ -79,7 +75,7 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(460, 453);
+            this.btnCancel.Location = new System.Drawing.Point(502, 370);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(90, 25);
             this.btnCancel.TabIndex = 11;
@@ -87,7 +83,7 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(364, 453);
+            this.btnOK.Location = new System.Drawing.Point(406, 370);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(90, 25);
             this.btnOK.TabIndex = 10;
@@ -126,35 +122,35 @@
             // 
             this.txtBoxPort.Location = new System.Drawing.Point(82, 128);
             this.txtBoxPort.Name = "txtBoxPort";
-            this.txtBoxPort.Size = new System.Drawing.Size(100, 22);
+            this.txtBoxPort.Size = new System.Drawing.Size(100, 21);
             this.txtBoxPort.TabIndex = 8;
             // 
             // txtBoxIP
             // 
             this.txtBoxIP.Location = new System.Drawing.Point(82, 101);
             this.txtBoxIP.Name = "txtBoxIP";
-            this.txtBoxIP.Size = new System.Drawing.Size(100, 22);
+            this.txtBoxIP.Size = new System.Drawing.Size(100, 21);
             this.txtBoxIP.TabIndex = 7;
             // 
             // txtBoxDBName
             // 
             this.txtBoxDBName.Location = new System.Drawing.Point(82, 74);
             this.txtBoxDBName.Name = "txtBoxDBName";
-            this.txtBoxDBName.Size = new System.Drawing.Size(100, 22);
+            this.txtBoxDBName.Size = new System.Drawing.Size(100, 21);
             this.txtBoxDBName.TabIndex = 6;
             // 
             // txtBoxPwd
             // 
             this.txtBoxPwd.Location = new System.Drawing.Point(82, 47);
             this.txtBoxPwd.Name = "txtBoxPwd";
-            this.txtBoxPwd.Size = new System.Drawing.Size(100, 22);
+            this.txtBoxPwd.Size = new System.Drawing.Size(100, 21);
             this.txtBoxPwd.TabIndex = 5;
             // 
             // txtBoxUser
             // 
             this.txtBoxUser.Location = new System.Drawing.Point(82, 20);
             this.txtBoxUser.Name = "txtBoxUser";
-            this.txtBoxUser.Size = new System.Drawing.Size(100, 22);
+            this.txtBoxUser.Size = new System.Drawing.Size(100, 21);
             this.txtBoxUser.TabIndex = 4;
             // 
             // label7
@@ -208,7 +204,7 @@
             this.groupMES.Controls.Add(this.label8);
             this.groupMES.Location = new System.Drawing.Point(209, 135);
             this.groupMES.Name = "groupMES";
-            this.groupMES.Size = new System.Drawing.Size(341, 160);
+            this.groupMES.Size = new System.Drawing.Size(383, 160);
             this.groupMES.TabIndex = 15;
             this.groupMES.TabStop = false;
             this.groupMES.Text = "WebService设置";
@@ -227,7 +223,7 @@
             this.radioBtnWSDL.AutoSize = true;
             this.radioBtnWSDL.Location = new System.Drawing.Point(183, 128);
             this.radioBtnWSDL.Name = "radioBtnWSDL";
-            this.radioBtnWSDL.Size = new System.Drawing.Size(125, 21);
+            this.radioBtnWSDL.Size = new System.Drawing.Size(95, 16);
             this.radioBtnWSDL.TabIndex = 18;
             this.radioBtnWSDL.TabStop = true;
             this.radioBtnWSDL.Text = "使用WSDL文件";
@@ -239,7 +235,7 @@
             this.radioBtnURL.AutoSize = true;
             this.radioBtnURL.Location = new System.Drawing.Point(87, 128);
             this.radioBtnURL.Name = "radioBtnURL";
-            this.radioBtnURL.Size = new System.Drawing.Size(113, 21);
+            this.radioBtnURL.Size = new System.Drawing.Size(89, 16);
             this.radioBtnURL.TabIndex = 17;
             this.radioBtnURL.TabStop = true;
             this.radioBtnURL.Text = "使用URL地址";
@@ -250,7 +246,7 @@
             // 
             this.txtBoxWebSvcWSDL.Location = new System.Drawing.Point(87, 47);
             this.txtBoxWebSvcWSDL.Name = "txtBoxWebSvcWSDL";
-            this.txtBoxWebSvcWSDL.Size = new System.Drawing.Size(248, 22);
+            this.txtBoxWebSvcWSDL.Size = new System.Drawing.Size(290, 21);
             this.txtBoxWebSvcWSDL.TabIndex = 4;
             // 
             // label12
@@ -266,7 +262,7 @@
             // 
             this.txtBoxWebSvcMethods.Location = new System.Drawing.Point(87, 101);
             this.txtBoxWebSvcMethods.Name = "txtBoxWebSvcMethods";
-            this.txtBoxWebSvcMethods.Size = new System.Drawing.Size(248, 22);
+            this.txtBoxWebSvcMethods.Size = new System.Drawing.Size(290, 21);
             this.txtBoxWebSvcMethods.TabIndex = 8;
             // 
             // label11
@@ -282,7 +278,7 @@
             // 
             this.txtBoxWebSvcName.Location = new System.Drawing.Point(87, 74);
             this.txtBoxWebSvcName.Name = "txtBoxWebSvcName";
-            this.txtBoxWebSvcName.Size = new System.Drawing.Size(248, 22);
+            this.txtBoxWebSvcName.Size = new System.Drawing.Size(290, 21);
             this.txtBoxWebSvcName.TabIndex = 6;
             // 
             // label10
@@ -298,7 +294,7 @@
             // 
             this.txtBoxWebSvcAddress.Location = new System.Drawing.Point(87, 20);
             this.txtBoxWebSvcAddress.Name = "txtBoxWebSvcAddress";
-            this.txtBoxWebSvcAddress.Size = new System.Drawing.Size(248, 22);
+            this.txtBoxWebSvcAddress.Size = new System.Drawing.Size(290, 21);
             this.txtBoxWebSvcAddress.TabIndex = 2;
             // 
             // label8
@@ -309,37 +305,6 @@
             this.label8.TabIndex = 1;
             this.label8.Text = "URL地址：";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // chkBoxUploadWhenever
-            // 
-            this.chkBoxUploadWhenever.AutoSize = true;
-            this.chkBoxUploadWhenever.Location = new System.Drawing.Point(10, 21);
-            this.chkBoxUploadWhenever.Name = "chkBoxUploadWhenever";
-            this.chkBoxUploadWhenever.Size = new System.Drawing.Size(270, 21);
-            this.chkBoxUploadWhenever.TabIndex = 20;
-            this.chkBoxUploadWhenever.Text = "无条件上传数据（即使OBD检测失败）";
-            this.chkBoxUploadWhenever.UseVisualStyleBackColor = true;
-            // 
-            // chkBoxUseECUName
-            // 
-            this.chkBoxUseECUName.AutoSize = true;
-            this.chkBoxUseECUName.Location = new System.Drawing.Point(10, 48);
-            this.chkBoxUseECUName.Name = "chkBoxUseECUName";
-            this.chkBoxUseECUName.Size = new System.Drawing.Size(226, 21);
-            this.chkBoxUseECUName.TabIndex = 21;
-            this.chkBoxUseECUName.Text = "使用 ECU Name 填充 ModuleID";
-            this.chkBoxUseECUName.UseVisualStyleBackColor = true;
-            // 
-            // groupUpload
-            // 
-            this.groupUpload.Controls.Add(this.chkBoxUploadWhenever);
-            this.groupUpload.Controls.Add(this.chkBoxUseECUName);
-            this.groupUpload.Location = new System.Drawing.Point(12, 301);
-            this.groupUpload.Name = "groupUpload";
-            this.groupUpload.Size = new System.Drawing.Size(538, 76);
-            this.groupUpload.TabIndex = 22;
-            this.groupUpload.TabStop = false;
-            this.groupUpload.Text = "数据上传设置";
             // 
             // comboHardware
             // 
@@ -353,7 +318,7 @@
             "CANtact"});
             this.comboHardware.Location = new System.Drawing.Point(83, 79);
             this.comboHardware.Name = "comboHardware";
-            this.comboHardware.Size = new System.Drawing.Size(108, 24);
+            this.comboHardware.Size = new System.Drawing.Size(115, 20);
             this.comboHardware.TabIndex = 0;
             this.comboHardware.SelectedIndexChanged += new System.EventHandler(this.ComboHardware_SelectedIndexChanged);
             // 
@@ -362,7 +327,7 @@
             this.comboPorts.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboPorts.Location = new System.Drawing.Point(83, 49);
             this.comboPorts.Name = "comboPorts";
-            this.comboPorts.Size = new System.Drawing.Size(108, 24);
+            this.comboPorts.Size = new System.Drawing.Size(115, 20);
             this.comboPorts.TabIndex = 0;
             // 
             // checkBoxAutoDetect
@@ -370,7 +335,7 @@
             this.checkBoxAutoDetect.AutoSize = true;
             this.checkBoxAutoDetect.Location = new System.Drawing.Point(10, 21);
             this.checkBoxAutoDetect.Name = "checkBoxAutoDetect";
-            this.checkBoxAutoDetect.Size = new System.Drawing.Size(172, 21);
+            this.checkBoxAutoDetect.Size = new System.Drawing.Size(138, 16);
             this.checkBoxAutoDetect.TabIndex = 12;
             this.checkBoxAutoDetect.Text = "自动探测OBD连接设置";
             this.checkBoxAutoDetect.CheckedChanged += new System.EventHandler(this.CheckBoxAutoDetect_CheckedChanged);
@@ -390,7 +355,7 @@
             this.groupELM.Controls.Add(this.label1);
             this.groupELM.Location = new System.Drawing.Point(12, 12);
             this.groupELM.Name = "groupELM";
-            this.groupELM.Size = new System.Drawing.Size(538, 117);
+            this.groupELM.Size = new System.Drawing.Size(580, 117);
             this.groupELM.TabIndex = 9;
             this.groupELM.TabStop = false;
             this.groupELM.Text = "ELM327 设置(&C)";
@@ -419,31 +384,31 @@
             this.comboInitialize.Items.AddRange(new object[] {
             "初始化",
             "旁路初始化"});
-            this.comboInitialize.Location = new System.Drawing.Point(284, 78);
+            this.comboInitialize.Location = new System.Drawing.Point(294, 78);
             this.comboInitialize.Name = "comboInitialize";
-            this.comboInitialize.Size = new System.Drawing.Size(248, 24);
+            this.comboInitialize.Size = new System.Drawing.Size(280, 20);
             this.comboInitialize.TabIndex = 5;
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(188, 79);
+            this.label3.Location = new System.Drawing.Point(195, 79);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(93, 21);
             this.label3.TabIndex = 4;
-            this.label3.Text = "初始化方式(&I):";
+            this.label3.Text = "初始化(&I):";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // comboProtocol
             // 
             this.comboProtocol.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboProtocol.Location = new System.Drawing.Point(284, 48);
+            this.comboProtocol.Location = new System.Drawing.Point(294, 48);
             this.comboProtocol.Name = "comboProtocol";
-            this.comboProtocol.Size = new System.Drawing.Size(248, 24);
+            this.comboProtocol.Size = new System.Drawing.Size(280, 20);
             this.comboProtocol.TabIndex = 3;
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(191, 48);
+            this.label2.Location = new System.Drawing.Point(195, 48);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(93, 22);
             this.label2.TabIndex = 2;
@@ -456,14 +421,14 @@
             this.comboBaud.Items.AddRange(new object[] {
             "9600",
             "38400"});
-            this.comboBaud.Location = new System.Drawing.Point(284, 18);
+            this.comboBaud.Location = new System.Drawing.Point(294, 18);
             this.comboBaud.Name = "comboBaud";
-            this.comboBaud.Size = new System.Drawing.Size(248, 24);
+            this.comboBaud.Size = new System.Drawing.Size(280, 20);
             this.comboBaud.TabIndex = 1;
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(188, 18);
+            this.label1.Location = new System.Drawing.Point(195, 18);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(93, 22);
             this.label1.TabIndex = 0;
@@ -477,9 +442,9 @@
             this.groupScanner.Controls.Add(this.cmbBoxScannerBaud);
             this.groupScanner.Controls.Add(this.cmbBoxScannerPort);
             this.groupScanner.Controls.Add(this.label17);
-            this.groupScanner.Location = new System.Drawing.Point(13, 384);
+            this.groupScanner.Location = new System.Drawing.Point(12, 301);
             this.groupScanner.Name = "groupScanner";
-            this.groupScanner.Size = new System.Drawing.Size(537, 63);
+            this.groupScanner.Size = new System.Drawing.Size(580, 63);
             this.groupScanner.TabIndex = 23;
             this.groupScanner.TabStop = false;
             this.groupScanner.Text = "串口扫码枪设置";
@@ -489,7 +454,7 @@
             this.chkBoxUseSerialScanner.AutoSize = true;
             this.chkBoxUseSerialScanner.Location = new System.Drawing.Point(9, 29);
             this.chkBoxUseSerialScanner.Name = "chkBoxUseSerialScanner";
-            this.chkBoxUseSerialScanner.Size = new System.Drawing.Size(128, 21);
+            this.chkBoxUseSerialScanner.Size = new System.Drawing.Size(108, 16);
             this.chkBoxUseSerialScanner.TabIndex = 19;
             this.chkBoxUseSerialScanner.Text = "使用串口扫码枪";
             this.chkBoxUseSerialScanner.UseVisualStyleBackColor = true;
@@ -511,9 +476,9 @@
             "9600",
             "38400",
             "115200"});
-            this.cmbBoxScannerBaud.Location = new System.Drawing.Point(379, 25);
+            this.cmbBoxScannerBaud.Location = new System.Drawing.Point(422, 25);
             this.cmbBoxScannerBaud.Name = "cmbBoxScannerBaud";
-            this.cmbBoxScannerBaud.Size = new System.Drawing.Size(152, 24);
+            this.cmbBoxScannerBaud.Size = new System.Drawing.Size(150, 20);
             this.cmbBoxScannerBaud.TabIndex = 17;
             // 
             // cmbBoxScannerPort
@@ -521,14 +486,14 @@
             this.cmbBoxScannerPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbBoxScannerPort.Location = new System.Drawing.Point(190, 25);
             this.cmbBoxScannerPort.Name = "cmbBoxScannerPort";
-            this.cmbBoxScannerPort.Size = new System.Drawing.Size(108, 24);
+            this.cmbBoxScannerPort.Size = new System.Drawing.Size(150, 20);
             this.cmbBoxScannerPort.TabIndex = 15;
             // 
             // label17
             // 
-            this.label17.Location = new System.Drawing.Point(280, 25);
+            this.label17.Location = new System.Drawing.Point(346, 25);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(93, 22);
+            this.label17.Size = new System.Drawing.Size(70, 22);
             this.label17.TabIndex = 16;
             this.label17.Text = "波特率(&B):";
             this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -538,9 +503,8 @@
             this.AcceptButton = this.btnOK;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(562, 487);
+            this.ClientSize = new System.Drawing.Size(604, 406);
             this.Controls.Add(this.groupScanner);
-            this.Controls.Add(this.groupUpload);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.groupDB);
@@ -557,8 +521,6 @@
             this.groupDB.PerformLayout();
             this.groupMES.ResumeLayout(false);
             this.groupMES.PerformLayout();
-            this.groupUpload.ResumeLayout(false);
-            this.groupUpload.PerformLayout();
             this.groupELM.ResumeLayout(false);
             this.groupELM.PerformLayout();
             this.groupScanner.ResumeLayout(false);
@@ -593,9 +555,6 @@
         private System.Windows.Forms.RadioButton radioBtnWSDL;
         private System.Windows.Forms.RadioButton radioBtnURL;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.CheckBox chkBoxUploadWhenever;
-        private System.Windows.Forms.CheckBox chkBoxUseECUName;
-        private System.Windows.Forms.GroupBox groupUpload;
         private System.Windows.Forms.ComboBox comboHardware;
         private System.Windows.Forms.ComboBox comboPorts;
         private System.Windows.Forms.CheckBox checkBoxAutoDetect;

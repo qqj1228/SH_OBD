@@ -15,6 +15,7 @@ namespace SH_OBD {
         private const string m_settings_xml = ".\\Configs\\settings.xml";
         private const string m_userprefs_xml = ".\\Configs\\userprefs.xml";
         private const string m_dbandMES_xml = ".\\Configs\\dbandMES.xml";
+        private const string m_obdResultSetting_xml = ".\\Configs\\obdResultSetting.xml";
 
         public delegate void __Delegate_OnConnect();
         public delegate void __Delegate_OnDisconnect();
@@ -32,6 +33,7 @@ namespace SH_OBD {
         public UserPreferences UserPreferences { get; private set; }
         public Settings CommSettings { get; private set; }
         public DBandMES DBandMES { get; private set; }
+        public OBDResultSetting OBDResultSetting { get; set; }
         public List<VehicleProfile> VehicleProfiles { get; private set; }
         public bool UseISO27145 { get; set; }
         public bool ScannerPortOpened { get; set; }
@@ -46,6 +48,7 @@ namespace SH_OBD {
             UserPreferences = LoadUserPreferences();
             CommSettings = LoadCommSettings();
             DBandMES = LoadDBandMES();
+            OBDResultSetting = LoadOBDResultSetting();
             VehicleProfiles = LoadVehicleProfiles();
             SetDevice(HardwareType.ELM327);
             UseISO27145 = false;
@@ -522,6 +525,16 @@ namespace SH_OBD {
             }
         }
 
+        public void SaveOBDResultSetting(OBDResultSetting obdResultSetting) {
+            this.OBDResultSetting = obdResultSetting;
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(OBDResultSetting));
+            using (TextWriter writer = new StreamWriter(m_obdResultSetting_xml)) {
+                xmlSerializer.Serialize(writer, this.OBDResultSetting);
+                writer.Close();
+            }
+        }
+
+
         public void SaveDBandMES(DBandMES dBandMES) {
             this.DBandMES = dBandMES;
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(DBandMES));
@@ -548,6 +561,20 @@ namespace SH_OBD {
                 xmlSerializer.Serialize(writer, UserPreferences);
                 writer.Close();
             }
+        }
+
+        public OBDResultSetting LoadOBDResultSetting() {
+            try {
+                XmlSerializer serializer = new XmlSerializer(typeof(OBDResultSetting));
+                using (FileStream reader = new FileStream(m_obdResultSetting_xml, FileMode.Open)) {
+                    OBDResultSetting = (OBDResultSetting)serializer.Deserialize(reader);
+                    reader.Close();
+                }
+            } catch (Exception e) {
+                m_log.TraceError("Using default OBD result settings because of failed to load config file, reason: " + e.Message);
+                OBDResultSetting = new OBDResultSetting();
+            }
+            return OBDResultSetting;
         }
 
         public DBandMES LoadDBandMES() {

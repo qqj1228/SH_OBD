@@ -35,7 +35,8 @@ CREATE TABLE SH_OBD.dbo.OBDData (
     ECU_NAME varchar(50) default('不适用'), -- ECU名称，090A
     CAL_ID varchar(50) default('不适用'), -- CAL_ID，0904
     CVN varchar(50) default('不适用'), -- CVN，0906
-	Result int default(0), -- OBD检测结果，1 - 合格，0 - 不合格
+    Result int default(0), -- OBD检测结果，1 - 合格，0 - 不合格
+    Upload int default(0), -- 上传数据结果，1 - 成功， 0 - 失败
 )
 GO
 
@@ -71,6 +72,7 @@ EXEC sp_addextendedproperty N'MS_Description', N'ECU名称', N'USER', N'dbo', N'
 EXEC sp_addextendedproperty N'MS_Description', N'CAL_ID', N'USER', N'dbo', N'TABLE', N'OBDData', N'COLUMN', N'CAL_ID'
 EXEC sp_addextendedproperty N'MS_Description', N'CVN', N'USER', N'dbo', N'TABLE', N'OBDData', N'COLUMN', N'CVN'
 EXEC sp_addextendedproperty N'MS_Description', N'OBD检测结果', N'USER', N'dbo', N'TABLE', N'OBDData', N'COLUMN', N'Result'
+EXEC sp_addextendedproperty N'MS_Description', N'上传数据结果', N'USER', N'dbo', N'TABLE', N'OBDData', N'COLUMN', N'Upload'
 GO
 
 -- 测试: 插入数据
@@ -81,7 +83,7 @@ INSERT SH_OBD.dbo.OBDData
         '7E0',
         'OFF',
         '0',
-        'CN-OBD-6',
+        '29,CN-OBD-6',
         '0',
         '--',
         '--',
@@ -105,7 +107,8 @@ INSERT SH_OBD.dbo.OBDData
         'ECM-EngineControl',
         'JMB*36761500,JMB*47872611',
         '1791BC82,16E062BE',
-		'1'
+        '1',
+        '1'
     )
 GO
 -- 测试: 修改数据

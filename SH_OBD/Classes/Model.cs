@@ -26,12 +26,12 @@ namespace SH_OBD {
             StrConn += "data source=" + m_dbandMES.IP + "," + m_dbandMES.Port;
         }
 
-        public void ShowDB(string StrTable) {
-            string StrSQL = "select * from " + StrTable;
+        public void ShowDB(string strTable) {
+            string strSQL = "select * from " + strTable;
 
             using (SqlConnection sqlConn = new SqlConnection(StrConn)) {
                 sqlConn.Open();
-                SqlCommand sqlCmd = new SqlCommand(StrSQL, sqlConn);
+                SqlCommand sqlCmd = new SqlCommand(strSQL, sqlConn);
                 SqlDataReader sqlData = sqlCmd.ExecuteReader();
                 string str = "";
                 int c = sqlData.FieldCount;
@@ -50,6 +50,48 @@ namespace SH_OBD {
                 sqlCmd.Dispose();
                 sqlConn.Close();
             }
+        }
+
+        public string[] GetTableColumns(string strTable) {
+            using (SqlConnection sqlConn = new SqlConnection(StrConn)) {
+                try {
+                    sqlConn.Open();
+                    DataTable schema = sqlConn.GetSchema("Columns", new string[] { null, null, strTable });
+                    schema.DefaultView.Sort = "ORDINAL_POSITION";
+                    schema = schema.DefaultView.ToTable();
+                    int count = schema.Rows.Count;
+                    string[] columns = new string[count];
+                    for (int i = 0; i < count; i++) {
+                        DataRow row = schema.Rows[i];
+                        foreach (DataColumn col in schema.Columns) {
+                            if (col.Caption == "COLUMN_NAME") {
+                                if (col.DataType.Equals(typeof(DateTime))) {
+                                    columns[i] = string.Format("{0:d}", row[col]);
+                                } else if (col.DataType.Equals(typeof(decimal))) {
+                                    columns[i] = string.Format("{0:C}", row[col]);
+                                } else {
+                                    columns[i] = string.Format("{0}", row[col]);
+                                }
+                            }
+                        }
+                    }
+                    return columns;
+                } catch (Exception ex) {
+                    m_log.TraceError("==> SQL ERROR: " + ex.Message);
+                } finally {
+                    sqlConn.Close();
+                }
+            }
+            return new string[] { };
+        }
+
+        public Dictionary<string, int> GetTableColumnsDic(string strTable) {
+            Dictionary<string, int> colDic = new Dictionary<string, int>();
+            string[] cols = GetTableColumns(strTable);
+            for (int i = 0; i < cols.Length; i++) {
+                colDic.Add(cols[i], i);
+            }
+            return colDic;
         }
 
         public void InsertDB(string strTable, DataTable dt) {
@@ -115,7 +157,7 @@ namespace SH_OBD {
 
         int RunSQL(string strSQL) {
             int count = 0;
-            if (strSQL == "") {
+            if (strSQL.Length == 0) {
                 return -1;
             }
             try {
@@ -193,6 +235,16 @@ namespace SH_OBD {
             }
         }
 
+        public string[,] GetRecords(string strTable, Dictionary<string, string> whereDic) {
+            string strSQL = "select * from " + strTable + " where ";
+            foreach (string key in whereDic.Keys) {
+                strSQL += key + " = '" + whereDic[key] + "' and ";
+            }
+            strSQL = strSQL.Substring(0, strSQL.Length - 5);
+            m_log.TraceInfo("==> T-SQL: " + strSQL);
+            return SelectDB(strSQL);
+        }
+
         public bool ModifyDB(string strTable, DataTable dt) {
             for (int i = 0; i < dt.Rows.Count; i++) {
                 Dictionary<string, string> whereDic = new Dictionary<string, string> {
@@ -230,6 +282,12 @@ namespace SH_OBD {
             return true;
         }
 
+        public int UpdateUpload(string strVIN, string strUpload) {
+            string strSQL = "update OBDData set Upload = '" + strUpload + "' where VIN = '" + strVIN + "'";
+            m_log.TraceInfo("==> T-SQL: " + strSQL);
+            return RunSQL(strSQL);
+        }
+
         public string GetPassWord() {
             string strSQL = "select PassWord from OBDUser where UserName = 'admin'";
             m_log.TraceInfo("==> T-SQL: " + strSQL);
@@ -246,5 +304,6 @@ namespace SH_OBD {
             m_log.TraceInfo("==> T-SQL: " + strSQL);
             return RunSQL(strSQL);
         }
+
     }
 }
