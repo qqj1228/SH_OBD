@@ -107,7 +107,7 @@ namespace SH_OBD {
     }
 
     // 获取文件版本类
-    public class MainFileVersion {
+    public static class MainFileVersion {
         public static Version AssemblyVersion {
             get { return ((Assembly.GetEntryAssembly()).GetName()).Version; }
         }

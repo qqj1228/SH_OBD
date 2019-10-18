@@ -206,13 +206,14 @@ namespace SH_OBD {
                 });
                 return;
             }
+            string errorMsg = "";
             try {
-                m_obdTest.StartOBDTest(out string errorMsg);
+                m_obdTest.StartOBDTest(out errorMsg);
 #if DEBUG
                 MessageBox.Show(errorMsg, WSHelper.GetMethodName(0));
 #endif
             } catch (Exception ex) {
-                MessageBox.Show(ex.Message, "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message + "\n" + errorMsg, "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             this.Invoke((EventHandler)delegate {

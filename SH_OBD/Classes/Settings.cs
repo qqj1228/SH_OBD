@@ -235,7 +235,7 @@ namespace SH_OBD {
     [Serializable]
     public class OBDResultSetting {
         public bool UploadWhenever { get; set; }
-        public bool UseECUName { get; set; }
+        public bool UseECUAcronym { get; set; }
         public bool UseSCRName { get; set; }
         public bool DTC03 { get; set; }
         public bool DTC07 { get; set; }
@@ -246,7 +246,7 @@ namespace SH_OBD {
 
         public OBDResultSetting() {
             UploadWhenever = false;
-            UseECUName = true;
+            UseECUAcronym = true;
             UseSCRName = true;
             DTC03 = true;
             DTC07 = true;

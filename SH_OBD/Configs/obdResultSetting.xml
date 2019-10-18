@@ -2,8 +2,8 @@
 <OBDResultSetting xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <!-- 无论何种情况都上传数据，即使结果为不合格 -->
   <UploadWhenever>false</UploadWhenever>
-  <!-- 使用ECU名称简写填充ModuleID -->
-  <UseECUName>true</UseECUName>
+  <!-- 使用ECU缩写填充ModuleID -->
+  <UseECUAcronym>true</UseECUAcronym>
   <!-- 使用SCR填充第二个ModuleID -->
   <UseSCRName>true</UseSCRName>
   <!-- OBD检测结果是否需要判断“存在存储DTC” -->

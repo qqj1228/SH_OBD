@@ -33,6 +33,7 @@ namespace SH_OBD {
         public bool DTCResult { get; set; }
         public bool ReadinessResult { get; set; }
         public bool VINResult { get; set; }
+        public bool CALIDCVNResult { get; set; }
         public string StrVIN_IN { get; set; }
 
         public OBDTest(OBDInterface obd) {
@@ -49,6 +50,7 @@ namespace SH_OBD {
             DTCResult = true;
             ReadinessResult = true;
             VINResult = true;
+            CALIDCVNResult = true;
             m_db = new Model(m_obdInterface.DBandMES, m_obdInterface.m_log);
         }
 
@@ -592,6 +594,7 @@ namespace SH_OBD {
             DTCResult = true;
             ReadinessResult = true;
             VINResult = true;
+            CALIDCVNResult = true;
 
             OBDTestStart?.Invoke();
 
@@ -734,178 +737,6 @@ namespace SH_OBD {
                 m_obdInterface.m_log.TraceError("Upload data function return false, VIN = " + strVIN);
                 return false;
             }
-        }
-
-        private void SetDataTableColumnsFromDB(DataTable dtDisplay, DataTable dtIn) {
-            dtDisplay.Clear();
-            dtDisplay.Columns.Clear();
-            if (dtIn.Rows.Count > 0) {
-                dtDisplay.Columns.Add(new DataColumn("NO", typeof(int)));
-                dtDisplay.Columns.Add(new DataColumn("Item", typeof(string)));
-                for (int i = 0; i < dtIn.Rows.Count; i++) {
-                    dtDisplay.Columns.Add(new DataColumn(dtIn.Rows[i][1].ToString(), typeof(string)));
-                }
-            } else {
-                SetDataTableColumnsErrorEventArgs args = new SetDataTableColumnsErrorEventArgs {
-                    ErrorMsg = "从数据库中未获取到数据"
-                };
-                SetDataTableColumnsError?.Invoke(this, args);
-            }
-        }
-
-        private void SetDataRowInfoFromDB(int lineNO, string strItem, DataTable dtIn) {
-            DataRow dr = m_dtInfo.NewRow();
-            dr[0] = lineNO;
-            dr[1] = strItem;
-            for (int i = 0; i < dtIn.Rows.Count; i++) {
-                if (GetCompIgn(dtIn) && lineNO > 10) {
-                    dr[i + 2] = dtIn.Rows[i][lineNO + (lineNO == 16 ? 3 : 9)];
-                } else {
-                    dr[i + 2] = dtIn.Rows[i][lineNO + 1];
-                }
-            }
-            m_dtInfo.Rows.Add(dr);
-        }
-
-        private void SetDataRowECUInfoFromDB(int lineNO, string strItem, DataTable dtIn) {
-            DataRow dr = m_dtECUInfo.NewRow();
-            dr[0] = lineNO;
-            dr[1] = strItem;
-            for (int i = 0; i < dtIn.Rows.Count; i++) {
-                if (lineNO == 1) {
-                    dr[i + 2] = dtIn.Rows[i][lineNO - 1];
-                } else {
-                    dr[i + 2] = dtIn.Rows[i][lineNO + 23];
-                }
-            }
-            m_dtECUInfo.Rows.Add(dr);
-        }
-
-        private void SetDataTableInfoFromDB(DataTable dtIn) {
-            int NO = 0;
-            SetDataRowInfoFromDB(++NO, "MIL状态", dtIn);                // 0
-            SetDataRowInfoFromDB(++NO, "MIL亮后行驶里程（km）", dtIn);   // 1
-            SetDataRowInfoFromDB(++NO, "OBD型式检验类型", dtIn);         // 2
-            SetDataRowInfoFromDB(++NO, "总累积里程ODO（km）", dtIn);     // 3
-            SetDataRowInfoFromDB(++NO, "存储DTC", dtIn);                // 4
-            SetDataRowInfoFromDB(++NO, "未决DTC", dtIn);                // 5
-            SetDataRowInfoFromDB(++NO, "永久DTC", dtIn);                // 6
-            SetDataRowInfoFromDB(++NO, "失火监测", dtIn);               // 7
-            SetDataRowInfoFromDB(++NO, "燃油系统监测", dtIn);           // 8
-            SetDataRowInfoFromDB(++NO, "综合组件监测", dtIn);           // 9
-            if (GetCompIgn(dtIn)) {
-                SetDataRowInfoFromDB(++NO, "NMHC催化剂监测", dtIn);     // 10
-                SetDataRowInfoFromDB(++NO, "NOx/SCR后处理监测", dtIn);  // 11
-                SetDataRowInfoFromDB(++NO, "增压系统监测", dtIn);       // 12
-                SetDataRowInfoFromDB(++NO, "排气传感器监测", dtIn);     // 13
-                SetDataRowInfoFromDB(++NO, "PM过滤器监测", dtIn);       // 14
-            } else {
-                SetDataRowInfoFromDB(++NO, "催化剂监测", dtIn);         // 10
-                SetDataRowInfoFromDB(++NO, "加热催化剂监测", dtIn);     // 11
-                SetDataRowInfoFromDB(++NO, "燃油蒸发系统监测", dtIn);   // 12
-                SetDataRowInfoFromDB(++NO, "二次空气系统监测", dtIn);   // 13
-                SetDataRowInfoFromDB(++NO, "空调系统制冷剂监测", dtIn); // 14
-                SetDataRowInfoFromDB(++NO, "氧气传感器监测", dtIn);     // 15
-                SetDataRowInfoFromDB(++NO, "加热氧气传感器监测", dtIn); // 16
-            }
-            SetDataRowInfoFromDB(++NO, "EGR/VVT系统监测", dtIn);       // 15 / 17
-        }
-
-        private void SetDataTableECUInfoFromDB(DataTable dtIn) {
-            int NO = 0;
-            SetDataRowECUInfoFromDB(++NO, "VIN", dtIn);               // 0
-            SetDataRowECUInfoFromDB(++NO, "ECU名称", dtIn);           // 1
-            SetDataRowECUInfoFromDB(++NO, "CAL_ID", dtIn);            // 2
-            SetDataRowECUInfoFromDB(++NO, "CVN", dtIn);               // 3
-        }
-
-        public bool UploadDataFromDB(string strVIN, out string errorMsg) {
-            errorMsg = "";
-            DataTable dt = new DataTable();
-            SetDataTableResultColumns(ref dt);
-
-            Dictionary<string, int> ColsDic = m_db.GetTableColumnsDic("OBDData");
-            Dictionary<string, string> VINDic = new Dictionary<string, string> { { "VIN", strVIN } };
-            string[,] Results = m_db.GetRecords("OBDData", VINDic);
-
-            SetDataTableResultFromDB(ColsDic, Results, dt);
-            SetDataTableColumnsFromDB(m_dtInfo, dt);
-            SetDataTableColumnsFromDB(m_dtECUInfo, dt);
-            SetupColumnsDone?.Invoke();
-            SetDataTableInfoFromDB(dt);
-            SetDataTableECUInfoFromDB(dt);
-            bool bRet;
-            try {
-                bRet = UploadData(strVIN, dt.Rows[0][28].ToString(), dt, ref errorMsg);
-            } catch (Exception) {
-                m_obdInterface.m_log.TraceError("Manual Upload Data Faiure！");
-                dt.Dispose();
-                throw;
-            }
-            dt.Dispose();
-            return bRet;
-        }
-
-        private List<string[,]> SplitResultsPerVIN(Dictionary<string, int> ColsDic, string[,] Results) {
-            int iRowCount = Results.GetLength(0);
-            int iColCount = Results.GetLength(1);
-            string[] row;
-            string[,] total;
-            List<string[]> rowList = new List<string[]>();
-            List<string[,]> totalList = new List<string[,]>();
-            string VIN = Results[0, ColsDic["VIN"]];
-            for (int iRow = 0; iRow < iRowCount; iRow++) {
-                row = new string[iColCount];
-                for (int iCol = 0; iCol < iColCount; iCol++) {
-                    row[iCol] = Results[iRow, iCol];
-                }
-                if (Results[iRow, ColsDic["VIN"]] != VIN) {
-                    total = new string[rowList.Count, iColCount];
-                    for (int m = 0; m < rowList.Count; m++) {
-                        for (int n = 0; n < iColCount; n++) {
-                            total[m, n] = rowList[m][n];
-                        }
-                    }
-                    totalList.Add(total);
-                    rowList.Clear();
-                    rowList.Add(row);
-                    VIN = Results[iRow, ColsDic["VIN"]];
-                } else {
-                    rowList.Add(row);
-                }
-            }
-            total = new string[rowList.Count, iColCount];
-            for (int m = 0; m < rowList.Count; m++) {
-                for (int n = 0; n < iColCount; n++) {
-                    total[m, n] = rowList[m][n];
-                }
-            }
-            totalList.Add(total);
-            return totalList;
-        }
-
-        public bool UploadDataFromDBOnTime(out string errorMsg) {
-            errorMsg = "";
-            bool bRet = false;
-            DataTable dt = new DataTable();
-            SetDataTableResultColumns(ref dt);
-
-            Dictionary<string, int> ColsDic = m_db.GetTableColumnsDic("OBDData");
-            Dictionary<string, string> dic = new Dictionary<string, string> { { "Upload", "0" } };
-            string[,] Results = m_db.GetRecords("OBDData", dic);
-            List<string[,]> ResultsList = SplitResultsPerVIN(ColsDic, Results);
-            for (int i = 0; i < ResultsList.Count; i++) {
-                SetDataTableResultFromDB(ColsDic, ResultsList[i], dt);
-                try {
-                    bRet = UploadData(dt.Rows[0][0].ToString(), dt.Rows[0][28].ToString(), dt, ref errorMsg);
-                } catch (Exception) {
-                    m_obdInterface.m_log.TraceError("Upload Data OnTime Faiure！");
-                    dt.Dispose();
-                    throw;
-                }
-            }
-            dt.Dispose();
-            return bRet;
         }
 
         private void SetDataTableResultColumns(ref DataTable dtOut) {
@@ -1175,6 +1006,32 @@ namespace SH_OBD {
             dt1MES.Rows.Add(dr);
         }
 
+        private void DataTable2MESAddRow(DataTable dt2MES, DataTable dtIn, int iRow, string ECUAcronym, string CALID, string CVN) {
+            string moduleID = ECUAcronym;
+            if (m_obdInterface.OBDResultSetting.UseECUAcronym) {
+                if (moduleID.Length == 0) {
+                    moduleID = dtIn.Rows[iRow][1].ToString();
+                }
+            } else {
+                moduleID = dtIn.Rows[iRow][1].ToString();
+            }
+            dt2MES.Rows.Add(
+                dtIn.Rows[iRow][4].ToString().Split(',')[0],
+                dtIn.Rows[iRow][5].ToString().Replace("不适用", ""),
+                moduleID,
+                CALID,
+                CVN
+            );
+            if (CALID.Length == 0) {
+                CALIDCVNResult = false;
+                m_obdInterface.m_log.TraceWarning("CAL_ID in " + moduleID + " is empty");
+            }
+            if (CVN.Length == 0) {
+                CALIDCVNResult = false;
+                m_obdInterface.m_log.TraceWarning("CVN in " + moduleID + " is empty");
+            }
+        }
+
         private void SetDataTable2MES(DataTable dt2MES, DataTable dtIn) {
             dt2MES.Columns.Add("obd");
             dt2MES.Columns.Add("odo");
@@ -1184,46 +1041,195 @@ namespace SH_OBD {
             for (int i = 0; i < dtIn.Rows.Count; i++) {
                 string[] CALIDArray = dtIn.Rows[i][26].ToString().Split(',');
                 string[] CVNArray = dtIn.Rows[i][27].ToString().Split(',');
-                dt2MES.Rows.Add(
-                    dtIn.Rows[i][4].ToString().Split(',')[0],
-                    dtIn.Rows[i][5].ToString().Replace("不适用", ""),
-                    m_obdInterface.OBDResultSetting.UseECUName ? dtIn.Rows[i][25].ToString().Split('-')[0] : dtIn.Rows[i][1].ToString(),
-                    CALIDArray[0],
-                    CVNArray[0]
-                );
+                string ECUAcronym = dtIn.Rows[i][25].ToString().Split('-')[0];
+                DataTable2MESAddRow(dt2MES, dtIn, i, ECUAcronym, CALIDArray[0], CVNArray[0]);
                 for (int j = 1; j < CALIDArray.Length; j++) {
                     // 若同一个ECU下有多个CALID和CVN的上传策略
                     if (m_obdInterface.OBDResultSetting.UseSCRName) {
                         //第二个CALID和CVN使用“SCR”作为ModuleID上传
                         if (j == 1) {
-                            dt2MES.Rows.Add(
-                                dtIn.Rows[i][4].ToString().Split(',')[0],
-                                dtIn.Rows[i][5].ToString().Replace("不适用", ""),
-                                m_obdInterface.OBDResultSetting.UseECUName ? "SCR" : dtIn.Rows[i][1].ToString(),
-                                CALIDArray[j],
-                                CVNArray.Length > j ? CVNArray[j] : ""
-                            );
+                            DataTable2MESAddRow(dt2MES, dtIn, i, "SCR", CALIDArray[j], CVNArray.Length > j ? CVNArray[j] : "");
                         } else {
-                            dt2MES.Rows.Add(
-                                dtIn.Rows[i][4].ToString().Split(',')[0],
-                                dtIn.Rows[i][5].ToString().Replace("不适用", ""),
-                                m_obdInterface.OBDResultSetting.UseECUName ? dtIn.Rows[i][25].ToString().Split('-')[0] : dtIn.Rows[i][1].ToString(),
-                                CALIDArray[j],
-                                CVNArray.Length > j ? CVNArray[j] : ""
-                            );
+                            DataTable2MESAddRow(dt2MES, dtIn, i, ECUAcronym, CALIDArray[j], CVNArray.Length > j ? CVNArray[j] : "");
                         }
                     } else {
                         // 多个CALID和CVN使用同一个ModuleID上传
-                        dt2MES.Rows.Add(
-                            dtIn.Rows[i][4].ToString().Split(',')[0],
-                            dtIn.Rows[i][5].ToString().Replace("不适用", ""),
-                            m_obdInterface.OBDResultSetting.UseECUName ? dtIn.Rows[i][25].ToString().Split('-')[0] : dtIn.Rows[i][1].ToString(),
-                            CALIDArray[j],
-                            CVNArray.Length > j ? CVNArray[j] : ""
-                        );
+                        DataTable2MESAddRow(dt2MES, dtIn, i, ECUAcronym, CALIDArray[j], CVNArray.Length > j ? CVNArray[j] : "");
                     }
                 }
             }
+        }
+
+        private void SetDataTableColumnsFromDB(DataTable dtDisplay, DataTable dtIn) {
+            dtDisplay.Clear();
+            dtDisplay.Columns.Clear();
+            if (dtIn.Rows.Count > 0) {
+                dtDisplay.Columns.Add(new DataColumn("NO", typeof(int)));
+                dtDisplay.Columns.Add(new DataColumn("Item", typeof(string)));
+                for (int i = 0; i < dtIn.Rows.Count; i++) {
+                    dtDisplay.Columns.Add(new DataColumn(dtIn.Rows[i][1].ToString(), typeof(string)));
+                }
+            } else {
+                SetDataTableColumnsErrorEventArgs args = new SetDataTableColumnsErrorEventArgs {
+                    ErrorMsg = "从数据库中未获取到数据"
+                };
+                SetDataTableColumnsError?.Invoke(this, args);
+            }
+        }
+
+        private void SetDataRowInfoFromDB(int lineNO, string strItem, DataTable dtIn) {
+            DataRow dr = m_dtInfo.NewRow();
+            dr[0] = lineNO;
+            dr[1] = strItem;
+            for (int i = 0; i < dtIn.Rows.Count; i++) {
+                if (GetCompIgn(dtIn) && lineNO > 10) {
+                    dr[i + 2] = dtIn.Rows[i][lineNO + (lineNO == 16 ? 3 : 9)];
+                } else {
+                    dr[i + 2] = dtIn.Rows[i][lineNO + 1];
+                }
+            }
+            m_dtInfo.Rows.Add(dr);
+        }
+
+        private void SetDataRowECUInfoFromDB(int lineNO, string strItem, DataTable dtIn) {
+            DataRow dr = m_dtECUInfo.NewRow();
+            dr[0] = lineNO;
+            dr[1] = strItem;
+            for (int i = 0; i < dtIn.Rows.Count; i++) {
+                if (lineNO == 1) {
+                    dr[i + 2] = dtIn.Rows[i][lineNO - 1];
+                } else {
+                    dr[i + 2] = dtIn.Rows[i][lineNO + 23];
+                }
+            }
+            m_dtECUInfo.Rows.Add(dr);
+        }
+
+        private void SetDataTableInfoFromDB(DataTable dtIn) {
+            int NO = 0;
+            SetDataRowInfoFromDB(++NO, "MIL状态", dtIn);                // 0
+            SetDataRowInfoFromDB(++NO, "MIL亮后行驶里程（km）", dtIn);   // 1
+            SetDataRowInfoFromDB(++NO, "OBD型式检验类型", dtIn);         // 2
+            SetDataRowInfoFromDB(++NO, "总累积里程ODO（km）", dtIn);     // 3
+            SetDataRowInfoFromDB(++NO, "存储DTC", dtIn);                // 4
+            SetDataRowInfoFromDB(++NO, "未决DTC", dtIn);                // 5
+            SetDataRowInfoFromDB(++NO, "永久DTC", dtIn);                // 6
+            SetDataRowInfoFromDB(++NO, "失火监测", dtIn);               // 7
+            SetDataRowInfoFromDB(++NO, "燃油系统监测", dtIn);           // 8
+            SetDataRowInfoFromDB(++NO, "综合组件监测", dtIn);           // 9
+            if (GetCompIgn(dtIn)) {
+                SetDataRowInfoFromDB(++NO, "NMHC催化剂监测", dtIn);     // 10
+                SetDataRowInfoFromDB(++NO, "NOx/SCR后处理监测", dtIn);  // 11
+                SetDataRowInfoFromDB(++NO, "增压系统监测", dtIn);       // 12
+                SetDataRowInfoFromDB(++NO, "排气传感器监测", dtIn);     // 13
+                SetDataRowInfoFromDB(++NO, "PM过滤器监测", dtIn);       // 14
+            } else {
+                SetDataRowInfoFromDB(++NO, "催化剂监测", dtIn);         // 10
+                SetDataRowInfoFromDB(++NO, "加热催化剂监测", dtIn);     // 11
+                SetDataRowInfoFromDB(++NO, "燃油蒸发系统监测", dtIn);   // 12
+                SetDataRowInfoFromDB(++NO, "二次空气系统监测", dtIn);   // 13
+                SetDataRowInfoFromDB(++NO, "空调系统制冷剂监测", dtIn); // 14
+                SetDataRowInfoFromDB(++NO, "氧气传感器监测", dtIn);     // 15
+                SetDataRowInfoFromDB(++NO, "加热氧气传感器监测", dtIn); // 16
+            }
+            SetDataRowInfoFromDB(++NO, "EGR/VVT系统监测", dtIn);       // 15 / 17
+        }
+
+        private void SetDataTableECUInfoFromDB(DataTable dtIn) {
+            int NO = 0;
+            SetDataRowECUInfoFromDB(++NO, "VIN", dtIn);               // 0
+            SetDataRowECUInfoFromDB(++NO, "ECU名称", dtIn);           // 1
+            SetDataRowECUInfoFromDB(++NO, "CAL_ID", dtIn);            // 2
+            SetDataRowECUInfoFromDB(++NO, "CVN", dtIn);               // 3
+        }
+
+        public bool UploadDataFromDB(string strVIN, out string errorMsg) {
+            errorMsg = "";
+            DataTable dt = new DataTable();
+            SetDataTableResultColumns(ref dt);
+
+            Dictionary<string, int> ColsDic = m_db.GetTableColumnsDic("OBDData");
+            Dictionary<string, string> VINDic = new Dictionary<string, string> { { "VIN", strVIN } };
+            string[,] Results = m_db.GetRecords("OBDData", VINDic);
+
+            SetDataTableResultFromDB(ColsDic, Results, dt);
+            SetDataTableColumnsFromDB(m_dtInfo, dt);
+            SetDataTableColumnsFromDB(m_dtECUInfo, dt);
+            SetupColumnsDone?.Invoke();
+            SetDataTableInfoFromDB(dt);
+            SetDataTableECUInfoFromDB(dt);
+            bool bRet;
+            try {
+                bRet = UploadData(strVIN, dt.Rows[0][28].ToString(), dt, ref errorMsg);
+            } catch (Exception) {
+                m_obdInterface.m_log.TraceError("Manual Upload Data Faiure！");
+                dt.Dispose();
+                throw;
+            }
+            dt.Dispose();
+            return bRet;
+        }
+
+        private List<string[,]> SplitResultsPerVIN(Dictionary<string, int> ColsDic, string[,] Results) {
+            int iRowCount = Results.GetLength(0);
+            int iColCount = Results.GetLength(1);
+            string[] row;
+            string[,] total;
+            List<string[]> rowList = new List<string[]>();
+            List<string[,]> totalList = new List<string[,]>();
+            string VIN = Results[0, ColsDic["VIN"]];
+            for (int iRow = 0; iRow < iRowCount; iRow++) {
+                row = new string[iColCount];
+                for (int iCol = 0; iCol < iColCount; iCol++) {
+                    row[iCol] = Results[iRow, iCol];
+                }
+                if (Results[iRow, ColsDic["VIN"]] != VIN) {
+                    total = new string[rowList.Count, iColCount];
+                    for (int m = 0; m < rowList.Count; m++) {
+                        for (int n = 0; n < iColCount; n++) {
+                            total[m, n] = rowList[m][n];
+                        }
+                    }
+                    totalList.Add(total);
+                    rowList.Clear();
+                    rowList.Add(row);
+                    VIN = Results[iRow, ColsDic["VIN"]];
+                } else {
+                    rowList.Add(row);
+                }
+            }
+            total = new string[rowList.Count, iColCount];
+            for (int m = 0; m < rowList.Count; m++) {
+                for (int n = 0; n < iColCount; n++) {
+                    total[m, n] = rowList[m][n];
+                }
+            }
+            totalList.Add(total);
+            return totalList;
+        }
+
+        public bool UploadDataFromDBOnTime(out string errorMsg) {
+            errorMsg = "";
+            bool bRet = false;
+            DataTable dt = new DataTable();
+            SetDataTableResultColumns(ref dt);
+
+            Dictionary<string, int> ColsDic = m_db.GetTableColumnsDic("OBDData");
+            Dictionary<string, string> dic = new Dictionary<string, string> { { "Upload", "0" } };
+            string[,] Results = m_db.GetRecords("OBDData", dic);
+            List<string[,]> ResultsList = SplitResultsPerVIN(ColsDic, Results);
+            for (int i = 0; i < ResultsList.Count; i++) {
+                SetDataTableResultFromDB(ColsDic, ResultsList[i], dt);
+                try {
+                    bRet = UploadData(dt.Rows[0][0].ToString(), dt.Rows[0][28].ToString(), dt, ref errorMsg);
+                } catch (Exception) {
+                    m_obdInterface.m_log.TraceError("Upload Data OnTime Faiure！");
+                    dt.Dispose();
+                    throw;
+                }
+            }
+            dt.Dispose();
+            return bRet;
         }
 
         private bool GetCompIgn(DataTable dtIn) {
@@ -1347,17 +1353,17 @@ namespace SH_OBD {
                 }
 
                 // moduleID
-                worksheet1.Cells["E3"].Value = m_obdInterface.OBDResultSetting.UseECUName ? dt.Rows[0][25].ToString().Split('-')[0] : dt.Rows[0][1].ToString();
+                worksheet1.Cells["E3"].Value = m_obdInterface.OBDResultSetting.UseECUAcronym ? dt.Rows[0][25].ToString().Split('-')[0] : dt.Rows[0][1].ToString();
                 if (worksheet1.Cells["B4"].Value.ToString().Length > 0) {
                     if (m_obdInterface.OBDResultSetting.UseSCRName) {
-                        worksheet1.Cells["E4"].Value = m_obdInterface.OBDResultSetting.UseECUName ? "SCR" : dt.Rows[0][1].ToString();
+                        worksheet1.Cells["E4"].Value = m_obdInterface.OBDResultSetting.UseECUAcronym ? "SCR" : dt.Rows[0][1].ToString();
                     } else {
-                        worksheet1.Cells["E4"].Value = m_obdInterface.OBDResultSetting.UseECUName ? dt.Rows[0][25].ToString().Split('-')[0] : dt.Rows[0][1].ToString();
+                        worksheet1.Cells["E4"].Value = m_obdInterface.OBDResultSetting.UseECUAcronym ? dt.Rows[0][25].ToString().Split('-')[0] : dt.Rows[0][1].ToString();
                     }
                 }
                 string OtherID = "";
                 for (int i = 1; i < dt.Rows.Count; i++) {
-                    OtherID += "," + (m_obdInterface.OBDResultSetting.UseECUName ? dt.Rows[i][25].ToString().Split('-')[0] : dt.Rows[i][1].ToString());
+                    OtherID += "," + (m_obdInterface.OBDResultSetting.UseECUAcronym ? dt.Rows[i][25].ToString().Split('-')[0] : dt.Rows[i][1].ToString());
                 }
                 worksheet1.Cells["E5"].Value = OtherID.Trim(',');
 
@@ -1506,6 +1512,7 @@ namespace SH_OBD {
                 //Result += DTCResult ? "" : "\n有DTC";
                 //Result += ReadinessResult ? "" : "\n就绪状态未完成项超过2项";
                 Result += VINResult ? "" : "，VIN号不匹配";
+                Result += CALIDCVNResult ? "" : "，未读到CALID或CVN";
                 worksheet1.Cells["B8"].Value = Result;
 
                 // 检验员
