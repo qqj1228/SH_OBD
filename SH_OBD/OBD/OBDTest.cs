@@ -1099,13 +1099,16 @@ namespace SH_OBD {
                 if (lineNO == 1) {
                     dr[i + 2] = dtIn.Rows[i][lineNO - 1];
                 } else {
-                    dr[i + 2] = dtIn.Rows[i][lineNO + 23];
+                    dr[i + 2] = dtIn.Rows[i][lineNO + 23].ToString().Replace(",", "\n");
                 }
             }
             m_dtECUInfo.Rows.Add(dr);
         }
 
         private void SetDataTableInfoFromDB(DataTable dtIn) {
+            if (m_dtInfo.Columns.Count <= 0) {
+                return;
+            }
             int NO = 0;
             SetDataRowInfoFromDB(++NO, "MIL状态", dtIn);                // 0
             SetDataRowInfoFromDB(++NO, "MIL亮后行驶里程（km）", dtIn);   // 1
@@ -1136,6 +1139,9 @@ namespace SH_OBD {
         }
 
         private void SetDataTableECUInfoFromDB(DataTable dtIn) {
+            if (m_dtInfo.Columns.Count <= 0) {
+                return;
+            }
             int NO = 0;
             SetDataRowECUInfoFromDB(++NO, "VIN", dtIn);               // 0
             SetDataRowECUInfoFromDB(++NO, "ECU名称", dtIn);           // 1
@@ -1158,13 +1164,15 @@ namespace SH_OBD {
             SetupColumnsDone?.Invoke();
             SetDataTableInfoFromDB(dt);
             SetDataTableECUInfoFromDB(dt);
-            bool bRet;
-            try {
-                bRet = UploadData(strVIN, dt.Rows[0][28].ToString(), dt, ref errorMsg);
-            } catch (Exception) {
-                m_obdInterface.m_log.TraceError("Manual Upload Data Faiure！");
-                dt.Dispose();
-                throw;
+            bool bRet = false;
+            if (dt.Rows.Count > 0) {
+                try {
+                    bRet = UploadData(strVIN, dt.Rows[0][28].ToString(), dt, ref errorMsg);
+                } catch (Exception) {
+                    m_obdInterface.m_log.TraceError("Manual Upload Data Faiure！");
+                    dt.Dispose();
+                    throw;
+                }
             }
             dt.Dispose();
             return bRet;

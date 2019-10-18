@@ -34,14 +34,20 @@ namespace SH_OBD {
                 this.labelInfo.ForeColor = Color.Black;
                 this.labelInfo.Text = "正在显示结果。。。";
             });
-            GridViewInfo.Columns[0].Width = 30;
-            GridViewInfo.Columns[1].Width = 150;
-            GridViewECUInfo.Columns[0].Width = GridViewInfo.Columns[0].Width;
-            //GridViewIUPR.Columns[0].Width = GridViewInfo.Columns[0].Width;
-            //GridViewIUPR.Columns[1].Width = 230;
-            SetGridViewColumnsSortMode(this.GridViewInfo, DataGridViewColumnSortMode.Programmatic);
-            SetGridViewColumnsSortMode(this.GridViewECUInfo, DataGridViewColumnSortMode.Programmatic);
-            //SetGridViewColumnsSortMode(this.GridViewIUPR, DataGridViewColumnSortMode.Programmatic);
+            if (GridViewInfo.Columns.Count > 0) {
+                GridViewInfo.Columns[0].Width = 30;
+                GridViewInfo.Columns[1].Width = 150;
+                SetGridViewColumnsSortMode(this.GridViewInfo, DataGridViewColumnSortMode.Programmatic);
+            }
+            if (GridViewECUInfo.Columns.Count > 0) {
+                GridViewECUInfo.Columns[0].Width = GridViewInfo.Columns[0].Width;
+                SetGridViewColumnsSortMode(this.GridViewECUInfo, DataGridViewColumnSortMode.Programmatic);
+            }
+            //if (GridViewIUPR.Columns.Count > 0) {
+            //    GridViewIUPR.Columns[0].Width = GridViewInfo.Columns[0].Width;
+            //    GridViewIUPR.Columns[1].Width = 230;
+            //    SetGridViewColumnsSortMode(this.GridViewIUPR, DataGridViewColumnSortMode.Programmatic);
+            //}
         }
 
         void OnWriteDbStart() {
