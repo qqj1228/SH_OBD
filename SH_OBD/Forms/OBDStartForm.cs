@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
@@ -34,6 +35,15 @@ namespace SH_OBD {
             m_obdTest.WriteDbDone += new Action(OnWriteDbDone);
             m_obdTest.UploadDataStart += new Action(OnUploadDataStart);
             m_obdTest.UploadDataDone += new Action(OnUploadDataDone);
+            // 删除WebService上传接口缓存dll
+            string dllPath = ".\\" + m_obdInterface.DBandMES.WebServiceName + ".dll";
+            try {
+                if (File.Exists(dllPath)) {
+                    File.Delete(dllPath);
+                }
+            } catch (Exception ex) {
+                m_obdInterface.m_log.TraceError("Delete WebService dll file failure: " + ex.Message);
+            }
             // 每日定时上传以前上传失败的数据
             m_timer = new System.Timers.Timer(60 * 60 * 1000);
             m_timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimeUpload);
