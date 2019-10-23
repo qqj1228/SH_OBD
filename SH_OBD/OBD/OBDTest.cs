@@ -19,6 +19,7 @@ namespace SH_OBD {
         private readonly Dictionary<string, bool[]> m_mode09Support;
         private bool m_compIgn;
         public readonly Model m_db;
+        public readonly ModelOracle m_dbOracle;
         public event Action OBDTestStart;
         public event Action SetupColumnsDone;
         public event Action WriteDbStart;
@@ -52,6 +53,7 @@ namespace SH_OBD {
             VINResult = true;
             CALIDCVNResult = true;
             m_db = new Model(m_obdInterface.DBandMES, m_obdInterface.m_log);
+            m_dbOracle = new ModelOracle(m_obdInterface.OracleMESSetting, m_obdInterface.m_log);
         }
 
         public DataTable GetDataTable(int index) {
@@ -667,14 +669,336 @@ namespace SH_OBD {
             }
 
             bool bRet;
-            try {
-                bRet = UploadData(strVIN, strOBDResult, dt, ref errorMsg);
-            } catch (Exception) {
-                dt.Dispose();
-                throw;
+            if (m_obdInterface.OracleMESSetting.Enable) {
+                try {
+                    bRet = UploadDataOracle(strVIN, strOBDResult, dt, ref errorMsg);
+                } catch (Exception) {
+                    dt.Dispose();
+                    throw;
+                }
+            } else {
+                try {
+                    bRet = UploadData(strVIN, strOBDResult, dt, ref errorMsg);
+                } catch (Exception) {
+                    dt.Dispose();
+                    throw;
+                }
             }
             dt.Dispose();
             return bRet;
+        }
+
+        private void SetDataTable1Oracle(string strVIN, DataTable dt, DataTable dtResult) {
+            dt.Columns.Add("ID", typeof(string));                       // 0
+
+            dt.Columns.Add("VEHICLEMODEL", typeof(string));             // 1
+            dt.Columns.Add("VIN", typeof(string));                      // 2
+            dt.Columns.Add("XXGKBH", typeof(string));                   // 3
+            dt.Columns.Add("SB", typeof(string));                       // 4
+            dt.Columns.Add("SCCDZ", typeof(string));                    // 5
+            dt.Columns.Add("SCDATE", typeof(string));                   // 6
+            dt.Columns.Add("FDJH", typeof(string));                     // 7
+            dt.Columns.Add("FDJSB", typeof(string));                    // 8
+            dt.Columns.Add("FDJSCCDZ", typeof(string));                 // 9
+            dt.Columns.Add("SCCMC", typeof(string));                    // 10
+
+            dt.Columns.Add("CREATIONTIME", typeof(DateTime));           // 11
+            dt.Columns.Add("CREATOR", typeof(string));                  // 12
+            dt.Columns.Add("LASTMODIFICATIONTIME", typeof(DateTime));   // 13
+            dt.Columns.Add("LASTMODIFIER", typeof(string));             // 14
+            dt.Columns.Add("DELETIONTIME", typeof(DateTime));           // 15
+            dt.Columns.Add("ISDELETED", typeof(string));                // 16
+            dt.Columns.Add("DELETER", typeof(string));                  // 17
+
+            DataRow dr = dt.NewRow();
+            dr[2] = strVIN;
+            dr[11] = DateTime.Now.ToLocalTime();
+            dr[12] = m_obdInterface.UserPreferences.Name;
+            dr[16] = "0";
+            dt.Rows.Add(dr);
+            int iRet = 0;
+            try {
+                iRet = m_dbOracle.InsertRecordIntoMES(dt.TableName, dt);
+            } catch (Exception) {
+                throw;
+            }
+        }
+
+        private void SetDataTable2Oracle(string strKeyID, string strVIN, DataTable dt, DataTable dtResult) {
+            dt.Columns.Add("ID", typeof(string));                       // 0
+            dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
+
+            dt.Columns.Add("RH", typeof(string));                       // 2
+            dt.Columns.Add("ET", typeof(string));                       // 3
+            dt.Columns.Add("AP", typeof(string));                       // 4
+
+            dt.Columns.Add("CREATIONTIME", typeof(DateTime));           // 5
+            dt.Columns.Add("CREATOR", typeof(string));                  // 6
+            dt.Columns.Add("LASTMODIFICATIONTIME", typeof(DateTime));   // 7
+            dt.Columns.Add("LASTMODIFIER", typeof(string));             // 8
+            dt.Columns.Add("DELETIONTIME", typeof(DateTime));           // 9
+            dt.Columns.Add("ISDELETED", typeof(string));                // 10
+            dt.Columns.Add("DELETER", typeof(string));                  // 11
+        }
+
+        private void SetDataTable3Oracle(string strKeyID, string strVIN, string strOBDResult, DataTable dt, DataTable dtResult) {
+            dt.Columns.Add("ID", typeof(string));                       // 0
+            dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
+
+            dt.Columns.Add("TESTTYPE", typeof(string));                 // 2
+            dt.Columns.Add("TESTNO", typeof(string));                   // 3
+            dt.Columns.Add("TESTDATE", typeof(string));                 // 4
+            dt.Columns.Add("APASS", typeof(string));                    // 5
+            dt.Columns.Add("OPASS", typeof(string));                    // 6
+            dt.Columns.Add("OTESTDATE", typeof(string));                // 7
+            dt.Columns.Add("EPASS", typeof(string));                    // 8
+            dt.Columns.Add("RESULT", typeof(string));                   // 9
+
+            dt.Columns.Add("CREATIONTIME", typeof(DateTime));           // 10
+            dt.Columns.Add("CREATOR", typeof(string));                  // 11
+            dt.Columns.Add("LASTMODIFICATIONTIME", typeof(DateTime));   // 12
+            dt.Columns.Add("LASTMODIFIER", typeof(string));             // 13
+            dt.Columns.Add("DELETIONTIME", typeof(DateTime));           // 14
+            dt.Columns.Add("ISDELETED", typeof(string));                // 15
+            dt.Columns.Add("DELETER", typeof(string));                  // 16
+
+            DataRow dr = dt.NewRow();
+            dr[1] = strKeyID;
+            dr[2] = "0";
+            dr[6] = "1";
+            dr[7] = DateTime.Now.ToLocalTime().ToString("yyyyMMdd");
+            dr[9] = "1";
+
+            dr[10] = DateTime.Now.ToLocalTime();
+            dr[11] = m_obdInterface.UserPreferences.Name;
+            dr[15] = "0";
+            dt.Rows.Add(dr);
+            int iRet = 0;
+            try {
+                iRet = m_dbOracle.InsertRecordIntoMES(dt.TableName, dt);
+            } catch (Exception) {
+                throw;
+            }
+        }
+
+        private void SetDataTable4Oracle(string strKeyID, string strVIN, DataTable dt, DataTable dtResult) {
+            dt.Columns.Add("ID", typeof(string));                       // 0
+            dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
+
+            dt.Columns.Add("OBD", typeof(string));                      // 2
+            dt.Columns.Add("ODO", typeof(string));                      // 3
+
+            dt.Columns.Add("CREATIONTIME", typeof(DateTime));           // 4
+            dt.Columns.Add("CREATOR", typeof(string));                  // 5
+            dt.Columns.Add("LASTMODIFICATIONTIME", typeof(DateTime));   // 6
+            dt.Columns.Add("LASTMODIFIER", typeof(string));             // 7
+            dt.Columns.Add("DELETIONTIME", typeof(DateTime));           // 8
+            dt.Columns.Add("ISDELETED", typeof(string));                // 9
+            dt.Columns.Add("DELETER", typeof(string));                  // 10
+        }
+
+        private void SetDataTable4AOracle(string strKeyID, string strVIN, DataTable dt, DataTable dtResult) {
+            dt.Columns.Add("ID", typeof(string));                       // 0
+            dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
+            dt.Columns.Add("WQPF4_ID", typeof(string));                 // 2
+
+            dt.Columns.Add("MODULEID", typeof(string));                 // 3
+            dt.Columns.Add("CALID", typeof(string));                    // 4
+            dt.Columns.Add("CVN", typeof(string));                      // 5
+
+            dt.Columns.Add("CREATIONTIME", typeof(DateTime));           // 6
+            dt.Columns.Add("CREATOR", typeof(string));                  // 7
+            dt.Columns.Add("LASTMODIFICATIONTIME", typeof(DateTime));   // 8
+            dt.Columns.Add("LASTMODIFIER", typeof(string));             // 9
+            dt.Columns.Add("DELETIONTIME", typeof(DateTime));           // 10
+            dt.Columns.Add("ISDELETED", typeof(string));                // 11
+            dt.Columns.Add("DELETER", typeof(string));                  // 12
+        }
+
+        private void SetDataTable51Oracle(string strKeyID, string strVIN, DataTable dt, DataTable dtResult) {
+            dt.Columns.Add("ID", typeof(string));                       // 0
+            dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
+
+            dt.Columns.Add("REAC", typeof(string));                     // 2
+            dt.Columns.Add("LEACMAX", typeof(string));                  // 3
+            dt.Columns.Add("LEACMIN", typeof(string));                  // 4
+            dt.Columns.Add("LRCO", typeof(string));                     // 5
+            dt.Columns.Add("LLCO", typeof(string));                     // 6
+            dt.Columns.Add("LRHC", typeof(string));                     // 7
+            dt.Columns.Add("LLHC", typeof(string));                     // 8
+            dt.Columns.Add("HRCO", typeof(string));                     // 9
+            dt.Columns.Add("HLCO", typeof(string));                     // 10
+            dt.Columns.Add("HRHC", typeof(string));                     // 11
+            dt.Columns.Add("HLHC", typeof(string));                     // 12
+
+            dt.Columns.Add("CREATIONTIME", typeof(DateTime));           // 13
+            dt.Columns.Add("CREATOR", typeof(string));                  // 14
+            dt.Columns.Add("LASTMODIFICATIONTIME", typeof(DateTime));   // 15
+            dt.Columns.Add("LASTMODIFIER", typeof(string));             // 16
+            dt.Columns.Add("DELETIONTIME", typeof(DateTime));           // 17
+            dt.Columns.Add("ISDELETED", typeof(string));                // 18
+            dt.Columns.Add("DELETER", typeof(string));                  // 19
+        }
+
+        private void SetDataTable52Oracle(string strKeyID, string strVIN, DataTable dt, DataTable dtResult) {
+            dt.Columns.Add("ID", typeof(string));                       // 0
+            dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
+
+            dt.Columns.Add("ARHC5025", typeof(string));                 // 2
+            dt.Columns.Add("ALHC5025", typeof(string));                 // 3
+            dt.Columns.Add("ARCO5025", typeof(string));                 // 4
+            dt.Columns.Add("ALCO5025", typeof(string));                 // 5
+            dt.Columns.Add("ARNOX5025", typeof(string));                // 6
+            dt.Columns.Add("ALNOX5025", typeof(string));                // 7
+            dt.Columns.Add("ARHC2540", typeof(string));                 // 8
+            dt.Columns.Add("ALHC2540", typeof(string));                 // 9
+            dt.Columns.Add("ARCO2540", typeof(string));                 // 10
+            dt.Columns.Add("ALCO2540", typeof(string));                 // 11
+            dt.Columns.Add("ARNOX2540", typeof(string));                // 12
+            dt.Columns.Add("ALNOX2540", typeof(string));                // 13
+
+            dt.Columns.Add("CREATIONTIME", typeof(DateTime));           // 14
+            dt.Columns.Add("CREATOR", typeof(string));                  // 15
+            dt.Columns.Add("LASTMODIFICATIONTIME", typeof(DateTime));   // 16
+            dt.Columns.Add("LASTMODIFIER", typeof(string));             // 17
+            dt.Columns.Add("DELETIONTIME", typeof(DateTime));           // 18
+            dt.Columns.Add("ISDELETED", typeof(string));                // 19
+            dt.Columns.Add("DELETER", typeof(string));                  // 20
+        }
+
+        private void SetDataTable53Oracle(string strKeyID, string strVIN, DataTable dt, DataTable dtResult) {
+            dt.Columns.Add("ID", typeof(string));                       // 0
+            dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
+
+            dt.Columns.Add("VRHC", typeof(string));                     // 2
+            dt.Columns.Add("VLHC", typeof(string));                     // 3
+            dt.Columns.Add("VRCO", typeof(string));                     // 4
+            dt.Columns.Add("VLCO", typeof(string));                     // 5
+            dt.Columns.Add("VRNOX", typeof(string));                    // 6
+            dt.Columns.Add("VLNOX", typeof(string));                    // 7
+
+            dt.Columns.Add("CREATIONTIME", typeof(DateTime));           // 8
+            dt.Columns.Add("CREATOR", typeof(string));                  // 9
+            dt.Columns.Add("LASTMODIFICATIONTIME", typeof(DateTime));   // 10
+            dt.Columns.Add("LASTMODIFIER", typeof(string));             // 11
+            dt.Columns.Add("DELETIONTIME", typeof(DateTime));           // 12
+            dt.Columns.Add("ISDELETED", typeof(string));                // 13
+            dt.Columns.Add("DELETER", typeof(string));                  // 14
+        }
+
+        private void SetDataTable54Oracle(string strKeyID, string strVIN, DataTable dt, DataTable dtResult) {
+            dt.Columns.Add("ID", typeof(string));                       // 0
+            dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
+
+            dt.Columns.Add("RATEREVUP", typeof(string));                // 2
+            dt.Columns.Add("RATEREVDOWN", typeof(string));              // 3
+            dt.Columns.Add("REV100", typeof(string));                   // 4
+            dt.Columns.Add("MAXPOWER", typeof(string));                 // 5
+            dt.Columns.Add("MAXPOWERLIMIT", typeof(string));            // 6
+            dt.Columns.Add("SMOKE100", typeof(string));                 // 7
+            dt.Columns.Add("SMOKE80", typeof(string));                  // 8
+            dt.Columns.Add("SMOKELIMIT", typeof(string));               // 9
+            dt.Columns.Add("NOX", typeof(string));                      // 10
+            dt.Columns.Add("NOXLIMIT", typeof(string));                 // 11
+
+            dt.Columns.Add("CREATIONTIME", typeof(DateTime));           // 12
+            dt.Columns.Add("CREATOR", typeof(string));                  // 13
+            dt.Columns.Add("LASTMODIFICATIONTIME", typeof(DateTime));   // 14
+            dt.Columns.Add("LASTMODIFIER", typeof(string));             // 15
+            dt.Columns.Add("DELETIONTIME", typeof(DateTime));           // 16
+            dt.Columns.Add("ISDELETED", typeof(string));                // 17
+            dt.Columns.Add("DELETER", typeof(string));                  // 18
+        }
+
+        private void SetDataTable55Oracle(string strKeyID, string strVIN, DataTable dt, DataTable dtResult) {
+            dt.Columns.Add("ID", typeof(string));                       // 0
+            dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
+
+            dt.Columns.Add("RATEREV", typeof(string));                  // 2
+            dt.Columns.Add("REV", typeof(string));                      // 3
+            dt.Columns.Add("SMOKEK1", typeof(string));                  // 4
+            dt.Columns.Add("SMOKEK2", typeof(string));                  // 5
+            dt.Columns.Add("SMOKEK3", typeof(string));                  // 6
+            dt.Columns.Add("SMOKEAVG", typeof(string));                 // 7
+            dt.Columns.Add("SMOKEKLIMIT", typeof(string));              // 8
+
+            dt.Columns.Add("CREATIONTIME", typeof(DateTime));           // 9
+            dt.Columns.Add("CREATOR", typeof(string));                  // 10
+            dt.Columns.Add("LASTMODIFICATIONTIME", typeof(DateTime));   // 11
+            dt.Columns.Add("LASTMODIFIER", typeof(string));             // 12
+            dt.Columns.Add("DELETIONTIME", typeof(DateTime));           // 13
+            dt.Columns.Add("ISDELETED", typeof(string));                // 14
+            dt.Columns.Add("DELETER", typeof(string));                  // 15
+        }
+
+        private void SetDataTable56Oracle(string strKeyID, string strVIN, DataTable dt, DataTable dtResult) {
+            dt.Columns.Add("ID", typeof(string));                       // 0
+            dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
+
+            dt.Columns.Add("VRCO", typeof(string));                     // 2
+            dt.Columns.Add("VLCO", typeof(string));                     // 3
+            dt.Columns.Add("VRHCNOX", typeof(string));                  // 4
+            dt.Columns.Add("VLHCNOX", typeof(string));                  // 5
+
+            dt.Columns.Add("CREATIONTIME", typeof(DateTime));           // 6
+            dt.Columns.Add("CREATOR", typeof(string));                  // 7
+            dt.Columns.Add("LASTMODIFICATIONTIME", typeof(DateTime));   // 8
+            dt.Columns.Add("LASTMODIFIER", typeof(string));             // 9
+            dt.Columns.Add("DELETIONTIME", typeof(DateTime));           // 10
+            dt.Columns.Add("ISDELETED", typeof(string));                // 11
+            dt.Columns.Add("DELETER", typeof(string));                  // 12
+        }
+
+        private void SetDataTable6Oracle(string strKeyID, string strVIN, DataTable dt, DataTable dtResult) {
+            dt.Columns.Add("ID", typeof(string));                       // 0
+            dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
+
+            dt.Columns.Add("ANALYMANUF", typeof(string));               // 2
+            dt.Columns.Add("ANALYNAME", typeof(string));                // 3
+            dt.Columns.Add("ANALYMODEL", typeof(string));               // 4
+            dt.Columns.Add("ANALYDATE", typeof(string));                // 5
+            dt.Columns.Add("DYNOMODEL", typeof(string));                // 6
+            dt.Columns.Add("DYNOMANUF", typeof(string));                // 7
+
+            dt.Columns.Add("CREATIONTIME", typeof(DateTime));           // 8
+            dt.Columns.Add("CREATOR", typeof(string));                  // 9
+            dt.Columns.Add("LASTMODIFICATIONTIME", typeof(DateTime));   // 10
+            dt.Columns.Add("LASTMODIFIER", typeof(string));             // 11
+            dt.Columns.Add("DELETIONTIME", typeof(DateTime));           // 12
+            dt.Columns.Add("ISDELETED", typeof(string));                // 13
+            dt.Columns.Add("DELETER", typeof(string));                  // 14
+        }
+
+        private bool UploadDataOracle(string strVIN, string strOBDResult, DataTable dtIn, ref string errorMsg) {
+            UploadDataStart?.Invoke();
+            m_obdInterface.DBandMES.ChangeWebService = false;
+            DataTable dt1 = new DataTable("IF_EM_WQPF_1");
+            SetDataTable1Oracle(strVIN, dt1, dtIn);
+            string strKeyID = m_dbOracle.GetKeyIDByVIN(dt1.TableName, strVIN);
+            DataTable dt2 = new DataTable("IF_EM_WQPF_2");
+            SetDataTable2Oracle(strKeyID, strVIN, dt2, dtIn);
+            DataTable dt3 = new DataTable("IF_EM_WQPF_3");
+            SetDataTable3Oracle(strKeyID, strVIN, strOBDResult, dt3, dtIn);
+            DataTable dt4 = new DataTable("IF_EM_WQPF_4");
+            SetDataTable4Oracle(strKeyID, strVIN, dt4, dtIn);
+            DataTable dt4A = new DataTable("IF_EM_WQPF_4A");
+            SetDataTable4AOracle(strKeyID, strVIN, dt4A, dtIn);
+            DataTable dt51 = new DataTable("IF_EM_WQPF_5_1");
+            SetDataTable51Oracle(strKeyID, strVIN, dt51, dtIn);
+            DataTable dt52 = new DataTable("IF_EM_WQPF_5_2");
+            SetDataTable52Oracle(strKeyID, strVIN, dt52, dtIn);
+            DataTable dt53 = new DataTable("IF_EM_WQPF_5_3");
+            SetDataTable53Oracle(strKeyID, strVIN, dt53, dtIn);
+            DataTable dt54 = new DataTable("IF_EM_WQPF_5_4");
+            SetDataTable54Oracle(strKeyID, strVIN, dt54, dtIn);
+            DataTable dt55 = new DataTable("IF_EM_WQPF_5_5");
+            SetDataTable55Oracle(strKeyID, strVIN, dt55, dtIn);
+            DataTable dt56 = new DataTable("IF_EM_WQPF_5_6");
+            SetDataTable56Oracle(strKeyID, strVIN, dt56, dtIn);
+            DataTable dt6 = new DataTable("IF_EM_WQPF_6");
+            SetDataTable6Oracle(strKeyID, strVIN, dt6, dtIn);
+
+            return true;
         }
 
         private bool UploadData(string strVIN, string strOBDResult, DataTable dtIn, ref string errorMsg) {

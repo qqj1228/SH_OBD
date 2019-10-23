@@ -35,14 +35,22 @@ namespace SH_OBD {
             m_obdTest.WriteDbDone += new Action(OnWriteDbDone);
             m_obdTest.UploadDataStart += new Action(OnUploadDataStart);
             m_obdTest.UploadDataDone += new Action(OnUploadDataDone);
-            // 删除WebService上传接口缓存dll
-            string dllPath = ".\\" + m_obdInterface.DBandMES.WebServiceName + ".dll";
-            try {
-                if (File.Exists(dllPath)) {
-                    File.Delete(dllPath);
+            if (!m_obdInterface.OracleMESSetting.Enable) {
+                // 删除WebService上传接口缓存dll
+                string dllPath = ".\\" + m_obdInterface.DBandMES.WebServiceName + ".dll";
+                try {
+                    if (File.Exists(dllPath)) {
+                        File.Delete(dllPath);
+                    }
+                } catch (Exception ex) {
+                    m_obdInterface.m_log.TraceError("Delete WebService dll file failure: " + ex.Message);
                 }
-            } catch (Exception ex) {
-                m_obdInterface.m_log.TraceError("Delete WebService dll file failure: " + ex.Message);
+            } else {
+                try {
+                    m_obdTest.m_dbOracle.Select();
+                } catch (Exception ex) {
+                    m_obdInterface.m_log.TraceError("Can't access database of MES: " + ex.Message);
+                }
             }
             // 每日定时上传以前上传失败的数据
             m_timer = new System.Timers.Timer(60 * 60 * 1000);

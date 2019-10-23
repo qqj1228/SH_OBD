@@ -16,6 +16,7 @@ namespace SH_OBD {
         private const string m_userprefs_xml = ".\\Configs\\userprefs.xml";
         private const string m_dbandMES_xml = ".\\Configs\\dbandMES.xml";
         private const string m_obdResultSetting_xml = ".\\Configs\\obdResultSetting.xml";
+        private const string m_oracleMESSetting_xml = ".\\Configs\\oracleMESSetting.xml";
 
         public delegate void __Delegate_OnConnect();
         public delegate void __Delegate_OnDisconnect();
@@ -34,6 +35,7 @@ namespace SH_OBD {
         public Settings CommSettings { get; private set; }
         public DBandMES DBandMES { get; private set; }
         public OBDResultSetting OBDResultSetting { get; set; }
+        public OracleMESSetting OracleMESSetting { get; set; }
         public List<VehicleProfile> VehicleProfiles { get; private set; }
         public bool UseISO27145 { get; set; }
         public bool ScannerPortOpened { get; set; }
@@ -49,6 +51,7 @@ namespace SH_OBD {
             CommSettings = LoadCommSettings();
             DBandMES = LoadDBandMES();
             OBDResultSetting = LoadOBDResultSetting();
+            OracleMESSetting = LoadOracleMESSetting();
             VehicleProfiles = LoadVehicleProfiles();
             SetDevice(HardwareType.ELM327);
             UseISO27145 = false;
@@ -525,6 +528,15 @@ namespace SH_OBD {
             }
         }
 
+        public void SaveOracleMESSetting(OracleMESSetting oracleMESSetting) {
+            this.OracleMESSetting = oracleMESSetting;
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(OracleMESSetting));
+            using (TextWriter writer = new StreamWriter(m_oracleMESSetting_xml)) {
+                xmlSerializer.Serialize(writer, this.OracleMESSetting);
+                writer.Close();
+            }
+        }
+
         public void SaveOBDResultSetting(OBDResultSetting obdResultSetting) {
             this.OBDResultSetting = obdResultSetting;
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(OBDResultSetting));
@@ -533,7 +545,6 @@ namespace SH_OBD {
                 writer.Close();
             }
         }
-
 
         public void SaveDBandMES(DBandMES dBandMES) {
             this.DBandMES = dBandMES;
@@ -562,6 +573,21 @@ namespace SH_OBD {
                 writer.Close();
             }
         }
+
+        public OracleMESSetting LoadOracleMESSetting() {
+            try {
+                XmlSerializer serializer = new XmlSerializer(typeof(OracleMESSetting));
+                using (FileStream reader = new FileStream(m_oracleMESSetting_xml, FileMode.Open)) {
+                    OracleMESSetting = (OracleMESSetting)serializer.Deserialize(reader);
+                    reader.Close();
+                }
+            } catch (Exception e) {
+                m_log.TraceError("Using default Oracle MES Setting because of failed to load config file, reason: " + e.Message);
+                OracleMESSetting = new OracleMESSetting();
+            }
+            return OracleMESSetting;
+        }
+
 
         public OBDResultSetting LoadOBDResultSetting() {
             try {

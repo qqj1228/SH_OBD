@@ -29,10 +29,10 @@ namespace SH_OBD {
         public int BaudRate {
             get {
                 switch (BaudRateIndex) {
-                    case 0: return 9600;
-                    case 1: return 38400;
-                    case 2: return 115200;
-                    default: return 9600;
+                case 0: return 9600;
+                case 1: return 38400;
+                case 2: return 115200;
+                default: return 9600;
                 }
             }
         }
@@ -257,4 +257,23 @@ namespace SH_OBD {
         }
     }
 
+    [Serializable]
+    public class OracleMESSetting {
+        public bool Enable { get; set; }
+        public string host { get; set; }
+        public string port { get; set; }
+        public string serviceName { get; set; }
+        public string userID { get; set; }
+        public string passWord { get; set; }
+
+        public OracleMESSetting() {
+            Enable = true;
+            host = "10.50.252.106";
+            port = "1561";
+            serviceName = "IUAT2";
+            userID = "idevice";
+            passWord = "idevice";
+        }
+
+    }
 }

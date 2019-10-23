@@ -44,6 +44,9 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\packages\Oracle.ManagedDataAccess.19.5.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -62,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Model.cs" />
+    <Compile Include="Classes\ModelOracle.cs" />
     <Compile Include="Classes\Structure.cs" />
     <Compile Include="Classes\Logger.cs" />
     <Compile Include="Classes\Settings.cs" />
@@ -347,6 +351,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Configs\obdResultSetting.xml" />
+    <Content Include="Configs\oracleMESSetting.xml" />
     <Content Include="icon.ico" />
     <None Include="Web References\MES1\webservicedemo.disco" />
     <None Include="Configs\generic.csv">

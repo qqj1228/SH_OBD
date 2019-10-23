@@ -256,11 +256,13 @@ namespace SH_OBD {
             Settings commSettings = m_obdInterface.CommSettings;
             DBandMES dbandMES = m_obdInterface.DBandMES;
             OBDResultSetting obdResultSetting = m_obdInterface.OBDResultSetting;
+            OracleMESSetting oracleMESSetting = m_obdInterface.OracleMESSetting;
             SettingsForm settingsForm = new SettingsForm(commSettings, dbandMES);
             settingsForm.ShowDialog();
             m_obdInterface.SaveCommSettings(commSettings);
             m_obdInterface.SaveDBandMES(dbandMES);
             m_obdInterface.SaveOBDResultSetting(obdResultSetting);
+            m_obdInterface.SaveOracleMESSetting(oracleMESSetting);
             StatusLabelCommProtocol.Text = m_obdInterface.GetProtocol().ToString();
             StatusLabelDeviceType.Text = m_obdInterface.GetDevice().ToString();
             if (commSettings.AutoDetect) {
