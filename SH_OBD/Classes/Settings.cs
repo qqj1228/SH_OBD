@@ -210,6 +210,7 @@ namespace SH_OBD {
         public string WebServiceMethods { get; set; }
         public string WebServiceWSDL { get; set; }
         public bool UseURL { get; set; }
+        public string DateSN { get; set; }
         [XmlIgnore]
         public bool ChangeWebService { get; set; }
 
@@ -224,6 +225,7 @@ namespace SH_OBD {
             WebServiceMethods = "WriteDataToMes";
             WebServiceWSDL = "";
             UseURL = true;
+            DateSN = DateTime.Now.ToLocalTime().ToString("yyyyMMdd") + ",0";
             ChangeWebService = true;
         }
 

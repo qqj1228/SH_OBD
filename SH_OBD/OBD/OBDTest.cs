@@ -17,6 +17,7 @@ namespace SH_OBD {
         //private readonly DataTable m_dtIUPR;
         private readonly Dictionary<string, bool[]> m_mode01Support;
         private readonly Dictionary<string, bool[]> m_mode09Support;
+        private static int m_iSN;
         private bool m_compIgn;
         public readonly Model m_db;
         public event Action OBDTestStart;
@@ -52,6 +53,18 @@ namespace SH_OBD {
             VINResult = true;
             CALIDCVNResult = true;
             m_db = new Model(m_obdInterface.DBandMES, m_obdInterface.m_log);
+            // 设置“testNo”字段中的每日顺序号初值
+            string DateSN = m_obdInterface.DBandMES.DateSN;
+            if (DateSN.Length == 0) {
+                m_iSN = 0;
+            } else if (DateSN.Split(',')[0] != DateTime.Now.ToLocalTime().ToString("yyyyMMdd")) {
+                m_iSN = 0;
+            } else {
+                bool result = int.TryParse(DateSN.Split(',')[1], out m_iSN);
+                if (!result) {
+                    m_iSN = 0;
+                }
+            }
         }
 
         public DataTable GetDataTable(int index) {
@@ -727,6 +740,8 @@ namespace SH_OBD {
             if (count < 4) {
                 // 上传数据接口返回成功信息
                 m_db.UpdateUpload(strVIN, "1");
+                // 保存m_iSN的值，以免程序非正常退出的话，该值就丢失了
+                m_obdInterface.SaveDBandMES(m_obdInterface.DBandMES);
                 UploadDataDone?.Invoke();
 #if DEBUG
                 errorMsg = strMsg;
@@ -998,11 +1013,16 @@ namespace SH_OBD {
             dt1MES.Columns.Add("leacmax");      // 164
             dt1MES.Columns.Add("leacmin");      // 165
 
+            string strNowDateTime = DateTime.Now.ToLocalTime().ToString("yyyyMMdd");
             DataRow dr = dt1MES.NewRow();
             dr[1] = "OBD";
             dr[7] = strVIN;
+            ++m_iSN;
+            dr[8] = "XC0079" + strNowDateTime + m_iSN.ToString("d4");
+            m_obdInterface.DBandMES.DateSN = strNowDateTime + "," + m_iSN.ToString();
             dr[13] = strOBDResult;
-            dr[163] = DateTime.Now.ToLocalTime().ToString("yyyyMMdd");
+            dr[15] = strOBDResult;
+            dr[163] = strNowDateTime;
             dt1MES.Rows.Add(dr);
         }
 
@@ -1230,6 +1250,10 @@ namespace SH_OBD {
             Dictionary<string, int> ColsDic = m_db.GetTableColumnsDic("OBDData");
             Dictionary<string, string> dic = new Dictionary<string, string> { { "Upload", "0" } };
             string[,] Results = m_db.GetRecords("OBDData", dic);
+            if (Results.GetLength(0) == 0) {
+                dt.Dispose();
+                return bRet;
+            }
             List<string[,]> ResultsList = SplitResultsPerVIN(ColsDic, Results);
             for (int i = 0; i < ResultsList.Count; i++) {
                 SetDataTableResultFromDB(ColsDic, ResultsList[i], dt);
