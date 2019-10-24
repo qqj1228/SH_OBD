@@ -13,12 +13,14 @@ namespace SH_OBD {
     public partial class SettingsForm : Form {
         private readonly Settings m_settings;
         private readonly DBandMES m_dbandMES;
+        private readonly OracleMESSetting m_oracleMESSetting;
         private bool m_lastURLStatus;
 
-        public SettingsForm(Settings settings, DBandMES dbandMES) {
+        public SettingsForm(Settings settings, DBandMES dbandMES, OracleMESSetting oracleMESSetting) {
             InitializeComponent();
             m_settings = settings;
             m_dbandMES = dbandMES;
+            m_oracleMESSetting = oracleMESSetting;
         }
 
         private void SettingsForm_Load(object sender, EventArgs e) {
@@ -80,6 +82,11 @@ namespace SH_OBD {
                 m_lastURLStatus = this.radioBtnURL.Checked;
                 this.radioBtnURL.Enabled = m_dbandMES.ChangeWebService;
                 this.radioBtnWSDL.Enabled = m_dbandMES.ChangeWebService;
+
+                if (m_oracleMESSetting.Enable) {
+                    this.groupDB.Enabled = false;
+                    this.groupMES.Enabled = false;
+                }
             } catch (Exception ex) {
                 MessageBox.Show(ex.ToString());
             }

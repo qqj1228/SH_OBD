@@ -257,7 +257,7 @@ namespace SH_OBD {
             DBandMES dbandMES = m_obdInterface.DBandMES;
             OBDResultSetting obdResultSetting = m_obdInterface.OBDResultSetting;
             OracleMESSetting oracleMESSetting = m_obdInterface.OracleMESSetting;
-            SettingsForm settingsForm = new SettingsForm(commSettings, dbandMES);
+            SettingsForm settingsForm = new SettingsForm(commSettings, dbandMES, oracleMESSetting);
             settingsForm.ShowDialog();
             m_obdInterface.SaveCommSettings(commSettings);
             m_obdInterface.SaveDBandMES(dbandMES);

@@ -364,6 +364,7 @@ namespace SH_OBD {
             SetDataRow(++NO, "CVN", dt, param);     // 3
         }
 
+        #region 读取IUPR值，现已取消
         //private void SetIUPRDataRow(int lineNO, string strItem, int padTotal, int padNum, DataTable dt, List<OBDParameterValue> valueList, int itemIndex, int InfoType) {
         //    double num = 0;
         //    double den = 0;
@@ -486,6 +487,7 @@ namespace SH_OBD {
         //    SetIUPRDataRow(++NO, "GPF 组2", 18, 9, dt, valueList, 26, param.Parameter);
         //    SetIUPRDataRow(++NO, "二次空气喷射系统", 18, 18, dt, valueList, 12, param.Parameter);
         //}
+        #endregion
 
         private bool GetSupportStatus(int mode, Dictionary<string, bool[]> supportStatus) {
             List<List<OBDParameterValue>> ECUSupportList = new List<List<OBDParameterValue>>();
@@ -669,26 +671,21 @@ namespace SH_OBD {
             }
 
             bool bRet;
-            if (m_obdInterface.OracleMESSetting.Enable) {
-                try {
+            try {
+                if (m_obdInterface.OracleMESSetting.Enable) {
                     bRet = UploadDataOracle(strVIN, strOBDResult, dt, ref errorMsg);
-                } catch (Exception) {
-                    dt.Dispose();
-                    throw;
-                }
-            } else {
-                try {
+                } else {
                     bRet = UploadData(strVIN, strOBDResult, dt, ref errorMsg);
-                } catch (Exception) {
-                    dt.Dispose();
-                    throw;
                 }
+            } catch (Exception) {
+                dt.Dispose();
+                throw;
             }
             dt.Dispose();
             return bRet;
         }
 
-        private void SetDataTable1Oracle(string strVIN, DataTable dt, DataTable dtResult) {
+        private void SetDataTable1Oracle(string strVIN, DataTable dt) {
             dt.Columns.Add("ID", typeof(string));                       // 0
 
             dt.Columns.Add("VEHICLEMODEL", typeof(string));             // 1
@@ -712,15 +709,24 @@ namespace SH_OBD {
 
             DataRow dr = dt.NewRow();
             dr[2] = strVIN;
+
             dr[11] = DateTime.Now.ToLocalTime();
             dr[12] = m_obdInterface.UserPreferences.Name;
             dr[16] = "0";
             dt.Rows.Add(dr);
             int iRet = 0;
             try {
-                iRet = m_dbOracle.InsertRecordIntoMES(dt.TableName, dt);
+                string[] strVals = m_dbOracle.GetValue(dt.TableName, "ID", "VIN", strVIN);
+                if (strVals.Length == 0) {
+                    iRet = m_dbOracle.InsertRecords(dt.TableName, dt);
+                } else {
+                    iRet = m_dbOracle.UpdateRecords(dt.TableName, dt, "ID", strVals);
+                }
             } catch (Exception) {
                 throw;
+            }
+            if (iRet <= 0) {
+                throw new Exception("插入或更新 MES 数据出错，返回的影响行数: " + iRet.ToString());
             }
         }
 
@@ -741,7 +747,7 @@ namespace SH_OBD {
             dt.Columns.Add("DELETER", typeof(string));                  // 11
         }
 
-        private void SetDataTable3Oracle(string strKeyID, string strVIN, string strOBDResult, DataTable dt, DataTable dtResult) {
+        private void SetDataTable3Oracle(string strKeyID, string strOBDResult, DataTable dt) {
             dt.Columns.Add("ID", typeof(string));                       // 0
             dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
 
@@ -765,23 +771,31 @@ namespace SH_OBD {
             DataRow dr = dt.NewRow();
             dr[1] = strKeyID;
             dr[2] = "0";
-            dr[6] = "1";
+            dr[6] = strOBDResult;
             dr[7] = DateTime.Now.ToLocalTime().ToString("yyyyMMdd");
-            dr[9] = "1";
+            dr[9] = strOBDResult;
 
             dr[10] = DateTime.Now.ToLocalTime();
             dr[11] = m_obdInterface.UserPreferences.Name;
             dr[15] = "0";
             dt.Rows.Add(dr);
-            int iRet = 0;
+            int iRet;
             try {
-                iRet = m_dbOracle.InsertRecordIntoMES(dt.TableName, dt);
+                string[] strVals = m_dbOracle.GetValue(dt.TableName, "ID", "WQPF_ID", strKeyID);
+                if (strVals.Length == 0) {
+                    iRet = m_dbOracle.InsertRecords(dt.TableName, dt);
+                } else {
+                    iRet = m_dbOracle.UpdateRecords(dt.TableName, dt, "ID", strVals);
+                }
             } catch (Exception) {
                 throw;
             }
+            if (iRet <= 0) {
+                throw new Exception("插入或更新 MES 数据出错，返回的影响行数: " + iRet.ToString());
+            }
         }
 
-        private void SetDataTable4Oracle(string strKeyID, string strVIN, DataTable dt, DataTable dtResult) {
+        private void SetDataTable4Oracle(string strKeyID, DataTable dt, DataTable dtResult) {
             dt.Columns.Add("ID", typeof(string));                       // 0
             dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
 
@@ -795,9 +809,33 @@ namespace SH_OBD {
             dt.Columns.Add("DELETIONTIME", typeof(DateTime));           // 8
             dt.Columns.Add("ISDELETED", typeof(string));                // 9
             dt.Columns.Add("DELETER", typeof(string));                  // 10
+
+            DataRow dr = dt.NewRow();
+            dr[1] = strKeyID;
+            dr[2] = dtResult.Rows[0]["OBD_SUP"].ToString().Split(',')[0];
+            dr[3] = dtResult.Rows[0]["ODO"].ToString().Replace("不适用", "");
+
+            dr[4] = DateTime.Now.ToLocalTime();
+            dr[5] = m_obdInterface.UserPreferences.Name;
+            dr[9] = "0";
+            dt.Rows.Add(dr);
+            int iRet;
+            try {
+                string[] strVals = m_dbOracle.GetValue(dt.TableName, "ID", "WQPF_ID", strKeyID);
+                if (strVals.Length == 0) {
+                    iRet = m_dbOracle.InsertRecords(dt.TableName, dt);
+                } else {
+                    iRet = m_dbOracle.UpdateRecords(dt.TableName, dt, "ID", strVals);
+                }
+            } catch (Exception) {
+                throw;
+            }
+            if (iRet <= 0) {
+                throw new Exception("插入或更新 MES 数据出错，返回的影响行数: " + iRet.ToString());
+            }
         }
 
-        private void SetDataTable4AOracle(string strKeyID, string strVIN, DataTable dt, DataTable dtResult) {
+        private void SetDataTable4AOracle(string strKeyID, string strKeyID4, DataTable dt, DataTable dtResult) {
             dt.Columns.Add("ID", typeof(string));                       // 0
             dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
             dt.Columns.Add("WQPF4_ID", typeof(string));                 // 2
@@ -813,9 +851,57 @@ namespace SH_OBD {
             dt.Columns.Add("DELETIONTIME", typeof(DateTime));           // 10
             dt.Columns.Add("ISDELETED", typeof(string));                // 11
             dt.Columns.Add("DELETER", typeof(string));                  // 12
+
+            string[] CALIDArray = dtResult.Rows[0]["CAL_ID"].ToString().Split(',');
+            string[] CVNArray = dtResult.Rows[0]["CVN"].ToString().Split(',');
+            for (int i = 0; i < 2; i++) {
+                DataRow dr = dt.NewRow();
+                dr[1] = strKeyID;
+                dr[2] = strKeyID4;
+                dr[3] = dtResult.Rows[0]["ECU_ID"];
+                dr[4] = CALIDArray.Length > i ? CALIDArray[i] : "-";
+                dr[5] = CVNArray.Length > i ? CVNArray[i] : "-";
+
+                dr[6] = DateTime.Now.ToLocalTime();
+                dr[7] = m_obdInterface.UserPreferences.Name;
+                dr[11] = "0";
+                dt.Rows.Add(dr);
+            }
+
+            for (int iRow = 1; iRow < dtResult.Rows.Count; iRow++) {
+                CALIDArray = dtResult.Rows[iRow]["CAL_ID"].ToString().Split(',');
+                CVNArray = dtResult.Rows[iRow]["CVN"].ToString().Split(',');
+                for (int i = 0; i < CALIDArray.Length; i++) {
+                    DataRow dr = dt.NewRow();
+                    dr[1] = strKeyID;
+                    dr[2] = strKeyID4;
+                    dr[3] = dtResult.Rows[iRow]["ECU_ID"];
+                    dr[4] = CALIDArray[i];
+                    dr[5] = CVNArray.Length > i ? CVNArray[i] : "";
+
+                    dr[6] = DateTime.Now.ToLocalTime();
+                    dr[7] = m_obdInterface.UserPreferences.Name;
+                    dr[11] = "0";
+                    dt.Rows.Add(dr);
+                }
+            }
+            int iRet;
+            try {
+                string[] strVals = m_dbOracle.GetValue(dt.TableName, "ID", "WQPF_ID", strKeyID);
+                if (strVals.Length == 0) {
+                    iRet = m_dbOracle.InsertRecords(dt.TableName, dt);
+                } else {
+                    iRet = m_dbOracle.UpdateRecords(dt.TableName, dt, "ID", strVals);
+                }
+            } catch (Exception) {
+                throw;
+            }
+            if (iRet <= 0) {
+                throw new Exception("插入或更新 MES 数据出错，返回的影响行数: " + iRet.ToString());
+            }
         }
 
-        private void SetDataTable51Oracle(string strKeyID, string strVIN, DataTable dt, DataTable dtResult) {
+        private void SetDataTable51Oracle(string strKeyID, DataTable dt, DataTable dtResult) {
             dt.Columns.Add("ID", typeof(string));                       // 0
             dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
 
@@ -840,7 +926,7 @@ namespace SH_OBD {
             dt.Columns.Add("DELETER", typeof(string));                  // 19
         }
 
-        private void SetDataTable52Oracle(string strKeyID, string strVIN, DataTable dt, DataTable dtResult) {
+        private void SetDataTable52Oracle(string strKeyID, DataTable dt, DataTable dtResult) {
             dt.Columns.Add("ID", typeof(string));                       // 0
             dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
 
@@ -866,7 +952,7 @@ namespace SH_OBD {
             dt.Columns.Add("DELETER", typeof(string));                  // 20
         }
 
-        private void SetDataTable53Oracle(string strKeyID, string strVIN, DataTable dt, DataTable dtResult) {
+        private void SetDataTable53Oracle(string strKeyID, DataTable dt, DataTable dtResult) {
             dt.Columns.Add("ID", typeof(string));                       // 0
             dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
 
@@ -886,7 +972,7 @@ namespace SH_OBD {
             dt.Columns.Add("DELETER", typeof(string));                  // 14
         }
 
-        private void SetDataTable54Oracle(string strKeyID, string strVIN, DataTable dt, DataTable dtResult) {
+        private void SetDataTable54Oracle(string strKeyID, DataTable dt, DataTable dtResult) {
             dt.Columns.Add("ID", typeof(string));                       // 0
             dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
 
@@ -910,7 +996,7 @@ namespace SH_OBD {
             dt.Columns.Add("DELETER", typeof(string));                  // 18
         }
 
-        private void SetDataTable55Oracle(string strKeyID, string strVIN, DataTable dt, DataTable dtResult) {
+        private void SetDataTable55Oracle(string strKeyID, DataTable dt, DataTable dtResult) {
             dt.Columns.Add("ID", typeof(string));                       // 0
             dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
 
@@ -931,7 +1017,7 @@ namespace SH_OBD {
             dt.Columns.Add("DELETER", typeof(string));                  // 15
         }
 
-        private void SetDataTable56Oracle(string strKeyID, string strVIN, DataTable dt, DataTable dtResult) {
+        private void SetDataTable56Oracle(string strKeyID, DataTable dt, DataTable dtResult) {
             dt.Columns.Add("ID", typeof(string));                       // 0
             dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
 
@@ -949,7 +1035,7 @@ namespace SH_OBD {
             dt.Columns.Add("DELETER", typeof(string));                  // 12
         }
 
-        private void SetDataTable6Oracle(string strKeyID, string strVIN, DataTable dt, DataTable dtResult) {
+        private void SetDataTable6Oracle(string strKeyID, DataTable dt, DataTable dtResult) {
             dt.Columns.Add("ID", typeof(string));                       // 0
             dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
 
@@ -970,34 +1056,46 @@ namespace SH_OBD {
         }
 
         private bool UploadDataOracle(string strVIN, string strOBDResult, DataTable dtIn, ref string errorMsg) {
-            UploadDataStart?.Invoke();
-            m_obdInterface.DBandMES.ChangeWebService = false;
             DataTable dt1 = new DataTable("IF_EM_WQPF_1");
-            SetDataTable1Oracle(strVIN, dt1, dtIn);
-            string strKeyID = m_dbOracle.GetKeyIDByVIN(dt1.TableName, strVIN);
-            DataTable dt2 = new DataTable("IF_EM_WQPF_2");
-            SetDataTable2Oracle(strKeyID, strVIN, dt2, dtIn);
+            //DataTable dt2 = new DataTable("IF_EM_WQPF_2");
             DataTable dt3 = new DataTable("IF_EM_WQPF_3");
-            SetDataTable3Oracle(strKeyID, strVIN, strOBDResult, dt3, dtIn);
             DataTable dt4 = new DataTable("IF_EM_WQPF_4");
-            SetDataTable4Oracle(strKeyID, strVIN, dt4, dtIn);
-            DataTable dt4A = new DataTable("IF_EM_WQPF_4A");
-            SetDataTable4AOracle(strKeyID, strVIN, dt4A, dtIn);
-            DataTable dt51 = new DataTable("IF_EM_WQPF_5_1");
-            SetDataTable51Oracle(strKeyID, strVIN, dt51, dtIn);
-            DataTable dt52 = new DataTable("IF_EM_WQPF_5_2");
-            SetDataTable52Oracle(strKeyID, strVIN, dt52, dtIn);
-            DataTable dt53 = new DataTable("IF_EM_WQPF_5_3");
-            SetDataTable53Oracle(strKeyID, strVIN, dt53, dtIn);
-            DataTable dt54 = new DataTable("IF_EM_WQPF_5_4");
-            SetDataTable54Oracle(strKeyID, strVIN, dt54, dtIn);
-            DataTable dt55 = new DataTable("IF_EM_WQPF_5_5");
-            SetDataTable55Oracle(strKeyID, strVIN, dt55, dtIn);
-            DataTable dt56 = new DataTable("IF_EM_WQPF_5_6");
-            SetDataTable56Oracle(strKeyID, strVIN, dt56, dtIn);
-            DataTable dt6 = new DataTable("IF_EM_WQPF_6");
-            SetDataTable6Oracle(strKeyID, strVIN, dt6, dtIn);
-
+            DataTable dt4A = new DataTable("IF_EM_WQPF_4_A");
+            //DataTable dt51 = new DataTable("IF_EM_WQPF_5_1");
+            //DataTable dt52 = new DataTable("IF_EM_WQPF_5_2");
+            //DataTable dt53 = new DataTable("IF_EM_WQPF_5_3");
+            //DataTable dt54 = new DataTable("IF_EM_WQPF_5_4");
+            //DataTable dt55 = new DataTable("IF_EM_WQPF_5_5");
+            //DataTable dt56 = new DataTable("IF_EM_WQPF_5_6");
+            //DataTable dt6 = new DataTable("IF_EM_WQPF_6");
+            try {
+                UploadDataStart?.Invoke();
+                m_obdInterface.DBandMES.ChangeWebService = false;
+                SetDataTable1Oracle(strVIN, dt1);
+                string strKeyID = m_dbOracle.GetValue(dt1.TableName, "ID", "VIN", strVIN)[0];
+                //SetDataTable2Oracle(strKeyID, strVIN, dt2, dtIn);
+                SetDataTable3Oracle(strKeyID, strOBDResult, dt3);
+                SetDataTable4Oracle(strKeyID, dt4, dtIn);
+                string strKeyID4 = m_dbOracle.GetValue(dt4.TableName, "ID", "WQPF_ID", strKeyID)[0];
+                SetDataTable4AOracle(strKeyID, strKeyID4, dt4A, dtIn);
+                //SetDataTable51Oracle(strKeyID, dt51, dtIn);
+                //SetDataTable52Oracle(strKeyID, dt52, dtIn);
+                //SetDataTable53Oracle(strKeyID, dt53, dtIn);
+                //SetDataTable54Oracle(strKeyID, dt54, dtIn);
+                //SetDataTable55Oracle(strKeyID, dt55, dtIn);
+                //SetDataTable56Oracle(strKeyID, dt56, dtIn);
+                //SetDataTable6Oracle(strKeyID, dt6, dtIn);
+                m_db.UpdateUpload(strVIN, "1");
+                UploadDataDone?.Invoke();
+            } catch (Exception ex) {
+                m_obdInterface.m_log.TraceError("UploadDataOracle Error: " + ex.Message);
+                throw;
+            } finally {
+                dt1.Dispose();
+                dt3.Dispose();
+                dt4.Dispose();
+                dt4A.Dispose();
+            }
             return true;
         }
 
@@ -1496,7 +1594,11 @@ namespace SH_OBD {
             bool bRet = false;
             if (dt.Rows.Count > 0) {
                 try {
-                    bRet = UploadData(strVIN, dt.Rows[0][28].ToString(), dt, ref errorMsg);
+                    if (m_obdInterface.OracleMESSetting.Enable) {
+                        bRet = UploadDataOracle(strVIN, dt.Rows[0][28].ToString(), dt, ref errorMsg);
+                    } else {
+                        bRet = UploadData(strVIN, dt.Rows[0][28].ToString(), dt, ref errorMsg);
+                    }
                 } catch (Exception) {
                     m_obdInterface.m_log.TraceError("Manual Upload Data Faiure！");
                     dt.Dispose();
@@ -1554,11 +1656,19 @@ namespace SH_OBD {
             Dictionary<string, int> ColsDic = m_db.GetTableColumnsDic("OBDData");
             Dictionary<string, string> dic = new Dictionary<string, string> { { "Upload", "0" } };
             string[,] Results = m_db.GetRecords("OBDData", dic);
+            if (Results.GetLength(0) == 0) {
+                dt.Dispose();
+                return bRet;
+            }
             List<string[,]> ResultsList = SplitResultsPerVIN(ColsDic, Results);
             for (int i = 0; i < ResultsList.Count; i++) {
                 SetDataTableResultFromDB(ColsDic, ResultsList[i], dt);
                 try {
-                    bRet = UploadData(dt.Rows[0][0].ToString(), dt.Rows[0][28].ToString(), dt, ref errorMsg);
+                    if (m_obdInterface.OracleMESSetting.Enable) {
+                        bRet = UploadDataOracle(dt.Rows[0][0].ToString(), dt.Rows[0][28].ToString(), dt, ref errorMsg);
+                    } else {
+                        bRet = UploadData(dt.Rows[0][0].ToString(), dt.Rows[0][28].ToString(), dt, ref errorMsg);
+                    }
                 } catch (Exception) {
                     m_obdInterface.m_log.TraceError("Upload Data OnTime Faiure！");
                     dt.Dispose();

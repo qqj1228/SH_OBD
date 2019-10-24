@@ -221,7 +221,9 @@ namespace SH_OBD {
             try {
                 m_obdTest.StartOBDTest(out string errorMsg);
 #if DEBUG
-                MessageBox.Show(errorMsg, WSHelper.GetMethodName(0));
+                if (!m_obdInterface.OracleMESSetting.Enable) {
+                    MessageBox.Show(errorMsg, WSHelper.GetMethodName(0));
+                }
 #endif
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message, "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Error);

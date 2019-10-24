@@ -47,7 +47,7 @@ namespace SH_OBD {
                 }
             } else {
                 try {
-                    m_obdTest.m_dbOracle.Select();
+                    m_obdTest.m_dbOracle.ConnectOracle();
                 } catch (Exception ex) {
                     m_obdInterface.m_log.TraceError("Can't access database of MES: " + ex.Message);
                 }
@@ -228,7 +228,9 @@ namespace SH_OBD {
             try {
                 m_obdTest.StartOBDTest(out errorMsg);
 #if DEBUG
-                MessageBox.Show(errorMsg, WSHelper.GetMethodName(0));
+                if (!m_obdInterface.OracleMESSetting.Enable) {
+                    MessageBox.Show(errorMsg, WSHelper.GetMethodName(0));
+                }
 #endif
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message + "\n" + errorMsg, "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Error);

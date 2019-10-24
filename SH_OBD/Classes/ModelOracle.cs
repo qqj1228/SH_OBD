@@ -9,7 +9,7 @@ namespace SH_OBD {
     public class ModelOracle {
         public readonly Logger m_log;
         public OracleMESSetting m_oracleMESSetting;
-        public string Connection { get; set; }
+        private string Connection { get; set; }
         public bool Connected { get; set; }
 
         public ModelOracle(OracleMESSetting oracleMESSetting, Logger log) {
@@ -114,40 +114,74 @@ namespace SH_OBD {
             }
         }
 
-        public int InsertRecordIntoMES(string strTable, DataTable dt) {
-            string strSQL = "insert into " + strTable + " (ID,";
-            for (int i = 1; i < dt.Columns.Count; i++) {
-                if (dt.Rows[0][i].ToString().Length != 0) {
-                    strSQL += dt.Columns[i].ColumnName + ",";
-                }
-            }
-            strSQL = strSQL.Trim(',');
-#if DEBUG
-            strSQL += ") values (SEQ_EM_WQPF_ID.NEXTVAL,";
-#else
-            strSQL += ") values (SEQ_EM_WQPF_ID.Next(),";
-#endif
-            for (int i = 1; i < dt.Columns.Count; i++) {
-                if (dt.Rows[0][i].ToString().Length != 0) {
-                    if (dt.Columns[i].DataType == typeof(DateTime)) {
-                        strSQL += "to_date('" + ((DateTime)dt.Rows[0][i]).ToString("yyyyMMdd-HHmmss") + "', 'yyyymmdd-HH24MISS'),";
-                    } else {
-                        strSQL += "'" + dt.Rows[0][i].ToString() + "',";
+        public int InsertRecords(string strTable, DataTable dt) {
+            int iRet = 0;
+            for (int iRow = 0; iRow < dt.Rows.Count; iRow++) {
+                string strSQL = "insert into " + strTable + " (ID,";
+                for (int iCol = 1; iCol < dt.Columns.Count; iCol++) {
+                    if (dt.Rows[iRow][iCol].ToString().Length != 0) {
+                        strSQL += dt.Columns[iCol].ColumnName + ",";
                     }
                 }
+                strSQL = strSQL.Trim(',');
+#if DEBUG
+                strSQL += ") values (SEQ_EM_WQPF_ID.NEXTVAL,";
+#else
+                strSQL += ") values (SEQ_EM_WQPF_ID.Next(),";
+#endif
+                for (int iCol = 1; iCol < dt.Columns.Count; iCol++) {
+                    if (dt.Rows[iRow][iCol].ToString().Length != 0) {
+                        if (dt.Columns[iCol].DataType == typeof(DateTime)) {
+                            strSQL += "to_date('" + ((DateTime)dt.Rows[iRow][iCol]).ToString("yyyyMMdd-HHmmss") + "', 'yyyymmdd-HH24MISS'),";
+                        } else {
+                            strSQL += "'" + dt.Rows[iRow][iCol].ToString() + "',";
+                        }
+                    }
+                }
+                strSQL = strSQL.Trim(',');
+                strSQL += ")";
+                iRet += ExecuteNonQuery(strSQL);
             }
-            strSQL = strSQL.Trim(',');
-            strSQL += ")";
-            return ExecuteNonQuery(strSQL);
+            return iRet;
         }
 
-        public string GetKeyIDByVIN(string strTable, string strVIN) {
-            string strSQL = "select ID from " + strTable + " where VIN = '" + strVIN + "'";
-
-            return (string)QueryOne(strSQL);
+        public int UpdateRecords(string strTable, DataTable dt, string strWhereKey, string[] strWhereValues) {
+            int iRet = 0;
+            if (dt.Rows.Count != strWhereValues.Length) {
+                return -1;
+            }
+            for (int iRow = 0; iRow < dt.Rows.Count; iRow++) {
+                string strSQL = "update " + strTable + " set ";
+                for (int iCol = 1; iCol < dt.Columns.Count; iCol++) {
+                    if (dt.Rows[iRow][iCol].ToString().Length != 0 && dt.Rows[iRow][iCol].ToString() != dt.Columns[iCol].ColumnName) {
+                        if (dt.Columns[iCol].DataType == typeof(DateTime)) {
+                            strSQL += dt.Columns[iCol].ColumnName + "=" + "to_date('" + ((DateTime)dt.Rows[iRow][iCol]).ToString("yyyyMMdd-HHmmss") + "', 'yyyymmdd-HH24MISS'),";
+                        } else {
+                            strSQL += dt.Columns[iCol].ColumnName + "='" + dt.Rows[iRow][iCol].ToString() + "',";
+                        }
+                    }
+                }
+                strSQL = strSQL.Trim(',');
+                strSQL += " where " + strWhereKey + "='" + strWhereValues[iRow] + "'";
+                iRet += ExecuteNonQuery(strSQL);
+            }
+            return iRet;
         }
 
-        public void Select() {
+        public string[] GetValue(string strTable, string strField, string strWhereKey, string strWhereValue) {
+            string strSQL = "select " + strField + " from " + strTable + " where " + strWhereKey + " = '" + strWhereValue + "'";
+            DataTable dt = new DataTable();
+            Query(strSQL, dt);
+            string[] values = new string[dt.Rows.Count];
+            for (int i = 0; i < dt.Rows.Count; i++) {
+                values[i] = dt.Rows[i][0].ToString();
+            }
+            Array.Sort(values);
+            dt.Dispose();
+            return values;
+        }
+
+        public void SelectTest() {
             string strSQL = "select VIN from IF_EM_WQPF_1 where VIN = 'testvincode012345'";
             DataTable dt = new DataTable();
             Query(strSQL, dt);
