@@ -169,7 +169,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "OBDStartForm";
-            this.Text = "江铃OBD检测";
+            this.Text = "五十铃OBD检测";
             this.Activated += new System.EventHandler(this.OBDStartForm_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OBDStartForm_FormClosing);
             this.Load += new System.EventHandler(this.OBDStartForm_Load);
