@@ -375,6 +375,7 @@ namespace SH_OBD {
             SetDataRow(++NO, "CVN", dt, param);     // 3
         }
 
+        #region 读取IUPR信息，现已取消
         //private void SetIUPRDataRow(int lineNO, string strItem, int padTotal, int padNum, DataTable dt, List<OBDParameterValue> valueList, int itemIndex, int InfoType) {
         //    double num = 0;
         //    double den = 0;
@@ -497,6 +498,7 @@ namespace SH_OBD {
         //    SetIUPRDataRow(++NO, "GPF 组2", 18, 9, dt, valueList, 26, param.Parameter);
         //    SetIUPRDataRow(++NO, "二次空气喷射系统", 18, 18, dt, valueList, 12, param.Parameter);
         //}
+        #endregion
 
         private bool GetSupportStatus(int mode, Dictionary<string, bool[]> supportStatus) {
             List<List<OBDParameterValue>> ECUSupportList = new List<List<OBDParameterValue>>();
@@ -1393,8 +1395,12 @@ namespace SH_OBD {
                 string moduleID = GetModuleID(dt.Rows[0][25].ToString().Split('-')[0], dt.Rows[0][1].ToString());
                 worksheet1.Cells["E3"].Value = moduleID;
                 if (worksheet1.Cells["B4"].Value.ToString().Length > 0) {
-                    if (m_obdInterface.OBDResultSetting.UseSCRName) {
-                        worksheet1.Cells["E4"].Value = "SCR";
+                    if (m_obdInterface.OBDResultSetting.UseECUAcronym) {
+                        if (m_obdInterface.OBDResultSetting.UseSCRName) {
+                            worksheet1.Cells["E4"].Value = "SCR";
+                        } else {
+                            worksheet1.Cells["E4"].Value = moduleID;
+                        }
                     } else {
                         worksheet1.Cells["E4"].Value = moduleID;
                     }
@@ -1405,20 +1411,6 @@ namespace SH_OBD {
                     OtherID += "," + moduleID;
                 }
                 worksheet1.Cells["E5"].Value = OtherID.Trim(',');
-
-                //worksheet1.Cells["E3"].Value = m_obdInterface.OBDResultSetting.UseECUAcronym ? dt.Rows[0][25].ToString().Split('-')[0] : dt.Rows[0][1].ToString();
-                //if (worksheet1.Cells["B4"].Value.ToString().Length > 0) {
-                //    if (m_obdInterface.OBDResultSetting.UseSCRName) {
-                //        worksheet1.Cells["E4"].Value = m_obdInterface.OBDResultSetting.UseECUAcronym ? "SCR" : dt.Rows[0][1].ToString();
-                //    } else {
-                //        worksheet1.Cells["E4"].Value = m_obdInterface.OBDResultSetting.UseECUAcronym ? dt.Rows[0][25].ToString().Split('-')[0] : dt.Rows[0][1].ToString();
-                //    }
-                //}
-                //string OtherID = "";
-                //for (int i = 1; i < dt.Rows.Count; i++) {
-                //    OtherID += "," + (m_obdInterface.OBDResultSetting.UseECUAcronym ? dt.Rows[i][25].ToString().Split('-')[0] : dt.Rows[i][1].ToString());
-                //}
-                //worksheet1.Cells["E5"].Value = OtherID.Trim(',');
 
                 // 与OBD诊断仪通讯情况
                 worksheet1.Cells["B7"].Value = "通讯成功";
