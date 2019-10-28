@@ -124,11 +124,12 @@ namespace SH_OBD {
                     }
                 }
                 strSQL = strSQL.Trim(',');
-#if DEBUG
                 strSQL += ") values (SEQ_EM_WQPF_ID.NEXTVAL,";
-#else
-                strSQL += ") values (SEQ_EM_WQPF_ID.Next(),";
-#endif
+//#if DEBUG
+//                strSQL += ") values (SEQ_EM_WQPF_ID.NEXTVAL,";
+//#else
+//                strSQL += ") values (SEQ_EM_WQPF_ID.Next(),";
+//#endif
                 for (int iCol = 1; iCol < dt.Columns.Count; iCol++) {
                     if (dt.Rows[iRow][iCol].ToString().Length != 0) {
                         if (dt.Columns[iCol].DataType == typeof(DateTime)) {
@@ -181,12 +182,5 @@ namespace SH_OBD {
             return values;
         }
 
-        public void SelectTest() {
-            string strSQL = "select VIN from IF_EM_WQPF_1 where VIN = 'testvincode012345'";
-            DataTable dt = new DataTable();
-            Query(strSQL, dt);
-            string ID = dt.Rows[0]["VIN"].ToString();
-            dt.Dispose();
-        }
     }
 }
