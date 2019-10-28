@@ -17,6 +17,7 @@ namespace SH_OBD {
         //private readonly DataTable m_dtIUPR;
         private readonly Dictionary<string, bool[]> m_mode01Support;
         private readonly Dictionary<string, bool[]> m_mode09Support;
+        private static int m_iSN;
         private bool m_compIgn;
         public readonly Model m_db;
         public readonly ModelOracle m_dbOracle;
@@ -35,6 +36,7 @@ namespace SH_OBD {
         public bool ReadinessResult { get; set; }
         public bool VINResult { get; set; }
         public bool CALIDCVNResult { get; set; }
+        public bool SpaceResult { get; set; }
         public string StrVIN_IN { get; set; }
 
         public OBDTest(OBDInterface obd) {
@@ -52,6 +54,7 @@ namespace SH_OBD {
             ReadinessResult = true;
             VINResult = true;
             CALIDCVNResult = true;
+            SpaceResult = true;
             m_db = new Model(m_obdInterface.DBandMES, m_obdInterface.m_log);
             m_dbOracle = new ModelOracle(m_obdInterface.OracleMESSetting, m_obdInterface.m_log);
         }
@@ -362,9 +365,31 @@ namespace SH_OBD {
             SetDataRow(++NO, "CAL_ID", dt, param);  // 2
             param.Parameter = HByte + 6;
             SetDataRow(++NO, "CVN", dt, param);     // 3
+
+            // 根据配置文件，判断CAL_ID和CVN两个值的合法性
+            for (int i = 2; i < dt.Columns.Count; i++) {
+                string[] CALIDArray = dt.Rows[2][i].ToString().Split('\n');
+                string[] CVNArray = dt.Rows[3][i].ToString().Split('\n');
+                int length = Math.Max(CALIDArray.Length, CVNArray.Length);
+                for (int j = 0; j < length; j++) {
+                    string CALID = CALIDArray.Length > j ? CALIDArray[j] : "";
+                    string CVN = CVNArray.Length > j ? CVNArray[j] : "";
+                    if (!m_obdInterface.OBDResultSetting.Allow3Space) {
+                        if (CALID.Contains("   ") || CVN.Contains("   ")) {
+                            SpaceResult = false;
+                        }
+                    }
+                    if (!m_obdInterface.OBDResultSetting.CALIDCVNEmpty) {
+                        if (CALID.Length * CVN.Length == 0 && CALID.Length + CVN.Length != 0) {
+                            CALIDCVNResult = false;
+                        }
+                    }
+                }
+            }
+
         }
 
-        #region 读取IUPR值，现已取消
+        #region 读取IUPR信息，现已取消
         //private void SetIUPRDataRow(int lineNO, string strItem, int padTotal, int padNum, DataTable dt, List<OBDParameterValue> valueList, int itemIndex, int InfoType) {
         //    double num = 0;
         //    double den = 0;
@@ -599,6 +624,7 @@ namespace SH_OBD {
             ReadinessResult = true;
             VINResult = true;
             CALIDCVNResult = true;
+            SpaceResult = true;
 
             OBDTestStart?.Invoke();
 
@@ -630,7 +656,7 @@ namespace SH_OBD {
             SetDataTableECUInfo();
             //SetDataTableIUPR();
 
-            OBDResult = DTCResult && ReadinessResult && VINResult;
+            OBDResult = DTCResult && ReadinessResult && VINResult && CALIDCVNResult && SpaceResult;
 
             WriteDbStart?.Invoke();
             string strVIN = "";
@@ -1149,6 +1175,8 @@ namespace SH_OBD {
             if (count < 4) {
                 // 上传数据接口返回成功信息
                 m_db.UpdateUpload(strVIN, "1");
+                // 保存m_iSN的值，以免程序非正常退出的话，该值就丢失了
+                m_obdInterface.SaveDBandMES(m_obdInterface.DBandMES);
                 UploadDataDone?.Invoke();
 #if DEBUG
                 errorMsg = strMsg;
@@ -1420,11 +1448,16 @@ namespace SH_OBD {
             dt1MES.Columns.Add("leacmax");      // 164
             dt1MES.Columns.Add("leacmin");      // 165
 
+            string strNowDateTime = DateTime.Now.ToLocalTime().ToString("yyyyMMdd");
             DataRow dr = dt1MES.NewRow();
             dr[1] = "OBD";
             dr[7] = strVIN;
+            ++m_iSN;
+            dr[8] = "XC0079" + strNowDateTime + m_iSN.ToString("d4");
+            m_obdInterface.DBandMES.DateSN = strNowDateTime + "," + m_iSN.ToString();
             dr[13] = strOBDResult;
-            dr[163] = DateTime.Now.ToLocalTime().ToString("yyyyMMdd");
+            dr[15] = strOBDResult;
+            dr[163] = strNowDateTime;
             dt1MES.Rows.Add(dr);
         }
 
@@ -1449,14 +1482,6 @@ namespace SH_OBD {
                 CALID,
                 CVN
             );
-            if (CALID.Length == 0) {
-                CALIDCVNResult = false;
-                m_obdInterface.m_log.TraceWarning("CAL_ID in " + moduleID + " is empty");
-            }
-            if (CVN.Length == 0) {
-                CALIDCVNResult = false;
-                m_obdInterface.m_log.TraceWarning("CVN in " + moduleID + " is empty");
-            }
         }
 
         private void SetDataTable2MES(DataTable dt2MES, DataTable dtIn) {
@@ -1468,20 +1493,23 @@ namespace SH_OBD {
             for (int i = 0; i < dtIn.Rows.Count; i++) {
                 string[] CALIDArray = dtIn.Rows[i][26].ToString().Split(',');
                 string[] CVNArray = dtIn.Rows[i][27].ToString().Split(',');
+                int length = Math.Max(CALIDArray.Length, CVNArray.Length);
                 string ECUAcronym = dtIn.Rows[i][25].ToString().Split('-')[0];
                 DataTable2MESAddRow(dt2MES, dtIn, i, ECUAcronym, CALIDArray[0], CVNArray[0]);
-                for (int j = 1; j < CALIDArray.Length; j++) {
+                for (int j = 1; j < length; j++) {
+                    string CALID = CALIDArray.Length > j ? CALIDArray[j] : "";
+                    string CVN = CVNArray.Length > j ? CVNArray[j] : "";
                     // 若同一个ECU下有多个CALID和CVN的上传策略
                     if (m_obdInterface.OBDResultSetting.UseSCRName) {
                         //第二个CALID和CVN使用“SCR”作为ModuleID上传
                         if (j == 1) {
-                            DataTable2MESAddRow(dt2MES, dtIn, i, "SCR", CALIDArray[j], CVNArray.Length > j ? CVNArray[j] : "");
+                            DataTable2MESAddRow(dt2MES, dtIn, i, "SCR", CALID, CVN);
                         } else {
-                            DataTable2MESAddRow(dt2MES, dtIn, i, ECUAcronym, CALIDArray[j], CVNArray.Length > j ? CVNArray[j] : "");
+                            DataTable2MESAddRow(dt2MES, dtIn, i, ECUAcronym, CALID, CVN);
                         }
                     } else {
                         // 多个CALID和CVN使用同一个ModuleID上传
-                        DataTable2MESAddRow(dt2MES, dtIn, i, ECUAcronym, CALIDArray[j], CVNArray.Length > j ? CVNArray[j] : "");
+                        DataTable2MESAddRow(dt2MES, dtIn, i, ECUAcronym, CALID, CVN);
                     }
                 }
             }
@@ -1803,8 +1831,12 @@ namespace SH_OBD {
                 string moduleID = GetModuleID(dt.Rows[0][25].ToString().Split('-')[0], dt.Rows[0][1].ToString());
                 worksheet1.Cells["E3"].Value = moduleID;
                 if (worksheet1.Cells["B4"].Value.ToString().Length > 0) {
-                    if (m_obdInterface.OBDResultSetting.UseSCRName) {
-                        worksheet1.Cells["E4"].Value = "SCR";
+                    if (m_obdInterface.OBDResultSetting.UseECUAcronym) {
+                        if (m_obdInterface.OBDResultSetting.UseSCRName) {
+                            worksheet1.Cells["E4"].Value = "SCR";
+                        } else {
+                            worksheet1.Cells["E4"].Value = moduleID;
+                        }
                     } else {
                         worksheet1.Cells["E4"].Value = moduleID;
                     }
@@ -1815,20 +1847,6 @@ namespace SH_OBD {
                     OtherID += "," + moduleID;
                 }
                 worksheet1.Cells["E5"].Value = OtherID.Trim(',');
-
-                //worksheet1.Cells["E3"].Value = m_obdInterface.OBDResultSetting.UseECUAcronym ? dt.Rows[0][25].ToString().Split('-')[0] : dt.Rows[0][1].ToString();
-                //if (worksheet1.Cells["B4"].Value.ToString().Length > 0) {
-                //    if (m_obdInterface.OBDResultSetting.UseSCRName) {
-                //        worksheet1.Cells["E4"].Value = m_obdInterface.OBDResultSetting.UseECUAcronym ? "SCR" : dt.Rows[0][1].ToString();
-                //    } else {
-                //        worksheet1.Cells["E4"].Value = m_obdInterface.OBDResultSetting.UseECUAcronym ? dt.Rows[0][25].ToString().Split('-')[0] : dt.Rows[0][1].ToString();
-                //    }
-                //}
-                //string OtherID = "";
-                //for (int i = 1; i < dt.Rows.Count; i++) {
-                //    OtherID += "," + (m_obdInterface.OBDResultSetting.UseECUAcronym ? dt.Rows[i][25].ToString().Split('-')[0] : dt.Rows[i][1].ToString());
-                //}
-                //worksheet1.Cells["E5"].Value = OtherID.Trim(',');
 
                 // 与OBD诊断仪通讯情况
                 worksheet1.Cells["B7"].Value = "通讯成功";
@@ -1974,8 +1992,9 @@ namespace SH_OBD {
                 string Result = OBDResult ? "合格" : "不合格";
                 //Result += DTCResult ? "" : "\n有DTC";
                 //Result += ReadinessResult ? "" : "\n就绪状态未完成项超过2项";
-                Result += VINResult ? "" : "，VIN号不匹配";
-                Result += CALIDCVNResult ? "" : "，未读到CALID或CVN";
+                Result += VINResult ? "" : "\nVIN号不匹配";
+                Result += CALIDCVNResult ? "" : "\nCALID和CVN数据不完整";
+                Result += SpaceResult ? "" : "\nCALID或CVN有多个空格";
                 worksheet1.Cells["B8"].Value = Result;
 
                 // 检验员
@@ -1986,6 +2005,7 @@ namespace SH_OBD {
                 File.WriteAllBytes(exportFileInfo.FullName, bin);
             }
         }
+
     }
 
     public class SetDataTableColumnsErrorEventArgs : EventArgs {

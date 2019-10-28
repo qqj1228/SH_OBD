@@ -305,5 +305,15 @@ namespace SH_OBD {
             return RunSQL(strSQL);
         }
 
+        public void AddUploadField() {
+            string strSQL = "select Upload from OBDData where ID = '1'";
+            string[,] rets = SelectDB(strSQL);
+            if (rets == null || rets.GetLength(0) < 1) {
+                strSQL = "alter table OBDData add Upload int not null default(0)";
+                RunSQL(strSQL);
+                strSQL = "update OBDData set Upload = '1' where VIN = 'testvincode012345'";
+                RunSQL(strSQL);
+            }
+        }
     }
 }

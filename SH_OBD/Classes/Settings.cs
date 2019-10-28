@@ -210,6 +210,7 @@ namespace SH_OBD {
         public string WebServiceMethods { get; set; }
         public string WebServiceWSDL { get; set; }
         public bool UseURL { get; set; }
+        public string DateSN { get; set; }
         [XmlIgnore]
         public bool ChangeWebService { get; set; }
 
@@ -224,6 +225,7 @@ namespace SH_OBD {
             WebServiceMethods = "WriteDataToMes";
             WebServiceWSDL = "";
             UseURL = true;
+            DateSN = DateTime.Now.ToLocalTime().ToString("yyyyMMdd") + ",0";
             ChangeWebService = true;
         }
 
@@ -243,6 +245,8 @@ namespace SH_OBD {
         public bool Readiness { get; set; }
         public bool VINError { get; set; }
         public int UploadTime { get; set; }
+        public bool CALIDCVNEmpty { get; set; }
+        public bool Allow3Space { get; set; }
 
         public OBDResultSetting() {
             UploadWhenever = false;
@@ -253,6 +257,8 @@ namespace SH_OBD {
             DTC0A = false;
             Readiness = false;
             VINError = true;
+            CALIDCVNEmpty = false;
+            Allow3Space = false;
             UploadTime = 20;
         }
     }

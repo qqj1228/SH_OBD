@@ -114,8 +114,20 @@ namespace SH_OBD {
             return false;
         }
 
+        /// <summary>
+        /// 获取OBD响应结果，若有错误的话总共尝试3次
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
         public override OBDResponseList Query(OBDParameter param) {
-            return m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
+            OBDResponseList orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
+            for (int i = 2; i > 0; i--) {
+                if (!orl.ErrorDetected) {
+                    break;
+                }
+                orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
+            }
+            return orl;
         }
 
         public override string Query(string command) {

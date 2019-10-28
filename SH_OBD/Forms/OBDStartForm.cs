@@ -21,6 +21,7 @@ namespace SH_OBD {
         readonly System.Timers.Timer m_timer;
 
         public OBDStartForm() {
+            // 在执行InitializeComponent()期间有可能会触发Winfrom的Resize事件（根据系统及dotnet版本组合，有时会发生），故先对m_lastHeight赋初值
             m_lastHeight = this.Height;
             InitializeComponent();
             m_obdInterface = new OBDInterface();
@@ -203,12 +204,12 @@ namespace SH_OBD {
             this.Invoke((EventHandler)delegate {
                 this.labelResult.ForeColor = Color.Black;
                 this.labelResult.Text = "准备OBD检测";
-                //this.labelDTC.BackColor = m_backColor;
-                //this.labelDTC.ForeColor = Color.Gray;
-                //this.labelReadiness.BackColor = m_backColor;
-                //this.labelReadiness.ForeColor = Color.Gray;
                 this.labelVINError.BackColor = m_backColor;
                 this.labelVINError.ForeColor = Color.Gray;
+                this.labelCALIDCVN.BackColor = m_backColor;
+                this.labelCALIDCVN.ForeColor = Color.Gray;
+                this.label3Space.BackColor = m_backColor;
+                this.label3Space.ForeColor = Color.Gray;
             });
             if (m_obdInterface.ConnectedStatus) {
                 m_obdInterface.Disconnect();
@@ -241,18 +242,19 @@ namespace SH_OBD {
                     this.labelResult.ForeColor = Color.GreenYellow;
                     this.labelResult.Text = "OBD检测结果：合格";
                 } else {
-                    //if (!m_obdTest.DTCResult) {
-                    //    this.labelDTC.BackColor = Color.Red;
-                    //    this.labelDTC.ForeColor = Color.Black;
-                    //}
-                    //if (!m_obdTest.ReadinessResult) {
-                    //    this.labelReadiness.BackColor = Color.Red;
-                    //    this.labelReadiness.ForeColor = Color.Black;
-                    //}
                     if (!m_obdTest.VINResult) {
                         this.labelVINError.BackColor = Color.Red;
                         this.labelVINError.ForeColor = Color.Black;
                     }
+                    if (!m_obdTest.CALIDCVNResult) {
+                        this.labelCALIDCVN.BackColor = Color.Red;
+                        this.labelCALIDCVN.ForeColor = Color.Black;
+                    }
+                    if (!m_obdTest.SpaceResult) {
+                        this.label3Space.BackColor = Color.Red;
+                        this.label3Space.ForeColor = Color.Black;
+                    }
+
                     this.labelResult.ForeColor = Color.Red;
                     this.labelResult.Text = "OBD检测结果：不合格";
                 }
@@ -268,9 +270,9 @@ namespace SH_OBD {
             ResizeFont(this.txtBoxVIN, scale);
             ResizeFont(this.label1, scale);
             ResizeFont(this.labelResult, scale);
-            //ResizeFont(this.labelDTC, scale);
-            //ResizeFont(this.labelReadiness, scale);
             ResizeFont(this.labelVINError, scale);
+            ResizeFont(this.labelCALIDCVN, scale);
+            ResizeFont(this.label3Space, scale);
             ResizeFont(this.btnAdvanceMode, scale);
             m_lastHeight = this.Height;
         }
@@ -308,9 +310,9 @@ namespace SH_OBD {
             this.labelResult.ForeColor = Color.Black;
             this.labelResult.Text = "准备OBD检测";
             this.txtBoxVIN.Focus();
-            //this.labelDTC.ForeColor = Color.Gray;
-            //this.labelReadiness.ForeColor = Color.Gray;
             this.labelVINError.ForeColor = Color.Gray;
+            this.labelCALIDCVN.ForeColor = Color.Gray;
+            this.label3Space.ForeColor = Color.Gray;
 
 #if DEBUG
             //////////////////////////////// TEST!!! ////////////////////////////////
