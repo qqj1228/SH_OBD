@@ -31,6 +31,8 @@
             this.tblLayoutBottom = new System.Windows.Forms.TableLayoutPanel();
             this.btnAdvanceMode = new System.Windows.Forms.Button();
             this.labelVINError = new System.Windows.Forms.Label();
+            this.labelCALIDCVN = new System.Windows.Forms.Label();
+            this.label3Space = new System.Windows.Forms.Label();
             this.labelResult = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.tblLayoutMain.SuspendLayout();
@@ -98,11 +100,15 @@
             // tblLayoutBottom
             // 
             this.tblLayoutBottom.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.OutsetDouble;
-            this.tblLayoutBottom.ColumnCount = 2;
-            this.tblLayoutBottom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tblLayoutBottom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tblLayoutBottom.Controls.Add(this.btnAdvanceMode, 1, 0);
+            this.tblLayoutBottom.ColumnCount = 4;
+            this.tblLayoutBottom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tblLayoutBottom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tblLayoutBottom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tblLayoutBottom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tblLayoutBottom.Controls.Add(this.btnAdvanceMode, 3, 0);
             this.tblLayoutBottom.Controls.Add(this.labelVINError, 0, 0);
+            this.tblLayoutBottom.Controls.Add(this.labelCALIDCVN, 1, 0);
+            this.tblLayoutBottom.Controls.Add(this.label3Space, 2, 0);
             this.tblLayoutBottom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tblLayoutBottom.Location = new System.Drawing.Point(3, 479);
             this.tblLayoutBottom.Name = "tblLayoutBottom";
@@ -116,11 +122,11 @@
             this.btnAdvanceMode.BackColor = System.Drawing.Color.SkyBlue;
             this.btnAdvanceMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnAdvanceMode.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnAdvanceMode.Location = new System.Drawing.Point(393, 6);
+            this.btnAdvanceMode.Location = new System.Drawing.Point(585, 6);
             this.btnAdvanceMode.Name = "btnAdvanceMode";
-            this.btnAdvanceMode.Size = new System.Drawing.Size(379, 67);
+            this.btnAdvanceMode.Size = new System.Drawing.Size(187, 67);
             this.btnAdvanceMode.TabIndex = 0;
-            this.btnAdvanceMode.Text = "打开高级模式(&A)";
+            this.btnAdvanceMode.Text = "高级模式(&A)";
             this.btnAdvanceMode.UseVisualStyleBackColor = false;
             this.btnAdvanceMode.Click += new System.EventHandler(this.BtnAdvanceMode_Click);
             // 
@@ -131,10 +137,32 @@
             this.labelVINError.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Bold);
             this.labelVINError.Location = new System.Drawing.Point(6, 3);
             this.labelVINError.Name = "labelVINError";
-            this.labelVINError.Size = new System.Drawing.Size(378, 73);
+            this.labelVINError.Size = new System.Drawing.Size(184, 73);
             this.labelVINError.TabIndex = 3;
             this.labelVINError.Text = "VIN号不匹配";
             this.labelVINError.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelCALIDCVN
+            // 
+            this.labelCALIDCVN.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelCALIDCVN.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.labelCALIDCVN.Location = new System.Drawing.Point(199, 3);
+            this.labelCALIDCVN.Name = "labelCALIDCVN";
+            this.labelCALIDCVN.Size = new System.Drawing.Size(184, 73);
+            this.labelCALIDCVN.TabIndex = 4;
+            this.labelCALIDCVN.Text = "CALID和CVN数据不完整";
+            this.labelCALIDCVN.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label3Space
+            // 
+            this.label3Space.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label3Space.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label3Space.Location = new System.Drawing.Point(392, 3);
+            this.label3Space.Name = "label3Space";
+            this.label3Space.Size = new System.Drawing.Size(184, 73);
+            this.label3Space.TabIndex = 5;
+            this.label3Space.Text = "CALID或CVN有多个空格";
+            this.label3Space.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // labelResult
             // 
@@ -196,5 +224,7 @@
         private System.Windows.Forms.Label labelResult;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label labelVINError;
+        private System.Windows.Forms.Label labelCALIDCVN;
+        private System.Windows.Forms.Label label3Space;
     }
 }

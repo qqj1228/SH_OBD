@@ -35,6 +35,7 @@ namespace SH_OBD {
         public bool ReadinessResult { get; set; }
         public bool VINResult { get; set; }
         public bool CALIDCVNResult { get; set; }
+        public bool SpaceResult { get; set; }
         public string StrVIN_IN { get; set; }
 
         public OBDTest(OBDInterface obd) {
@@ -52,6 +53,7 @@ namespace SH_OBD {
             ReadinessResult = true;
             VINResult = true;
             CALIDCVNResult = true;
+            SpaceResult = true;
             m_db = new Model(m_obdInterface.DBandMES, m_obdInterface.m_log);
             // 设置“testNo”字段中的每日顺序号初值
             string DateSN = m_obdInterface.DBandMES.DateSN;
@@ -373,6 +375,28 @@ namespace SH_OBD {
             SetDataRow(++NO, "CAL_ID", dt, param);  // 2
             param.Parameter = HByte + 6;
             SetDataRow(++NO, "CVN", dt, param);     // 3
+
+            // 根据配置文件，判断CAL_ID和CVN两个值的合法性
+            for (int i = 2; i < dt.Columns.Count; i++) {
+                string[] CALIDArray = dt.Rows[2][i].ToString().Split('\n');
+                string[] CVNArray = dt.Rows[3][i].ToString().Split('\n');
+                int length = Math.Max(CALIDArray.Length, CVNArray.Length);
+                for (int j = 0; j < length; j++) {
+                    string CALID = CALIDArray.Length > j ? CALIDArray[j] : "";
+                    string CVN = CVNArray.Length > j ? CVNArray[j] : "";
+                    if (!m_obdInterface.OBDResultSetting.Allow3Space) {
+                        if (CALID.Contains("   ") || CVN.Contains("   ")) {
+                            SpaceResult = false;
+                        }
+                    }
+                    if (!m_obdInterface.OBDResultSetting.CALIDCVNEmpty) {
+                        if (CALID.Length * CVN.Length == 0 && CALID.Length + CVN.Length != 0) {
+                            CALIDCVNResult = false;
+                        }
+                    }
+                }
+            }
+
         }
 
         #region 读取IUPR信息，现已取消
@@ -610,6 +634,7 @@ namespace SH_OBD {
             ReadinessResult = true;
             VINResult = true;
             CALIDCVNResult = true;
+            SpaceResult = true;
 
             OBDTestStart?.Invoke();
 
@@ -641,7 +666,7 @@ namespace SH_OBD {
             SetDataTableECUInfo();
             //SetDataTableIUPR();
 
-            OBDResult = DTCResult && ReadinessResult && VINResult;
+            OBDResult = DTCResult && ReadinessResult && VINResult && CALIDCVNResult && SpaceResult;
 
             WriteDbStart?.Invoke();
             string strVIN = "";
@@ -1049,14 +1074,6 @@ namespace SH_OBD {
                 CALID,
                 CVN
             );
-            if (CALID.Length == 0) {
-                CALIDCVNResult = false;
-                m_obdInterface.m_log.TraceWarning("CAL_ID in " + moduleID + " is empty");
-            }
-            if (CVN.Length == 0) {
-                CALIDCVNResult = false;
-                m_obdInterface.m_log.TraceWarning("CVN in " + moduleID + " is empty");
-            }
         }
 
         private void SetDataTable2MES(DataTable dt2MES, DataTable dtIn) {
@@ -1068,20 +1085,23 @@ namespace SH_OBD {
             for (int i = 0; i < dtIn.Rows.Count; i++) {
                 string[] CALIDArray = dtIn.Rows[i][26].ToString().Split(',');
                 string[] CVNArray = dtIn.Rows[i][27].ToString().Split(',');
+                int length = Math.Max(CALIDArray.Length, CVNArray.Length);
                 string ECUAcronym = dtIn.Rows[i][25].ToString().Split('-')[0];
                 DataTable2MESAddRow(dt2MES, dtIn, i, ECUAcronym, CALIDArray[0], CVNArray[0]);
-                for (int j = 1; j < CALIDArray.Length; j++) {
+                for (int j = 1; j < length; j++) {
+                    string CALID = CALIDArray.Length > j ? CALIDArray[j] : "";
+                    string CVN = CVNArray.Length > j ? CVNArray[j] : "";
                     // 若同一个ECU下有多个CALID和CVN的上传策略
                     if (m_obdInterface.OBDResultSetting.UseSCRName) {
                         //第二个CALID和CVN使用“SCR”作为ModuleID上传
                         if (j == 1) {
-                            DataTable2MESAddRow(dt2MES, dtIn, i, "SCR", CALIDArray[j], CVNArray.Length > j ? CVNArray[j] : "");
+                            DataTable2MESAddRow(dt2MES, dtIn, i, "SCR", CALID, CVN);
                         } else {
-                            DataTable2MESAddRow(dt2MES, dtIn, i, ECUAcronym, CALIDArray[j], CVNArray.Length > j ? CVNArray[j] : "");
+                            DataTable2MESAddRow(dt2MES, dtIn, i, ECUAcronym, CALID, CVN);
                         }
                     } else {
                         // 多个CALID和CVN使用同一个ModuleID上传
-                        DataTable2MESAddRow(dt2MES, dtIn, i, ECUAcronym, CALIDArray[j], CVNArray.Length > j ? CVNArray[j] : "");
+                        DataTable2MESAddRow(dt2MES, dtIn, i, ECUAcronym, CALID, CVN);
                     }
                 }
             }
@@ -1556,8 +1576,9 @@ namespace SH_OBD {
                 string Result = OBDResult ? "合格" : "不合格";
                 //Result += DTCResult ? "" : "\n有DTC";
                 //Result += ReadinessResult ? "" : "\n就绪状态未完成项超过2项";
-                Result += VINResult ? "" : "，VIN号不匹配";
-                Result += CALIDCVNResult ? "" : "，未读到CALID或CVN";
+                Result += VINResult ? "" : "\nVIN号不匹配";
+                Result += CALIDCVNResult ? "" : "\nCALID和CVN数据不完整";
+                Result += SpaceResult ? "" : "\nCALID或CVN有多个空格";
                 worksheet1.Cells["B8"].Value = Result;
 
                 // 检验员
@@ -1568,6 +1589,7 @@ namespace SH_OBD {
                 File.WriteAllBytes(exportFileInfo.FullName, bin);
             }
         }
+
     }
 
     public class SetDataTableColumnsErrorEventArgs : EventArgs {

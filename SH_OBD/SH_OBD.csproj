@@ -325,7 +325,9 @@
       <DependentUpon>UserPreferencesForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
-    <None Include="Configs\OBD_Result.xlsx" />
+    <None Include="Configs\OBD_Result.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -346,7 +348,9 @@
     <Content Include="Configs\dtc.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Configs\obdResultSetting.xml" />
+    <Content Include="Configs\obdResultSetting.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="icon.ico" />
     <None Include="Web References\MES1\webservicedemo.disco" />
     <None Include="Configs\generic.csv">

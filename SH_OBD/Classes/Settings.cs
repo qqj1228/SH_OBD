@@ -245,6 +245,8 @@ namespace SH_OBD {
         public bool Readiness { get; set; }
         public bool VINError { get; set; }
         public int UploadTime { get; set; }
+        public bool CALIDCVNEmpty { get; set; }
+        public bool Allow3Space { get; set; }
 
         public OBDResultSetting() {
             UploadWhenever = false;
@@ -255,6 +257,8 @@ namespace SH_OBD {
             DTC0A = false;
             Readiness = false;
             VINError = true;
+            CALIDCVNEmpty = false;
+            Allow3Space = false;
             UploadTime = 20;
         }
     }
