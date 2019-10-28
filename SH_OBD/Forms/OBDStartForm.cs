@@ -21,9 +21,8 @@ namespace SH_OBD {
         readonly System.Timers.Timer m_timer;
 
         public OBDStartForm() {
-            // 在执行InitializeComponent()期间有可能会触发Winfrom的Resize事件（根据系统及dotnet版本组合，有时会发生），故先对m_lastHeight赋初值
-            m_lastHeight = this.Height;
             InitializeComponent();
+            m_lastHeight = this.Height;
             m_obdInterface = new OBDInterface();
             m_obdTest = new OBDTest(m_obdInterface);
             m_backColor = label1.BackColor;
@@ -258,6 +257,9 @@ namespace SH_OBD {
         }
 
         private void OBDStartForm_Resize(object sender, EventArgs e) {
+            if (m_lastHeight == 0) {
+                return;
+            }
             float scale = this.Height / m_lastHeight;
             ResizeFont(this.txtBoxVIN, scale);
             ResizeFont(this.label1, scale);
