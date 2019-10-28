@@ -21,11 +21,11 @@ namespace SH_OBD {
         readonly System.Timers.Timer m_timer;
 
         public OBDStartForm() {
+            m_lastHeight = this.Height;
             InitializeComponent();
             m_obdInterface = new OBDInterface();
             m_obdTest = new OBDTest(m_obdInterface);
             m_backColor = label1.BackColor;
-            m_lastHeight = this.Height;
             if (m_obdInterface.ScannerPortOpened) {
                 m_obdInterface.m_sp.DataReceived += new SerialPortClass.SerialPortDataReceiveEventArgs(SerialDataReceived);
             }
