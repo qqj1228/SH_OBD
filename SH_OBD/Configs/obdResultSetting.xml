@@ -3,9 +3,9 @@
   <!-- 无论何种情况都上传数据，即使结果为不合格 -->
   <UploadWhenever>false</UploadWhenever>
   <!-- 使用ECU缩写填充ModuleID -->
-  <UseECUAcronym>true</UseECUAcronym>
+  <UseECUAcronym>false</UseECUAcronym>
   <!-- 使用SCR填充第二个ModuleID -->
-  <UseSCRName>true</UseSCRName>
+  <UseSCRName>false</UseSCRName>
   <!-- OBD检测结果是否需要判断“存在存储DTC” -->
   <DTC03>false</DTC03>
   <!-- OBD检测结果是否需要判断“存在未决DTC” -->
