@@ -266,19 +266,19 @@ namespace SH_OBD {
     [Serializable]
     public class OracleMESSetting {
         public bool Enable { get; set; }
-        public string host { get; set; }
-        public string port { get; set; }
-        public string serviceName { get; set; }
-        public string userID { get; set; }
-        public string passWord { get; set; }
+        public string Host { get; set; }
+        public string Port { get; set; }
+        public string ServiceName { get; set; }
+        public string UserID { get; set; }
+        public string PassWord { get; set; }
 
         public OracleMESSetting() {
             Enable = true;
-            host = "10.50.252.106";
-            port = "1561";
-            serviceName = "IUAT2";
-            userID = "idevice";
-            passWord = "idevice";
+            Host = "10.50.252.106";
+            Port = "1561";
+            ServiceName = "IUAT2";
+            UserID = "idevice";
+            PassWord = "idevice";
         }
 
     }

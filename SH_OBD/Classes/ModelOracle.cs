@@ -22,12 +22,12 @@ namespace SH_OBD {
 
         void ReadConfig() {
             Connection = "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=";
-            Connection += m_oracleMESSetting.host + ")(PORT=";
-            Connection += m_oracleMESSetting.port + "))(CONNECT_DATA=(SERVICE_NAME=";
-            Connection += m_oracleMESSetting.serviceName + ")));";
+            Connection += m_oracleMESSetting.Host + ")(PORT=";
+            Connection += m_oracleMESSetting.Port + "))(CONNECT_DATA=(SERVICE_NAME=";
+            Connection += m_oracleMESSetting.ServiceName + ")));";
             Connection += "Persist Security Info=True;";
-            Connection += "User ID=" + m_oracleMESSetting.userID + ";";
-            Connection += "Password=" + m_oracleMESSetting.passWord + ";";
+            Connection += "User ID=" + m_oracleMESSetting.UserID + ";";
+            Connection += "Password=" + m_oracleMESSetting.PassWord + ";";
         }
 
         public bool ConnectOracle() {
@@ -125,11 +125,6 @@ namespace SH_OBD {
                 }
                 strSQL = strSQL.Trim(',');
                 strSQL += ") values (SEQ_EM_WQPF_ID.NEXTVAL,";
-//#if DEBUG
-//                strSQL += ") values (SEQ_EM_WQPF_ID.NEXTVAL,";
-//#else
-//                strSQL += ") values (SEQ_EM_WQPF_ID.Next(),";
-//#endif
                 for (int iCol = 1; iCol < dt.Columns.Count; iCol++) {
                     if (dt.Rows[iRow][iCol].ToString().Length != 0) {
                         if (dt.Columns[iCol].DataType == typeof(DateTime)) {
