@@ -189,6 +189,7 @@
             this.txtBoxVIN.TabIndex = 9;
             this.txtBoxVIN.Text = "等待扫描VIN号";
             this.txtBoxVIN.TextChanged += new System.EventHandler(this.TxtBoxVIN_TextChanged);
+            this.txtBoxVIN.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtBoxVIN_KeyPress);
             // 
             // chkBoxManualUpload
             // 

@@ -16,10 +16,14 @@
   <Readiness>false</Readiness>
   <!-- OBD检测结果是否需要判断“扫码VIN号、读取VIN号，这两个VIN号匹配” -->
   <VINError>true</VINError>
-  <!-- OBD检测结果判定：是否允许CAL_ID或者CVN为空值 -->
+  <!-- OBD检测结果判定：国六车型是否允许CAL_ID或者CVN为空值 -->
   <CALIDCVNEmpty>false</CALIDCVNEmpty>
   <!-- OBD检测结果判定：是否允许CAL_ID或者CVN含有连续3个或以上的空格 -->
   <Allow3Space>false</Allow3Space>
-  <!-- 每天几点定时上传以前上传失败的数据（24小时制） -->
-  <UploadTime>20</UploadTime>
+  <!-- OBD检测结果是否需要判断“OBD型式” -->
+  <OBD_SUP>true</OBD_SUP>
+  <!-- 自动上传以前上传失败的数据的时间间隔（单位：分钟） -->
+  <UploadInterval>15</UploadInterval>
+  <!-- 检测报告编号里的顺序号起始值 -->
+  <StartSN>0</StartSN>
 </OBDResultSetting>

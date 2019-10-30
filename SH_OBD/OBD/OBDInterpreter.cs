@@ -1094,6 +1094,14 @@ namespace SH_OBD {
             case 0x0F:
                 // VIN / ESN / EROTAN
                 DataOffset = 17 * 2;
+                // 过滤从K线读取的“00”数据，该数据用于补齐K线每帧4个有效字节
+                string strTemp = "";
+                for (int i = 0; i < response.Data.Length; i += 2) {
+                    if (response.Data.Substring(i, 2) != "00") {
+                        strTemp += response.Data.Substring(i, 2);
+                    }
+                }
+                response.Data = strTemp;
                 value2.ListStringValue = SetMode09ASCII(DataOffset, response);
                 break;
             case 0x04:

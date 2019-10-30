@@ -244,22 +244,26 @@ namespace SH_OBD {
         public bool DTC0A { get; set; }
         public bool Readiness { get; set; }
         public bool VINError { get; set; }
-        public int UploadTime { get; set; }
+        public int UploadInterval { get; set; }
         public bool CALIDCVNEmpty { get; set; }
         public bool Allow3Space { get; set; }
+        public bool OBD_SUP { get; set; }
+        public int StartSN { get; set; }
 
         public OBDResultSetting() {
             UploadWhenever = false;
-            UseECUAcronym = true;
-            UseSCRName = true;
-            DTC03 = true;
-            DTC07 = true;
+            UseECUAcronym = false;
+            UseSCRName = false;
+            DTC03 = false;
+            DTC07 = false;
             DTC0A = false;
             Readiness = false;
             VINError = true;
             CALIDCVNEmpty = false;
-            Allow3Space = false;
-            UploadTime = 20;
+            Allow3Space = true;
+            OBD_SUP = true;
+            UploadInterval = 15;
+            StartSN = 0;
         }
     }
 

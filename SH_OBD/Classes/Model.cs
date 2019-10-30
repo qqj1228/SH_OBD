@@ -315,5 +315,32 @@ namespace SH_OBD {
                 RunSQL(strSQL);
             }
         }
+
+        public void AddSNField() {
+            string strSQL = "select SN from OBDUser where ID = '1'";
+            string[,] rets = SelectDB(strSQL);
+            if (rets == null || rets.GetLength(0) < 1) {
+                strSQL = "alter table OBDUser add SN varchar(20) null";
+                RunSQL(strSQL);
+            }
+        }
+
+        public string GetSN() {
+            string strSQL = "select SN from OBDUser where ID = '1'";
+            string[,] rets = SelectDB(strSQL);
+            string strRet;
+            if (rets == null || rets.GetLength(0) < 1) {
+                strRet = "";
+            } else {
+                strRet = rets[0, 0];
+            }
+            return strRet;
+        }
+
+        public int SetSN(string strSN) {
+            string strSQL = "update OBDUser set SN = '" + strSN + "' where ID = '1'";
+            m_log.TraceInfo("==> T-SQL: " + strSQL);
+            return RunSQL(strSQL);
+        }
     }
 }

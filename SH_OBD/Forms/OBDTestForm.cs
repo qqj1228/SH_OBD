@@ -14,12 +14,14 @@ namespace SH_OBD {
     public partial class OBDTestForm : Form {
         private readonly OBDInterface m_obdInterface;
         private readonly OBDTest m_obdTest;
+        private DateTime m_lastTime;
 
         public OBDTestForm(OBDInterface obd, OBDTest obdTest) {
             InitializeComponent();
             m_obdInterface = obd;
             m_obdTest = obdTest;
             btnStartOBDTest.Enabled = false;
+            m_lastTime = DateTime.Now;
         }
 
         void OnOBDTestStart() {
@@ -79,6 +81,13 @@ namespace SH_OBD {
             });
         }
 
+        void OnNotUploadData() {
+            this.Invoke((EventHandler)delegate {
+                this.labelMESInfo.ForeColor = Color.Red;
+                this.labelMESInfo.Text = "因OBD检测不合格，故数据不上传";
+            });
+        }
+
         void OnSetDataTableColumnsError(object sender, SetDataTableColumnsErrorEventArgs e) {
             this.Invoke((EventHandler)delegate {
                 this.labelMESInfo.ForeColor = Color.Red;
@@ -89,7 +98,7 @@ namespace SH_OBD {
         void SerialDataReceived(object sender, SerialDataReceivedEventArgs e, byte[] bits) {
             // 跨UI线程调用UI控件要使用Invoke
             this.Invoke((EventHandler)delegate {
-                this.txtBoxVIN.Text = Encoding.Default.GetString(bits).Trim();
+                this.txtBoxVIN.Text = Encoding.Default.GetString(bits).Trim().ToUpper();
                 if (this.txtBoxVIN.Text.Length == 17 && !this.chkBoxManualUpload.Checked) {
                     this.btnStartOBDTest.PerformClick();
                 }
@@ -132,6 +141,7 @@ namespace SH_OBD {
             m_obdTest.WriteDbDone += new Action(OnWriteDbDone);
             m_obdTest.UploadDataStart += new Action(OnUploadDataStart);
             m_obdTest.UploadDataDone += new Action(OnUploadDataDone);
+            m_obdTest.NotUploadData += new Action(OnNotUploadData);
             m_obdTest.SetDataTableColumnsError += OnSetDataTableColumnsError;
             if (this.GridViewInfo.Columns.Count > 1) {
                 GridViewInfo.Columns[0].Width = 30;
@@ -177,12 +187,16 @@ namespace SH_OBD {
         }
 
         private void TxtBoxVIN_TextChanged(object sender, EventArgs e) {
+            TimeSpan ts = DateTime.Now.Subtract(m_lastTime);
+            int sec = (int)ts.TotalSeconds;
             if (this.chkBoxManualUpload.Checked) {
                 if (this.txtBoxVIN.Text.Length == 17) {
                     ManualUpload();
                 }
             } else {
-                if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Length == 17) {
+                if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Length == 17 && sec > 1) {
+                    m_lastTime = DateTime.Now;
+                    this.txtBoxVIN.Text = this.txtBoxVIN.Text.Trim().ToUpper();
                     this.btnStartOBDTest.PerformClick();
                     this.txtBoxVIN.ReadOnly = true;
                 }
@@ -258,7 +272,12 @@ namespace SH_OBD {
             m_obdTest.WriteDbDone -= new Action(OnWriteDbDone);
             m_obdTest.UploadDataStart -= new Action(OnUploadDataStart);
             m_obdTest.UploadDataDone -= new Action(OnUploadDataDone);
+            m_obdTest.NotUploadData -= new Action(OnNotUploadData);
             m_obdTest.SetDataTableColumnsError -= OnSetDataTableColumnsError;
+        }
+
+        private void TxtBoxVIN_KeyPress(object sender, KeyPressEventArgs e) {
+            e.KeyChar = Convert.ToChar(e.KeyChar.ToString().ToUpper());
         }
     }
 

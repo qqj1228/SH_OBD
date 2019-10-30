@@ -19,10 +19,12 @@ namespace SH_OBD {
         private readonly Color m_backColor;
         private float m_lastHeight;
         readonly System.Timers.Timer m_timer;
+        private DateTime m_lastTime;
 
         public OBDStartForm() {
             InitializeComponent();
             m_lastHeight = this.Height;
+            m_lastTime = DateTime.Now;
             m_obdInterface = new OBDInterface();
             m_obdTest = new OBDTest(m_obdInterface);
             m_backColor = label1.BackColor;
@@ -46,8 +48,10 @@ namespace SH_OBD {
             }
             // 在OBDData表中新增Upload字段，用于存储上传是否成功的标志
             m_obdTest.m_db.AddUploadField();
+            // 在OBDUser表中新增SN字段，用于存储检测报表编号中顺序号的特征字符串
+            m_obdTest.m_db.AddSNField();
             // 每日定时上传以前上传失败的数据
-            m_timer = new System.Timers.Timer(60 * 60 * 1000);
+            m_timer = new System.Timers.Timer(m_obdInterface.OBDResultSetting.UploadInterval * 60 * 1000);
             m_timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimeUpload);
             m_timer.AutoReset = true;
             m_timer.Enabled = true;
@@ -59,20 +63,30 @@ namespace SH_OBD {
         }
 
         private void OnTimeUpload(object source, System.Timers.ElapsedEventArgs e) {
-            string Hour = DateTime.Now.ToLocalTime().ToString("HH");
-            bool result = int.TryParse(Hour, out int iHour);
-            if (result) {
-                if (iHour == m_obdInterface.OBDResultSetting.UploadTime) {
-                    try {
-                        m_obdTest.UploadDataFromDBOnTime(out string errorMsg);
+            //            string Hour = DateTime.Now.ToLocalTime().ToString("HH");
+            //            bool result = int.TryParse(Hour, out int iHour);
+            //            if (result) {
+            //                if (iHour == m_obdInterface.OBDResultSetting.UploadInterval) {
+            //                    try {
+            //                        m_obdTest.UploadDataFromDBOnTime(out string errorMsg);
+            //#if DEBUG
+            //                        MessageBox.Show(errorMsg, WSHelper.GetMethodName(0));
+            //#endif
+            //                    } catch (Exception ex) {
+            //                        m_obdInterface.m_log.TraceError("集中上传数据出错" + ex.Message);
+            //                    }
+            //                }
+            //            }
+
+            try {
+                m_obdTest.UploadDataFromDBOnTime(out string errorMsg);
 #if DEBUG
-                        MessageBox.Show(errorMsg, WSHelper.GetMethodName(0));
+                MessageBox.Show(errorMsg, WSHelper.GetMethodName(0));
 #endif
-                    } catch (Exception ex) {
-                        m_obdInterface.m_log.TraceError("集中上传数据出错" + ex.Message);
-                    }
-                }
+            } catch (Exception ex) {
+                m_obdInterface.m_log.TraceError("自动重传数据出错" + ex.Message);
             }
+
         }
 
         void OnOBDTestStart() {
@@ -104,7 +118,7 @@ namespace SH_OBD {
         void SerialDataReceived(object sender, SerialDataReceivedEventArgs e, byte[] bits) {
             // 跨UI线程调用UI控件要使用Invoke
             this.Invoke((EventHandler)delegate {
-                this.txtBoxVIN.Text = Encoding.Default.GetString(bits).Trim();
+                this.txtBoxVIN.Text = Encoding.Default.GetString(bits).Trim().ToUpper();
                 if (this.txtBoxVIN.Text.Length == 17) {
                     m_obdTest.StrVIN_IN = this.txtBoxVIN.Text;
                     if (!m_obdTest.AdvanceMode) {
@@ -241,7 +255,11 @@ namespace SH_OBD {
                         this.labelCALIDCVN.BackColor = Color.Red;
                         this.labelCALIDCVN.ForeColor = Color.Black;
                     }
-                    if (!m_obdTest.SpaceResult) {
+                    //if (!m_obdTest.SpaceResult) {
+                    //    this.label3Space.BackColor = Color.Red;
+                    //    this.label3Space.ForeColor = Color.Black;
+                    //}
+                    if (!m_obdTest.OBDSUPResult) {
                         this.label3Space.BackColor = Color.Red;
                         this.label3Space.ForeColor = Color.Black;
                     }
@@ -321,8 +339,12 @@ namespace SH_OBD {
         }
 
         private void TxtBoxVIN_TextChanged(object sender, EventArgs e) {
-            if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Length == 17) {
-                m_obdTest.StrVIN_IN = this.txtBoxVIN.Text.Trim();
+            TimeSpan ts = DateTime.Now.Subtract(m_lastTime);
+            int sec = (int)ts.TotalSeconds;
+            if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Length == 17 && sec > 1) {
+                m_obdTest.StrVIN_IN = this.txtBoxVIN.Text.Trim().ToUpper();
+                m_lastTime = DateTime.Now;
+                this.txtBoxVIN.Text = m_obdTest.StrVIN_IN;
                 if (!m_obdTest.AdvanceMode) {
                     StartOBDTest();
                     this.txtBoxVIN.SelectAll();
@@ -332,6 +354,10 @@ namespace SH_OBD {
 
         private void OBDStartForm_Activated(object sender, EventArgs e) {
             this.txtBoxVIN.Focus();
+        }
+
+        private void TxtBoxVIN_KeyPress(object sender, KeyPressEventArgs e) {
+            e.KeyChar = Convert.ToChar(e.KeyChar.ToString().ToUpper());
         }
     }
 }

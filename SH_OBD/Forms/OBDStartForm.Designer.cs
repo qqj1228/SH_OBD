@@ -96,6 +96,7 @@
             this.txtBoxVIN.Size = new System.Drawing.Size(594, 84);
             this.txtBoxVIN.TabIndex = 1;
             this.txtBoxVIN.TextChanged += new System.EventHandler(this.TxtBoxVIN_TextChanged);
+            this.txtBoxVIN.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtBoxVIN_KeyPress);
             // 
             // tblLayoutBottom
             // 
@@ -161,7 +162,7 @@
             this.label3Space.Name = "label3Space";
             this.label3Space.Size = new System.Drawing.Size(184, 73);
             this.label3Space.TabIndex = 5;
-            this.label3Space.Text = "CALID或CVN有多个空格";
+            this.label3Space.Text = "OBD型式不适用或异常";
             this.label3Space.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // labelResult
