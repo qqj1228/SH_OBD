@@ -17,7 +17,13 @@ namespace SH_OBD {
                 return responseList;
             }
 
-            List<string> lines = SplitByCR(response);
+            List<string> tempLines = SplitByCR(response);
+            List<string> lines = new List<string>();
+            foreach (string item in tempLines) {
+                if (!IsNegativeResponse(item, headLen)) {
+                    lines.Add(item);
+                }
+            }
             lines.Sort();
             List<List<string>> groups = new List<List<string>>();
             List<string> group = new List<string> { lines[0] };
@@ -109,6 +115,20 @@ namespace SH_OBD {
                 break;
             }
             return bIsMultiline ? iRet + 2 : iRet;
+        }
+
+        private bool IsNegativeResponse(string strData, int headLen) {
+            bool bRet = false;
+            if (strData.Length > 0) {
+                bool result = int.TryParse(strData.Substring(headLen, 2), out int len);
+                if (result) {
+                    string strActual = strData.Substring(headLen + 2);
+                    if (strActual.Length == len * 2 && strActual.Substring(0, 2) == "7F") {
+                        bRet = true;
+                    }
+                }
+            }
+            return bRet;
         }
     }
 

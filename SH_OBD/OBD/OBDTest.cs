@@ -350,6 +350,7 @@ namespace SH_OBD {
             if (m_obdInterface.OBDResultSetting.Readiness && errorCount > 2) {
                 ReadinessResult = false;
             }
+
         }
 
         private void SetDataTableECUInfo() {
@@ -1473,8 +1474,14 @@ namespace SH_OBD {
                 // 外观检验结果
                 worksheet1.Cells["B7"].Value = "合格";
 
+                // OBD型式检验要求
+                worksheet1.Cells["B9"].Value = dt.Rows[0][4].ToString();
+
+                // 总累积里程ODO（km）
+                worksheet1.Cells["B10"].Value = dt.Rows[0][5].ToString();
+
                 // 与OBD诊断仪通讯情况
-                worksheet1.Cells["B9"].Value = "通讯成功";
+                worksheet1.Cells["B11"].Value = "通讯成功";
 
                 #region DTC和就绪状态，已取消
                 //for (int i = 0; i < dt.Rows.Count; i++) {
@@ -1621,10 +1628,10 @@ namespace SH_OBD {
                 Result += CALIDCVNResult ? "" : "\nCALID和CVN数据不完整";
                 Result += SpaceResult ? "" : "\nCALID或CVN有多个空格";
                 Result += OBDSUPResult ? "" : "\nOBD型式不适用或异常";
-                worksheet1.Cells["B10"].Value = Result;
+                worksheet1.Cells["B12"].Value = Result;
 
                 // 检验员
-                worksheet1.Cells["E11"].Value = m_obdInterface.UserPreferences.Name;
+                worksheet1.Cells["E13"].Value = m_obdInterface.UserPreferences.Name;
 
                 byte[] bin = package.GetAsByteArray();
                 FileInfo exportFileInfo = new FileInfo(ExportPath);
