@@ -27,6 +27,7 @@ namespace SH_OBD {
         public event Action WriteDbDone;
         public event Action UploadDataStart;
         public event Action UploadDataDone;
+        public event Action NotUploadData;
         public event EventHandler<SetDataTableColumnsErrorEventArgs> SetDataTableColumnsError;
 
         public bool AdvanceMode { get; set; }
@@ -1620,6 +1621,12 @@ namespace SH_OBD {
             SetDataTableInfoFromDB(dt);
             SetDataTableECUInfoFromDB(dt);
             bool bRet = false;
+            if (!m_obdInterface.OBDResultSetting.UploadWhenever && dt.Rows[0]["Result"].ToString() != "1") {
+                m_obdInterface.m_log.TraceError("Won't upload data from database because OBD test result is NOK");
+                NotUploadData?.Invoke();
+                dt.Dispose();
+                return bRet;
+            }
             if (dt.Rows.Count > 0) {
                 try {
                     if (m_obdInterface.OracleMESSetting.Enable) {
@@ -1691,6 +1698,9 @@ namespace SH_OBD {
             List<string[,]> ResultsList = SplitResultsPerVIN(ColsDic, Results);
             for (int i = 0; i < ResultsList.Count; i++) {
                 SetDataTableResultFromDB(ColsDic, ResultsList[i], dt);
+                if (!m_obdInterface.OBDResultSetting.UploadWhenever && dt.Rows[0]["Result"].ToString() != "1") {
+                    continue;
+                }
                 try {
                     if (m_obdInterface.OracleMESSetting.Enable) {
                         bRet = UploadDataOracle(dt.Rows[0][0].ToString(), dt.Rows[0][28].ToString(), dt, ref errorMsg);

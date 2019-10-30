@@ -79,6 +79,13 @@ namespace SH_OBD {
             });
         }
 
+        void OnNotUploadData() {
+            this.Invoke((EventHandler)delegate {
+                this.labelMESInfo.ForeColor = Color.Red;
+                this.labelMESInfo.Text = "因OBD检测不合格，故数据不上传";
+            });
+        }
+
         void OnSetDataTableColumnsError(object sender, SetDataTableColumnsErrorEventArgs e) {
             this.Invoke((EventHandler)delegate {
                 this.labelMESInfo.ForeColor = Color.Red;
@@ -132,6 +139,7 @@ namespace SH_OBD {
             m_obdTest.WriteDbDone += new Action(OnWriteDbDone);
             m_obdTest.UploadDataStart += new Action(OnUploadDataStart);
             m_obdTest.UploadDataDone += new Action(OnUploadDataDone);
+            m_obdTest.NotUploadData += new Action(OnNotUploadData);
             m_obdTest.SetDataTableColumnsError += OnSetDataTableColumnsError;
             if (this.GridViewInfo.Columns.Count > 1) {
                 GridViewInfo.Columns[0].Width = 30;
@@ -260,6 +268,7 @@ namespace SH_OBD {
             m_obdTest.WriteDbDone -= new Action(OnWriteDbDone);
             m_obdTest.UploadDataStart -= new Action(OnUploadDataStart);
             m_obdTest.UploadDataDone -= new Action(OnUploadDataDone);
+            m_obdTest.NotUploadData -= new Action(OnNotUploadData);
             m_obdTest.SetDataTableColumnsError -= OnSetDataTableColumnsError;
         }
     }
