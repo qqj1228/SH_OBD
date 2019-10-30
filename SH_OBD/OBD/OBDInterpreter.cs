@@ -1267,6 +1267,10 @@ namespace SH_OBD {
                 break;
             }
             value2.ECUResponseID = response.Header;
+            // 如果是K线协议的话ECUResponseID取后2个字节
+            if (value2.ECUResponseID.Length == 6) {
+                value2.ECUResponseID = value2.ECUResponseID.Substring(2);
+            }
             return value2;
         }
 
