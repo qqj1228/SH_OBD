@@ -284,7 +284,6 @@ namespace SH_OBD {
 
         public int UpdateUpload(string strVIN, string strUpload) {
             string strSQL = "update OBDData set Upload = '" + strUpload + "' where VIN = '" + strVIN + "'";
-            m_log.TraceInfo("==> T-SQL: " + strSQL);
             return RunSQL(strSQL);
         }
 
@@ -301,7 +300,6 @@ namespace SH_OBD {
 
         public int SetPassWord(string strPwd) {
             string strSQL = "update OBDUser set PassWord = '" + strPwd + "' where UserName = 'admin'";
-            m_log.TraceInfo("==> T-SQL: " + strSQL);
             return RunSQL(strSQL);
         }
 
@@ -339,7 +337,6 @@ namespace SH_OBD {
 
         public int SetSN(string strSN) {
             string strSQL = "update OBDUser set SN = '" + strSN + "' where ID = '1'";
-            m_log.TraceInfo("==> T-SQL: " + strSQL);
             return RunSQL(strSQL);
         }
     }

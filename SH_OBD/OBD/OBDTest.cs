@@ -1243,7 +1243,7 @@ namespace SH_OBD {
             SetDataTableECUInfoFromDB(dt);
             bool bRet = false;
             if (!m_obdInterface.OBDResultSetting.UploadWhenever && dt.Rows[0]["Result"].ToString() != "1") {
-                m_obdInterface.m_log.TraceError("Won't upload data from database because OBD test result is NOK");
+                m_obdInterface.m_log.TraceWarning("Won't upload data from database because OBD test result is NOK");
                 NotUploadData?.Invoke();
                 dt.Dispose();
                 return bRet;

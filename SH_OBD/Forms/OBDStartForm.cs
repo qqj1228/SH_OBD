@@ -63,6 +63,7 @@ namespace SH_OBD {
         }
 
         private void OnTimeUpload(object source, System.Timers.ElapsedEventArgs e) {
+            #region 每天定时集中上传，现已取消
             //            string Hour = DateTime.Now.ToLocalTime().ToString("HH");
             //            bool result = int.TryParse(Hour, out int iHour);
             //            if (result) {
@@ -77,6 +78,7 @@ namespace SH_OBD {
             //                    }
             //                }
             //            }
+            #endregion
 
             try {
                 m_obdTest.UploadDataFromDBOnTime(out string errorMsg);
