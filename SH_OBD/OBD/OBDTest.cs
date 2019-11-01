@@ -69,7 +69,9 @@ namespace SH_OBD {
                 m_iSN = m_obdInterface.OBDResultSetting.StartSN;
             } else {
                 bool result = int.TryParse(m_strSN.Split(',')[1], out m_iSN);
-                if (!result) {
+                if (result) {
+                    m_iSN = (m_iSN % 1000) + m_obdInterface.OBDResultSetting.StartSN;
+                } else {
                     m_iSN = m_obdInterface.OBDResultSetting.StartSN;
                 }
             }
@@ -1062,11 +1064,15 @@ namespace SH_OBD {
             dt1MES.Columns.Add("leacmax");      // 164
             dt1MES.Columns.Add("leacmin");      // 165
 
-            string strNowDateTime = DateTime.Now.ToLocalTime().ToString("yyyyMMdd");
             DataRow dr = dt1MES.NewRow();
             dr["SBFLAG"] = "OBD";
             dr["VIN"] = strVIN;
+            string strNowDateTime = DateTime.Now.ToLocalTime().ToString("yyyyMMdd");
+            if (m_strSN.Split(',')[0] != strNowDateTime) {
+                m_iSN = m_obdInterface.OBDResultSetting.StartSN;
+            }
             ++m_iSN;
+            m_iSN %= 10000;
             dr["TestNo"] = "XC0079" + strNowDateTime + m_iSN.ToString("d4");
             m_strSN = strNowDateTime + "," + m_iSN.ToString();
             dr["TestType"] = "0";
