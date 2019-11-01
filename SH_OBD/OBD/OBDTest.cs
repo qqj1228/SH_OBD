@@ -2019,8 +2019,8 @@ namespace SH_OBD {
 
                 // 检测结果
                 string Result = OBDResult ? "合格" : "不合格";
-                //Result += DTCResult ? "" : "\n有DTC";
-                //Result += ReadinessResult ? "" : "\n就绪状态未完成项超过2项";
+                Result += DTCResult ? "" : "\n存在DTC故障码";
+                Result += ReadinessResult ? "" : "\n就绪状态未完成项超过2项";
                 Result += VINResult ? "" : "\nVIN号不匹配";
                 Result += CALIDCVNResult ? "" : "\nCALID和CVN数据不完整";
                 Result += SpaceResult ? "" : "\nCALID或CVN有多个空格";

@@ -243,7 +243,7 @@ namespace SH_OBD {
             } else {
                 string strCat = "";
                 if (!m_obdTest.DTCResult) {
-                    strCat += "，存在故障码DTC";
+                    strCat += "，存在DTC故障码";
                 }
                 if (!m_obdTest.ReadinessResult) {
                     strCat += "，就绪状态未完成项超过2项";
