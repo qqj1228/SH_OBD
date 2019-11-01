@@ -161,7 +161,7 @@
             this.label3Space.Name = "label3Space";
             this.label3Space.Size = new System.Drawing.Size(184, 73);
             this.label3Space.TabIndex = 5;
-            this.label3Space.Text = "CALID或CVN有多个空格";
+            this.label3Space.Text = "有DTC故障码";
             this.label3Space.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // labelResult

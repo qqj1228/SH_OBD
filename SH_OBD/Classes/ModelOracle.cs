@@ -40,7 +40,7 @@ namespace SH_OBD {
                 con.Dispose();
             } catch (Exception ex) {
                 m_log.TraceError("Connection error: " + ex.Message);
-                return Connected;
+                throw ex;
             }
             return Connected;
         }

@@ -247,6 +247,7 @@ namespace SH_OBD {
         public int UploadTime { get; set; }
         public bool CALIDCVNEmpty { get; set; }
         public bool Allow3Space { get; set; }
+        public string CN6_OBD_SUP { get; set; }
 
         public OBDResultSetting() {
             UploadWhenever = false;
@@ -260,6 +261,7 @@ namespace SH_OBD {
             CALIDCVNEmpty = false;
             Allow3Space = false;
             UploadTime = 20;
+            CN6_OBD_SUP = "29,43";
         }
     }
 

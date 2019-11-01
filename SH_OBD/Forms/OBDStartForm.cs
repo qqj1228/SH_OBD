@@ -46,11 +46,7 @@ namespace SH_OBD {
                     m_obdInterface.m_log.TraceError("Delete WebService dll file failure: " + ex.Message);
                 }
             } else {
-                try {
-                    m_obdTest.m_dbOracle.ConnectOracle();
-                } catch (Exception ex) {
-                    m_obdInterface.m_log.TraceError("Can't access database of MES: " + ex.Message);
-                }
+                Task.Factory.StartNew(TestOracleConnect);
             }
             // 每日定时上传以前上传失败的数据
             m_timer = new System.Timers.Timer(60 * 60 * 1000);
@@ -249,7 +245,7 @@ namespace SH_OBD {
                         this.labelCALIDCVN.BackColor = Color.Red;
                         this.labelCALIDCVN.ForeColor = Color.Black;
                     }
-                    if (!m_obdTest.SpaceResult) {
+                    if (!m_obdTest.DTCResult) {
                         this.label3Space.BackColor = Color.Red;
                         this.label3Space.ForeColor = Color.Black;
                     }
@@ -315,7 +311,6 @@ namespace SH_OBD {
             this.labelVINError.ForeColor = Color.Gray;
             this.labelCALIDCVN.ForeColor = Color.Gray;
             this.label3Space.ForeColor = Color.Gray;
-
 #if DEBUG
             //////////////////////////////// TEST!!! ////////////////////////////////
             //try {
@@ -340,6 +335,14 @@ namespace SH_OBD {
 
         private void OBDStartForm_Activated(object sender, EventArgs e) {
             this.txtBoxVIN.Focus();
+        }
+
+        private void TestOracleConnect() {
+            try {
+                m_obdTest.m_dbOracle.ConnectOracle();
+            } catch (Exception ex) {
+                MessageBox.Show("检测到与MES通讯异常，数据将无法上传: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

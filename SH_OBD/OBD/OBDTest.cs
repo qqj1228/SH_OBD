@@ -19,6 +19,7 @@ namespace SH_OBD {
         private readonly Dictionary<string, bool[]> m_mode09Support;
         private static int m_iSN;
         private bool m_compIgn;
+        private bool m_CN6;
         public readonly Model m_db;
         public readonly ModelOracle m_dbOracle;
         public event Action OBDTestStart;
@@ -48,6 +49,7 @@ namespace SH_OBD {
             m_mode01Support = new Dictionary<string, bool[]>();
             m_mode09Support = new Dictionary<string, bool[]>();
             m_compIgn = false;
+            m_CN6 = false;
             AdvanceMode = false;
             AccessAdvanceMode = 0;
             OBDResult = true;
@@ -240,6 +242,14 @@ namespace SH_OBD {
             param.Parameter = HByte + 0x1C;
             param.ValueTypes = (int)OBDParameter.EnumValueTypes.ShortString;
             SetDataRow(++NO, "OBD型式检验类型", dt, param);                                    // 2
+            string OBD_SUP = dt.Rows[dt.Rows.Count - 1][2].ToString().Replace("不适用", "0").Split(',')[0];
+            string[] CN6_OBD_SUP = m_obdInterface.OBDResultSetting.CN6_OBD_SUP.Split(',');
+            foreach (string item in CN6_OBD_SUP) {
+                if (OBD_SUP == item) {
+                    m_CN6 = true;
+                    break;
+                }
+            }
 
             param.Parameter = HByte + 0xA6;
             param.ValueTypes = (int)OBDParameter.EnumValueTypes.Double;
@@ -368,21 +378,23 @@ namespace SH_OBD {
             SetDataRow(++NO, "CVN", dt, param);     // 3
 
             // 根据配置文件，判断CAL_ID和CVN两个值的合法性
-            for (int i = 2; i < dt.Columns.Count; i++) {
-                string[] CALIDArray = dt.Rows[2][i].ToString().Split('\n');
-                string[] CVNArray = dt.Rows[3][i].ToString().Split('\n');
-                int length = Math.Max(CALIDArray.Length, CVNArray.Length);
-                for (int j = 0; j < length; j++) {
-                    string CALID = CALIDArray.Length > j ? CALIDArray[j] : "";
-                    string CVN = CVNArray.Length > j ? CVNArray[j] : "";
-                    if (!m_obdInterface.OBDResultSetting.Allow3Space) {
-                        if (CALID.Contains("   ") || CVN.Contains("   ")) {
-                            SpaceResult = false;
+            if (m_CN6) {
+                for (int i = 2; i < dt.Columns.Count; i++) {
+                    string[] CALIDArray = dt.Rows[2][i].ToString().Split('\n');
+                    string[] CVNArray = dt.Rows[3][i].ToString().Split('\n');
+                    int length = Math.Max(CALIDArray.Length, CVNArray.Length);
+                    for (int j = 0; j < length; j++) {
+                        string CALID = CALIDArray.Length > j ? CALIDArray[j] : "";
+                        string CVN = CVNArray.Length > j ? CVNArray[j] : "";
+                        if (!m_obdInterface.OBDResultSetting.Allow3Space) {
+                            if (CALID.Contains("   ") || CVN.Contains("   ")) {
+                                SpaceResult = false;
+                            }
                         }
-                    }
-                    if (!m_obdInterface.OBDResultSetting.CALIDCVNEmpty) {
-                        if (CALID.Length * CVN.Length == 0 && CALID.Length + CVN.Length != 0) {
-                            CALIDCVNResult = false;
+                        if (!m_obdInterface.OBDResultSetting.CALIDCVNEmpty) {
+                            if (CALID.Length * CVN.Length == 0 && CALID.Length + CVN.Length != 0) {
+                                CALIDCVNResult = false;
+                            }
                         }
                     }
                 }
@@ -620,6 +632,7 @@ namespace SH_OBD {
             m_mode01Support.Clear();
             m_mode09Support.Clear();
             m_compIgn = false;
+            m_CN6 = false;
             OBDResult = true;
             DTCResult = true;
             ReadinessResult = true;
@@ -692,7 +705,7 @@ namespace SH_OBD {
 
             // 用“无条件上传”和“OBD检测结果”判断是否需要直接返回不上传MES
             if (!m_obdInterface.OBDResultSetting.UploadWhenever && !OBDResult) {
-                m_obdInterface.m_log.TraceError("Won't upload data because OBD test result is NOK");
+                m_obdInterface.m_log.TraceWarning("Won't upload data because OBD test result is NOK");
                 dt.Dispose();
                 return true;
             }
@@ -1476,8 +1489,14 @@ namespace SH_OBD {
 
         private void DataTable2MESAddRow(DataTable dt2MES, DataTable dtIn, int iRow, string ECUAcronym, string CALID, string CVN) {
             string moduleID = GetModuleID(ECUAcronym, dtIn.Rows[iRow][1].ToString());
+            string OBD_SUP = dtIn.Rows[iRow][4].ToString().Replace("不适用", "0").Split(',')[0];
+            if (OBD_SUP.Length == 0) {
+                OBD_SUP = "0";
+            } else if (OBD_SUP.Length > 2) {
+                OBD_SUP = OBD_SUP.Substring(0, 2);
+            }
             dt2MES.Rows.Add(
-                dtIn.Rows[iRow][4].ToString().Split(',')[0],
+                OBD_SUP,
                 dtIn.Rows[iRow][5].ToString().Replace("不适用", ""),
                 moduleID,
                 CALID,
