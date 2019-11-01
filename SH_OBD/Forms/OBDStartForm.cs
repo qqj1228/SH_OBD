@@ -343,19 +343,17 @@ namespace SH_OBD {
         private void TxtBoxVIN_TextChanged(object sender, EventArgs e) {
             TimeSpan ts = DateTime.Now.Subtract(m_lastTime_TXT);
             int sec = (int)ts.TotalSeconds;
-            if (sec < 2 || this.txtBoxVIN.Text.Length == 17) {
-                m_lastTime_TXT = DateTime.Now;
-                if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Length == 17 && m_bAcceptVIN_TXT) {
-                    m_bAcceptVIN_TXT = false;
-                    this.txtBoxVIN.Text = this.txtBoxVIN.Text.Trim().ToUpper();
-                    m_obdTest.StrVIN_IN = this.txtBoxVIN.Text;
-                    if (!m_obdTest.AdvanceMode) {
-                        StartOBDTest();
-                    }
+            m_lastTime_TXT = DateTime.Now;
+            if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Length == 17 && m_bAcceptVIN_TXT) {
+                m_bAcceptVIN_TXT = false;
+                this.txtBoxVIN.Text = this.txtBoxVIN.Text.Trim().ToUpper();
+                m_obdTest.StrVIN_IN = this.txtBoxVIN.Text;
+                if (!m_obdTest.AdvanceMode) {
+                    StartOBDTest();
                 }
                 this.txtBoxVIN.SelectAll();
-                m_bAcceptVIN_TXT = true;
             }
+            m_bAcceptVIN_TXT = true;
             m_lastLength_TXT = this.txtBoxVIN.Text.Length;
         }
 

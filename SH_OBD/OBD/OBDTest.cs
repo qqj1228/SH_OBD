@@ -586,12 +586,13 @@ namespace SH_OBD {
                         if (value.ErrorDetected) {
                             return false;
                         }
+                        for (int j = 0; j < ECUSupportNext.Count; j++) {
+                            ECUSupportNext[j] = false;
+                        }
                         for (int j = 0; j < ECUSupportList.Count; j++) {
                             if (ECUSupportList[j][0].ECUResponseID == value.ECUResponseID) {
-                                if (ECUSupportNext[j]) {
-                                    ECUSupportList[j].Add(value);
-                                    ECUSupportNext[j] = value.GetBitFlag(31);
-                                }
+                                ECUSupportList[j].Add(value);
+                                ECUSupportNext[j] = value.GetBitFlag(31);
                             }
                         }
                     }
