@@ -21,12 +21,14 @@ namespace SH_OBD {
         readonly System.Timers.Timer m_timer;
         private DateTime m_lastTime_TXT;
         private int m_lastLength_TXT;
+        private bool m_bAcceptVIN_TXT;
 
         public OBDStartForm() {
             InitializeComponent();
             m_lastHeight = this.Height;
             m_lastTime_TXT = DateTime.Now;
             m_lastLength_TXT = 0;
+            m_bAcceptVIN_TXT = true;
             m_obdInterface = new OBDInterface();
             m_obdTest = new OBDTest(m_obdInterface);
             m_backColor = label1.BackColor;
@@ -345,16 +347,18 @@ namespace SH_OBD {
         private void TxtBoxVIN_TextChanged(object sender, EventArgs e) {
             TimeSpan ts = DateTime.Now.Subtract(m_lastTime_TXT);
             int sec = (int)ts.TotalSeconds;
-            if (Math.Abs(this.txtBoxVIN.Text.Length - m_lastLength_TXT) != 1 || this.txtBoxVIN.Text.Length == 17) {
+            if ((Math.Abs(this.txtBoxVIN.Text.Length - m_lastLength_TXT) != 1 || this.txtBoxVIN.Text.Length == 17)) {
                 m_lastTime_TXT = DateTime.Now;
-                this.txtBoxVIN.Text = this.txtBoxVIN.Text.Trim().ToUpper();
-                if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Length == 17 && sec > 1) {
+                if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Length == 17 && m_bAcceptVIN_TXT) {
+                    m_bAcceptVIN_TXT = false;
+                    this.txtBoxVIN.Text = this.txtBoxVIN.Text.Trim().ToUpper();
                     m_obdTest.StrVIN_IN = this.txtBoxVIN.Text;
                     if (!m_obdTest.AdvanceMode) {
                         StartOBDTest();
                     }
                 }
                 this.txtBoxVIN.SelectAll();
+                m_bAcceptVIN_TXT = true;
             }
             m_lastLength_TXT = this.txtBoxVIN.Text.Length;
         }
