@@ -258,8 +258,12 @@ namespace SH_OBD {
             param.ValueTypes = (int)OBDParameter.EnumValueTypes.ShortString;
             SetDataRow(++NO, "OBD型式检验类型", dt, param);                                    // 2
             string OBD_SUP = dt.Rows[dt.Rows.Count - 1][2].ToString().Replace("不适用", "0").Split(',')[0];
-            if (OBD_SUP == "29" || OBD_SUP == "43") {
-                m_CN6 = true;
+            string[] CN6_OBD_SUP = m_obdInterface.OBDResultSetting.CN6_OBD_SUP.Split(',');
+            foreach (string item in CN6_OBD_SUP) {
+                if (OBD_SUP == item) {
+                    m_CN6 = true;
+                    break;
+                }
             }
             if (m_obdInterface.OBDResultSetting.OBD_SUP) {
                 if (OBD_SUP.Length == 0 || OBD_SUP.Length > 2 || OBD_SUP == "0") {

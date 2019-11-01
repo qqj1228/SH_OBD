@@ -249,6 +249,7 @@ namespace SH_OBD {
         public bool Allow3Space { get; set; }
         public bool OBD_SUP { get; set; }
         public int StartSN { get; set; }
+        public string CN6_OBD_SUP { get; set; }
 
         public OBDResultSetting() {
             UploadWhenever = false;
@@ -264,6 +265,7 @@ namespace SH_OBD {
             OBD_SUP = true;
             UploadInterval = 15;
             StartSN = 0;
+            CN6_OBD_SUP = "29,43";
         }
     }
 
