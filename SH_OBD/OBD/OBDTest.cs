@@ -650,15 +650,19 @@ namespace SH_OBD {
             }
             int count = 0;
             while (!GetSupportStatus(mode01, m_mode01Support)) {
-                if (++count > 3) {
-                    errorMsg = "连接OBD接口出错！";
-                    return false;
+                if (++count >= 3) {
+                    OBDResult = false;
+                    errorMsg = "获取 Mode01 支持状态出错！";
+                    m_obdInterface.m_log.TraceError("Get Mode01 Support Status Error!");
+                    throw new Exception("获取 Mode01 支持状态出错！");
                 }
             }
             while (!GetSupportStatus(mode09, m_mode09Support)) {
-                if (++count > 3) {
-                    errorMsg = "连接OBD接口出错！";
-                    return false;
+                if (++count >= 3) {
+                    OBDResult = false;
+                    errorMsg = "获取 Mode09 支持状态出错！";
+                    m_obdInterface.m_log.TraceError("Get Mode09 Support Status Error!");
+                    throw new Exception("获取 Mode09 支持状态出错！");
                 }
             }
 
