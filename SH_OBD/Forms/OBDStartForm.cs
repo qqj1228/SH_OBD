@@ -19,12 +19,14 @@ namespace SH_OBD {
         private readonly Color m_backColor;
         private float m_lastHeight;
         readonly System.Timers.Timer m_timer;
-        private DateTime m_lastTime;
+        private DateTime m_lastTime_TXT;
+        private int m_lastLength_TXT;
 
         public OBDStartForm() {
             InitializeComponent();
             m_lastHeight = this.Height;
-            m_lastTime = DateTime.Now;
+            m_lastTime_TXT = DateTime.Now;
+            m_lastLength_TXT = 0;
             m_obdInterface = new OBDInterface();
             m_obdTest = new OBDTest(m_obdInterface);
             m_backColor = label1.BackColor;
@@ -341,17 +343,20 @@ namespace SH_OBD {
         }
 
         private void TxtBoxVIN_TextChanged(object sender, EventArgs e) {
-            TimeSpan ts = DateTime.Now.Subtract(m_lastTime);
+            TimeSpan ts = DateTime.Now.Subtract(m_lastTime_TXT);
             int sec = (int)ts.TotalSeconds;
-            if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Length == 17 && sec > 1) {
-                m_obdTest.StrVIN_IN = this.txtBoxVIN.Text.Trim().ToUpper();
-                m_lastTime = DateTime.Now;
-                this.txtBoxVIN.Text = m_obdTest.StrVIN_IN;
-                if (!m_obdTest.AdvanceMode) {
-                    StartOBDTest();
-                    this.txtBoxVIN.SelectAll();
+            if (Math.Abs(this.txtBoxVIN.Text.Length - m_lastLength_TXT) != 1 || this.txtBoxVIN.Text.Length == 17) {
+                m_lastTime_TXT = DateTime.Now;
+                this.txtBoxVIN.Text = this.txtBoxVIN.Text.Trim().ToUpper();
+                if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Length == 17 && sec > 1) {
+                    m_obdTest.StrVIN_IN = this.txtBoxVIN.Text;
+                    if (!m_obdTest.AdvanceMode) {
+                        StartOBDTest();
+                    }
                 }
+                this.txtBoxVIN.SelectAll();
             }
+            m_lastLength_TXT = this.txtBoxVIN.Text.Length;
         }
 
         private void OBDStartForm_Activated(object sender, EventArgs e) {
