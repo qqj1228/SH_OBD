@@ -261,10 +261,6 @@ namespace SH_OBD {
                         this.labelCALIDCVN.BackColor = Color.Red;
                         this.labelCALIDCVN.ForeColor = Color.Black;
                     }
-                    //if (!m_obdTest.SpaceResult) {
-                    //    this.label3Space.BackColor = Color.Red;
-                    //    this.label3Space.ForeColor = Color.Black;
-                    //}
                     if (!m_obdTest.OBDSUPResult) {
                         this.label3Space.BackColor = Color.Red;
                         this.label3Space.ForeColor = Color.Black;
@@ -347,7 +343,7 @@ namespace SH_OBD {
         private void TxtBoxVIN_TextChanged(object sender, EventArgs e) {
             TimeSpan ts = DateTime.Now.Subtract(m_lastTime_TXT);
             int sec = (int)ts.TotalSeconds;
-            if ((Math.Abs(this.txtBoxVIN.Text.Length - m_lastLength_TXT) != 1 || this.txtBoxVIN.Text.Length == 17)) {
+            if (sec < 2 || this.txtBoxVIN.Text.Length == 17) {
                 m_lastTime_TXT = DateTime.Now;
                 if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Length == 17 && m_bAcceptVIN_TXT) {
                     m_bAcceptVIN_TXT = false;
