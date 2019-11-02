@@ -96,7 +96,7 @@ namespace SH_OBD {
             if (strHex.Length > 0) {
                 for (int i = 0; i < strHex.Length; i += 2) {
                     int num = Hex2Int(strHex.Substring(i, 2));
-                    if (num != 0) {
+                    if (num >= 0x20 && num < 0x7F) {
                         str += new string((char)num, 1);
                     }
                 }

@@ -62,10 +62,14 @@ namespace SH_OBD {
             OBDSUPResult = true;
             m_db = new Model(m_obdInterface.DBandMES, m_obdInterface.m_log);
             // 设置“testNo”字段中的每日顺序号初值
+            GetSN(DateTime.Now.ToLocalTime().ToString("yyyyMMdd"));
+        }
+
+        private int GetSN(string strNowDate) {
             m_strSN = m_db.GetSN();
             if (m_strSN.Length == 0) {
                 m_iSN = m_obdInterface.OBDResultSetting.StartSN;
-            } else if (m_strSN.Split(',')[0] != DateTime.Now.ToLocalTime().ToString("yyyyMMdd")) {
+            } else if (m_strSN.Split(',')[0] != strNowDate) {
                 m_iSN = m_obdInterface.OBDResultSetting.StartSN;
             } else {
                 bool result = int.TryParse(m_strSN.Split(',')[1], out m_iSN);
@@ -75,6 +79,7 @@ namespace SH_OBD {
                     m_iSN = m_obdInterface.OBDResultSetting.StartSN;
                 }
             }
+            return m_iSN;
         }
 
         public DataTable GetDataTable(int index) {
@@ -800,8 +805,6 @@ namespace SH_OBD {
             if (count < 4) {
                 // 上传数据接口返回成功信息
                 m_db.UpdateUpload(strVIN, "1");
-                // 保存m_iSN的值，以免程序非正常退出的话，该值就丢失了
-                m_db.SetSN(m_strSN);
                 UploadDataDone?.Invoke();
 #if DEBUG
                 errorMsg = strMsg;
@@ -1077,13 +1080,12 @@ namespace SH_OBD {
             dr["SBFLAG"] = "OBD";
             dr["VIN"] = strVIN;
             string strNowDateTime = DateTime.Now.ToLocalTime().ToString("yyyyMMdd");
-            if (m_strSN.Split(',')[0] != strNowDateTime) {
-                m_iSN = m_obdInterface.OBDResultSetting.StartSN;
-            }
+            GetSN(strNowDateTime);
             ++m_iSN;
             m_iSN %= 10000;
             dr["TestNo"] = "XC0079" + strNowDateTime + m_iSN.ToString("d4");
             m_strSN = strNowDateTime + "," + m_iSN.ToString();
+            m_db.SetSN(m_strSN);
             dr["TestType"] = "0";
             dr["APASS"] = "1";
             dr["OPASS"] = strOBDResult;

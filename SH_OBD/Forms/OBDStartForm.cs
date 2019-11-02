@@ -59,11 +59,22 @@ namespace SH_OBD {
             m_timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimeUpload);
             m_timer.AutoReset = true;
             m_timer.Enabled = true;
+
+            Task.Factory.StartNew(TestNativeDatabase);
         }
 
         ~OBDStartForm() {
             f_MainForm.Close();
             m_timer.Dispose();
+        }
+
+        private void TestNativeDatabase() {
+            try {
+                m_obdTest.m_db.ShowDB("OBDUser");
+            } catch (Exception ex) {
+                m_obdInterface.m_log.TraceError("Access native database failed: " + ex.Message);
+                MessageBox.Show("检测到数据库通讯异常，请排查相关故障：\n" + ex.Message, "数据库通讯异常", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void OnTimeUpload(object source, System.Timers.ElapsedEventArgs e) {
@@ -90,7 +101,7 @@ namespace SH_OBD {
                 MessageBox.Show(errorMsg, WSHelper.GetMethodName(0));
 #endif
             } catch (Exception ex) {
-                m_obdInterface.m_log.TraceError("自动重传数据出错" + ex.Message);
+                m_obdInterface.m_log.TraceError("自动重传数据出错：" + ex.Message);
             }
 
         }
