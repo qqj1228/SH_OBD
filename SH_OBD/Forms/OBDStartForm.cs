@@ -101,7 +101,7 @@ namespace SH_OBD {
                 MessageBox.Show(errorMsg, WSHelper.GetMethodName(0));
 #endif
             } catch (Exception ex) {
-                m_obdInterface.m_log.TraceError("自动重传数据出错：" + ex.Message);
+                m_obdInterface.m_log.TraceError("UploadDataFromDBOnTime fialed：" + ex.Message);
             }
 
         }

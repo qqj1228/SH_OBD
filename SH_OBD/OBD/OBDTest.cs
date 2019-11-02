@@ -789,7 +789,7 @@ namespace SH_OBD {
                     try {
                         strRet = WSHelper.GetResponseOutString(WSHelper.GetMethodName(0), out strMsg, dt1MES, dt2MES);
                     } catch (Exception ex) {
-                        m_obdInterface.m_log.TraceError("WebService GetResponseString error: " + ex.Message);
+                        m_obdInterface.m_log.TraceError("WebService GetResponseString error: "+ strMsg + ", " + ex.Message);
                         dt2MES.Dispose();
                         dt1MES.Dispose();
                         throw;
@@ -1269,7 +1269,18 @@ namespace SH_OBD {
                 try {
                     bRet = UploadData(strVIN, dt.Rows[0][28].ToString(), dt, ref errorMsg);
                 } catch (Exception) {
-                    m_obdInterface.m_log.TraceError("Manual Upload Data Faiure！");
+                    string strMsg = "Wrong record: VIN = " + strVIN + ", OBDResult = " + dt.Rows[0][28].ToString() + ", ";
+                    for (int i = 0; i < dt.Rows.Count; i++) {
+                        strMsg += "ECU_ID = " + dt.Rows[i][1] + ", ";
+                        strMsg += "OBD_SUP = " + dt.Rows[i][4] + ", ";
+                        strMsg += "ODO = " + dt.Rows[i][5] + ", ";
+                        strMsg += "ECU_NAME = " + dt.Rows[i][25] + ", ";
+                        strMsg += "CAL_ID = " + dt.Rows[i][26] + ", ";
+                        strMsg += "CVN = " + dt.Rows[i][27] + " || ";
+                    }
+                    strMsg = strMsg.Substring(0, strMsg.Length - 4);
+                    m_obdInterface.m_log.TraceError("Manual Upload Data Failed: " + errorMsg);
+                    m_obdInterface.m_log.TraceError(strMsg);
                     dt.Dispose();
                     throw;
                 }
@@ -1337,10 +1348,20 @@ namespace SH_OBD {
                 }
                 try {
                     bRet = UploadData(dt.Rows[0][0].ToString(), dt.Rows[0][28].ToString(), dt, ref errorMsg);
-                } catch (Exception) {
-                    m_obdInterface.m_log.TraceError("Upload Data OnTime Faiure！");
-                    dt.Dispose();
-                    throw;
+                } catch (Exception ex) {
+                    string strMsg = "Wrong record: VIN = " + dt.Rows[0][0].ToString() + ", OBDResult = " + dt.Rows[0][28].ToString() + " [";
+                    for (int j = 0; j < dt.Rows.Count; j++) {
+                        strMsg += "ECU_ID = " + dt.Rows[j][1] + ", ";
+                        strMsg += "OBD_SUP = " + dt.Rows[j][4] + ", ";
+                        strMsg += "ODO = " + dt.Rows[j][5] + ", ";
+                        strMsg += "ECU_NAME = " + dt.Rows[j][25] + ", ";
+                        strMsg += "CAL_ID = " + dt.Rows[j][26] + ", ";
+                        strMsg += "CVN = " + dt.Rows[j][27] + " || ";
+                    }
+                    strMsg = strMsg.Substring(0, strMsg.Length - 4) + "]";
+                    m_obdInterface.m_log.TraceError("Upload Data OnTime Failed: " + errorMsg + ", " + ex.Message);
+                    m_obdInterface.m_log.TraceError(strMsg);
+                    continue;
                 }
             }
             dt.Dispose();
