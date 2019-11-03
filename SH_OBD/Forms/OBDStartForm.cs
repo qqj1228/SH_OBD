@@ -20,14 +20,12 @@ namespace SH_OBD {
         private float m_lastHeight;
         readonly System.Timers.Timer m_timer;
         private DateTime m_lastTime_TXT;
-        private int m_lastLength_TXT;
         private bool m_bAcceptVIN_TXT;
 
         public OBDStartForm() {
             InitializeComponent();
             m_lastHeight = this.Height;
             m_lastTime_TXT = DateTime.Now;
-            m_lastLength_TXT = 0;
             m_bAcceptVIN_TXT = true;
             m_obdInterface = new OBDInterface();
             m_obdTest = new OBDTest(m_obdInterface);
@@ -352,10 +350,7 @@ namespace SH_OBD {
         }
 
         private void TxtBoxVIN_TextChanged(object sender, EventArgs e) {
-            TimeSpan ts = DateTime.Now.Subtract(m_lastTime_TXT);
-            int sec = (int)ts.TotalSeconds;
-            m_lastTime_TXT = DateTime.Now;
-            if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Length == 17 && m_bAcceptVIN_TXT) {
+            if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Trim().Length == 17 && m_bAcceptVIN_TXT) {
                 m_bAcceptVIN_TXT = false;
                 this.txtBoxVIN.Text = this.txtBoxVIN.Text.Trim().ToUpper();
                 m_obdTest.StrVIN_IN = this.txtBoxVIN.Text;
@@ -365,7 +360,6 @@ namespace SH_OBD {
                 this.txtBoxVIN.SelectAll();
             }
             m_bAcceptVIN_TXT = true;
-            m_lastLength_TXT = this.txtBoxVIN.Text.Length;
         }
 
         private void OBDStartForm_Activated(object sender, EventArgs e) {
@@ -373,6 +367,12 @@ namespace SH_OBD {
         }
 
         private void TxtBoxVIN_KeyPress(object sender, KeyPressEventArgs e) {
+            TimeSpan ts = DateTime.Now.Subtract(m_lastTime_TXT);
+            int sec = (int)ts.TotalSeconds;
+            m_lastTime_TXT = DateTime.Now;
+            if (sec > 1) {
+                this.txtBoxVIN.Text = "";
+            }
             e.KeyChar = Convert.ToChar(e.KeyChar.ToString().ToUpper());
         }
     }
