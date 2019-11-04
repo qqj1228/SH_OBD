@@ -46,7 +46,7 @@ namespace SH_OBD {
                     File.Delete(dllPath);
                 }
             } catch (Exception ex) {
-                m_obdInterface.m_log.TraceError("Delete WebService dll file failure: " + ex.Message);
+                m_obdInterface.m_log.TraceError("Delete WebService dll file failed: " + ex.Message);
             }
             // 在OBDData表中新增Upload字段，用于存储上传是否成功的标志
             m_obdTest.m_db.AddUploadField();
@@ -233,6 +233,8 @@ namespace SH_OBD {
                 this.label3Space.BackColor = m_backColor;
                 this.label3Space.ForeColor = Color.Gray;
             });
+            m_obdInterface.m_log.TraceInfo(">>>>>>>>>> Start to test vehicle of VIN: " + m_obdTest.StrVIN_IN + " <<<<<<<<<<");
+            m_obdInterface.m_log.TraceInfo("Ver: " + MainFileVersion.AssemblyVersion);
             if (m_obdInterface.ConnectedStatus) {
                 m_obdInterface.Disconnect();
             }
@@ -260,7 +262,7 @@ namespace SH_OBD {
             this.Invoke((EventHandler)delegate {
                 if (m_obdTest.OBDResult) {
                     this.labelResult.ForeColor = Color.GreenYellow;
-                    this.labelResult.Text = "OBD检测结果：合格";
+                    this.labelResult.Text = "被检车辆: " + m_obdTest.StrVIN_ECU + "\nOBD检测结果：合格";
                 } else {
                     if (!m_obdTest.VINResult) {
                         this.labelVINError.BackColor = Color.Red;
@@ -276,7 +278,7 @@ namespace SH_OBD {
                     }
 
                     this.labelResult.ForeColor = Color.Red;
-                    this.labelResult.Text = "OBD检测结果：不合格";
+                    this.labelResult.Text = "被检车辆: " + m_obdTest.StrVIN_ECU + "\nOBD检测结果：不合格";
                 }
             });
         }
@@ -367,12 +369,12 @@ namespace SH_OBD {
         }
 
         private void TxtBoxVIN_KeyPress(object sender, KeyPressEventArgs e) {
-            TimeSpan ts = DateTime.Now.Subtract(m_lastTime_TXT);
-            int sec = (int)ts.TotalSeconds;
-            m_lastTime_TXT = DateTime.Now;
-            if (sec > 1) {
-                this.txtBoxVIN.Text = "";
-            }
+            //TimeSpan ts = DateTime.Now.Subtract(m_lastTime_TXT);
+            //int sec = (int)ts.TotalSeconds;
+            //m_lastTime_TXT = DateTime.Now;
+            //if (sec > 1) {
+            //    this.txtBoxVIN.Text = "";
+            //}
             e.KeyChar = Convert.ToChar(e.KeyChar.ToString().ToUpper());
         }
     }

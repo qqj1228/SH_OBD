@@ -78,7 +78,7 @@
             // label1
             // 
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Font = new System.Drawing.Font("宋体", 60F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label1.Font = new System.Drawing.Font("宋体", 50F, System.Drawing.FontStyle.Bold);
             this.label1.Location = new System.Drawing.Point(3, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(172, 106);
@@ -167,9 +167,8 @@
             // 
             // labelResult
             // 
-            this.labelResult.AutoSize = true;
             this.labelResult.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelResult.Font = new System.Drawing.Font("宋体", 60F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.labelResult.Font = new System.Drawing.Font("宋体", 50F, System.Drawing.FontStyle.Bold);
             this.labelResult.Location = new System.Drawing.Point(3, 196);
             this.labelResult.Name = "labelResult";
             this.labelResult.Size = new System.Drawing.Size(778, 280);
@@ -204,7 +203,6 @@
             this.Load += new System.EventHandler(this.OBDStartForm_Load);
             this.Resize += new System.EventHandler(this.OBDStartForm_Resize);
             this.tblLayoutMain.ResumeLayout(false);
-            this.tblLayoutMain.PerformLayout();
             this.tblLayoutTop.ResumeLayout(false);
             this.tblLayoutTop.PerformLayout();
             this.tblLayoutBottom.ResumeLayout(false);

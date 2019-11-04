@@ -41,6 +41,7 @@ namespace SH_OBD {
         public bool SpaceResult { get; set; }
         public bool OBDSUPResult { get; set; }
         public string StrVIN_IN { get; set; }
+        public string StrVIN_ECU { get; set; }
 
         public OBDTest(OBDInterface obd) {
             m_obdInterface = obd;
@@ -393,8 +394,9 @@ namespace SH_OBD {
                     break;
                 }
             }
-            if (m_obdInterface.OBDResultSetting.VINError && StrVIN_IN != null && strVIN != StrVIN_IN && StrVIN_IN.Length > 0) {
-                m_obdInterface.m_log.TraceWarning("Scan tool VIN[" + StrVIN_IN + "] and ECU VIN[" + strVIN + "] are not consistent");
+            StrVIN_ECU = strVIN;
+            if (m_obdInterface.OBDResultSetting.VINError && StrVIN_IN != null && StrVIN_ECU != StrVIN_IN && StrVIN_IN.Length > 0) {
+                m_obdInterface.m_log.TraceWarning("Scan tool VIN[" + StrVIN_IN + "] and ECU VIN[" + StrVIN_ECU + "] are not consistent");
                 VINResult = false;
             }
             param.Parameter = HByte + 0x0A;
@@ -650,6 +652,8 @@ namespace SH_OBD {
         /// <param name="errorMsg">错误信息</param>
         /// <returns>是否返回成功信息</returns>
         public bool StartOBDTest(out string errorMsg) {
+            m_obdInterface.m_log.TraceInfo("Enter StartOBDTest function");
+
             errorMsg = "";
             m_dtInfo.Clear();
             m_dtInfo.Dispose();
@@ -681,16 +685,16 @@ namespace SH_OBD {
             while (!GetSupportStatus(mode01, m_mode01Support)) {
                 if (++count >= 3) {
                     OBDResult = false;
-                    errorMsg = "获取 Mode01 支持状态出错！";
-                    m_obdInterface.m_log.TraceError("Get Mode01 Support Status Error!");
+                    errorMsg = "获取 Mode01 / DID F4 支持状态出错！";
+                    m_obdInterface.m_log.TraceError("Get Mode01 / DID F4 Support Status Error!");
                     throw new Exception("获取 Mode01 支持状态出错！");
                 }
             }
             while (!GetSupportStatus(mode09, m_mode09Support)) {
                 if (++count >= 3) {
                     OBDResult = false;
-                    errorMsg = "获取 Mode09 支持状态出错！";
-                    m_obdInterface.m_log.TraceError("Get Mode09 Support Status Error!");
+                    errorMsg = "获取 Mode09 / DID F8 支持状态出错！";
+                    m_obdInterface.m_log.TraceError("Get Mode09 / DID F8 Support Status Error!");
                     throw new Exception("获取 Mode09 支持状态出错！");
                 }
             }
@@ -703,22 +707,22 @@ namespace SH_OBD {
             SetDataTableECUInfo();
             //SetDataTableIUPR();
 
+            WriteDbStart?.Invoke();
             OBDResult = DTCResult && ReadinessResult && VINResult && CALIDCVNResult && SpaceResult && OBDSUPResult;
 
-            WriteDbStart?.Invoke();
-            string strVIN = "";
-            for (int i = 2; i < m_dtECUInfo.Columns.Count; i++) {
-                strVIN = m_dtECUInfo.Rows[0][i].ToString();
-                if (strVIN.Length > 0 || strVIN != "不适用" || strVIN != "--") {
-                    break;
-                }
-            }
+            //string strVIN = "";
+            //for (int i = 2; i < m_dtECUInfo.Columns.Count; i++) {
+            //    strVIN = m_dtECUInfo.Rows[0][i].ToString();
+            //    if (strVIN.Length > 0 || strVIN != "不适用" || strVIN != "--") {
+            //        break;
+            //    }
+            //}
             string strOBDResult = OBDResult ? "1" : "0";
 
             DataTable dt = new DataTable();
             SetDataTableResultColumns(ref dt);
             try {
-                SetDataTableResult(strVIN, strOBDResult, ref dt);
+                SetDataTableResult(StrVIN_ECU, strOBDResult, ref dt);
             } catch (Exception ex) {
                 m_obdInterface.m_log.TraceError("Result DataTable Error: " + ex.Message);
                 dt.Dispose();
@@ -746,7 +750,7 @@ namespace SH_OBD {
 
             bool bRet;
             try {
-                bRet = UploadData(strVIN, strOBDResult, dt, ref errorMsg);
+                bRet = UploadData(StrVIN_ECU, strOBDResult, dt, ref errorMsg);
             } catch (Exception) {
                 dt.Dispose();
                 throw;
