@@ -92,7 +92,7 @@ namespace SH_OBD {
             //                }
             //            }
             #endregion
-
+            m_obdInterface.m_log.TraceError("Start UploadDataFromDBOnTime");
             try {
                 m_obdTest.UploadDataFromDBOnTime(out string errorMsg);
 #if DEBUG
@@ -136,6 +136,7 @@ namespace SH_OBD {
                 this.txtBoxVIN.Text = Encoding.Default.GetString(bits).Trim().ToUpper();
                 if (this.txtBoxVIN.Text.Length == 17) {
                     m_obdTest.StrVIN_IN = this.txtBoxVIN.Text;
+                    m_obdInterface.m_log.TraceInfo("Get VIN: " + m_obdTest.StrVIN_IN + " by serial port scanner");
                     if (!m_obdTest.AdvanceMode) {
                         StartOBDTest();
                     }
@@ -234,7 +235,6 @@ namespace SH_OBD {
                 this.label3Space.ForeColor = Color.Gray;
             });
             m_obdInterface.m_log.TraceInfo(">>>>>>>>>> Start to test vehicle of VIN: " + m_obdTest.StrVIN_IN + " <<<<<<<<<<");
-            m_obdInterface.m_log.TraceInfo("Ver: " + MainFileVersion.AssemblyVersion);
             if (m_obdInterface.ConnectedStatus) {
                 m_obdInterface.Disconnect();
             }
@@ -356,6 +356,7 @@ namespace SH_OBD {
                 m_bAcceptVIN_TXT = false;
                 this.txtBoxVIN.Text = this.txtBoxVIN.Text.Trim().ToUpper();
                 m_obdTest.StrVIN_IN = this.txtBoxVIN.Text;
+                m_obdInterface.m_log.TraceInfo("Get VIN: " + m_obdTest.StrVIN_IN);
                 if (!m_obdTest.AdvanceMode) {
                     StartOBDTest();
                 }

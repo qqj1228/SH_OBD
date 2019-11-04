@@ -652,7 +652,7 @@ namespace SH_OBD {
         /// <param name="errorMsg">错误信息</param>
         /// <returns>是否返回成功信息</returns>
         public bool StartOBDTest(out string errorMsg) {
-            m_obdInterface.m_log.TraceInfo("Enter StartOBDTest function");
+            m_obdInterface.m_log.TraceInfo("Enter StartOBDTest function. Ver: " + MainFileVersion.AssemblyVersion);
 
             errorMsg = "";
             m_dtInfo.Clear();
@@ -710,13 +710,6 @@ namespace SH_OBD {
             WriteDbStart?.Invoke();
             OBDResult = DTCResult && ReadinessResult && VINResult && CALIDCVNResult && SpaceResult && OBDSUPResult;
 
-            //string strVIN = "";
-            //for (int i = 2; i < m_dtECUInfo.Columns.Count; i++) {
-            //    strVIN = m_dtECUInfo.Rows[0][i].ToString();
-            //    if (strVIN.Length > 0 || strVIN != "不适用" || strVIN != "--") {
-            //        break;
-            //    }
-            //}
             string strOBDResult = OBDResult ? "1" : "0";
 
             DataTable dt = new DataTable();

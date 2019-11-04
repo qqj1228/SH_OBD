@@ -100,6 +100,7 @@ namespace SH_OBD {
             this.Invoke((EventHandler)delegate {
                 this.txtBoxVIN.Text = Encoding.Default.GetString(bits).Trim().ToUpper();
                 if (this.txtBoxVIN.Text.Length == 17 && !this.chkBoxManualUpload.Checked) {
+                    m_obdInterface.m_log.TraceInfo("Get VIN: " + this.txtBoxVIN.Text + " by serial port scanner");
                     this.btnStartOBDTest.PerformClick();
                 }
             });
@@ -197,6 +198,7 @@ namespace SH_OBD {
                 if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Length == 17 && sec > 1) {
                     m_lastTime = DateTime.Now;
                     this.txtBoxVIN.Text = this.txtBoxVIN.Text.Trim().ToUpper();
+                    m_obdInterface.m_log.TraceInfo("Get VIN: " + this.txtBoxVIN.Text);
                     this.btnStartOBDTest.PerformClick();
                     this.txtBoxVIN.ReadOnly = true;
                 }
@@ -207,6 +209,7 @@ namespace SH_OBD {
             if (!m_obdTest.AdvanceMode) {
                 return;
             }
+            m_obdInterface.m_log.TraceInfo("Start ManualUpload");
             this.labelInfo.ForeColor = Color.Black;
             this.labelInfo.Text = "手动读取数据";
             this.labelMESInfo.ForeColor = Color.Black;
@@ -227,11 +230,13 @@ namespace SH_OBD {
             if (!m_obdTest.AdvanceMode) {
                 return;
             }
+            m_obdInterface.m_log.TraceInfo("Start OBD test in advance mode");
+            m_obdTest.StrVIN_IN = this.txtBoxVIN.Text;
             this.labelInfo.ForeColor = Color.Black;
             this.labelInfo.Text = "准备OBD检测";
             this.labelMESInfo.ForeColor = Color.Black;
             this.labelMESInfo.Text = "准备上传数据";
-
+            m_obdInterface.m_log.TraceInfo(">>>>>>>>>> Start to test vehicle of VIN: " + m_obdTest.StrVIN_IN + " <<<<<<<<<<");
             try {
                 m_obdTest.StartOBDTest(out string errorMsg);
 #if DEBUG
