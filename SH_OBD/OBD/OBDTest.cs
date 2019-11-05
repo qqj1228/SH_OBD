@@ -133,7 +133,7 @@ namespace SH_OBD {
                     for (int i = 2; i < dt.Columns.Count; i++) {
                         if (dt.Columns[i].ColumnName == value.ECUResponseID) {
                             if (value.ListStringValue.Count == 0 || value.ListStringValue[0].Length == 0) {
-                                dr[i] = "--";
+                                dr[i] = "";
                             } else {
                                 dr[i] = value.ListStringValue[0];
                                 for (int j = 1; j < value.ListStringValue.Count; j++) {
