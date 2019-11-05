@@ -265,7 +265,7 @@ namespace SH_OBD {
             OBD_SUP = true;
             UploadInterval = 15;
             StartSN = 0;
-            CN6_OBD_SUP = "29,43";
+            CN6_OBD_SUP = "29,2B";
         }
     }
 

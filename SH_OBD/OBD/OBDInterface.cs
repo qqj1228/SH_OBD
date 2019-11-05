@@ -98,6 +98,10 @@ namespace SH_OBD {
             return CommSettings.ProtocolIndex;
         }
 
+        public void SetTimeout(int iTimeout = 500) {
+            m_obdDevice.SetTimeout(iTimeout);
+        }
+
         public bool InitDevice(HardwareType device, int port, int baud, ProtocolType protocol) {
             m_log.TraceInfo(string.Format("Attempting initialization on port {0}", port.ToString()));
 

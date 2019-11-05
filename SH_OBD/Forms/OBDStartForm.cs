@@ -256,7 +256,9 @@ namespace SH_OBD {
                 MessageBox.Show(errorMsg, WSHelper.GetMethodName(0));
 #endif
             } catch (Exception ex) {
-                MessageBox.Show(ex.Message + "\n" + errorMsg, "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                m_obdTest.OBDResult = false;
+                m_obdInterface.m_log.TraceError("OBD test occurred error: " + errorMsg + ", " + ex.Message);
+                MessageBox.Show(errorMsg + "\n" + ex.Message, "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             this.Invoke((EventHandler)delegate {

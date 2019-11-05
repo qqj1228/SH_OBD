@@ -237,12 +237,15 @@ namespace SH_OBD {
             this.labelMESInfo.ForeColor = Color.Black;
             this.labelMESInfo.Text = "准备上传数据";
             m_obdInterface.m_log.TraceInfo(">>>>>>>>>> Start to test vehicle of VIN: " + m_obdTest.StrVIN_IN + " <<<<<<<<<<");
+            string errorMsg = "";
             try {
-                m_obdTest.StartOBDTest(out string errorMsg);
+                m_obdTest.StartOBDTest(out errorMsg);
 #if DEBUG
                 MessageBox.Show(errorMsg, WSHelper.GetMethodName(0));
 #endif
             } catch (Exception ex) {
+                m_obdTest.OBDResult = false;
+                m_obdInterface.m_log.TraceError("OBD test occurred error: " + errorMsg + ", " + ex.Message);
                 MessageBox.Show(ex.Message, "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 

@@ -53,6 +53,16 @@ namespace SH_OBD {
             }
         }
 
+        protected string Transact(int iTimeut) {
+            m_TransFlag.Reset();
+            if (!m_TransFlag.WaitOne(iTimeut, false)) {
+                ThrowException("Timeout");
+            }
+            lock (locker) {
+                return m_RxString;
+            }
+        }
+
         protected void Setup(CommLine.CommLineSettings settings) {
             m_RxBuffer = new byte[settings.RxStringBufferSize];
             m_RxTerm = settings.RxTerminator;

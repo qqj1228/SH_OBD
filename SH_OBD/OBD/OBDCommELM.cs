@@ -68,6 +68,23 @@ namespace SH_OBD {
             return response;
         }
 
+        public string GetResponse() {
+            string response;
+            try {
+                m_log.TraceInfo(string.Format("TX: Waitting for pending message"));
+                response = Transact(5000);
+                m_log.TraceInfo(string.Format("RX: {0}", response.Replace("\r", @"\r")));
+            } catch (Exception ex) {
+                m_log.TraceError(ex.Message);
+                if (string.Compare(ex.Message, "Timeout") == 0) {
+                    Open();
+                }
+                m_log.TraceError("RX: COMM TIMED OUT!");
+                response = "TIMEOUT";
+            }
+            return response;
+        }
+
         protected override CommBaseSettings CommSettings() {
             CommLine.CommLineSettings settings = new CommLine.CommLineSettings();
             settings.SetStandard(m_Port, m_BaudRate);
