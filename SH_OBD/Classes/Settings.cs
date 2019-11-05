@@ -261,7 +261,7 @@ namespace SH_OBD {
             CALIDCVNEmpty = false;
             Allow3Space = false;
             UploadTime = 20;
-            CN6_OBD_SUP = "29,43";
+            CN6_OBD_SUP = "29,2B";
         }
     }
 

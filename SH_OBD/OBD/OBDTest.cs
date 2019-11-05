@@ -52,7 +52,7 @@ namespace SH_OBD {
             m_CN6 = false;
             AdvanceMode = false;
             AccessAdvanceMode = 0;
-            OBDResult = true;
+            OBDResult = false;
             DTCResult = true;
             ReadinessResult = true;
             VINResult = true;
@@ -112,7 +112,7 @@ namespace SH_OBD {
                     for (int i = 2; i < dt.Columns.Count; i++) {
                         if (dt.Columns[i].ColumnName == value.ECUResponseID) {
                             if (value.ListStringValue.Count == 0 || value.ListStringValue[0].Length == 0) {
-                                dr[i] = "--";
+                                dr[i] = "";
                             } else {
                                 dr[i] = value.ListStringValue[0];
                                 for (int j = 1; j < value.ListStringValue.Count; j++) {
@@ -229,11 +229,6 @@ namespace SH_OBD {
                 };
             }
             SetDataRow(++NO, "MIL状态", dt, param);                                          // 0
-            for (int i = 2; i < dt.Columns.Count; i++) {
-                if (dt.Rows[dt.Rows.Count - 1][i].ToString() == "ON") {
-                    OBDResult = false;
-                }
-            }
 
             param.Parameter = HByte + 0x21;
             param.ValueTypes = (int)OBDParameter.EnumValueTypes.Double;
@@ -375,7 +370,9 @@ namespace SH_OBD {
             param.Parameter = HByte + 4;
             SetDataRow(++NO, "CAL_ID", dt, param);  // 2
             param.Parameter = HByte + 6;
+            m_obdInterface.SetTimeout(15000);
             SetDataRow(++NO, "CVN", dt, param);     // 3
+            m_obdInterface.SetTimeout(500);
 
             // 根据配置文件，判断CAL_ID和CVN两个值的合法性
             if (m_CN6) {
@@ -634,7 +631,7 @@ namespace SH_OBD {
             m_mode09Support.Clear();
             m_compIgn = false;
             m_CN6 = false;
-            OBDResult = true;
+            OBDResult = false;
             DTCResult = true;
             ReadinessResult = true;
             VINResult = true;

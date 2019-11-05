@@ -33,5 +33,6 @@ namespace SH_OBD {
         public abstract ProtocolType GetProtocolType();
         public abstract int GetComPortIndex();
         public abstract int GetBaudRateIndex();
+        public abstract void SetTimeout(int iTimeout);
     }
 }

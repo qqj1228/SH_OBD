@@ -137,6 +137,10 @@ namespace SH_OBD {
             return "";
         }
 
+        override public void SetTimeout(int iTimeout) {
+            m_CommELM.SetTimeout(iTimeout);
+        }
+
         public override void Disconnect() {
             if (m_CommELM.Online) {
                 m_CommELM.Close();

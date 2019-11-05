@@ -30,6 +30,7 @@ namespace SH_OBD {
         private readonly List<OBDResponse> m_Responses;
         public bool ErrorDetected { get; set; }
         public string RawResponse { get; set; }
+        public bool Pending { get; set; }
 
         public int ResponseCount {
             get { return m_Responses.Count; }
@@ -38,6 +39,7 @@ namespace SH_OBD {
         public OBDResponseList(string response) {
             RawResponse = response;
             ErrorDetected = false;
+            Pending = false;
             m_Responses = new List<OBDResponse>();
         }
 

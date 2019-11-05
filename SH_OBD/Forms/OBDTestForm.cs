@@ -225,15 +225,17 @@ namespace SH_OBD {
             this.labelInfo.Text = "准备OBD检测";
             this.labelMESInfo.ForeColor = Color.Black;
             this.labelMESInfo.Text = "准备上传数据";
-
+            string errorMsg = "";
             try {
-                m_obdTest.StartOBDTest(out string errorMsg);
+                m_obdTest.StartOBDTest(out errorMsg);
 #if DEBUG
                 if (!m_obdInterface.OracleMESSetting.Enable) {
                     MessageBox.Show(errorMsg, WSHelper.GetMethodName(0));
                 }
 #endif
             } catch (Exception ex) {
+                m_obdTest.OBDResult = false;
+                m_obdInterface.m_log.TraceError("OBD test occurred error: " + errorMsg + ", " + ex.Message);
                 MessageBox.Show(ex.Message, "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 

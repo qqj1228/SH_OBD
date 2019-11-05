@@ -341,6 +341,10 @@ namespace SH_OBD {
             return (m_obdDevice.Query("04").IndexOf("44") >= 0);
         }
 
+        public void SetTimeout(int iTimeout = 500) {
+            m_obdDevice.SetTimeout(iTimeout);
+        }
+
         public void Disconnect() {
             m_obdDevice.Disconnect();
             m_obdDevice.SetConnected(false);
