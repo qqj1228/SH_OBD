@@ -46,6 +46,7 @@ namespace SH_OBD {
                     }
                     str += "\n";
                 }
+                str = str.Trim('\n');
                 m_log.TraceInfo(str);
                 sqlCmd.Dispose();
                 sqlConn.Close();

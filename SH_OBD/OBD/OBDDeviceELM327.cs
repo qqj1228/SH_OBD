@@ -125,11 +125,6 @@ namespace SH_OBD {
         /// <returns></returns>
         public override OBDResponseList Query(OBDParameter param) {
             OBDResponseList orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
-            //int count = 0;
-            //while (orl.Pending && orl.ErrorDetected && count <= 3) {
-            //    ++count;
-            //    orl = m_Parser.Parse(param, m_CommELM.GetResponse());
-            //}
             for (int i = 2; i > 0; i--) {
                 if (!orl.ErrorDetected) {
                     break;

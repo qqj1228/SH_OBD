@@ -12,7 +12,7 @@ namespace SH_OBD {
 
             OBDResponseList responseList = new OBDResponseList(response);
             response = Strip(response);
-            if (ErrorCheck(response) && response != "TIMEOUT") {
+            if (ErrorCheck(response)) {
                 responseList.ErrorDetected = true;
                 return responseList;
             }
@@ -29,9 +29,6 @@ namespace SH_OBD {
             }
             if (lines.Count == 0 && responseList.Pending) {
                 responseList.RawResponse = "Pending_Message";
-                return responseList;
-            }
-            if (response == "TIMEOUT") {
                 responseList.ErrorDetected = true;
                 return responseList;
             }

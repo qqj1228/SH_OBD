@@ -399,7 +399,7 @@ namespace SH_OBD {
             param.Parameter = HByte + 4;
             SetDataRow(++NO, "CAL_ID", dt, param);  // 2
             param.Parameter = HByte + 6;
-            m_obdInterface.SetTimeout(5000);
+            m_obdInterface.SetTimeout(15000);
             SetDataRow(++NO, "CVN", dt, param);     // 3
             m_obdInterface.SetTimeout(500);
 
@@ -649,7 +649,7 @@ namespace SH_OBD {
         /// <param name="errorMsg">错误信息</param>
         /// <returns>是否返回成功信息</returns>
         public bool StartOBDTest(out string errorMsg) {
-            m_obdInterface.m_log.TraceInfo("Enter StartOBDTest function. Ver: " + MainFileVersion.AssemblyVersion);
+            m_obdInterface.m_log.TraceInfo(">>>>> Enter StartOBDTest function. Ver: " + MainFileVersion.AssemblyVersion + "<<<<<");
 
             errorMsg = "";
             m_dtInfo.Clear();
