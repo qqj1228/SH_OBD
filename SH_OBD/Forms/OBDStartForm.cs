@@ -92,7 +92,7 @@ namespace SH_OBD {
             //                }
             //            }
             #endregion
-            m_obdInterface.m_log.TraceError("Start UploadDataFromDBOnTime");
+            m_obdInterface.m_log.TraceInfo("Start UploadDataFromDBOnTime");
             try {
                 m_obdTest.UploadDataFromDBOnTime(out string errorMsg);
 #if DEBUG
@@ -256,7 +256,6 @@ namespace SH_OBD {
                 MessageBox.Show(errorMsg, WSHelper.GetMethodName(0));
 #endif
             } catch (Exception ex) {
-                m_obdTest.OBDResult = false;
                 m_obdInterface.m_log.TraceError("OBD test occurred error: " + errorMsg + ", " + ex.Message);
                 MessageBox.Show(errorMsg + "\n" + ex.Message, "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

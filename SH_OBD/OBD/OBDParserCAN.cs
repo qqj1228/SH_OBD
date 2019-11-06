@@ -28,8 +28,7 @@ namespace SH_OBD {
                 }
             }
             if (lines.Count == 0 && responseList.Pending) {
-                responseList.RawResponse = "Pending_Message";
-                responseList.ErrorDetected = true;
+                responseList.RawResponse = "PENDING";
                 return responseList;
             }
             lines.Sort();

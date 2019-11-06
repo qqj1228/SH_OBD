@@ -399,9 +399,9 @@ namespace SH_OBD {
             param.Parameter = HByte + 4;
             SetDataRow(++NO, "CAL_ID", dt, param);  // 2
             param.Parameter = HByte + 6;
-            m_obdInterface.SetTimeout(15000);
+            //m_obdInterface.SetTimeout(5000);
             SetDataRow(++NO, "CVN", dt, param);     // 3
-            m_obdInterface.SetTimeout(500);
+            //m_obdInterface.SetTimeout(500);
 
             // 根据配置文件，判断CAL_ID和CVN两个值的合法性
             if (m_CN6) {
@@ -798,6 +798,7 @@ namespace SH_OBD {
             dt1MES.Dispose();
             if (count < 4) {
                 // 上传数据接口返回成功信息
+                m_obdInterface.m_log.TraceInfo("Upload data success, VIN = " + strVIN);
                 m_db.UpdateUpload(strVIN, "1");
                 UploadDataDone?.Invoke();
 #if DEBUG
