@@ -74,7 +74,18 @@ namespace SH_OBD {
                             m_CommELM.Close();
                             return false;
                         }
-                        if (GetOBDResponse("0100").Replace(" ", "").IndexOf("4100") >= 0 || GetOBDResponse("22F810").Replace(" ", "").IndexOf("62F810") >= 0) {
+                        bool bSupport = false;
+                        for (int i = 3; i > 0 && !bSupport; i--) {
+                            if (GetOBDResponse("0100").Replace(" ", "").Contains("4100")) {
+                                bSupport = true;
+                            }
+                        }
+                        for (int i = 3; i > 0 && !bSupport; i--) {
+                            if (GetOBDResponse("22F810").Replace(" ", "").Contains("62F810")) {
+                                bSupport = bSupport || true;
+                            }
+                        }
+                        if (bSupport) {
                             if (m_Parser == null) {
                                 SetProtocol((ProtocolType)xattr[idx]);
                             }
@@ -199,21 +210,12 @@ namespace SH_OBD {
         }
 
         /// <summary>
-        /// Send command with 3 attempts
-        /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
-        public bool ConfirmAT(string command) {
-            return ConfirmAT(command, 3);
-        }
-
-        /// <summary>
         /// Send command
         /// </summary>
         /// <param name="command"></param>
         /// <param name="attempts"></param>
         /// <returns></returns>
-        public bool ConfirmAT(string command, int attempts) {
+        public bool ConfirmAT(string command, int attempts = 3) {
             if (!m_CommELM.Online) {
                 return false;
             }
