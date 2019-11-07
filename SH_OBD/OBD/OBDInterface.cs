@@ -54,6 +54,7 @@ namespace SH_OBD {
             OracleMESSetting = LoadOracleMESSetting();
             VehicleProfiles = LoadVehicleProfiles();
             SetDevice(HardwareType.ELM327);
+            Disconnect();
             UseISO27145 = false;
             ScannerPortOpened = false;
             if (CommSettings.UseSerialScanner) {

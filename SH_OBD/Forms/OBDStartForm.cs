@@ -229,7 +229,6 @@ namespace SH_OBD {
                 }
 #endif
             } catch (Exception ex) {
-                m_obdTest.OBDResult = false;
                 m_obdInterface.m_log.TraceError("OBD test occurred error: " + errorMsg + ", " + ex.Message);
                 MessageBox.Show(ex.Message + "\n" + errorMsg, "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

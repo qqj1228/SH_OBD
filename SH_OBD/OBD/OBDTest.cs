@@ -370,9 +370,9 @@ namespace SH_OBD {
             param.Parameter = HByte + 4;
             SetDataRow(++NO, "CAL_ID", dt, param);  // 2
             param.Parameter = HByte + 6;
-            m_obdInterface.SetTimeout(15000);
+            //m_obdInterface.SetTimeout(15000);
             SetDataRow(++NO, "CVN", dt, param);     // 3
-            m_obdInterface.SetTimeout(500);
+            //m_obdInterface.SetTimeout(500);
 
             // 根据配置文件，判断CAL_ID和CVN两个值的合法性
             if (m_CN6) {
