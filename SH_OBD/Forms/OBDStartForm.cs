@@ -264,6 +264,7 @@ namespace SH_OBD {
                 if (m_obdTest.OBDResult) {
                     this.labelResult.ForeColor = Color.GreenYellow;
                     this.labelResult.Text = "被检车辆: " + m_obdTest.StrVIN_ECU + "\nOBD检测结果：合格";
+                    this.txtBoxVIN.Text = "";
                 } else {
                     if (!m_obdTest.VINResult) {
                         this.labelVINError.BackColor = Color.Red;
