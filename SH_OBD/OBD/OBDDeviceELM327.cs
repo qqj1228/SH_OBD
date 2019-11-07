@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO.Ports;
 
 namespace SH_OBD {
     public class OBDDeviceELM327 : OBDDevice {
@@ -89,11 +90,11 @@ namespace SH_OBD {
                         m_CommELM.Close();
                     }
                 }
-            } catch (Exception e) {
+            } catch (Exception ex) {
                 if (m_CommELM.Online) {
                     m_CommELM.Close();
                 }
-                m_log.TraceError("Initialize occur error: " + e.Message);
+                m_log.TraceError("Initialize occur error: " + ex.Message);
             }
             return false;
         }
@@ -106,15 +107,23 @@ namespace SH_OBD {
                 if (CommBase.GetPortAvailable(settings.ComPort) == CommBase.PortStatus.Available && Initialize(settings.ComPort, settings.BaudRate)) {
                     return true;
                 }
-                for (int iPort = 0; iPort < 100; ++iPort) {
-                    if (iPort != settings.ComPort) {
-                        if (CommBase.GetPortAvailable(iPort) == CommBase.PortStatus.Available
-                            && (Initialize(iPort, 38400) || Initialize(iPort, 115200) || Initialize(iPort, 9600))) {
-                            return true;
+                string[] serials = SerialPort.GetPortNames();
+                for (int i = 0; i < serials.Length; i++) {
+                    if (int.TryParse(serials[i].Substring(3), out int iPort)) {
+                        if (iPort != settings.ComPort) {
+                            if (CommBase.GetPortAvailable(iPort) == CommBase.PortStatus.Available
+                                && (Initialize(iPort, 38400)/* || Initialize(iPort, 115200) || Initialize(iPort, 9600)*/)) {
+                                return true;
+                            }
                         }
                     }
                 }
-            } catch { }
+            } catch (Exception ex) {
+                if (m_CommELM.Online) {
+                    m_CommELM.Close();
+                }
+                m_log.TraceError("Initialize occur error: " + ex.Message);
+            }
             return false;
         }
 
