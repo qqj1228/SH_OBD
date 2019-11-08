@@ -229,9 +229,9 @@ namespace SH_OBD {
         private void SetDataTableInfo() {
             DataTable dt = m_dtInfo;
             int NO = 0;
-            OBDParameter param;
+            OBDParameter param = new OBDParameter();
             int HByte = 0;
-            if (m_obdInterface.UseISO27145) {
+            if (m_obdInterface.STDType == StandardType.ISO_27145) {
                 param = new OBDParameter {
                     OBDRequest = "22F401",
                     Service = 0x22,
@@ -240,7 +240,7 @@ namespace SH_OBD {
                     ValueTypes = (int)OBDParameter.EnumValueTypes.Bool
                 };
                 HByte = 0xF400;
-            } else {
+            } else if (m_obdInterface.STDType == StandardType.ISO_15031) {
                 param = new OBDParameter {
                     OBDRequest = "0101",
                     Service = 1,
@@ -276,9 +276,9 @@ namespace SH_OBD {
             param.ValueTypes = (int)OBDParameter.EnumValueTypes.Double;
             SetDataRow(++NO, "总累积里程ODO（km）", dt, param);                                // 3
 
-            if (m_obdInterface.UseISO27145) {
+            if (m_obdInterface.STDType == StandardType.ISO_27145) {
                 param.OBDRequest = "194233081E";
-            } else {
+            } else if (m_obdInterface.STDType == StandardType.ISO_15031) {
                 param.OBDRequest = "03";
             }
             param.ValueTypes = (int)OBDParameter.EnumValueTypes.ListString;
@@ -290,9 +290,9 @@ namespace SH_OBD {
                 }
             }
 
-            if (m_obdInterface.UseISO27145) {
+            if (m_obdInterface.STDType == StandardType.ISO_27145) {
                 param.OBDRequest = "194233041E";
-            } else {
+            } else if (m_obdInterface.STDType == StandardType.ISO_15031) {
                 param.OBDRequest = "07";
             }
             param.ValueTypes = (int)OBDParameter.EnumValueTypes.ListString;
@@ -304,9 +304,9 @@ namespace SH_OBD {
                 }
             }
 
-            if (m_obdInterface.UseISO27145) {
+            if (m_obdInterface.STDType == StandardType.ISO_27145) {
                 param.OBDRequest = "195533";
-            } else {
+            } else if (m_obdInterface.STDType == StandardType.ISO_15031) {
                 param.OBDRequest = "0A";
             }
             param.ValueTypes = (int)OBDParameter.EnumValueTypes.ListString;
@@ -319,9 +319,9 @@ namespace SH_OBD {
             }
 
             int errorCount = 0;
-            if (m_obdInterface.UseISO27145) {
+            if (m_obdInterface.STDType == StandardType.ISO_27145) {
                 param.OBDRequest = "22F401";
-            } else {
+            } else if (m_obdInterface.STDType == StandardType.ISO_15031) {
                 param.OBDRequest = "0101";
             }
             param.ValueTypes = (int)OBDParameter.EnumValueTypes.BitFlags;
@@ -363,9 +363,9 @@ namespace SH_OBD {
         private void SetDataTableECUInfo() {
             DataTable dt = m_dtECUInfo;
             int NO = 0;
-            OBDParameter param;
+            OBDParameter param = new OBDParameter();
             int HByte = 0;
-            if (m_obdInterface.UseISO27145) {
+            if (m_obdInterface.STDType == StandardType.ISO_27145) {
                 param = new OBDParameter {
                     OBDRequest = "22F802",
                     Service = 0x22,
@@ -373,7 +373,7 @@ namespace SH_OBD {
                     ValueTypes = (int)OBDParameter.EnumValueTypes.ListString
                 };
                 HByte = 0xF800;
-            } else {
+            } else if (m_obdInterface.STDType == StandardType.ISO_15031) {
                 param = new OBDParameter {
                     OBDRequest = "0902",
                     Service = 9,
@@ -556,14 +556,14 @@ namespace SH_OBD {
         private bool GetSupportStatus(int mode, Dictionary<string, bool[]> supportStatus) {
             List<List<OBDParameterValue>> ECUSupportList = new List<List<OBDParameterValue>>();
             List<bool> ECUSupportNext = new List<bool>();
-            OBDParameter param;
+            OBDParameter param = new OBDParameter();
             int HByte = 0;
-            if (m_obdInterface.UseISO27145) {
+            if (m_obdInterface.STDType == StandardType.ISO_27145) {
                 HByte = (mode << 8) & 0xFF00;
                 param = new OBDParameter(0x22, HByte, 0) {
                     ValueTypes = 32
                 };
-            } else {
+            } else if (m_obdInterface.STDType == StandardType.ISO_15031) {
                 param = new OBDParameter(mode, 0, 0) {
                     ValueTypes = 32
                 };
@@ -625,9 +625,9 @@ namespace SH_OBD {
             }
             foreach (string key in supportStatus.Keys) {
                 string log = "";
-                if (m_obdInterface.UseISO27145) {
+                if (m_obdInterface.STDType == StandardType.ISO_27145) {
                     log = "DID " + mode.ToString("X2") + " Support: [" + key + "], [";
-                } else {
+                } else if (m_obdInterface.STDType == StandardType.ISO_15031) {
                     log = "Mode" + mode.ToString("X2") + " Support: [" + key + "], [";
                 }
                 for (int i = 0; i * 8 < maxPID; i++) {
@@ -674,7 +674,7 @@ namespace SH_OBD {
 
             int mode01 = 1;
             int mode09 = 9;
-            if (m_obdInterface.UseISO27145) {
+            if (m_obdInterface.STDType == StandardType.ISO_27145) {
                 mode01 = 0xF4;
                 mode09 = 0xF8;
             }

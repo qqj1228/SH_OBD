@@ -35,7 +35,7 @@ namespace SH_OBD {
         public DBandMES DBandMES { get; private set; }
         public OBDResultSetting OBDResultSetting { get; set; }
         public List<VehicleProfile> VehicleProfiles { get; private set; }
-        public bool UseISO27145 { get; set; }
+        public StandardType STDType { get; set; }
         public bool ScannerPortOpened { get; set; }
 
         public OBDInterface() {
@@ -52,7 +52,7 @@ namespace SH_OBD {
             VehicleProfiles = LoadVehicleProfiles();
             SetDevice(HardwareType.ELM327);
             Disconnect();
-            UseISO27145 = false;
+            STDType = StandardType.Unknown;
             ScannerPortOpened = false;
             if (CommSettings.UseSerialScanner) {
                 m_sp = new SerialPortClass(
@@ -103,11 +103,17 @@ namespace SH_OBD {
             m_obdDevice.SetTimeout(iTimeout);
         }
 
-        public bool InitDevice(HardwareType device, int port, int baud, ProtocolType protocol) {
+        public bool InitDevice(HardwareType device, int port, int baud, ProtocolType protocol, bool bGetPIDStatus = true) {
             m_log.TraceInfo(string.Format("Attempting initialization on port {0}", port.ToString()));
-
             SetDevice(device);
-            if (m_obdDevice.Initialize(port, baud, protocol) && InitOBD()) {
+            bool flag;
+            if (bGetPIDStatus) {
+                flag = m_obdDevice.Initialize(port, baud, protocol) && InitOBD();
+            } else {
+                flag = m_obdDevice.Initialize(port, baud, protocol);
+            }
+            STDType = m_obdDevice.GetStandardType();
+            if (flag) {
                 m_obdDevice.SetConnected(true);
                 OnConnect?.Invoke();
                 return true;
@@ -116,10 +122,17 @@ namespace SH_OBD {
             return false;
         }
 
-        public bool InitDeviceAuto() {
+        public bool InitDeviceAuto(bool bGetPIDStatus = true) {
             m_log.TraceInfo("Beginning AUTO initialization...");
             SetDevice(HardwareType.ELM327);
-            if (m_obdDevice.Initialize(CommSettings) && InitOBD()) {
+            bool flag;
+            if (bGetPIDStatus) {
+                flag = m_obdDevice.Initialize(CommSettings) && InitOBD();
+            } else {
+                flag = m_obdDevice.Initialize(CommSettings);
+            }
+            STDType = m_obdDevice.GetStandardType();
+            if (flag) {
                 CommSettings.ProtocolIndex = m_obdDevice.GetProtocolType();
                 CommSettings.ComPort = m_obdDevice.GetComPortIndex();
                 SaveCommSettings(CommSettings);
@@ -180,8 +193,6 @@ namespace SH_OBD {
                         break;
                     }
                 }
-                UseISO27145 = bRet;
-                m_log.TraceInfo("Current vehicle support ISO 27145 only!");
             }
             return bRet;
         }
@@ -346,7 +357,7 @@ namespace SH_OBD {
         public void Disconnect() {
             m_obdDevice.Disconnect();
             m_obdDevice.SetConnected(false);
-            UseISO27145 = false;
+            STDType = StandardType.Unknown;
             OnDisconnect?.Invoke();
         }
 
@@ -430,8 +441,8 @@ namespace SH_OBD {
                             param.EnglishMaxValue = Utility.Text2Double(tokens[13]);
                             param.MetricMinValue = Utility.Text2Double(tokens[14]);
                             param.MetricMaxValue = Utility.Text2Double(tokens[15]);
-                        } catch (Exception e) {
-                            m_log.TraceError("Utility.Text2Double() occur error: " + e.Message);
+                        } catch (Exception ex) {
+                            m_log.TraceError("Utility.Text2Double() occur error: " + ex.Message);
                         }
 
                         int valueType = 0x00;
@@ -454,8 +465,8 @@ namespace SH_OBD {
                 }
                 m_log.TraceInfo(string.Format("Loaded {0} parameters from {1}", lineNo, fileName));
                 return true;
-            } catch (Exception e) {
-                m_log.TraceError(string.Format("Failed to load parameters from: {0}, reason: {1}", fileName, e.Message));
+            } catch (Exception ex) {
+                m_log.TraceError(string.Format("Failed to load parameters from: {0}, reason: {1}", fileName, ex.Message));
                 return false;
             }
         }
@@ -524,8 +535,8 @@ namespace SH_OBD {
                     m_log.TraceError("Failed to locate DTC definitions file: " + fileName);
                     return 0;
                 }
-            } catch (Exception e) {
-                m_log.TraceError("Failed to load parameters from: " + fileName + ", reason: " + e.Message);
+            } catch (Exception ex) {
+                m_log.TraceError("Failed to load parameters from: " + fileName + ", reason: " + ex.Message);
                 return -1;
             }
         }
@@ -575,8 +586,8 @@ namespace SH_OBD {
                     OBDResultSetting = (OBDResultSetting)serializer.Deserialize(reader);
                     reader.Close();
                 }
-            } catch (Exception e) {
-                m_log.TraceError("Using default OBD result settings because of failed to load config file, reason: " + e.Message);
+            } catch (Exception ex) {
+                m_log.TraceError("Using default OBD result settings because of failed to load config file, reason: " + ex.Message);
                 OBDResultSetting = new OBDResultSetting();
             }
             return OBDResultSetting;
@@ -589,8 +600,8 @@ namespace SH_OBD {
                     DBandMES = (DBandMES)serializer.Deserialize(reader);
                     reader.Close();
                 }
-            } catch (Exception e) {
-                m_log.TraceError("Using default DB and MES settings because of failed to load them, reason: " + e.Message);
+            } catch (Exception ex) {
+                m_log.TraceError("Using default DB and MES settings because of failed to load them, reason: " + ex.Message);
                 DBandMES = new DBandMES();
             }
             return DBandMES;
@@ -603,8 +614,8 @@ namespace SH_OBD {
                     CommSettings = (Settings)serializer.Deserialize(reader);
                     reader.Close();
                 }
-            } catch (Exception e) {
-                m_log.TraceError("Using default communication settings because of failed to load them, reason: " + e.Message);
+            } catch (Exception ex) {
+                m_log.TraceError("Using default communication settings because of failed to load them, reason: " + ex.Message);
                 CommSettings = new Settings();
             }
             return CommSettings;
@@ -617,8 +628,8 @@ namespace SH_OBD {
                     UserPreferences = (UserPreferences)serializer.Deserialize(reader);
                     reader.Close();
                 }
-            } catch (Exception e) {
-                m_log.TraceError("Using default user preferences because of failed to load them, reason: " + e.Message);
+            } catch (Exception ex) {
+                m_log.TraceError("Using default user preferences because of failed to load them, reason: " + ex.Message);
                 UserPreferences = new UserPreferences();
             }
             return UserPreferences;
@@ -643,9 +654,9 @@ namespace SH_OBD {
                 }
             } catch (SerializationException) {
                 // file读完以后会抛出SerializationException异常，什么都不做继续执行finally块
-            } catch (Exception e) {
+            } catch (Exception ex) {
                 // 发生其余异常的话就写log
-                m_log.TraceError("Failed to load vehicle profile. Reason: " + e.Message);
+                m_log.TraceError("Failed to load vehicle profile. Reason: " + ex.Message);
             } finally {
                 if (file != null) {
                     file.Close();
@@ -666,8 +677,8 @@ namespace SH_OBD {
                     CommSettings.ActiveProfileIndex = 0;
 
                     return VehicleProfiles[0];
-                } catch (Exception e) {
-                    m_log.TraceError("Failed to get vehicle profile, reason: " + e.Message);
+                } catch (Exception ex) {
+                    m_log.TraceError("Failed to get vehicle profile, reason: " + ex.Message);
                     return null;
                 }
             }
@@ -691,8 +702,8 @@ namespace SH_OBD {
                 foreach (VehicleProfile profile in profiles) {
                     binaryFormatter.Serialize(file, profile);
                 }
-            } catch (Exception e) {
-                m_log.TraceError("Failed to save vehicle profile, reason: " + e.Message);
+            } catch (Exception ex) {
+                m_log.TraceError("Failed to save vehicle profile, reason: " + ex.Message);
             } finally {
                 if (file != null) {
                     file.Close();

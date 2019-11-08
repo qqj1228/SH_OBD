@@ -4,6 +4,7 @@ using System.IO.Ports;
 namespace SH_OBD {
     public class OBDDeviceELM327 : OBDDevice {
         private ProtocolType m_iProtocol;
+        private StandardType m_iStandard;
         private int m_iBaudRateIndex;
         private int m_iComPortIndex;
         private bool m_bConnected;
@@ -11,14 +12,11 @@ namespace SH_OBD {
         public OBDDeviceELM327(Logger log) : base(log) {
             try {
                 m_iProtocol = ProtocolType.Unknown;
+                m_iStandard = StandardType.Unknown;
                 m_bConnected = false;
             } catch (Exception) {
                 throw;
             }
-        }
-
-        override public void SetTimeout(int iTimeout = 500) {
-            m_CommELM.SetTimeout(iTimeout);
         }
 
         public override bool Initialize(int iPort, int iBaud, ProtocolType iProtocol) {
@@ -51,16 +49,15 @@ namespace SH_OBD {
                     }
 
                     m_CommELM.SetTimeout(5000);
-                    bool flag = false;
-                    if (GetOBDResponse("0100").Replace(" ", "").IndexOf("4100") >= 0 || GetOBDResponse("22F810").Replace(" ", "").IndexOf("62F810") >= 0) {
-                        flag = true;
+                    m_iStandard = SetStandardStatus();
+                    if (m_iStandard != StandardType.Unknown) {
                         if (m_Parser == null) {
                             SetProtocol((ProtocolType)int.Parse(GetOBDResponse("ATDPN").Replace("A", "")));
                         }
                     }
 
                     m_CommELM.SetTimeout(500);
-                    return flag;
+                    return m_iStandard != StandardType.Unknown;
                 } else {
                     if (!ConfirmAT("ATM0")) {
                         m_CommELM.Close();
@@ -68,24 +65,15 @@ namespace SH_OBD {
                     }
 
                     m_CommELM.SetTimeout(5000);
-                    int[] xattr = new int[] { 6, 7, 2, 3, 1, 8, 9, 4, 5 };
+                    //int[] xattr = new int[] { 6, 7, 2, 3, 1, 8, 9, 4, 5 };
+                    int[] xattr = new int[] { 6, 7, 3, 4, 5, 8, 9, 0xA, 2, 1 };
                     for (int idx = 0; idx < xattr.Length; idx++) {
                         if (!ConfirmAT("ATTP" + xattr[idx].ToString())) {
                             m_CommELM.Close();
                             return false;
                         }
-                        bool bSupport = false;
-                        for (int i = 3; i > 0 && !bSupport; i--) {
-                            if (GetOBDResponse("0100").Replace(" ", "").Contains("4100")) {
-                                bSupport = true;
-                            }
-                        }
-                        for (int i = 3; i > 0 && !bSupport; i--) {
-                            if (GetOBDResponse("22F810").Replace(" ", "").Contains("62F810")) {
-                                bSupport = bSupport || true;
-                            }
-                        }
-                        if (bSupport) {
+                        m_iStandard = SetStandardStatus();
+                        if (m_iStandard != StandardType.Unknown) {
                             if (m_Parser == null) {
                                 SetProtocol((ProtocolType)xattr[idx]);
                             }
@@ -138,6 +126,24 @@ namespace SH_OBD {
             return false;
         }
 
+        private StandardType SetStandardStatus() {
+            bool bflag = false;
+            StandardType standard = StandardType.Unknown;
+            for (int i = 3; i > 0 && !bflag; i--) {
+                if (GetOBDResponse("0100").Replace(" ", "").Contains("4100")) {
+                    bflag = true;
+                    standard = StandardType.ISO_15031;
+                }
+            }
+            for (int i = 3; i > 0 && !bflag; i--) {
+                if (GetOBDResponse("22F810").Replace(" ", "").Contains("62F810")) {
+                    bflag = bflag || true;
+                    standard = StandardType.ISO_27145;
+                }
+            }
+            return standard;
+        }
+
         /// <summary>
         /// 获取OBD响应结果，若有错误的话总共尝试3次
         /// </summary>
@@ -159,6 +165,10 @@ namespace SH_OBD {
                 return m_CommELM.GetResponse(command);
             }
             return "";
+        }
+
+        override public void SetTimeout(int iTimeout = 500) {
+            m_CommELM.SetTimeout(iTimeout);
         }
 
         public override void Disconnect() {
@@ -268,7 +278,10 @@ namespace SH_OBD {
                 break;
             }
         }
+
         public override int GetComPortIndex() { return m_iComPortIndex; }
+
+        public override StandardType GetStandardType() { return m_iStandard; }
 
     }
 }
