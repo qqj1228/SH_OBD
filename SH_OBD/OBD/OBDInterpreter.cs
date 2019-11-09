@@ -1220,6 +1220,94 @@ namespace SH_OBD {
             return value2;
         }
 
+        private OBDParameterValue GetDM5Value(OBDParameter param, OBDResponse response) {
+            OBDParameterValue value2 = new OBDParameterValue();
+            if (response.GetDataByteCount() < 8) {
+                value2.ErrorDetected = true;
+                return value2;
+            }
+
+            switch (param.SubParameter) {
+            case 0:
+                // OBD型式
+                response.Data = response.GetDataByte(2);
+                value2 = GetPID1CValue(response);
+                break;
+            case 1:
+                // 激活的故障代码
+                response.Data = response.GetDataByte(0);
+                break;
+            case 2:
+                // 先前激活的诊断故障代码
+                response.Data = response.GetDataByte(1);
+                break;
+            case 3:
+                // 持续监视系统支持／状态
+                response.Data = response.GetDataByte(3);
+                break;
+            case 4:
+                // 非持续监视系统支持
+                response.Data = response.GetDataByte(4) + response.GetDataByte(5);
+                break;
+            case 5:
+                // 非持续监视系统状态
+                response.Data = response.GetDataByte(6) + response.GetDataByte(7);
+                break;
+            default:
+                value2.ErrorDetected = true;
+                break;
+            }
+            return value2;
+        }
+
+        private OBDParameterValue GetDM19Value(OBDParameter param, OBDResponse response) {
+            OBDParameterValue value2 = new OBDParameterValue();
+            if (response.GetDataByteCount() < 20) {
+                value2.ErrorDetected = true;
+                return value2;
+            }
+
+            switch (param.SubParameter) {
+            case 0:
+                // CVN
+                param.Parameter = 0x06;
+                response.Data = response.Data.Substring(0, 4 * 2);
+                value2 = GetMode09Value(param, response);
+                for (int i = 0; i < value2.ListStringValue.Count; i++) {
+                    string strVal = value2.ListStringValue[i];
+                    value2.ListStringValue[i] = strVal.Substring(6, 2) + strVal.Substring(4, 2) + strVal.Substring(2, 2) + strVal.Substring(0, 2);
+                }
+                break;
+            case 1:
+                // CAL_ID
+                param.Parameter = 0x04;
+                response.Data = response.Data.Substring(4 * 2);
+                value2 = GetMode09Value(param, response);
+                break;
+            default:
+                value2.ErrorDetected = true;
+                break;
+            }
+            return value2;
+        }
+
+        private OBDParameterValue GetJ1939Value(OBDParameter param, OBDResponse response) {
+            OBDParameterValue value2 = new OBDParameterValue();
+            switch (param.Parameter) {
+            case 0xFECE:
+                value2 = GetDM5Value(param, response);
+                break;
+            case 0xD300:
+                value2 = GetDM19Value(param, response);
+                break;
+            case 0xFEEC:
+                // VIN
+                value2.ListStringValue = SetMode09ASCII(17 * 2, response);
+                break;
+            }
+            return value2;
+        }
+
         public OBDParameterValue GetValue(OBDParameter param, OBDResponse response, bool bEnglishUnits = false) {
             OBDParameterValue value2 = new OBDParameterValue();
             if (response == null) {
@@ -1227,6 +1315,10 @@ namespace SH_OBD {
                 return value2;
             }
             switch (param.Service) {
+            case 0:
+                // SAE J1939
+                value2 = GetJ1939Value(param, response);
+                break;
             case 1:
             case 2:
                 value2 = GetMode0102Value(param, response, bEnglishUnits);
@@ -1267,9 +1359,12 @@ namespace SH_OBD {
                 break;
             }
             value2.ECUResponseID = response.Header;
-            // 如果是K线协议的话ECUResponseID取后2个字节
             if (value2.ECUResponseID.Length == 6) {
+                // 如果是K线协议的话ECUResponseID取最后2个字节
                 value2.ECUResponseID = value2.ECUResponseID.Substring(2);
+            } else if (value2.ECUResponseID.Length == 8 && param.Service == 0) {
+                // 如果是J1939协议的话ECUResponseID取最后1个字节
+                value2.ECUResponseID = value2.ECUResponseID.Substring(6);
             }
             return value2;
         }

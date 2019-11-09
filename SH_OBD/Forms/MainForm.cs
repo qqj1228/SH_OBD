@@ -395,6 +395,7 @@ namespace SH_OBD {
                     StatusLabelAppProtocol.Text = "ISO_27145";
                     break;
                 case StandardType.SAE_J1939:
+                    StatusLabelAppProtocol.Text = "SAE_J1939";
                     break;
                 default:
                     StatusLabelAppProtocol.Text = "Unknown";

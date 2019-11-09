@@ -68,7 +68,7 @@ namespace SH_OBD {
                     //int[] xattr = new int[] { 6, 7, 2, 3, 1, 8, 9, 4, 5 };
                     int[] xattr = new int[] { 6, 7, 3, 4, 5, 8, 9, 0xA, 2, 1 };
                     for (int idx = 0; idx < xattr.Length; idx++) {
-                        if (!ConfirmAT("ATTP" + xattr[idx].ToString())) {
+                        if (!ConfirmAT("ATTP" + xattr[idx].ToString("X1"))) {
                             m_CommELM.Close();
                             return false;
                         }
@@ -76,6 +76,7 @@ namespace SH_OBD {
                         if (m_iStandard != StandardType.Unknown) {
                             if (m_Parser == null) {
                                 SetProtocol((ProtocolType)xattr[idx]);
+                                //SetProtocol((ProtocolType)0xA);
                             }
                             SetBaudRateIndex(iBaud);
                             m_iComPortIndex = iPort;
@@ -140,6 +141,15 @@ namespace SH_OBD {
                     bflag = bflag || true;
                     standard = StandardType.ISO_27145;
                 }
+            }
+            for (int i = 3; i > 0 && !bflag; i--) {
+                if (GetOBDResponse("00FECE").Replace(" ", "").Contains("FECE")) {
+                    bflag = bflag || true;
+                    standard = StandardType.SAE_J1939;
+                }
+            }
+            if (standard == StandardType.SAE_J1939) {
+                ConfirmAT("ATJHF0");
             }
             return standard;
         }
@@ -215,6 +225,9 @@ namespace SH_OBD {
                 break;
             case ProtocolType.ISO_15765_4_CAN_29BIT_250KBAUD:
                 m_Parser = new OBDParser_ISO15765_4_CAN29();
+                break;
+            case ProtocolType.SAE_J1939_CAN_29BIT_250KBAUD:
+                m_Parser = new OBDParser_SAE_J1939_CAN29();
                 break;
             }
         }
