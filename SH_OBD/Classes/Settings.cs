@@ -67,7 +67,8 @@ namespace SH_OBD {
             "ISO 15765-4 CAN (11 位 CAN ID, 500K 波特率)",
             "ISO 15765-4 CAN (29 位 CAN ID, 500K 波特率)",
             "ISO 15765-4 CAN (11 位 CAN ID, 250K 波特率)",
-            "ISO 15765-4 CAN (29 位 CAN ID, 250K 波特率)"
+            "ISO 15765-4 CAN (29 位 CAN ID, 250K 波特率)",
+            "SAE J1939 CAN (29 位 CAN ID, 250K 波特率)"
         };
 
         [XmlIgnore]
@@ -110,7 +111,15 @@ namespace SH_OBD {
         ISO_15765_4_CAN_11BIT_500KBAUD = 6,
         ISO_15765_4_CAN_29BIT_500KBAUD = 7,
         ISO_15765_4_CAN_11BIT_250KBAUD = 8,
-        ISO_15765_4_CAN_29BIT_250KBAUD = 9
+        ISO_15765_4_CAN_29BIT_250KBAUD = 9,
+        SAE_J1939_CAN_29BIT_250KBAUD = 0xA
+    }
+
+    public enum StandardType : int {
+        Unknown = -1,
+        ISO_15031 = 1,
+        ISO_27145 = 2,
+        SAE_J1939 = 3
     }
 
     public enum HardwareType : int {
@@ -210,7 +219,6 @@ namespace SH_OBD {
         public string WebServiceMethods { get; set; }
         public string WebServiceWSDL { get; set; }
         public bool UseURL { get; set; }
-        public string DateSN { get; set; }
         [XmlIgnore]
         public bool ChangeWebService { get; set; }
 
@@ -225,7 +233,6 @@ namespace SH_OBD {
             WebServiceMethods = "WriteDataToMes";
             WebServiceWSDL = "";
             UseURL = true;
-            DateSN = DateTime.Now.ToLocalTime().ToString("yyyyMMdd") + ",0";
             ChangeWebService = true;
         }
 

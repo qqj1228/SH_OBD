@@ -17,7 +17,6 @@ namespace SH_OBD {
         //private readonly DataTable m_dtIUPR;
         private readonly Dictionary<string, bool[]> m_mode01Support;
         private readonly Dictionary<string, bool[]> m_mode09Support;
-        private static int m_iSN;
         private bool m_compIgn;
         private bool m_CN6;
         public readonly Model m_db;
@@ -210,7 +209,7 @@ namespace SH_OBD {
             int NO = 0;
             OBDParameter param;
             int HByte = 0;
-            if (m_obdInterface.UseISO27145) {
+            if (m_obdInterface.STDType == StandardType.ISO_27145) {
                 param = new OBDParameter {
                     OBDRequest = "22F401",
                     Service = 0x22,
@@ -250,7 +249,7 @@ namespace SH_OBD {
             param.ValueTypes = (int)OBDParameter.EnumValueTypes.Double;
             SetDataRow(++NO, "总累积里程ODO（km）", dt, param);                                // 3
 
-            if (m_obdInterface.UseISO27145) {
+            if (m_obdInterface.STDType == StandardType.ISO_27145) {
                 param.OBDRequest = "194233081E";
             } else {
                 param.OBDRequest = "03";
@@ -264,7 +263,7 @@ namespace SH_OBD {
                 }
             }
 
-            if (m_obdInterface.UseISO27145) {
+            if (m_obdInterface.STDType == StandardType.ISO_27145) {
                 param.OBDRequest = "194233041E";
             } else {
                 param.OBDRequest = "07";
@@ -278,7 +277,7 @@ namespace SH_OBD {
                 }
             }
 
-            if (m_obdInterface.UseISO27145) {
+            if (m_obdInterface.STDType == StandardType.ISO_27145) {
                 param.OBDRequest = "195533";
             } else {
                 param.OBDRequest = "0A";
@@ -293,7 +292,7 @@ namespace SH_OBD {
             }
 
             int errorCount = 0;
-            if (m_obdInterface.UseISO27145) {
+            if (m_obdInterface.STDType == StandardType.ISO_27145) {
                 param.OBDRequest = "22F401";
             } else {
                 param.OBDRequest = "0101";
@@ -338,7 +337,7 @@ namespace SH_OBD {
             int NO = 0;
             OBDParameter param;
             int HByte = 0;
-            if (m_obdInterface.UseISO27145) {
+            if (m_obdInterface.STDType == StandardType.ISO_27145) {
                 param = new OBDParameter {
                     OBDRequest = "22F802",
                     Service = 0x22,
@@ -370,9 +369,7 @@ namespace SH_OBD {
             param.Parameter = HByte + 4;
             SetDataRow(++NO, "CAL_ID", dt, param);  // 2
             param.Parameter = HByte + 6;
-            //m_obdInterface.SetTimeout(15000);
             SetDataRow(++NO, "CVN", dt, param);     // 3
-            //m_obdInterface.SetTimeout(500);
 
             // 根据配置文件，判断CAL_ID和CVN两个值的合法性
             if (m_CN6) {
@@ -529,7 +526,7 @@ namespace SH_OBD {
             List<bool> ECUSupportNext = new List<bool>();
             OBDParameter param;
             int HByte = 0;
-            if (m_obdInterface.UseISO27145) {
+            if (m_obdInterface.STDType == StandardType.ISO_27145) {
                 HByte = (mode << 8) & 0xFF00;
                 param = new OBDParameter(0x22, HByte, 0) {
                     ValueTypes = 32
@@ -596,7 +593,7 @@ namespace SH_OBD {
             }
             foreach (string key in supportStatus.Keys) {
                 string log = "";
-                if (m_obdInterface.UseISO27145) {
+                if (m_obdInterface.STDType == StandardType.ISO_27145) {
                     log = "DID " + mode.ToString("X2") + " Support: [" + key + "], [";
                 } else {
                     log = "Mode" + mode.ToString("X2") + " Support: [" + key + "], [";
@@ -642,7 +639,7 @@ namespace SH_OBD {
 
             int mode01 = 1;
             int mode09 = 9;
-            if (m_obdInterface.UseISO27145) {
+            if (m_obdInterface.STDType == StandardType.ISO_27145) {
                 mode01 = 0xF4;
                 mode09 = 0xF8;
             }
@@ -756,7 +753,7 @@ namespace SH_OBD {
             dr[12] = m_obdInterface.UserPreferences.Name;
             dr[16] = "0";
             dt.Rows.Add(dr);
-            int iRet = 0;
+            int iRet;
             try {
                 string[] strVals = m_dbOracle.GetValue(dt.TableName, "ID", "VIN", strVIN);
                 if (strVals.Length == 0) {
@@ -770,23 +767,6 @@ namespace SH_OBD {
             if (iRet <= 0) {
                 throw new Exception("插入或更新 MES 数据出错，返回的影响行数: " + iRet.ToString());
             }
-        }
-
-        private void SetDataTable2Oracle(string strKeyID, string strVIN, DataTable dt, DataTable dtResult) {
-            dt.Columns.Add("ID", typeof(string));                       // 0
-            dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
-
-            dt.Columns.Add("RH", typeof(string));                       // 2
-            dt.Columns.Add("ET", typeof(string));                       // 3
-            dt.Columns.Add("AP", typeof(string));                       // 4
-
-            dt.Columns.Add("CREATIONTIME", typeof(DateTime));           // 5
-            dt.Columns.Add("CREATOR", typeof(string));                  // 6
-            dt.Columns.Add("LASTMODIFICATIONTIME", typeof(DateTime));   // 7
-            dt.Columns.Add("LASTMODIFIER", typeof(string));             // 8
-            dt.Columns.Add("DELETIONTIME", typeof(DateTime));           // 9
-            dt.Columns.Add("ISDELETED", typeof(string));                // 10
-            dt.Columns.Add("DELETER", typeof(string));                  // 11
         }
 
         private void SetDataTable3Oracle(string strKeyID, string strOBDResult, DataTable dt) {
@@ -943,193 +923,24 @@ namespace SH_OBD {
             }
         }
 
-        private void SetDataTable51Oracle(string strKeyID, DataTable dt, DataTable dtResult) {
-            dt.Columns.Add("ID", typeof(string));                       // 0
-            dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
-
-            dt.Columns.Add("REAC", typeof(string));                     // 2
-            dt.Columns.Add("LEACMAX", typeof(string));                  // 3
-            dt.Columns.Add("LEACMIN", typeof(string));                  // 4
-            dt.Columns.Add("LRCO", typeof(string));                     // 5
-            dt.Columns.Add("LLCO", typeof(string));                     // 6
-            dt.Columns.Add("LRHC", typeof(string));                     // 7
-            dt.Columns.Add("LLHC", typeof(string));                     // 8
-            dt.Columns.Add("HRCO", typeof(string));                     // 9
-            dt.Columns.Add("HLCO", typeof(string));                     // 10
-            dt.Columns.Add("HRHC", typeof(string));                     // 11
-            dt.Columns.Add("HLHC", typeof(string));                     // 12
-
-            dt.Columns.Add("CREATIONTIME", typeof(DateTime));           // 13
-            dt.Columns.Add("CREATOR", typeof(string));                  // 14
-            dt.Columns.Add("LASTMODIFICATIONTIME", typeof(DateTime));   // 15
-            dt.Columns.Add("LASTMODIFIER", typeof(string));             // 16
-            dt.Columns.Add("DELETIONTIME", typeof(DateTime));           // 17
-            dt.Columns.Add("ISDELETED", typeof(string));                // 18
-            dt.Columns.Add("DELETER", typeof(string));                  // 19
-        }
-
-        private void SetDataTable52Oracle(string strKeyID, DataTable dt, DataTable dtResult) {
-            dt.Columns.Add("ID", typeof(string));                       // 0
-            dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
-
-            dt.Columns.Add("ARHC5025", typeof(string));                 // 2
-            dt.Columns.Add("ALHC5025", typeof(string));                 // 3
-            dt.Columns.Add("ARCO5025", typeof(string));                 // 4
-            dt.Columns.Add("ALCO5025", typeof(string));                 // 5
-            dt.Columns.Add("ARNOX5025", typeof(string));                // 6
-            dt.Columns.Add("ALNOX5025", typeof(string));                // 7
-            dt.Columns.Add("ARHC2540", typeof(string));                 // 8
-            dt.Columns.Add("ALHC2540", typeof(string));                 // 9
-            dt.Columns.Add("ARCO2540", typeof(string));                 // 10
-            dt.Columns.Add("ALCO2540", typeof(string));                 // 11
-            dt.Columns.Add("ARNOX2540", typeof(string));                // 12
-            dt.Columns.Add("ALNOX2540", typeof(string));                // 13
-
-            dt.Columns.Add("CREATIONTIME", typeof(DateTime));           // 14
-            dt.Columns.Add("CREATOR", typeof(string));                  // 15
-            dt.Columns.Add("LASTMODIFICATIONTIME", typeof(DateTime));   // 16
-            dt.Columns.Add("LASTMODIFIER", typeof(string));             // 17
-            dt.Columns.Add("DELETIONTIME", typeof(DateTime));           // 18
-            dt.Columns.Add("ISDELETED", typeof(string));                // 19
-            dt.Columns.Add("DELETER", typeof(string));                  // 20
-        }
-
-        private void SetDataTable53Oracle(string strKeyID, DataTable dt, DataTable dtResult) {
-            dt.Columns.Add("ID", typeof(string));                       // 0
-            dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
-
-            dt.Columns.Add("VRHC", typeof(string));                     // 2
-            dt.Columns.Add("VLHC", typeof(string));                     // 3
-            dt.Columns.Add("VRCO", typeof(string));                     // 4
-            dt.Columns.Add("VLCO", typeof(string));                     // 5
-            dt.Columns.Add("VRNOX", typeof(string));                    // 6
-            dt.Columns.Add("VLNOX", typeof(string));                    // 7
-
-            dt.Columns.Add("CREATIONTIME", typeof(DateTime));           // 8
-            dt.Columns.Add("CREATOR", typeof(string));                  // 9
-            dt.Columns.Add("LASTMODIFICATIONTIME", typeof(DateTime));   // 10
-            dt.Columns.Add("LASTMODIFIER", typeof(string));             // 11
-            dt.Columns.Add("DELETIONTIME", typeof(DateTime));           // 12
-            dt.Columns.Add("ISDELETED", typeof(string));                // 13
-            dt.Columns.Add("DELETER", typeof(string));                  // 14
-        }
-
-        private void SetDataTable54Oracle(string strKeyID, DataTable dt, DataTable dtResult) {
-            dt.Columns.Add("ID", typeof(string));                       // 0
-            dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
-
-            dt.Columns.Add("RATEREVUP", typeof(string));                // 2
-            dt.Columns.Add("RATEREVDOWN", typeof(string));              // 3
-            dt.Columns.Add("REV100", typeof(string));                   // 4
-            dt.Columns.Add("MAXPOWER", typeof(string));                 // 5
-            dt.Columns.Add("MAXPOWERLIMIT", typeof(string));            // 6
-            dt.Columns.Add("SMOKE100", typeof(string));                 // 7
-            dt.Columns.Add("SMOKE80", typeof(string));                  // 8
-            dt.Columns.Add("SMOKELIMIT", typeof(string));               // 9
-            dt.Columns.Add("NOX", typeof(string));                      // 10
-            dt.Columns.Add("NOXLIMIT", typeof(string));                 // 11
-
-            dt.Columns.Add("CREATIONTIME", typeof(DateTime));           // 12
-            dt.Columns.Add("CREATOR", typeof(string));                  // 13
-            dt.Columns.Add("LASTMODIFICATIONTIME", typeof(DateTime));   // 14
-            dt.Columns.Add("LASTMODIFIER", typeof(string));             // 15
-            dt.Columns.Add("DELETIONTIME", typeof(DateTime));           // 16
-            dt.Columns.Add("ISDELETED", typeof(string));                // 17
-            dt.Columns.Add("DELETER", typeof(string));                  // 18
-        }
-
-        private void SetDataTable55Oracle(string strKeyID, DataTable dt, DataTable dtResult) {
-            dt.Columns.Add("ID", typeof(string));                       // 0
-            dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
-
-            dt.Columns.Add("RATEREV", typeof(string));                  // 2
-            dt.Columns.Add("REV", typeof(string));                      // 3
-            dt.Columns.Add("SMOKEK1", typeof(string));                  // 4
-            dt.Columns.Add("SMOKEK2", typeof(string));                  // 5
-            dt.Columns.Add("SMOKEK3", typeof(string));                  // 6
-            dt.Columns.Add("SMOKEAVG", typeof(string));                 // 7
-            dt.Columns.Add("SMOKEKLIMIT", typeof(string));              // 8
-
-            dt.Columns.Add("CREATIONTIME", typeof(DateTime));           // 9
-            dt.Columns.Add("CREATOR", typeof(string));                  // 10
-            dt.Columns.Add("LASTMODIFICATIONTIME", typeof(DateTime));   // 11
-            dt.Columns.Add("LASTMODIFIER", typeof(string));             // 12
-            dt.Columns.Add("DELETIONTIME", typeof(DateTime));           // 13
-            dt.Columns.Add("ISDELETED", typeof(string));                // 14
-            dt.Columns.Add("DELETER", typeof(string));                  // 15
-        }
-
-        private void SetDataTable56Oracle(string strKeyID, DataTable dt, DataTable dtResult) {
-            dt.Columns.Add("ID", typeof(string));                       // 0
-            dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
-
-            dt.Columns.Add("VRCO", typeof(string));                     // 2
-            dt.Columns.Add("VLCO", typeof(string));                     // 3
-            dt.Columns.Add("VRHCNOX", typeof(string));                  // 4
-            dt.Columns.Add("VLHCNOX", typeof(string));                  // 5
-
-            dt.Columns.Add("CREATIONTIME", typeof(DateTime));           // 6
-            dt.Columns.Add("CREATOR", typeof(string));                  // 7
-            dt.Columns.Add("LASTMODIFICATIONTIME", typeof(DateTime));   // 8
-            dt.Columns.Add("LASTMODIFIER", typeof(string));             // 9
-            dt.Columns.Add("DELETIONTIME", typeof(DateTime));           // 10
-            dt.Columns.Add("ISDELETED", typeof(string));                // 11
-            dt.Columns.Add("DELETER", typeof(string));                  // 12
-        }
-
-        private void SetDataTable6Oracle(string strKeyID, DataTable dt, DataTable dtResult) {
-            dt.Columns.Add("ID", typeof(string));                       // 0
-            dt.Columns.Add("WQPF_ID", typeof(string));                  // 1
-
-            dt.Columns.Add("ANALYMANUF", typeof(string));               // 2
-            dt.Columns.Add("ANALYNAME", typeof(string));                // 3
-            dt.Columns.Add("ANALYMODEL", typeof(string));               // 4
-            dt.Columns.Add("ANALYDATE", typeof(string));                // 5
-            dt.Columns.Add("DYNOMODEL", typeof(string));                // 6
-            dt.Columns.Add("DYNOMANUF", typeof(string));                // 7
-
-            dt.Columns.Add("CREATIONTIME", typeof(DateTime));           // 8
-            dt.Columns.Add("CREATOR", typeof(string));                  // 9
-            dt.Columns.Add("LASTMODIFICATIONTIME", typeof(DateTime));   // 10
-            dt.Columns.Add("LASTMODIFIER", typeof(string));             // 11
-            dt.Columns.Add("DELETIONTIME", typeof(DateTime));           // 12
-            dt.Columns.Add("ISDELETED", typeof(string));                // 13
-            dt.Columns.Add("DELETER", typeof(string));                  // 14
-        }
-
         private bool UploadDataOracle(string strVIN, string strOBDResult, DataTable dtIn, ref string errorMsg) {
             DataTable dt1 = new DataTable("IF_EM_WQPF_1");
-            //DataTable dt2 = new DataTable("IF_EM_WQPF_2");
             DataTable dt3 = new DataTable("IF_EM_WQPF_3");
             DataTable dt4 = new DataTable("IF_EM_WQPF_4");
             DataTable dt4A = new DataTable("IF_EM_WQPF_4_A");
-            //DataTable dt51 = new DataTable("IF_EM_WQPF_5_1");
-            //DataTable dt52 = new DataTable("IF_EM_WQPF_5_2");
-            //DataTable dt53 = new DataTable("IF_EM_WQPF_5_3");
-            //DataTable dt54 = new DataTable("IF_EM_WQPF_5_4");
-            //DataTable dt55 = new DataTable("IF_EM_WQPF_5_5");
-            //DataTable dt56 = new DataTable("IF_EM_WQPF_5_6");
-            //DataTable dt6 = new DataTable("IF_EM_WQPF_6");
             try {
                 UploadDataStart?.Invoke();
                 m_obdInterface.DBandMES.ChangeWebService = false;
                 SetDataTable1Oracle(strVIN, dt1);
                 string strKeyID = m_dbOracle.GetValue(dt1.TableName, "ID", "VIN", strVIN)[0];
-                //SetDataTable2Oracle(strKeyID, strVIN, dt2, dtIn);
                 SetDataTable3Oracle(strKeyID, strOBDResult, dt3);
                 SetDataTable4Oracle(strKeyID, dt4, dtIn);
                 string strKeyID4 = m_dbOracle.GetValue(dt4.TableName, "ID", "WQPF_ID", strKeyID)[0];
                 SetDataTable4AOracle(strKeyID, strKeyID4, dt4A, dtIn);
-                //SetDataTable51Oracle(strKeyID, dt51, dtIn);
-                //SetDataTable52Oracle(strKeyID, dt52, dtIn);
-                //SetDataTable53Oracle(strKeyID, dt53, dtIn);
-                //SetDataTable54Oracle(strKeyID, dt54, dtIn);
-                //SetDataTable55Oracle(strKeyID, dt55, dtIn);
-                //SetDataTable56Oracle(strKeyID, dt56, dtIn);
-                //SetDataTable6Oracle(strKeyID, dt6, dtIn);
                 m_db.UpdateUpload(strVIN, "1");
                 UploadDataDone?.Invoke();
             } catch (Exception ex) {
+                errorMsg = "UploadDataOracle Error: " + ex.Message;
                 m_obdInterface.m_log.TraceError("UploadDataOracle Error: " + ex.Message);
                 throw;
             } finally {
@@ -1468,9 +1279,6 @@ namespace SH_OBD {
             DataRow dr = dt1MES.NewRow();
             dr[1] = "OBD";
             dr[7] = strVIN;
-            ++m_iSN;
-            dr[8] = "XC0079" + strNowDateTime + m_iSN.ToString("d4");
-            m_obdInterface.DBandMES.DateSN = strNowDateTime + "," + m_iSN.ToString();
             dr[13] = strOBDResult;
             dr[15] = strOBDResult;
             dr[163] = strNowDateTime;

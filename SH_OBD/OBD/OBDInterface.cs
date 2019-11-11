@@ -37,7 +37,7 @@ namespace SH_OBD {
         public OBDResultSetting OBDResultSetting { get; set; }
         public OracleMESSetting OracleMESSetting { get; set; }
         public List<VehicleProfile> VehicleProfiles { get; private set; }
-        public bool UseISO27145 { get; set; }
+        public StandardType STDType { get; set; }
         public bool ScannerPortOpened { get; set; }
 
         public OBDInterface() {
@@ -55,7 +55,7 @@ namespace SH_OBD {
             VehicleProfiles = LoadVehicleProfiles();
             SetDevice(HardwareType.ELM327);
             Disconnect();
-            UseISO27145 = false;
+            STDType = StandardType.Unknown;
             ScannerPortOpened = false;
             if (CommSettings.UseSerialScanner) {
                 m_sp = new SerialPortClass(
@@ -102,23 +102,41 @@ namespace SH_OBD {
             return CommSettings.ProtocolIndex;
         }
 
-        public bool InitDevice(HardwareType device, int port, int baud, ProtocolType protocol) {
+        public bool InitDevice(HardwareType device, int port, int baud, ProtocolType protocol, bool bGetPIDStatus = true) {
             m_log.TraceInfo(string.Format("Attempting initialization on port {0}", port.ToString()));
-
             SetDevice(device);
-            if (m_obdDevice.Initialize(port, baud, protocol) && InitOBD()) {
+            bool flag;
+            if (bGetPIDStatus) {
+                flag = m_obdDevice.Initialize(port, baud, protocol) && InitOBD();
+            } else {
+                flag = m_obdDevice.Initialize(port, baud, protocol);
+            }
+            STDType = m_obdDevice.GetStandardType();
+            if (flag) {
                 m_obdDevice.SetConnected(true);
                 OnConnect?.Invoke();
                 return true;
             }
+            //if (m_obdDevice.Initialize(port, baud, protocol) && InitOBD()) {
+            //    m_obdDevice.SetConnected(true);
+            //    OnConnect?.Invoke();
+            //    return true;
+            //}
             m_obdDevice.SetConnected(false);
             return false;
         }
 
-        public bool InitDeviceAuto() {
+        public bool InitDeviceAuto(bool bGetPIDStatus = true) {
             m_log.TraceInfo("Beginning AUTO initialization...");
             SetDevice(HardwareType.ELM327);
-            if (m_obdDevice.Initialize(CommSettings) && InitOBD()) {
+            bool flag;
+            if (bGetPIDStatus) {
+                flag = m_obdDevice.Initialize(CommSettings) && InitOBD();
+            } else {
+                flag = m_obdDevice.Initialize(CommSettings);
+            }
+            STDType = m_obdDevice.GetStandardType();
+            if (flag) {
                 CommSettings.ProtocolIndex = m_obdDevice.GetProtocolType();
                 CommSettings.ComPort = m_obdDevice.GetComPortIndex();
                 SaveCommSettings(CommSettings);
@@ -126,6 +144,14 @@ namespace SH_OBD {
                 OnConnect?.Invoke();
                 return true;
             }
+            //if (m_obdDevice.Initialize(CommSettings) && InitOBD()) {
+            //    CommSettings.ProtocolIndex = m_obdDevice.GetProtocolType();
+            //    CommSettings.ComPort = m_obdDevice.GetComPortIndex();
+            //    SaveCommSettings(CommSettings);
+            //    m_obdDevice.SetConnected(true);
+            //    OnConnect?.Invoke();
+            //    return true;
+            //}
             m_obdDevice.SetConnected(false);
             return false;
         }
@@ -179,8 +205,6 @@ namespace SH_OBD {
                         break;
                     }
                 }
-                UseISO27145 = bRet;
-                m_log.TraceInfo("Current vehicle support ISO 27145 only!");
             }
             return bRet;
         }
@@ -349,7 +373,7 @@ namespace SH_OBD {
         public void Disconnect() {
             m_obdDevice.Disconnect();
             m_obdDevice.SetConnected(false);
-            UseISO27145 = false;
+            STDType = StandardType.Unknown;
             OnDisconnect?.Invoke();
         }
 

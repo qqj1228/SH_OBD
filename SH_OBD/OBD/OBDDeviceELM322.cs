@@ -4,11 +4,13 @@ namespace SH_OBD {
         private int m_iBaudRateIndex;
         private int m_iComPortIndex;
         private bool m_bConnected;
+        private StandardType m_iStandard;
 
         public OBDDeviceELM322(Logger log) : base(log) {
             try {
                 m_Parser = new OBDParser_J1850_VPW();
                 m_bConnected = false;
+                m_iStandard = StandardType.Unknown;
             } catch (Exception) {
                 throw;
             }
@@ -137,5 +139,7 @@ namespace SH_OBD {
             }
         }
         public override int GetComPortIndex() { return m_iComPortIndex; }
+
+        public override StandardType GetStandardType() { return m_iStandard; }
     }
 }

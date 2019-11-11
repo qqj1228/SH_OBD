@@ -386,7 +386,23 @@ namespace SH_OBD {
             this.Invoke((EventHandler)delegate {
                 StatusLabelConnStatus.ForeColor = Color.Green;
                 StatusLabelConnStatus.Text = "OBD通讯接口已连接";
-                StatusLabelAppProtocol.Text = m_obdInterface.UseISO27145 ? "ISO_27145" : "ISO_15031";
+                switch (m_obdInterface.STDType) {
+                case StandardType.Unknown:
+                    StatusLabelAppProtocol.Text = "Unknown";
+                    break;
+                case StandardType.ISO_15031:
+                    StatusLabelAppProtocol.Text = "ISO_15031";
+                    break;
+                case StandardType.ISO_27145:
+                    StatusLabelAppProtocol.Text = "ISO_27145";
+                    break;
+                case StandardType.SAE_J1939:
+                    StatusLabelAppProtocol.Text = "SAE_J1939";
+                    break;
+                default:
+                    StatusLabelAppProtocol.Text = "Unknown";
+                    break;
+                }
             });
         }
 

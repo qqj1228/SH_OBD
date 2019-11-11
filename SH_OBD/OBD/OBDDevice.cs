@@ -34,5 +34,6 @@ namespace SH_OBD {
         public abstract int GetComPortIndex();
         public abstract int GetBaudRateIndex();
         public abstract void SetTimeout(int iTimeout);
+        public abstract StandardType GetStandardType();
     }
 }

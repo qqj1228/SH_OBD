@@ -29,10 +29,12 @@ namespace SH_OBD {
             }
             if (lines.Count == 0 && responseList.Pending) {
                 responseList.RawResponse = "Pending_Message";
-                responseList.ErrorDetected = true;
                 return responseList;
             }
             lines.Sort();
+            if (param.Service == 0 && lines.Count > 1) {
+                lines.RemoveAt(lines.Count - 1);
+            }
             List<List<string>> groups = new List<List<string>>();
             List<string> group = new List<string> { lines[0] };
             groups.Add(group);
@@ -62,7 +64,12 @@ namespace SH_OBD {
                 if (groups[i].Count > 1) {
                     bIsMultiline = true;
                 }
-                int dataStartIndex1 = GetDataStartIndex(headLen, param, bIsMultiline, false);
+                int dataStartIndex1;
+                if (param.Service == 0 && bIsMultiline) {
+                    dataStartIndex1 = GetDataStartIndex(headLen, param, bIsMultiline, true);
+                } else {
+                    dataStartIndex1 = GetDataStartIndex(headLen, param, bIsMultiline, false);
+                }
                 int length1 = groups[i][0].Length - dataStartIndex1;
                 obd_response.Header = groups[i][0].Substring(0, headLen);
                 obd_response.Data = length1 > 0 ? groups[i][0].Substring(dataStartIndex1, length1) : "";
@@ -83,6 +90,9 @@ namespace SH_OBD {
                 return headLen + 2;
             }
             switch (param.Service) {
+            case 0:
+                iRet = headLen;
+                break;
             case 1:
                 iRet = headLen + 6;
                 break;
@@ -150,6 +160,14 @@ namespace SH_OBD {
     }
 
     public class OBDParser_ISO15765_4_CAN29 : OBDParserCAN {
+        protected const int HEADER_LENGTH = 8;
+
+        public override OBDResponseList Parse(OBDParameter param, string response) {
+            return Parse(param, response, HEADER_LENGTH);
+        }
+    }
+
+    public class OBDParser_SAE_J1939_CAN29 : OBDParserCAN {
         protected const int HEADER_LENGTH = 8;
 
         public override OBDResponseList Parse(OBDParameter param, string response) {

@@ -164,7 +164,7 @@ namespace SH_OBD {
         private bool ConnectOBD() {
             LogCommSettingInfo();
             if (m_obdInterface.CommSettings.AutoDetect) {
-                if (m_obdInterface.InitDeviceAuto()) {
+                if (m_obdInterface.InitDeviceAuto(false)) {
                     m_obdInterface.GetLogger().TraceInfo("Connection Established!");
                 } else {
                     m_obdInterface.GetLogger().TraceWarning("Failed to find a compatible OBD-II interface.");
@@ -175,7 +175,7 @@ namespace SH_OBD {
             } else {
                 int baudRate = m_obdInterface.CommSettings.BaudRate;
                 int comPort = m_obdInterface.CommSettings.ComPort;
-                if (m_obdInterface.InitDevice(m_obdInterface.CommSettings.HardwareIndex, comPort, baudRate, m_obdInterface.CommSettings.ProtocolIndex)) {
+                if (m_obdInterface.InitDevice(m_obdInterface.CommSettings.HardwareIndex, comPort, baudRate, m_obdInterface.CommSettings.ProtocolIndex, false)) {
                     m_obdInterface.GetLogger().TraceInfo("Connection Established!");
                 } else {
                     m_obdInterface.GetLogger().TraceWarning("Failed to find a compatible OBD-II interface.");
@@ -206,6 +206,7 @@ namespace SH_OBD {
                 this.label3Space.BackColor = m_backColor;
                 this.label3Space.ForeColor = Color.Gray;
             });
+            m_obdInterface.m_log.TraceInfo(">>>>>>>>>> Start to test vehicle of VIN: " + m_obdTest.StrVIN_IN + " <<<<<<<<<<");
             if (m_obdInterface.ConnectedStatus) {
                 m_obdInterface.Disconnect();
             }

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.IO.Ports;
 
 namespace SH_OBD {
     public class OBDDeviceELM327 : OBDDevice {
         private ProtocolType m_iProtocol;
+        private StandardType m_iStandard;
         private int m_iBaudRateIndex;
         private int m_iComPortIndex;
         private bool m_bConnected;
@@ -46,16 +48,22 @@ namespace SH_OBD {
                     }
 
                     m_CommELM.SetTimeout(5000);
-                    bool flag = false;
-                    if (GetOBDResponse("0100").Replace(" ", "").IndexOf("4100") >= 0 || GetOBDResponse("22F810").Replace(" ", "").IndexOf("62F810") >= 0) {
-                        flag = true;
+                    m_iStandard = SetStandardStatus();
+                    if (m_iStandard != StandardType.Unknown) {
                         if (m_Parser == null) {
                             SetProtocol((ProtocolType)int.Parse(GetOBDResponse("ATDPN").Replace("A", "")));
                         }
                     }
+                    //bool flag = false;
+                    //if (GetOBDResponse("0100").Replace(" ", "").IndexOf("4100") >= 0 || GetOBDResponse("22F810").Replace(" ", "").IndexOf("62F810") >= 0) {
+                    //    flag = true;
+                    //    if (m_Parser == null) {
+                    //        SetProtocol((ProtocolType)int.Parse(GetOBDResponse("ATDPN").Replace("A", "")));
+                    //    }
+                    //}
 
                     m_CommELM.SetTimeout(500);
-                    return flag;
+                    return m_iStandard != StandardType.Unknown;
                 } else {
                     if (!ConfirmAT("ATM0")) {
                         m_CommELM.Close();
@@ -63,13 +71,15 @@ namespace SH_OBD {
                     }
 
                     m_CommELM.SetTimeout(5000);
-                    int[] xattr = new int[] { 6, 7, 2, 3, 1, 8, 9, 4, 5 };
+                    //int[] xattr = new int[] { 6, 7, 2, 3, 1, 8, 9, 4, 5 };
+                    int[] xattr = new int[] { 6, 7, 3, 4, 5, 8, 9, 0xA, 2, 1 };
                     for (int idx = 0; idx < xattr.Length; idx++) {
                         if (!ConfirmAT("ATTP" + xattr[idx].ToString())) {
                             m_CommELM.Close();
                             return false;
                         }
-                        if (GetOBDResponse("0100").Replace(" ", "").IndexOf("4100") >= 0 || GetOBDResponse("22F810").Replace(" ", "").IndexOf("62F810") >= 0) {
+                        m_iStandard = SetStandardStatus();
+                        if (m_iStandard != StandardType.Unknown) {
                             if (m_Parser == null) {
                                 SetProtocol((ProtocolType)xattr[idx]);
                             }
@@ -79,6 +89,16 @@ namespace SH_OBD {
                             ConfirmAT("ATM1");
                             return true;
                         }
+                        //if (GetOBDResponse("0100").Replace(" ", "").IndexOf("4100") >= 0 || GetOBDResponse("22F810").Replace(" ", "").IndexOf("62F810") >= 0) {
+                        //    if (m_Parser == null) {
+                        //        SetProtocol((ProtocolType)xattr[idx]);
+                        //    }
+                        //    SetBaudRateIndex(iBaud);
+                        //    m_iComPortIndex = iPort;
+                        //    m_CommELM.SetTimeout(500);
+                        //    ConfirmAT("ATM1");
+                        //    return true;
+                        //}
                     }
                     // 每个协议都无法连接的话就关闭端口准备退出
                     if (m_CommELM.Online) {
@@ -102,16 +122,59 @@ namespace SH_OBD {
                 if (CommBase.GetPortAvailable(settings.ComPort) == CommBase.PortStatus.Available && Initialize(settings.ComPort, settings.BaudRate)) {
                     return true;
                 }
-                for (int iPort = 0; iPort < 100; ++iPort) {
-                    if (iPort != settings.ComPort) {
-                        if (CommBase.GetPortAvailable(iPort) == CommBase.PortStatus.Available
-                            && (Initialize(iPort, 38400) || Initialize(iPort, 115200) || Initialize(iPort, 9600))) {
-                            return true;
+                string[] serials = SerialPort.GetPortNames();
+                for (int i = 0; i < serials.Length; i++) {
+                    if (int.TryParse(serials[i].Substring(3), out int iPort)) {
+                        if (iPort != settings.ComPort) {
+                            if (CommBase.GetPortAvailable(iPort) == CommBase.PortStatus.Available
+                                && (Initialize(iPort, 38400)/* || Initialize(iPort, 115200) || Initialize(iPort, 9600)*/)) {
+                                return true;
+                            }
                         }
                     }
                 }
-            } catch { }
+                //for (int iPort = 0; iPort < 100; ++iPort) {
+                //    if (iPort != settings.ComPort) {
+                //        if (CommBase.GetPortAvailable(iPort) == CommBase.PortStatus.Available
+                //            && (Initialize(iPort, 38400) || Initialize(iPort, 115200) || Initialize(iPort, 9600))) {
+                //            return true;
+                //        }
+                //    }
+                //}
+            } catch (Exception ex) {
+                if (m_CommELM.Online) {
+                    m_CommELM.Close();
+                }
+                m_log.TraceError("Initialize occur error: " + ex.Message);
+            }
             return false;
+        }
+
+        private StandardType SetStandardStatus() {
+            bool bflag = false;
+            StandardType standard = StandardType.Unknown;
+            for (int i = 3; i > 0 && !bflag; i--) {
+                if (GetOBDResponse("0100").Replace(" ", "").Contains("4100")) {
+                    bflag = true;
+                    standard = StandardType.ISO_15031;
+                }
+            }
+            for (int i = 3; i > 0 && !bflag; i--) {
+                if (GetOBDResponse("22F810").Replace(" ", "").Contains("62F810")) {
+                    bflag = bflag || true;
+                    standard = StandardType.ISO_27145;
+                }
+            }
+            for (int i = 3; i > 0 && !bflag; i--) {
+                if (GetOBDResponse("00FECE").Replace(" ", "").Contains("FECE")) {
+                    bflag = bflag || true;
+                    standard = StandardType.SAE_J1939;
+                }
+            }
+            if (standard == StandardType.SAE_J1939) {
+                ConfirmAT("ATJHF0");
+            }
+            return standard;
         }
 
         /// <summary>
@@ -186,16 +249,10 @@ namespace SH_OBD {
             case ProtocolType.ISO_15765_4_CAN_29BIT_250KBAUD:
                 m_Parser = new OBDParser_ISO15765_4_CAN29();
                 break;
+            case ProtocolType.SAE_J1939_CAN_29BIT_250KBAUD:
+                m_Parser = new OBDParser_SAE_J1939_CAN29();
+                break;
             }
-        }
-
-        /// <summary>
-        /// Send command with 3 attempts
-        /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
-        public bool ConfirmAT(string command) {
-            return ConfirmAT(command, 3);
         }
 
         /// <summary>
@@ -204,7 +261,7 @@ namespace SH_OBD {
         /// <param name="command"></param>
         /// <param name="attempts"></param>
         /// <returns></returns>
-        public bool ConfirmAT(string command, int attempts) {
+        public bool ConfirmAT(string command, int attempts = 3) {
             if (!m_CommELM.Online) {
                 return false;
             }
@@ -240,7 +297,9 @@ namespace SH_OBD {
         }
 
         public override ProtocolType GetProtocolType() { return m_iProtocol; }
+
         public override int GetBaudRateIndex() { return m_iBaudRateIndex; }
+
         public void SetBaudRateIndex(int iBaud) {
             switch (iBaud) {
             case 9600:
@@ -257,7 +316,9 @@ namespace SH_OBD {
                 break;
             }
         }
+
         public override int GetComPortIndex() { return m_iComPortIndex; }
 
+        public override StandardType GetStandardType() { return m_iStandard; }
     }
 }

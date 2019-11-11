@@ -52,10 +52,17 @@ namespace SH_OBD {
             }
 
             if (txtCommand.Text.Trim() == "ClearDTC") {
-                if (m_obdInterface.UseISO27145) {
-                    txtCommand.Text = "14FFFF33";
-                } else {
+                switch (m_obdInterface.STDType) {
+                case StandardType.Unknown:
+                    return;
+                case StandardType.ISO_15031:
                     txtCommand.Text = "04";
+                    break;
+                case StandardType.ISO_27145:
+                    txtCommand.Text = "14FFFF33";
+                    break;
+                case StandardType.SAE_J1939:
+                    return;
                 }
             }
 
