@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO.Ports;
+using System.Threading;
 
 namespace SH_OBD {
     public class OBDDeviceELM327 : OBDDevice {
@@ -167,6 +168,17 @@ namespace SH_OBD {
                 }
                 orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
             }
+            if (orl.Pending && orl.RawResponse == "PENDING") {
+                for (int i = 5; i > 0; i--) {
+                    Thread.Sleep(1000);
+                    param.OBDRequest = "3E00";
+                    orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
+                    if (!orl.ErrorDetected && orl.RawResponse != "TPPR") {
+                        break;
+                    }
+                }
+            }
+
             return orl;
         }
 

@@ -21,7 +21,7 @@ namespace SH_OBD {
             List<string> lines = new List<string>();
             foreach (string item in tempLines) {
                 string strNRC = IsNegativeResponse(item, headLen);
-                if (strNRC.Length == 0) {
+                if (strNRC.Length == 0 && !IsTesterPresentResponse(item)) {
                     lines.Add(item);
                 } else if (strNRC == "78") {
                     responseList.Pending = true;
@@ -31,6 +31,12 @@ namespace SH_OBD {
                 responseList.RawResponse = "PENDING";
                 return responseList;
             }
+            if (lines.Count == 0) {
+                // 只含有TesterPresent的正响应
+                responseList.RawResponse = "TPPR";
+                return responseList;
+            }
+
             lines.Sort();
             if (param.Service == 0 && lines.Count > 1) {
                 lines.RemoveAt(lines.Count - 1);
@@ -147,6 +153,10 @@ namespace SH_OBD {
                 }
             }
             return strNRC;
+        }
+
+        private bool IsTesterPresentResponse(string strData) {
+            return strData == "7E00" || strData == "7E80";
         }
     }
 
