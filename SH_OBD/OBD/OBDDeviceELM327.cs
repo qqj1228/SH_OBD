@@ -54,14 +54,6 @@ namespace SH_OBD {
                             SetProtocol((ProtocolType)int.Parse(GetOBDResponse("ATDPN").Replace("A", "")));
                         }
                     }
-                    //bool flag = false;
-                    //if (GetOBDResponse("0100").Replace(" ", "").IndexOf("4100") >= 0 || GetOBDResponse("22F810").Replace(" ", "").IndexOf("62F810") >= 0) {
-                    //    flag = true;
-                    //    if (m_Parser == null) {
-                    //        SetProtocol((ProtocolType)int.Parse(GetOBDResponse("ATDPN").Replace("A", "")));
-                    //    }
-                    //}
-
                     m_CommELM.SetTimeout(500);
                     return m_iStandard != StandardType.Unknown;
                 } else {
@@ -71,7 +63,6 @@ namespace SH_OBD {
                     }
 
                     m_CommELM.SetTimeout(5000);
-                    //int[] xattr = new int[] { 6, 7, 2, 3, 1, 8, 9, 4, 5 };
                     int[] xattr = new int[] { 6, 7, 3, 4, 5, 8, 9, 0xA, 2, 1 };
                     for (int idx = 0; idx < xattr.Length; idx++) {
                         if (!ConfirmAT("ATTP" + xattr[idx].ToString())) {
@@ -89,16 +80,6 @@ namespace SH_OBD {
                             ConfirmAT("ATM1");
                             return true;
                         }
-                        //if (GetOBDResponse("0100").Replace(" ", "").IndexOf("4100") >= 0 || GetOBDResponse("22F810").Replace(" ", "").IndexOf("62F810") >= 0) {
-                        //    if (m_Parser == null) {
-                        //        SetProtocol((ProtocolType)xattr[idx]);
-                        //    }
-                        //    SetBaudRateIndex(iBaud);
-                        //    m_iComPortIndex = iPort;
-                        //    m_CommELM.SetTimeout(500);
-                        //    ConfirmAT("ATM1");
-                        //    return true;
-                        //}
                     }
                     // 每个协议都无法连接的话就关闭端口准备退出
                     if (m_CommELM.Online) {
@@ -133,14 +114,6 @@ namespace SH_OBD {
                         }
                     }
                 }
-                //for (int iPort = 0; iPort < 100; ++iPort) {
-                //    if (iPort != settings.ComPort) {
-                //        if (CommBase.GetPortAvailable(iPort) == CommBase.PortStatus.Available
-                //            && (Initialize(iPort, 38400) || Initialize(iPort, 115200) || Initialize(iPort, 9600))) {
-                //            return true;
-                //        }
-                //    }
-                //}
             } catch (Exception ex) {
                 if (m_CommELM.Online) {
                     m_CommELM.Close();

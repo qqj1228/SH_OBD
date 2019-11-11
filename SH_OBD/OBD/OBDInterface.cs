@@ -117,11 +117,6 @@ namespace SH_OBD {
                 OnConnect?.Invoke();
                 return true;
             }
-            //if (m_obdDevice.Initialize(port, baud, protocol) && InitOBD()) {
-            //    m_obdDevice.SetConnected(true);
-            //    OnConnect?.Invoke();
-            //    return true;
-            //}
             m_obdDevice.SetConnected(false);
             return false;
         }
@@ -144,14 +139,6 @@ namespace SH_OBD {
                 OnConnect?.Invoke();
                 return true;
             }
-            //if (m_obdDevice.Initialize(CommSettings) && InitOBD()) {
-            //    CommSettings.ProtocolIndex = m_obdDevice.GetProtocolType();
-            //    CommSettings.ComPort = m_obdDevice.GetComPortIndex();
-            //    SaveCommSettings(CommSettings);
-            //    m_obdDevice.SetConnected(true);
-            //    OnConnect?.Invoke();
-            //    return true;
-            //}
             m_obdDevice.SetConnected(false);
             return false;
         }

@@ -39,6 +39,7 @@ namespace SH_OBD {
         public bool CALIDCVNResult { get; set; }
         public bool SpaceResult { get; set; }
         public string StrVIN_IN { get; set; }
+        public string StrVIN_ECU { get; set; }
 
         public OBDTest(OBDInterface obd) {
             m_obdInterface = obd;
@@ -361,7 +362,9 @@ namespace SH_OBD {
                     break;
                 }
             }
-            if (m_obdInterface.OBDResultSetting.VINError && StrVIN_IN != null && strVIN != StrVIN_IN && StrVIN_IN.Length > 0) {
+            StrVIN_ECU = strVIN;
+            if (m_obdInterface.OBDResultSetting.VINError && StrVIN_IN != null && StrVIN_ECU != StrVIN_IN && StrVIN_IN.Length > 0) {
+                m_obdInterface.m_log.TraceWarning("Scan tool VIN[" + StrVIN_IN + "] and ECU VIN[" + StrVIN_ECU + "] are not consistent");
                 VINResult = false;
             }
             param.Parameter = HByte + 0x0A;
@@ -617,6 +620,7 @@ namespace SH_OBD {
         /// <param name="errorMsg">错误信息</param>
         /// <returns>是否返回成功信息</returns>
         public bool StartOBDTest(out string errorMsg) {
+            m_obdInterface.m_log.TraceInfo(">>>>> Enter StartOBDTest function. Ver: " + MainFileVersion.AssemblyVersion + "<<<<<");
             errorMsg = "";
             m_dtInfo.Clear();
             m_dtInfo.Dispose();
@@ -647,16 +651,16 @@ namespace SH_OBD {
             while (!GetSupportStatus(mode01, m_mode01Support)) {
                 if (++count >= 3) {
                     OBDResult = false;
-                    errorMsg = "获取 Mode01 支持状态出错！";
-                    m_obdInterface.m_log.TraceError("Get Mode01 Support Status Error!");
+                    errorMsg = "获取 Mode01 / DID F4 / DM5 支持状态出错！";
+                    m_obdInterface.m_log.TraceError("Get Mode01 / DID F4 / DM5 Support Status Error!");
                     throw new Exception("获取 Mode01 支持状态出错！");
                 }
             }
             while (!GetSupportStatus(mode09, m_mode09Support)) {
                 if (++count >= 3) {
                     OBDResult = false;
-                    errorMsg = "获取 Mode09 支持状态出错！";
-                    m_obdInterface.m_log.TraceError("Get Mode09 Support Status Error!");
+                    errorMsg = "获取 Mode09 / DID F8 / DM19 支持状态出错！";
+                    m_obdInterface.m_log.TraceError("Get Mode09 / DID F8 / DM19 Support Status Error!");
                     throw new Exception("获取 Mode09 支持状态出错！");
                 }
             }
@@ -684,7 +688,7 @@ namespace SH_OBD {
             DataTable dt = new DataTable();
             SetDataTableResultColumns(ref dt);
             try {
-                SetDataTableResult(strVIN, strOBDResult, ref dt);
+                SetDataTableResult(StrVIN_ECU, strOBDResult, ref dt);
             } catch (Exception ex) {
                 m_obdInterface.m_log.TraceError("Result DataTable Error: " + ex.Message);
                 dt.Dispose();
@@ -712,9 +716,9 @@ namespace SH_OBD {
             bool bRet;
             try {
                 if (m_obdInterface.OracleMESSetting.Enable) {
-                    bRet = UploadDataOracle(strVIN, strOBDResult, dt, ref errorMsg);
+                    bRet = UploadDataOracle(StrVIN_ECU, strOBDResult, dt, ref errorMsg);
                 } else {
-                    bRet = UploadData(strVIN, strOBDResult, dt, ref errorMsg);
+                    bRet = UploadData(StrVIN_ECU, strOBDResult, dt, ref errorMsg);
                 }
             } catch (Exception) {
                 dt.Dispose();
@@ -1001,9 +1005,8 @@ namespace SH_OBD {
             dt1MES.Dispose();
             if (count < 4) {
                 // 上传数据接口返回成功信息
+                m_obdInterface.m_log.TraceInfo("Upload data success, VIN = " + strVIN);
                 m_db.UpdateUpload(strVIN, "1");
-                // 保存m_iSN的值，以免程序非正常退出的话，该值就丢失了
-                m_obdInterface.SaveDBandMES(m_obdInterface.DBandMES);
                 UploadDataDone?.Invoke();
 #if DEBUG
                 errorMsg = strMsg;
@@ -1464,7 +1467,18 @@ namespace SH_OBD {
                         bRet = UploadData(strVIN, dt.Rows[0][28].ToString(), dt, ref errorMsg);
                     }
                 } catch (Exception) {
-                    m_obdInterface.m_log.TraceError("Manual Upload Data Faiure！");
+                    string strMsg = "Wrong record: VIN = " + strVIN + ", OBDResult = " + dt.Rows[0][28].ToString() + ", ";
+                    for (int i = 0; i < dt.Rows.Count; i++) {
+                        strMsg += "ECU_ID = " + dt.Rows[i][1] + ", ";
+                        strMsg += "OBD_SUP = " + dt.Rows[i][4] + ", ";
+                        strMsg += "ODO = " + dt.Rows[i][5] + ", ";
+                        strMsg += "ECU_NAME = " + dt.Rows[i][25] + ", ";
+                        strMsg += "CAL_ID = " + dt.Rows[i][26] + ", ";
+                        strMsg += "CVN = " + dt.Rows[i][27] + " || ";
+                    }
+                    strMsg = strMsg.Substring(0, strMsg.Length - 4);
+                    m_obdInterface.m_log.TraceError("Manual Upload Data Failed: " + errorMsg);
+                    m_obdInterface.m_log.TraceError(strMsg);
                     dt.Dispose();
                     throw;
                 }
@@ -1536,10 +1550,20 @@ namespace SH_OBD {
                     } else {
                         bRet = UploadData(dt.Rows[0][0].ToString(), dt.Rows[0][28].ToString(), dt, ref errorMsg);
                     }
-                } catch (Exception) {
-                    m_obdInterface.m_log.TraceError("Upload Data OnTime Faiure！");
-                    dt.Dispose();
-                    throw;
+                } catch (Exception ex) {
+                    string strMsg = "Wrong record: VIN = " + dt.Rows[0][0].ToString() + ", OBDResult = " + dt.Rows[0][28].ToString() + " [";
+                    for (int j = 0; j < dt.Rows.Count; j++) {
+                        strMsg += "ECU_ID = " + dt.Rows[j][1] + ", ";
+                        strMsg += "OBD_SUP = " + dt.Rows[j][4] + ", ";
+                        strMsg += "ODO = " + dt.Rows[j][5] + ", ";
+                        strMsg += "ECU_NAME = " + dt.Rows[j][25] + ", ";
+                        strMsg += "CAL_ID = " + dt.Rows[j][26] + ", ";
+                        strMsg += "CVN = " + dt.Rows[j][27] + " || ";
+                    }
+                    strMsg = strMsg.Substring(0, strMsg.Length - 4) + "]";
+                    m_obdInterface.m_log.TraceError("Upload Data OnTime Failed: " + errorMsg + ", " + ex.Message);
+                    m_obdInterface.m_log.TraceError(strMsg);
+                    continue;
                 }
             }
             dt.Dispose();
