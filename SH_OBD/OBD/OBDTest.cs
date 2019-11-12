@@ -293,6 +293,7 @@ namespace SH_OBD {
                     break;
                 }
             }
+            // 判断ECM的OBD型式是否合法
             if (m_obdInterface.OBDResultSetting.OBD_SUP) {
                 if (OBD_SUP.Length == 0 || OBD_SUP.Length > 2 || OBD_SUP == "不适用") {
                     OBDSUPResult = false;
@@ -799,6 +800,14 @@ namespace SH_OBD {
 
             WriteDbStart?.Invoke();
             OBDResult = DTCResult && ReadinessResult && VINResult && CALIDCVNResult && SpaceResult && OBDSUPResult;
+            string strLog = "OBD Test Result: " + OBDResult.ToString() + " [";
+            strLog += "DTCResult: " + DTCResult.ToString();
+            strLog += ", ReadinessResult: " + ReadinessResult.ToString();
+            strLog += ", SpaceResult: " + SpaceResult.ToString();
+            strLog += ", OBDSUPResult: " + OBDSUPResult.ToString();
+            strLog += ", VINResult: " + VINResult.ToString();
+            strLog += ", CALIDCVNResult: " + CALIDCVNResult.ToString() + "]";
+            m_obdInterface.m_log.TraceInfo(strLog);
 
             string strOBDResult = OBDResult ? "1" : "0";
 

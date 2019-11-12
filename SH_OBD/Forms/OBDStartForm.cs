@@ -28,6 +28,13 @@ namespace SH_OBD {
             m_lastTime_TXT = DateTime.Now;
             m_bAcceptVIN_TXT = true;
             m_obdInterface = new OBDInterface();
+            if (m_obdInterface.StrLoadConfigResult.Length > 0) {
+                m_obdInterface.StrLoadConfigResult += "是否要以默认配置运行程序？点击\"否\"：将会退出程序。";
+                DialogResult result = MessageBox.Show(m_obdInterface.StrLoadConfigResult, "加载配置文件出错", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.No) {
+                    Environment.Exit(0);
+                }
+            }
             m_obdTest = new OBDTest(m_obdInterface);
             m_backColor = label1.BackColor;
             if (m_obdInterface.ScannerPortOpened) {
@@ -62,8 +69,12 @@ namespace SH_OBD {
         }
 
         ~OBDStartForm() {
-            f_MainForm.Close();
-            m_timer.Dispose();
+            if (f_MainForm != null) {
+                f_MainForm.Close();
+            }
+            if (m_timer != null) {
+                m_timer.Dispose();
+            }
         }
 
         private void TestNativeDatabase() {
