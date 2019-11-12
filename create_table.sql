@@ -8,7 +8,7 @@ CREATE TABLE SH_OBD.dbo.OBDData (
     ID int IDENTITY PRIMARY KEY NOT NULL, -- ID, 自增, 主键
     WriteTime datetime NOT NULL default(getdate()), -- 写入时间
     VIN varchar(17) NOT NULL, -- 车辆VIN号，0902
-    ECU_ID varchar(8) NOT NULL, -- 车型代码与排放相关的ECU Response ID
+    ECU_ID varchar(8) NOT NULL, -- 与排放相关的ECU Response ID
     MIL varchar(50) default('不适用'), -- MIL灯状态，0101
     MIL_DIST varchar(50) default('不适用'), -- MIL亮后行驶里程（km），0121
     OBD_SUP varchar(50) default('不适用'), -- OBD型式检验类型，011C

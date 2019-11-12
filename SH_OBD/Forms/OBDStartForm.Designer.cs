@@ -35,10 +35,14 @@
             this.label3Space = new System.Windows.Forms.Label();
             this.labelResult = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.tblLayoutMiddle = new System.Windows.Forms.TableLayoutPanel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtBoxVehicleType = new System.Windows.Forms.TextBox();
             this.tblLayoutMain.SuspendLayout();
             this.tblLayoutTop.SuspendLayout();
             this.tblLayoutBottom.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.tblLayoutMiddle.SuspendLayout();
             this.SuspendLayout();
             // 
             // tblLayoutMain
@@ -46,16 +50,18 @@
             this.tblLayoutMain.ColumnCount = 1;
             this.tblLayoutMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblLayoutMain.Controls.Add(this.tblLayoutTop, 0, 1);
-            this.tblLayoutMain.Controls.Add(this.tblLayoutBottom, 0, 3);
-            this.tblLayoutMain.Controls.Add(this.labelResult, 0, 2);
+            this.tblLayoutMain.Controls.Add(this.tblLayoutBottom, 0, 4);
+            this.tblLayoutMain.Controls.Add(this.labelResult, 0, 3);
             this.tblLayoutMain.Controls.Add(this.pictureBox1, 0, 0);
+            this.tblLayoutMain.Controls.Add(this.tblLayoutMiddle, 0, 2);
             this.tblLayoutMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tblLayoutMain.Location = new System.Drawing.Point(0, 0);
             this.tblLayoutMain.Name = "tblLayoutMain";
-            this.tblLayoutMain.RowCount = 4;
+            this.tblLayoutMain.RowCount = 5;
             this.tblLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
-            this.tblLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tblLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tblLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 17F));
+            this.tblLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 17F));
+            this.tblLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 36F));
             this.tblLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
             this.tblLayoutMain.Size = new System.Drawing.Size(784, 561);
             this.tblLayoutMain.TabIndex = 0;
@@ -72,25 +78,25 @@
             this.tblLayoutTop.Name = "tblLayoutTop";
             this.tblLayoutTop.RowCount = 1;
             this.tblLayoutTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayoutTop.Size = new System.Drawing.Size(778, 106);
+            this.tblLayoutTop.Size = new System.Drawing.Size(778, 89);
             this.tblLayoutTop.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Font = new System.Drawing.Font("宋体", 60F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label1.Font = new System.Drawing.Font("宋体", 50F, System.Drawing.FontStyle.Bold);
             this.label1.Location = new System.Drawing.Point(3, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(172, 106);
+            this.label1.Size = new System.Drawing.Size(172, 89);
             this.label1.TabIndex = 0;
             this.label1.Text = "VIN:";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // txtBoxVIN
             // 
-            this.txtBoxVIN.BackColor = System.Drawing.Color.SteelBlue;
+            this.txtBoxVIN.BackColor = System.Drawing.Color.SkyBlue;
             this.txtBoxVIN.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtBoxVIN.Font = new System.Drawing.Font("宋体", 50F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtBoxVIN.Font = new System.Drawing.Font("宋体", 50F);
             this.txtBoxVIN.Location = new System.Drawing.Point(181, 3);
             this.txtBoxVIN.Name = "txtBoxVIN";
             this.txtBoxVIN.Size = new System.Drawing.Size(594, 84);
@@ -110,11 +116,11 @@
             this.tblLayoutBottom.Controls.Add(this.labelCALIDCVN, 1, 0);
             this.tblLayoutBottom.Controls.Add(this.label3Space, 2, 0);
             this.tblLayoutBottom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tblLayoutBottom.Location = new System.Drawing.Point(3, 479);
+            this.tblLayoutBottom.Location = new System.Drawing.Point(3, 478);
             this.tblLayoutBottom.Name = "tblLayoutBottom";
             this.tblLayoutBottom.RowCount = 1;
             this.tblLayoutBottom.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayoutBottom.Size = new System.Drawing.Size(778, 79);
+            this.tblLayoutBottom.Size = new System.Drawing.Size(778, 80);
             this.tblLayoutBottom.TabIndex = 1;
             // 
             // btnAdvanceMode
@@ -124,7 +130,7 @@
             this.btnAdvanceMode.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnAdvanceMode.Location = new System.Drawing.Point(585, 6);
             this.btnAdvanceMode.Name = "btnAdvanceMode";
-            this.btnAdvanceMode.Size = new System.Drawing.Size(187, 67);
+            this.btnAdvanceMode.Size = new System.Drawing.Size(187, 68);
             this.btnAdvanceMode.TabIndex = 0;
             this.btnAdvanceMode.Text = "高级模式(&A)";
             this.btnAdvanceMode.UseVisualStyleBackColor = false;
@@ -137,7 +143,7 @@
             this.labelVINError.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Bold);
             this.labelVINError.Location = new System.Drawing.Point(6, 3);
             this.labelVINError.Name = "labelVINError";
-            this.labelVINError.Size = new System.Drawing.Size(184, 73);
+            this.labelVINError.Size = new System.Drawing.Size(184, 74);
             this.labelVINError.TabIndex = 3;
             this.labelVINError.Text = "VIN号不匹配";
             this.labelVINError.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -148,7 +154,7 @@
             this.labelCALIDCVN.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.labelCALIDCVN.Location = new System.Drawing.Point(199, 3);
             this.labelCALIDCVN.Name = "labelCALIDCVN";
-            this.labelCALIDCVN.Size = new System.Drawing.Size(184, 73);
+            this.labelCALIDCVN.Size = new System.Drawing.Size(184, 74);
             this.labelCALIDCVN.TabIndex = 4;
             this.labelCALIDCVN.Text = "CALID和CVN数据不完整";
             this.labelCALIDCVN.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -159,7 +165,7 @@
             this.label3Space.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label3Space.Location = new System.Drawing.Point(392, 3);
             this.label3Space.Name = "label3Space";
-            this.label3Space.Size = new System.Drawing.Size(184, 73);
+            this.label3Space.Size = new System.Drawing.Size(184, 74);
             this.label3Space.TabIndex = 5;
             this.label3Space.Text = "存在DTC故障码";
             this.label3Space.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -169,9 +175,9 @@
             this.labelResult.AutoSize = true;
             this.labelResult.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelResult.Font = new System.Drawing.Font("宋体", 60F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labelResult.Location = new System.Drawing.Point(3, 196);
+            this.labelResult.Location = new System.Drawing.Point(3, 274);
             this.labelResult.Name = "labelResult";
-            this.labelResult.Size = new System.Drawing.Size(778, 280);
+            this.labelResult.Size = new System.Drawing.Size(778, 201);
             this.labelResult.TabIndex = 2;
             this.labelResult.Text = "OBD检测结果";
             this.labelResult.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -186,6 +192,42 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
+            // 
+            // tblLayoutMiddle
+            // 
+            this.tblLayoutMiddle.ColumnCount = 2;
+            this.tblLayoutMiddle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23F));
+            this.tblLayoutMiddle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 77F));
+            this.tblLayoutMiddle.Controls.Add(this.label2, 0, 0);
+            this.tblLayoutMiddle.Controls.Add(this.txtBoxVehicleType, 1, 0);
+            this.tblLayoutMiddle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tblLayoutMiddle.Location = new System.Drawing.Point(3, 182);
+            this.tblLayoutMiddle.Name = "tblLayoutMiddle";
+            this.tblLayoutMiddle.RowCount = 1;
+            this.tblLayoutMiddle.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tblLayoutMiddle.Size = new System.Drawing.Size(778, 89);
+            this.tblLayoutMiddle.TabIndex = 4;
+            // 
+            // label2
+            // 
+            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.Font = new System.Drawing.Font("宋体", 40F, System.Drawing.FontStyle.Bold);
+            this.label2.Location = new System.Drawing.Point(3, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(172, 94);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "车型:";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // txtBoxVehicleType
+            // 
+            this.txtBoxVehicleType.BackColor = System.Drawing.Color.SkyBlue;
+            this.txtBoxVehicleType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtBoxVehicleType.Font = new System.Drawing.Font("宋体", 50F);
+            this.txtBoxVehicleType.Location = new System.Drawing.Point(181, 3);
+            this.txtBoxVehicleType.Name = "txtBoxVehicleType";
+            this.txtBoxVehicleType.Size = new System.Drawing.Size(594, 84);
+            this.txtBoxVehicleType.TabIndex = 1;
             // 
             // OBDStartForm
             // 
@@ -209,6 +251,8 @@
             this.tblLayoutBottom.ResumeLayout(false);
             this.tblLayoutBottom.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.tblLayoutMiddle.ResumeLayout(false);
+            this.tblLayoutMiddle.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -226,5 +270,8 @@
         private System.Windows.Forms.Label labelVINError;
         private System.Windows.Forms.Label labelCALIDCVN;
         private System.Windows.Forms.Label label3Space;
+        private System.Windows.Forms.TableLayoutPanel tblLayoutMiddle;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox txtBoxVehicleType;
     }
 }

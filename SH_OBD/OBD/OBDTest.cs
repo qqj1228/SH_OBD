@@ -38,8 +38,11 @@ namespace SH_OBD {
         public bool VINResult { get; set; }
         public bool CALIDCVNResult { get; set; }
         public bool SpaceResult { get; set; }
+        public bool CALIDCheckResult { get; set; }
+        public bool CVNCheckResult { get; set; }
         public string StrVIN_IN { get; set; }
         public string StrVIN_ECU { get; set; }
+        public string StrType_IN { get; set; }
 
         public OBDTest(OBDInterface obd) {
             m_obdInterface = obd;
@@ -58,6 +61,8 @@ namespace SH_OBD {
             VINResult = true;
             CALIDCVNResult = true;
             SpaceResult = true;
+            CALIDCheckResult = true;
+            CVNCheckResult = true;
             m_db = new Model(m_obdInterface.DBandMES, m_obdInterface.m_log);
             m_dbOracle = new ModelOracle(m_obdInterface.OracleMESSetting, m_obdInterface.m_log);
         }
@@ -672,6 +677,7 @@ namespace SH_OBD {
             SetDataTableInfo();
             SetDataTableECUInfo();
             //SetDataTableIUPR();
+
 
             OBDResult = DTCResult && ReadinessResult && VINResult && CALIDCVNResult && SpaceResult;
 
@@ -1664,6 +1670,10 @@ namespace SH_OBD {
                     dtOut.Rows.Add(dr);
                 }
             }
+        }
+
+        private void CheckCALIDCVN(string strType) {
+
         }
 
         private void ExportResultFile(DataTable dt) {

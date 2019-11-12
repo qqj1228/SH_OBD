@@ -106,6 +106,9 @@ namespace SH_OBD {
         void SerialDataReceived(object sender, SerialDataReceivedEventArgs e, byte[] bits) {
             // 跨UI线程调用UI控件要使用Invoke
             this.Invoke((EventHandler)delegate {
+                if (true) {
+
+                }
                 this.txtBoxVIN.Text = Encoding.Default.GetString(bits).Trim();
                 if (this.txtBoxVIN.Text.Length == 17) {
                     m_obdTest.StrVIN_IN = this.txtBoxVIN.Text;
@@ -269,6 +272,8 @@ namespace SH_OBD {
             float scale = this.Height / m_lastHeight;
             ResizeFont(this.txtBoxVIN, scale);
             ResizeFont(this.label1, scale);
+            ResizeFont(this.label2, scale);
+            ResizeFont(this.txtBoxVehicleType, scale);
             ResizeFont(this.labelResult, scale);
             ResizeFont(this.labelVINError, scale);
             ResizeFont(this.labelCALIDCVN, scale);
