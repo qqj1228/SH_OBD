@@ -104,19 +104,29 @@ namespace SH_OBD {
         void OnUploadDataDone() { }
 
         void SerialDataReceived(object sender, SerialDataReceivedEventArgs e, byte[] bits) {
-            // 跨UI线程调用UI控件要使用Invoke
-            this.Invoke((EventHandler)delegate {
-                if (true) {
-
-                }
-                this.txtBoxVIN.Text = Encoding.Default.GetString(bits).Trim();
-                if (this.txtBoxVIN.Text.Length == 17) {
-                    m_obdTest.StrVIN_IN = this.txtBoxVIN.Text;
+            Control con = this.ActiveControl;
+            if (con is TextBox tb) {
+                // 跨UI线程调用UI控件要使用Invoke
+                this.Invoke((EventHandler)delegate {
+                    if (tb.Name == "txtBoxVIN") {
+                        this.txtBoxVIN.Text = Encoding.Default.GetString(bits);
+                        if (this.txtBoxVIN.Text.Contains('\n')) {
+                            this.txtBoxVehicleType.Focus();
+                        }
+                    } else if (tb.Name == "txtBoxVehicleType") {
+                        this.txtBoxVehicleType.Text = Encoding.Default.GetString(bits);
+                        if (this.txtBoxVehicleType.Text.Contains('\n')) {
+                            this.txtBoxVIN.Focus();
+                        }
+                    }
+                });
+                if (this.txtBoxVIN.Text.Trim().Length == 17 && this.txtBoxVehicleType.Text.Trim().Length >= 10) {
+                    m_obdTest.StrVIN_IN = this.txtBoxVIN.Text.Trim();
                     if (!m_obdTest.AdvanceMode) {
                         StartOBDTest();
                     }
                 }
-            });
+            }
         }
 
         private void LogCommSettingInfo() {
@@ -349,6 +359,17 @@ namespace SH_OBD {
                 m_obdTest.m_dbOracle.ConnectOracle();
             } catch (Exception ex) {
                 MessageBox.Show("检测到与MES通讯异常，数据将无法上传: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void TxtBox_KeyPress(object sender, KeyPressEventArgs e) {
+            if (e.KeyChar == (char)Keys.Enter) {
+                TextBox tb = sender as TextBox;
+                if (tb.Name == "txtBoxVehicleType") {
+                    this.txtBoxVIN.Focus();
+                } else if (tb.Name == "txtBoxVIN") {
+                    this.txtBoxVehicleType.Focus();
+                }
             }
         }
     }

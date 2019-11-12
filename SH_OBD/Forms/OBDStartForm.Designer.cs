@@ -100,8 +100,9 @@
             this.txtBoxVIN.Location = new System.Drawing.Point(181, 3);
             this.txtBoxVIN.Name = "txtBoxVIN";
             this.txtBoxVIN.Size = new System.Drawing.Size(594, 84);
-            this.txtBoxVIN.TabIndex = 1;
+            this.txtBoxVIN.TabIndex = 0;
             this.txtBoxVIN.TextChanged += new System.EventHandler(this.TxtBoxVIN_TextChanged);
+            this.txtBoxVIN.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtBox_KeyPress);
             // 
             // tblLayoutBottom
             // 
@@ -228,6 +229,7 @@
             this.txtBoxVehicleType.Name = "txtBoxVehicleType";
             this.txtBoxVehicleType.Size = new System.Drawing.Size(594, 84);
             this.txtBoxVehicleType.TabIndex = 1;
+            this.txtBoxVehicleType.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtBox_KeyPress);
             // 
             // OBDStartForm
             // 
