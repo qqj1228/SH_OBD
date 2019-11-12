@@ -54,8 +54,8 @@
             this.tblLayoutMain.Name = "tblLayoutMain";
             this.tblLayoutMain.RowCount = 4;
             this.tblLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
-            this.tblLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tblLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tblLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 17F));
+            this.tblLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 53F));
             this.tblLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
             this.tblLayoutMain.Size = new System.Drawing.Size(784, 561);
             this.tblLayoutMain.TabIndex = 0;
@@ -72,7 +72,7 @@
             this.tblLayoutTop.Name = "tblLayoutTop";
             this.tblLayoutTop.RowCount = 1;
             this.tblLayoutTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayoutTop.Size = new System.Drawing.Size(778, 106);
+            this.tblLayoutTop.Size = new System.Drawing.Size(778, 89);
             this.tblLayoutTop.TabIndex = 0;
             // 
             // label1
@@ -81,10 +81,10 @@
             this.label1.Font = new System.Drawing.Font("宋体", 50F, System.Drawing.FontStyle.Bold);
             this.label1.Location = new System.Drawing.Point(3, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(172, 106);
+            this.label1.Size = new System.Drawing.Size(172, 89);
             this.label1.TabIndex = 0;
             this.label1.Text = "VIN:";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // txtBoxVIN
             // 
@@ -169,9 +169,9 @@
             // 
             this.labelResult.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelResult.Font = new System.Drawing.Font("宋体", 50F, System.Drawing.FontStyle.Bold);
-            this.labelResult.Location = new System.Drawing.Point(3, 196);
+            this.labelResult.Location = new System.Drawing.Point(3, 179);
             this.labelResult.Name = "labelResult";
-            this.labelResult.Size = new System.Drawing.Size(778, 280);
+            this.labelResult.Size = new System.Drawing.Size(778, 297);
             this.labelResult.TabIndex = 2;
             this.labelResult.Text = "OBD检测结果";
             this.labelResult.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;

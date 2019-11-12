@@ -285,7 +285,7 @@ namespace SH_OBD {
                 };
             }
             SetDataRow(++NO, "OBD型式检验类型", dt, param);                                    // 2
-            string OBD_SUP = dt.Rows[dt.Rows.Count - 1][2].ToString().Replace("不适用", "0").Split(',')[0];
+            string OBD_SUP = dt.Rows[dt.Rows.Count - 1][2].ToString().Split(',')[0];
             string[] CN6_OBD_SUP = m_obdInterface.OBDResultSetting.CN6_OBD_SUP.Split(',');
             foreach (string item in CN6_OBD_SUP) {
                 if (OBD_SUP == item) {
@@ -294,7 +294,7 @@ namespace SH_OBD {
                 }
             }
             if (m_obdInterface.OBDResultSetting.OBD_SUP) {
-                if (OBD_SUP.Length == 0 || OBD_SUP.Length > 2 || OBD_SUP == "0") {
+                if (OBD_SUP.Length == 0 || OBD_SUP.Length > 2 || OBD_SUP == "不适用") {
                     OBDSUPResult = false;
                 }
             }
@@ -1196,19 +1196,13 @@ namespace SH_OBD {
 
         private void DataTable2MESAddRow(DataTable dt2MES, DataTable dtIn, int iRow, string ECUAcronym, string CALID, string CVN) {
             string moduleID = GetModuleID(ECUAcronym, dtIn.Rows[iRow][1].ToString());
-            string OBD_SUP = dtIn.Rows[iRow][4].ToString().Replace("不适用", "0").Split(',')[0];
-            if (OBD_SUP.Length == 0) {
-                OBD_SUP = "0";
-            } else if (OBD_SUP.Length > 2) {
+            // OBD型式和ODO只用第一个ECU（即7E8，ECM）的数据上传
+            string OBD_SUP = dtIn.Rows[0][4].ToString().Split(',')[0].Replace("不适用", "");
+            string ODO = dtIn.Rows[0][5].ToString().Replace("不适用", "");
+            if (OBD_SUP.Length > 2) {
                 OBD_SUP = OBD_SUP.Substring(0, 2);
             }
-            dt2MES.Rows.Add(
-                OBD_SUP,
-                dtIn.Rows[iRow][5].ToString().Replace("不适用", ""),
-                moduleID,
-                CALID,
-                CVN
-            );
+            dt2MES.Rows.Add(OBD_SUP, ODO, moduleID, CALID, CVN);
         }
 
         private void SetDataTable2MES(DataTable dt2MES, DataTable dtIn) {
