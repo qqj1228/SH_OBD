@@ -35,6 +35,7 @@
             this.btnModify = new System.Windows.Forms.Button();
             this.btnInsert = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
+            this.btnRefresh = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.GridContent)).BeginInit();
             this.grpBoxType.SuspendLayout();
             this.grpBoxECUID.SuspendLayout();
@@ -67,7 +68,7 @@
             this.txtBoxType.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtBoxType.Location = new System.Drawing.Point(3, 17);
             this.txtBoxType.Name = "txtBoxType";
-            this.txtBoxType.Size = new System.Drawing.Size(114, 21);
+            this.txtBoxType.Size = new System.Drawing.Size(104, 21);
             this.txtBoxType.TabIndex = 1;
             // 
             // grpBoxType
@@ -75,7 +76,7 @@
             this.grpBoxType.Controls.Add(this.txtBoxType);
             this.grpBoxType.Location = new System.Drawing.Point(13, 13);
             this.grpBoxType.Name = "grpBoxType";
-            this.grpBoxType.Size = new System.Drawing.Size(120, 45);
+            this.grpBoxType.Size = new System.Drawing.Size(110, 45);
             this.grpBoxType.TabIndex = 2;
             this.grpBoxType.TabStop = false;
             this.grpBoxType.Text = "车型";
@@ -83,9 +84,9 @@
             // grpBoxECUID
             // 
             this.grpBoxECUID.Controls.Add(this.txtBoxECUID);
-            this.grpBoxECUID.Location = new System.Drawing.Point(139, 13);
+            this.grpBoxECUID.Location = new System.Drawing.Point(129, 13);
             this.grpBoxECUID.Name = "grpBoxECUID";
-            this.grpBoxECUID.Size = new System.Drawing.Size(120, 45);
+            this.grpBoxECUID.Size = new System.Drawing.Size(110, 45);
             this.grpBoxECUID.TabIndex = 3;
             this.grpBoxECUID.TabStop = false;
             this.grpBoxECUID.Text = "模块ID";
@@ -95,15 +96,15 @@
             this.txtBoxECUID.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtBoxECUID.Location = new System.Drawing.Point(3, 17);
             this.txtBoxECUID.Name = "txtBoxECUID";
-            this.txtBoxECUID.Size = new System.Drawing.Size(114, 21);
+            this.txtBoxECUID.Size = new System.Drawing.Size(104, 21);
             this.txtBoxECUID.TabIndex = 1;
             // 
             // grpBoxCALID
             // 
             this.grpBoxCALID.Controls.Add(this.txtBoxCALID);
-            this.grpBoxCALID.Location = new System.Drawing.Point(265, 13);
+            this.grpBoxCALID.Location = new System.Drawing.Point(245, 13);
             this.grpBoxCALID.Name = "grpBoxCALID";
-            this.grpBoxCALID.Size = new System.Drawing.Size(120, 45);
+            this.grpBoxCALID.Size = new System.Drawing.Size(110, 45);
             this.grpBoxCALID.TabIndex = 4;
             this.grpBoxCALID.TabStop = false;
             this.grpBoxCALID.Text = "CAL_ID";
@@ -113,15 +114,15 @@
             this.txtBoxCALID.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtBoxCALID.Location = new System.Drawing.Point(3, 17);
             this.txtBoxCALID.Name = "txtBoxCALID";
-            this.txtBoxCALID.Size = new System.Drawing.Size(114, 21);
+            this.txtBoxCALID.Size = new System.Drawing.Size(104, 21);
             this.txtBoxCALID.TabIndex = 1;
             // 
             // grpBoxCVN
             // 
             this.grpBoxCVN.Controls.Add(this.txtBoxCVN);
-            this.grpBoxCVN.Location = new System.Drawing.Point(391, 13);
+            this.grpBoxCVN.Location = new System.Drawing.Point(361, 13);
             this.grpBoxCVN.Name = "grpBoxCVN";
-            this.grpBoxCVN.Size = new System.Drawing.Size(120, 45);
+            this.grpBoxCVN.Size = new System.Drawing.Size(110, 45);
             this.grpBoxCVN.TabIndex = 5;
             this.grpBoxCVN.TabStop = false;
             this.grpBoxCVN.Text = "CVN";
@@ -131,13 +132,13 @@
             this.txtBoxCVN.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtBoxCVN.Location = new System.Drawing.Point(3, 17);
             this.txtBoxCVN.Name = "txtBoxCVN";
-            this.txtBoxCVN.Size = new System.Drawing.Size(114, 21);
+            this.txtBoxCVN.Size = new System.Drawing.Size(104, 21);
             this.txtBoxCVN.TabIndex = 1;
             // 
             // btnModify
             // 
             this.btnModify.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnModify.Location = new System.Drawing.Point(536, 28);
+            this.btnModify.Location = new System.Drawing.Point(480, 28);
             this.btnModify.Name = "btnModify";
             this.btnModify.Size = new System.Drawing.Size(80, 23);
             this.btnModify.TabIndex = 6;
@@ -148,30 +149,42 @@
             // btnInsert
             // 
             this.btnInsert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnInsert.Location = new System.Drawing.Point(622, 28);
+            this.btnInsert.Location = new System.Drawing.Point(566, 28);
             this.btnInsert.Name = "btnInsert";
             this.btnInsert.Size = new System.Drawing.Size(80, 23);
             this.btnInsert.TabIndex = 7;
             this.btnInsert.Text = "新增一行";
             this.btnInsert.UseVisualStyleBackColor = true;
-            this.btnInsert.Click += new System.EventHandler(this.btnInsert_Click);
+            this.btnInsert.Click += new System.EventHandler(this.BtnInsert_Click);
             // 
             // btnRemove
             // 
             this.btnRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRemove.Location = new System.Drawing.Point(708, 28);
+            this.btnRemove.Location = new System.Drawing.Point(652, 28);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(80, 23);
             this.btnRemove.TabIndex = 8;
             this.btnRemove.Text = "删除选中行";
             this.btnRemove.UseVisualStyleBackColor = true;
-            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
+            this.btnRemove.Click += new System.EventHandler(this.BtnRemove_Click);
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRefresh.Location = new System.Drawing.Point(738, 28);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(50, 23);
+            this.btnRefresh.TabIndex = 9;
+            this.btnRefresh.Text = "刷新";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.BtnRefresh_Click);
             // 
             // CheckForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.btnRemove);
             this.Controls.Add(this.btnInsert);
             this.Controls.Add(this.btnModify);
@@ -211,5 +224,6 @@
         private System.Windows.Forms.Button btnModify;
         private System.Windows.Forms.Button btnInsert;
         private System.Windows.Forms.Button btnRemove;
+        private System.Windows.Forms.Button btnRefresh;
     }
 }

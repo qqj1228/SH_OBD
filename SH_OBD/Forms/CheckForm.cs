@@ -56,14 +56,18 @@ namespace SH_OBD {
             }
         }
 
-        private void CheckForm_Load(object sender, EventArgs e) {
-            this.GridContent.DataSource = m_dtContent;
+        private void SetDataTableContent() {
             string[] columns = m_obdTest.m_db.GetTableColumns("VehicleType");
             SetDataTableColumns<string>(m_dtContent, columns);
             if (this.GridContent.Columns.Count > 0) {
                 SetGridViewColumnsSortMode(this.GridContent, DataGridViewColumnSortMode.Programmatic);
             }
             SetDataTableRow(m_dtContent);
+        }
+
+        private void CheckForm_Load(object sender, EventArgs e) {
+            this.GridContent.DataSource = m_dtContent;
+            SetDataTableContent();
         }
 
         private void GridContent_Click(object sender, EventArgs e) {
@@ -78,15 +82,54 @@ namespace SH_OBD {
 
         private void BtnModify_Click(object sender, EventArgs e) {
             if (txtBoxType.Text.Length > 0 && txtBoxECUID.Text.Length > 0 && txtBoxCALID.Text.Length > 0 && txtBoxCVN.Text.Length > 0) {
+                int index = this.GridContent.CurrentRow.Index;
+                string strID = m_dtContent.Rows[index]["ID"].ToString();
+                int iResult = m_obdTest.m_db.UpdateVehicleType(txtBoxType.Text, txtBoxECUID.Text, txtBoxCALID.Text, txtBoxCVN.Text, strID);
+                if (iResult > 0) {
+                    SetDataTableContent();
+                    this.GridContent.Rows[index].Selected = true;
+                    this.GridContent.CurrentCell = this.GridContent.Rows[index].Cells[0];
+                } else {
+                    MessageBox.Show("修改数据出错，修改行数：" + iResult.ToString(), "出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
-        private void btnInsert_Click(object sender, EventArgs e) {
-
+        private void BtnInsert_Click(object sender, EventArgs e) {
+            if (txtBoxType.Text.Length > 0 && txtBoxECUID.Text.Length > 0 && txtBoxCALID.Text.Length > 0 && txtBoxCVN.Text.Length > 0) {
+                int index = this.GridContent.Rows.Count;
+                int iResult = m_obdTest.m_db.InsertVehicleType(txtBoxType.Text, txtBoxECUID.Text, txtBoxCALID.Text, txtBoxCVN.Text);
+                if (iResult > 0) {
+                    SetDataTableContent();
+                    this.GridContent.Rows[index].Selected = true;
+                    this.GridContent.CurrentCell = this.GridContent.Rows[index].Cells[0];
+                } else {
+                    MessageBox.Show("插入数据出错，插入行数：" + iResult.ToString(), "出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
-        private void btnRemove_Click(object sender, EventArgs e) {
+        private void BtnRemove_Click(object sender, EventArgs e) {
+            int selectedCount = this.GridContent.SelectedRows.Count;
+            if (selectedCount > 0) {
+                int deletedCount = 0;
+                for (int i = 0; i < selectedCount; i++) {
+                    if ((DataRowView)this.GridContent.SelectedRows[i].DataBoundItem is DataRowView rowView) {
+                        deletedCount += m_obdTest.m_db.DeleteVehicleType(rowView.Row["ID"].ToString());
+                    }
+                }
+                SetDataTableContent();
+                if (deletedCount != selectedCount) {
+                    MessageBox.Show("删除数据出错，删除行数：" + deletedCount.ToString(), "出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
 
+        private void BtnRefresh_Click(object sender, EventArgs e) {
+            int index = this.GridContent.CurrentRow.Index;
+            SetDataTableContent();
+            this.GridContent.Rows[index].Selected = true;
+            this.GridContent.CurrentCell = this.GridContent.Rows[index].Cells[0];
         }
     }
 }

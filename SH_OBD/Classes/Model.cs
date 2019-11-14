@@ -321,8 +321,25 @@ namespace SH_OBD {
             }
         }
 
-        //public int InsertVehicleType() {
-        //    string strSQL = "insert VehicleType () values ()";
-        //}
+        public int InsertVehicleType(string strType, string strECUID, string strCALID, string strCVN) {
+            string strSQL = "insert into VehicleType (Type, ECU_ID, CAL_ID, CVN) values ('";
+            strSQL += strType + "', '" + strECUID + "', '" + strCALID + "', '" + strCVN + "')";
+            m_log.TraceInfo("==> T-SQL: " + strSQL);
+            return RunSQL(strSQL);
+        }
+
+        public int UpdateVehicleType(string strType, string strECUID, string strCALID, string strCVN, string strID) {
+            string strSQL = "update VehicleType set Type = '";
+            strSQL += strType + "', ECU_ID = '" + strECUID + "', CAL_ID = '" + strCALID + "', CVN = '" + strCVN + "' ";
+            strSQL += "where ID = '" + strID + "'";
+            m_log.TraceInfo("==> T-SQL: " + strSQL);
+            return RunSQL(strSQL);
+        }
+
+        public int DeleteVehicleType(string strID) {
+            string strSQL = "delete from VehicleType where ID = '" + strID + "'";
+            m_log.TraceInfo("==> T-SQL: " + strSQL);
+            return RunSQL(strSQL);
+        }
     }
 }
