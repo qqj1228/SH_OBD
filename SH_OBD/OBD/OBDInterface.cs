@@ -30,6 +30,7 @@ namespace SH_OBD {
         private readonly List<OBDParameter> m_listSupportedParameters;
         public readonly SerialPortClass m_sp;
         public readonly Logger m_log;
+        private LoadConfigResult m_configResult;
 
         public UserPreferences UserPreferences { get; private set; }
         public Settings CommSettings { get; private set; }
@@ -39,6 +40,7 @@ namespace SH_OBD {
         public List<VehicleProfile> VehicleProfiles { get; private set; }
         public StandardType STDType { get; set; }
         public bool ScannerPortOpened { get; set; }
+        public string StrLoadConfigResult { get; set; }
 
         public OBDInterface() {
             m_log = new Logger("./log", EnumLogLevel.LogLevelAll, true, 100);
@@ -47,12 +49,29 @@ namespace SH_OBD {
             m_listAllParameters = new List<OBDParameter>();
             m_listSupportedParameters = new List<OBDParameter>();
             m_obdInterpreter = new OBDInterpreter();
+            m_configResult = LoadConfigResult.Success;
+            StrLoadConfigResult = "";
             UserPreferences = LoadUserPreferences();
             CommSettings = LoadCommSettings();
             DBandMES = LoadDBandMES();
             OBDResultSetting = LoadOBDResultSetting();
             OracleMESSetting = LoadOracleMESSetting();
             VehicleProfiles = LoadVehicleProfiles();
+            if (m_configResult != LoadConfigResult.Success) {
+                if ((m_configResult & LoadConfigResult.UserPreferences) == LoadConfigResult.UserPreferences) {
+                    StrLoadConfigResult += "用户设置读取错误\n";
+                } else if ((m_configResult & LoadConfigResult.CommSettings) == LoadConfigResult.CommSettings) {
+                    StrLoadConfigResult += "通讯设置读取错误\n";
+                } else if ((m_configResult & LoadConfigResult.DBandMES) == LoadConfigResult.DBandMES) {
+                    StrLoadConfigResult += "本地数据库设置读取错误\n";
+                } else if ((m_configResult & LoadConfigResult.OBDResultSetting) == LoadConfigResult.OBDResultSetting) {
+                    StrLoadConfigResult += "OBD检测结果设置读取错误\n";
+                } else if ((m_configResult & LoadConfigResult.VehicleProfiles) == LoadConfigResult.VehicleProfiles) {
+                    StrLoadConfigResult += "车辆设置读取错误\n";
+                } else if ((m_configResult & LoadConfigResult.OracleMESSetting) == LoadConfigResult.OracleMESSetting) {
+                    StrLoadConfigResult += "上传MES设置读取错误\n";
+                }
+            }
             SetDevice(HardwareType.ELM327);
             Disconnect();
             STDType = StandardType.Unknown;
@@ -598,6 +617,7 @@ namespace SH_OBD {
                     reader.Close();
                 }
             } catch (Exception e) {
+                m_configResult |= LoadConfigResult.OBDResultSetting;
                 m_log.TraceError("Using default Oracle MES Setting because of failed to load config file, reason: " + e.Message);
                 OracleMESSetting = new OracleMESSetting();
             }
@@ -613,6 +633,7 @@ namespace SH_OBD {
                     reader.Close();
                 }
             } catch (Exception e) {
+                m_configResult |= LoadConfigResult.OBDResultSetting;
                 m_log.TraceError("Using default OBD result settings because of failed to load config file, reason: " + e.Message);
                 OBDResultSetting = new OBDResultSetting();
             }
@@ -627,6 +648,7 @@ namespace SH_OBD {
                     reader.Close();
                 }
             } catch (Exception e) {
+                m_configResult |= LoadConfigResult.DBandMES;
                 m_log.TraceError("Using default DB and MES settings because of failed to load them, reason: " + e.Message);
                 DBandMES = new DBandMES();
             }
@@ -641,6 +663,7 @@ namespace SH_OBD {
                     reader.Close();
                 }
             } catch (Exception e) {
+                m_configResult |= LoadConfigResult.CommSettings;
                 m_log.TraceError("Using default communication settings because of failed to load them, reason: " + e.Message);
                 CommSettings = new Settings();
             }
@@ -655,6 +678,7 @@ namespace SH_OBD {
                     reader.Close();
                 }
             } catch (Exception e) {
+                m_configResult |= LoadConfigResult.UserPreferences;
                 m_log.TraceError("Using default user preferences because of failed to load them, reason: " + e.Message);
                 UserPreferences = new UserPreferences();
             }
@@ -682,6 +706,7 @@ namespace SH_OBD {
                 // file读完以后会抛出SerializationException异常，什么都不做继续执行finally块
             } catch (Exception e) {
                 // 发生其余异常的话就写log
+                m_configResult |= LoadConfigResult.VehicleProfiles;
                 m_log.TraceError("Failed to load vehicle profile. Reason: " + e.Message);
             } finally {
                 if (file != null) {

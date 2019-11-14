@@ -131,6 +131,16 @@ namespace SH_OBD {
         CANtact = 5
     }
 
+    public enum LoadConfigResult : int {
+        Success = 0,
+        UserPreferences = 1,
+        CommSettings = 2,
+        DBandMES = 4,
+        OBDResultSetting = 8,
+        VehicleProfiles = 0x10,
+        OracleMESSetting = 0x20
+    }
+
     [Serializable]
     public class UserPreferences {
         public string Telephone { get; set; }

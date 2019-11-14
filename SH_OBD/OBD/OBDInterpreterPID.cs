@@ -353,8 +353,12 @@ namespace SH_OBD {
                 value2.StringValue = "巴西 OBD 柴油（OBDBr-D）";
                 value2.ShortStringValue = dataA.ToString("X") + ",OBDBr-D";
                 break;
+            case 0x2B:
+                value2.StringValue = "中国重型车辆VI（CN-HDOBD-VI）";
+                value2.ShortStringValue = dataA.ToString("X") + ",CN-HDOBD-VI";
+                break;
             default:
-                if (dataA >= 0x2B && dataA <= 0xFA) {
+                if (dataA >= 0x2C && dataA <= 0xFA) {
                     value2.StringValue = "ISO/SAE 保留";
                     value2.ShortStringValue = dataA.ToString("X") + ",--";
                 } else if (dataA >= 0xFB && dataA <= 0xFF) {

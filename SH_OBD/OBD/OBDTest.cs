@@ -40,6 +40,7 @@ namespace SH_OBD {
         public bool SpaceResult { get; set; }
         public bool CALIDCheckResult { get; set; }
         public bool CVNCheckResult { get; set; }
+        public bool VehicleTypeExist { get; set; }
         public string StrVIN_IN { get; set; }
         public string StrVIN_ECU { get; set; }
         public string StrType_IN { get; set; }
@@ -63,6 +64,10 @@ namespace SH_OBD {
             SpaceResult = true;
             CALIDCheckResult = true;
             CVNCheckResult = true;
+            VehicleTypeExist = true;
+            StrVIN_ECU = "";
+            StrVIN_IN = "";
+            StrType_IN = "";
             m_db = new Model(m_obdInterface.DBandMES, m_obdInterface.m_log);
             m_dbOracle = new ModelOracle(m_obdInterface.OracleMESSetting, m_obdInterface.m_log);
         }
@@ -643,6 +648,9 @@ namespace SH_OBD {
             VINResult = true;
             CALIDCVNResult = true;
             SpaceResult = true;
+            CALIDCheckResult = true;
+            CVNCheckResult = true;
+            VehicleTypeExist = true;
 
             OBDTestStart?.Invoke();
 
@@ -678,8 +686,23 @@ namespace SH_OBD {
             SetDataTableECUInfo();
             //SetDataTableIUPR();
 
+            for (int i = 2; i < m_dtECUInfo.Columns.Count; i++) {
+                string strCALID = m_dtECUInfo.Rows[2][i].ToString();
+                string strCVN = m_dtECUInfo.Rows[3][i].ToString();
+                CheckCALIDCVN(StrType_IN, m_dtECUInfo.Columns[i].ColumnName, strCALID, strCVN);
+            }
 
-            OBDResult = DTCResult && ReadinessResult && VINResult && CALIDCVNResult && SpaceResult;
+            OBDResult = DTCResult && ReadinessResult && VINResult && CALIDCVNResult && SpaceResult && CALIDCheckResult && CVNCheckResult && VehicleTypeExist;
+            string strLog = "OBD Test Result: " + OBDResult.ToString() + " [";
+            strLog += "DTCResult: " + DTCResult.ToString();
+            strLog += ", ReadinessResult: " + ReadinessResult.ToString();
+            strLog += ", SpaceResult: " + SpaceResult.ToString();
+            strLog += ", VINResult: " + VINResult.ToString();
+            strLog += ", CALIDCVNResult: " + CALIDCVNResult.ToString();
+            strLog += ", VehicleTypeExist: " + VehicleTypeExist.ToString();
+            strLog += ", CALIDCheckResult: " + CALIDCheckResult.ToString();
+            strLog += ", CVNCheckResult: " + CVNCheckResult.ToString() + "]";
+            m_obdInterface.m_log.TraceInfo(strLog);
 
             WriteDbStart?.Invoke();
             string strVIN = "";
@@ -1308,19 +1331,14 @@ namespace SH_OBD {
 
         private void DataTable2MESAddRow(DataTable dt2MES, DataTable dtIn, int iRow, string ECUAcronym, string CALID, string CVN) {
             string moduleID = GetModuleID(ECUAcronym, dtIn.Rows[iRow][1].ToString());
-            string OBD_SUP = dtIn.Rows[iRow][4].ToString().Replace("不适用", "0").Split(',')[0];
+            string ODO = dtIn.Rows[0][5].ToString().Replace("不适用", "");
+            string OBD_SUP = dtIn.Rows[0][4].ToString().Replace("不适用", "0").Split(',')[0];
             if (OBD_SUP.Length == 0) {
                 OBD_SUP = "0";
             } else if (OBD_SUP.Length > 2) {
                 OBD_SUP = OBD_SUP.Substring(0, 2);
             }
-            dt2MES.Rows.Add(
-                OBD_SUP,
-                dtIn.Rows[iRow][5].ToString().Replace("不适用", ""),
-                moduleID,
-                CALID,
-                CVN
-            );
+            dt2MES.Rows.Add(OBD_SUP, ODO, moduleID, CALID, CVN);
         }
 
         private void SetDataTable2MES(DataTable dt2MES, DataTable dtIn) {
@@ -1672,8 +1690,21 @@ namespace SH_OBD {
             }
         }
 
-        private void CheckCALIDCVN(string strType) {
-
+        private void CheckCALIDCVN(string strType, string strECUID, string strCALID, string strCVN) {
+            bool bCALID = false;
+            bool bCVN = false;
+            Dictionary<string, string> TypeDic = new Dictionary<string, string> { { "Type", strType }, { "ECU_ID", strECUID } };
+            string[,] Results = m_db.GetRecords("VehicleType", TypeDic);
+            if (Results != null && Results.GetLength(0) > 0) {
+                for (int i = 0; i < Results.GetLength(0) && !bCALID && !bCVN; i++) {
+                    bCALID = Results[i, 3] == strCALID;
+                    bCVN = Results[i, 4] == strCVN;
+                }
+            } else {
+                VehicleTypeExist = false;
+            }
+            CALIDCheckResult = CALIDCheckResult && bCALID;
+            CVNCheckResult = CVNCheckResult && bCVN;
         }
 
         private void ExportResultFile(DataTable dt) {

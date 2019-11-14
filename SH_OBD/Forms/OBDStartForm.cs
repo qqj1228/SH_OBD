@@ -24,6 +24,13 @@ namespace SH_OBD {
             InitializeComponent();
             m_lastHeight = this.Height;
             m_obdInterface = new OBDInterface();
+            if (m_obdInterface.StrLoadConfigResult.Length > 0) {
+                m_obdInterface.StrLoadConfigResult += "是否要以默认配置运行程序？点击\"否\"：将会退出程序。";
+                DialogResult result = MessageBox.Show(m_obdInterface.StrLoadConfigResult, "加载配置文件出错", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.No) {
+                    Environment.Exit(0);
+                }
+            }
             m_obdTest = new OBDTest(m_obdInterface);
             m_backColor = label1.BackColor;
             if (m_obdInterface.ScannerPortOpened) {
@@ -48,6 +55,8 @@ namespace SH_OBD {
             } else {
                 Task.Factory.StartNew(TestOracleConnect);
             }
+            // 在OBDData表中新增Upload字段，用于存储上传是否成功的标志
+            m_obdTest.m_db.AddUploadField();
             // 每日定时上传以前上传失败的数据
             m_timer = new System.Timers.Timer(60 * 60 * 1000);
             m_timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimeUpload);
@@ -56,8 +65,12 @@ namespace SH_OBD {
         }
 
         ~OBDStartForm() {
-            f_MainForm.Close();
-            m_timer.Dispose();
+            if (f_MainForm != null) {
+                f_MainForm.Close();
+            }
+            if (m_timer != null) {
+                m_timer.Dispose();
+            }
         }
 
         private void OnTimeUpload(object source, System.Timers.ElapsedEventArgs e) {
@@ -110,18 +123,19 @@ namespace SH_OBD {
                 this.Invoke((EventHandler)delegate {
                     if (tb.Name == "txtBoxVIN") {
                         this.txtBoxVIN.Text = Encoding.Default.GetString(bits);
+                        m_obdTest.StrVIN_IN = this.txtBoxVIN.Text.Trim();
                         if (this.txtBoxVIN.Text.Contains('\n')) {
                             this.txtBoxVehicleType.Focus();
                         }
                     } else if (tb.Name == "txtBoxVehicleType") {
                         this.txtBoxVehicleType.Text = Encoding.Default.GetString(bits);
+                        m_obdTest.StrType_IN = this.txtBoxVehicleType.Text.Trim();
                         if (this.txtBoxVehicleType.Text.Contains('\n')) {
                             this.txtBoxVIN.Focus();
                         }
                     }
                 });
-                if (this.txtBoxVIN.Text.Trim().Length == 17 && this.txtBoxVehicleType.Text.Trim().Length >= 10) {
-                    m_obdTest.StrVIN_IN = this.txtBoxVIN.Text.Trim();
+                if (m_obdTest.StrVIN_IN.Length == 17 && m_obdTest.StrType_IN.Length >= 10) {
                     if (!m_obdTest.AdvanceMode) {
                         StartOBDTest();
                     }
@@ -245,6 +259,9 @@ namespace SH_OBD {
             } catch (Exception ex) {
                 m_obdInterface.m_log.TraceError("OBD test occurred error: " + errorMsg + ", " + ex.Message);
                 MessageBox.Show(ex.Message + "\n" + errorMsg, "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            } finally {
+                m_obdTest.StrVIN_IN = "";
+                m_obdTest.StrType_IN = "";
             }
 
             this.Invoke((EventHandler)delegate {
@@ -264,9 +281,28 @@ namespace SH_OBD {
                         this.label3Space.BackColor = Color.Red;
                         this.label3Space.ForeColor = Color.Black;
                     }
-
                     this.labelResult.ForeColor = Color.Red;
-                    this.labelResult.Text = "OBD检测结果：不合格";
+                    if (m_obdTest.VehicleTypeExist && m_obdTest.CALIDCheckResult && m_obdTest.CVNCheckResult) {
+                        this.labelResult.Text = "OBD检测结果：不合格";
+                    } else {
+                        this.labelResult.Text = "结果：";
+                    }
+                    if (!m_obdTest.VehicleTypeExist) {
+                        this.labelResult.Text += "缺少车型数据";
+                    }
+                    if (!m_obdTest.CALIDCheckResult) {
+                        if (this.labelResult.Text.Length > 3) {
+                            this.labelResult.Text += "，";
+                        }
+                        this.labelResult.Text += "CALID校验不合格";
+                    }
+                    if (!m_obdTest.CVNCheckResult) {
+                        if (this.labelResult.Text.Length > 3) {
+                            this.labelResult.Text += "，";
+                        }
+                        this.labelResult.Text += "CVN校验不合格";
+                    }
+
                 }
             });
         }
@@ -340,12 +376,26 @@ namespace SH_OBD {
 #endif
         }
 
-        private void TxtBoxVIN_TextChanged(object sender, EventArgs e) {
-            if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Length == 17) {
-                m_obdTest.StrVIN_IN = this.txtBoxVIN.Text.Trim();
-                if (!m_obdTest.AdvanceMode) {
-                    StartOBDTest();
-                    this.txtBoxVIN.SelectAll();
+        private void TxtBox_TextChanged(object sender, EventArgs e) {
+            Control con = this.ActiveControl;
+            if (con is TextBox tb) {
+                if (tb.Name == "txtBoxVIN") {
+                    m_obdTest.StrVIN_IN = this.txtBoxVIN.Text.Trim();
+                    //if (this.txtBoxVIN.Text.Contains('\n')) {
+                    //    this.txtBoxVehicleType.Focus();
+                    //}
+                } else if (tb.Name == "txtBoxVehicleType") {
+                    m_obdTest.StrType_IN = this.txtBoxVehicleType.Text.Trim();
+                    //if (this.txtBoxVehicleType.Text.Contains('\n')) {
+                    //    this.txtBoxVIN.Focus();
+                    //}
+                }
+                if (!m_obdInterface.CommSettings.UseSerialScanner && m_obdTest.StrVIN_IN.Length == 17 && m_obdTest.StrType_IN.Length >= 10) {
+                    if (!m_obdTest.AdvanceMode) {
+                        StartOBDTest();
+                        this.txtBoxVIN.SelectAll();
+                        this.txtBoxVehicleType.SelectAll();
+                    }
                 }
             }
         }

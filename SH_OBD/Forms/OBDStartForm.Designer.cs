@@ -60,8 +60,8 @@
             this.tblLayoutMain.RowCount = 5;
             this.tblLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
             this.tblLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 17F));
-            this.tblLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 17F));
-            this.tblLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 36F));
+            this.tblLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 18F));
+            this.tblLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35F));
             this.tblLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
             this.tblLayoutMain.Size = new System.Drawing.Size(784, 561);
             this.tblLayoutMain.TabIndex = 0;
@@ -95,13 +95,14 @@
             // txtBoxVIN
             // 
             this.txtBoxVIN.BackColor = System.Drawing.Color.SkyBlue;
+            this.txtBoxVIN.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.txtBoxVIN.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtBoxVIN.Font = new System.Drawing.Font("宋体", 50F);
             this.txtBoxVIN.Location = new System.Drawing.Point(181, 3);
             this.txtBoxVIN.Name = "txtBoxVIN";
             this.txtBoxVIN.Size = new System.Drawing.Size(594, 84);
             this.txtBoxVIN.TabIndex = 0;
-            this.txtBoxVIN.TextChanged += new System.EventHandler(this.TxtBoxVIN_TextChanged);
+            this.txtBoxVIN.TextChanged += new System.EventHandler(this.TxtBox_TextChanged);
             this.txtBoxVIN.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtBox_KeyPress);
             // 
             // tblLayoutBottom
@@ -176,9 +177,9 @@
             this.labelResult.AutoSize = true;
             this.labelResult.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelResult.Font = new System.Drawing.Font("宋体", 60F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labelResult.Location = new System.Drawing.Point(3, 274);
+            this.labelResult.Location = new System.Drawing.Point(3, 279);
             this.labelResult.Name = "labelResult";
-            this.labelResult.Size = new System.Drawing.Size(778, 201);
+            this.labelResult.Size = new System.Drawing.Size(778, 196);
             this.labelResult.TabIndex = 2;
             this.labelResult.Text = "OBD检测结果";
             this.labelResult.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -206,7 +207,7 @@
             this.tblLayoutMiddle.Name = "tblLayoutMiddle";
             this.tblLayoutMiddle.RowCount = 1;
             this.tblLayoutMiddle.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tblLayoutMiddle.Size = new System.Drawing.Size(778, 89);
+            this.tblLayoutMiddle.Size = new System.Drawing.Size(778, 94);
             this.tblLayoutMiddle.TabIndex = 4;
             // 
             // label2
@@ -229,6 +230,7 @@
             this.txtBoxVehicleType.Name = "txtBoxVehicleType";
             this.txtBoxVehicleType.Size = new System.Drawing.Size(594, 84);
             this.txtBoxVehicleType.TabIndex = 1;
+            this.txtBoxVehicleType.TextChanged += new System.EventHandler(this.TxtBox_TextChanged);
             this.txtBoxVehicleType.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtBox_KeyPress);
             // 
             // OBDStartForm
