@@ -38,6 +38,7 @@ namespace SH_OBD {
         public bool ReadinessResult { get; set; }
         public bool VINResult { get; set; }
         public bool CALIDCVNResult { get; set; }
+        public bool CALIDCVNAllEmpty { get; set; }
         public bool SpaceResult { get; set; }
         public bool OBDSUPResult { get; set; }
         public string StrVIN_IN { get; set; }
@@ -59,6 +60,7 @@ namespace SH_OBD {
             ReadinessResult = true;
             VINResult = true;
             CALIDCVNResult = true;
+            CALIDCVNAllEmpty = false;
             SpaceResult = true;
             OBDSUPResult = true;
             m_db = new Model(m_obdInterface.DBandMES, m_obdInterface.m_log);
@@ -500,8 +502,15 @@ namespace SH_OBD {
                             }
                         }
                         if (!m_obdInterface.OBDResultSetting.CALIDCVNEmpty) {
-                            if (CALID.Length * CVN.Length == 0 && CALID.Length + CVN.Length != 0) {
-                                CALIDCVNResult = false;
+                            if (CALID.Length * CVN.Length == 0) {
+                                if (CALID.Length + CVN.Length == 0) {
+                                    if (j == 0) {
+                                        CALIDCVNResult = false;
+                                        CALIDCVNAllEmpty = true;
+                                    }
+                                } else {
+                                    CALIDCVNResult = false;
+                                }
                             }
                         }
                     }
@@ -758,6 +767,7 @@ namespace SH_OBD {
             ReadinessResult = true;
             VINResult = true;
             CALIDCVNResult = true;
+            CALIDCVNAllEmpty = false;
             SpaceResult = true;
             OBDSUPResult = true;
 

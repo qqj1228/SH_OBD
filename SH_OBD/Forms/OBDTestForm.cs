@@ -266,6 +266,9 @@ namespace SH_OBD {
                 this.labelInfo.Text = "OBD检测结束，结果：不合格" + strCat;
             }
             this.txtBoxVIN.ReadOnly = false;
+            if (m_obdTest.CALIDCVNAllEmpty) {
+                MessageBox.Show("CALID和CVN均为空！请检查OBD线缆接头连接是否牢固。", "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void OBDTestForm_FormClosing(object sender, FormClosingEventArgs e) {

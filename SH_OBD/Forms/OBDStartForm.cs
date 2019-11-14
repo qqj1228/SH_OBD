@@ -294,6 +294,9 @@ namespace SH_OBD {
                     this.labelResult.Text = "被检车辆: " + m_obdTest.StrVIN_ECU + "\nOBD检测结果：不合格";
                 }
             });
+            if (m_obdTest.CALIDCVNAllEmpty) {
+                MessageBox.Show("CALID和CVN均为空！请检查OBD线缆接头连接是否牢固。", "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void ResizeFont(Control control, float scale) {
