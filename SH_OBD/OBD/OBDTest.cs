@@ -409,6 +409,7 @@ namespace SH_OBD {
                                 }
                             }
                         }
+                        CheckCALIDCVN(StrType_IN, dt.Columns[i].ColumnName, CALID, CVN);
                     }
                 }
             }
@@ -692,11 +693,11 @@ namespace SH_OBD {
             SetDataTableECUInfo();
             //SetDataTableIUPR();
 
-            for (int i = 2; i < m_dtECUInfo.Columns.Count; i++) {
-                string strCALID = m_dtECUInfo.Rows[2][i].ToString();
-                string strCVN = m_dtECUInfo.Rows[3][i].ToString();
-                CheckCALIDCVN(StrType_IN, m_dtECUInfo.Columns[i].ColumnName, strCALID, strCVN);
-            }
+            //for (int i = 2; i < m_dtECUInfo.Columns.Count && m_CN6; i++) {
+            //    string strCALID = m_dtECUInfo.Rows[2][i].ToString();
+            //    string strCVN = m_dtECUInfo.Rows[3][i].ToString();
+            //    CheckCALIDCVN(StrType_IN, m_dtECUInfo.Columns[i].ColumnName, strCALID, strCVN);
+            //}
 
             OBDResult = DTCResult && ReadinessResult && VINResult && CALIDCVNResult && SpaceResult && CALIDCheckResult && CVNCheckResult && VehicleTypeExist;
             string strLog = "OBD Test Result: " + OBDResult.ToString() + " [";
