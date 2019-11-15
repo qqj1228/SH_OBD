@@ -1254,11 +1254,11 @@ namespace SH_OBD {
                         }
                     }
                 } else {
-                    string CALID = dtIn.Rows[i][26].ToString().Replace(",", "").Replace(" ", "");
+                    string CALID = dtIn.Rows[i][26].ToString().Replace(",", "").Replace(" ", "").Replace("不适用", "");
                     if (CALID.Length > 20) {
                         CALID = CALID.Substring(0, 20);
                     }
-                    string CVN = dtIn.Rows[i][27].ToString().Replace(",", "").Replace(" ", "");
+                    string CVN = dtIn.Rows[i][27].ToString().Replace(",", "").Replace(" ", "").Replace("不适用", "");
                     if (CVN.Length > 20) {
                         CVN = CVN.Substring(0, 20);
                     }
@@ -1590,21 +1590,49 @@ namespace SH_OBD {
                 worksheet1.Cells["B2"].Value = dt.Rows[0][0].ToString(); // VIN
 
                 // CALID, CVN
-                string[] CALIDArray = dt.Rows[0][26].ToString().Split(',');
-                string[] CVNArray = dt.Rows[0][27].ToString().Split(',');
-                for (int i = 0; i < 2; i++) {
-                    worksheet1.Cells[3 + i, 2].Value = CALIDArray.Length > i ? CALIDArray[i] : "";
-                    worksheet1.Cells[3 + i, 4].Value = CVNArray.Length > i ? CVNArray[i] : "";
-                }
-                for (int i = 1; i < dt.Rows.Count; i++) {
-                    worksheet1.Cells["B5"].Value = dt.Rows[i][26].ToString().Replace(",", "\n");
-                    worksheet1.Cells["D5"].Value = dt.Rows[i][27].ToString().Replace(",", "\n");
+                if (m_CN6) {
+                    string[] CALIDArray = dt.Rows[0][26].ToString().Split(',');
+                    string[] CVNArray = dt.Rows[0][27].ToString().Split(',');
+                    for (int i = 0; i < 2; i++) {
+                        worksheet1.Cells[3 + i, 2].Value = CALIDArray.Length > i ? CALIDArray[i] : "";
+                        worksheet1.Cells[3 + i, 4].Value = CVNArray.Length > i ? CVNArray[i] : "";
+                    }
+                    for (int i = 1; i < dt.Rows.Count; i++) {
+                        worksheet1.Cells["B5"].Value = dt.Rows[i][26].ToString().Replace(",", "\n");
+                        worksheet1.Cells["D5"].Value = dt.Rows[i][27].ToString().Replace(",", "\n");
+                    }
+                } else {
+                    string CALID = dt.Rows[0][26].ToString().Replace(",", "").Replace(" ", "");
+                    if (CALID.Length > 20) {
+                        CALID = CALID.Substring(0, 20);
+                    }
+                    string CVN = dt.Rows[0][27].ToString().Replace(",", "").Replace(" ", "");
+                    if (CVN.Length > 20) {
+                        CVN = CVN.Substring(0, 20);
+                    }
+                    worksheet1.Cells["B3"].Value = CALID;
+                    worksheet1.Cells["D3"].Value = CVN;
+
+                    for (int i = 1; i < dt.Rows.Count; i++) {
+                        CALID = dt.Rows[i][26].ToString().Replace(",", "").Replace(" ", "");
+                        if (CALID.Length > 20) {
+                            CALID = CALID.Substring(0, 20);
+                        }
+                        CVN = dt.Rows[i][27].ToString().Replace(",", "").Replace(" ", "");
+                        if (CVN.Length > 20) {
+                            CVN = CVN.Substring(0, 20);
+                        }
+                        worksheet1.Cells[3 + i + 1, 2].Value = CALID;
+                        worksheet1.Cells[3 + i + 1, 4].Value = CVN;
+                    }
                 }
 
                 // moduleID
                 string moduleID = GetModuleID(dt.Rows[0][25].ToString().Split('-')[0], dt.Rows[0][1].ToString());
                 worksheet1.Cells["E3"].Value = moduleID;
-                if (worksheet1.Cells["B4"].Value.ToString().Length > 0) {
+                worksheet1.Cells["B4"].Value += "";
+                worksheet1.Cells["D4"].Value += "";
+                if (worksheet1.Cells["B4"].Value.ToString().Length > 0 || worksheet1.Cells["D4"].Value.ToString().Length > 0) {
                     if (m_obdInterface.OBDResultSetting.UseECUAcronym) {
                         if (m_obdInterface.OBDResultSetting.UseSCRName) {
                             worksheet1.Cells["E4"].Value = "SCR";
