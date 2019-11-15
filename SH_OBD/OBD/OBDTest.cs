@@ -1231,26 +1231,38 @@ namespace SH_OBD {
             dt2MES.Columns.Add("CALID");
             dt2MES.Columns.Add("CVN");
             for (int i = 0; i < dtIn.Rows.Count; i++) {
-                string[] CALIDArray = dtIn.Rows[i][26].ToString().Split(',');
-                string[] CVNArray = dtIn.Rows[i][27].ToString().Split(',');
-                int length = Math.Max(CALIDArray.Length, CVNArray.Length);
                 string ECUAcronym = dtIn.Rows[i][25].ToString().Split('-')[0];
-                DataTable2MESAddRow(dt2MES, dtIn, i, ECUAcronym, CALIDArray[0], CVNArray[0]);
-                for (int j = 1; j < length; j++) {
-                    string CALID = CALIDArray.Length > j ? CALIDArray[j] : "";
-                    string CVN = CVNArray.Length > j ? CVNArray[j] : "";
-                    // 若同一个ECU下有多个CALID和CVN的上传策略
-                    if (m_obdInterface.OBDResultSetting.UseSCRName) {
-                        //第二个CALID和CVN使用“SCR”作为ModuleID上传
-                        if (j == 1) {
-                            DataTable2MESAddRow(dt2MES, dtIn, i, "SCR", CALID, CVN);
+                if (m_CN6) {
+                    string[] CALIDArray = dtIn.Rows[i][26].ToString().Split(',');
+                    string[] CVNArray = dtIn.Rows[i][27].ToString().Split(',');
+                    int length = Math.Max(CALIDArray.Length, CVNArray.Length);
+                    DataTable2MESAddRow(dt2MES, dtIn, i, ECUAcronym, CALIDArray[0], CVNArray[0]);
+                    for (int j = 1; j < length; j++) {
+                        string CALID = CALIDArray.Length > j ? CALIDArray[j] : "";
+                        string CVN = CVNArray.Length > j ? CVNArray[j] : "";
+                        // 若同一个ECU下有多个CALID和CVN的上传策略
+                        if (m_obdInterface.OBDResultSetting.UseSCRName) {
+                            //第二个CALID和CVN使用“SCR”作为ModuleID上传
+                            if (j == 1) {
+                                DataTable2MESAddRow(dt2MES, dtIn, i, "SCR", CALID, CVN);
+                            } else {
+                                DataTable2MESAddRow(dt2MES, dtIn, i, ECUAcronym, CALID, CVN);
+                            }
                         } else {
+                            // 多个CALID和CVN使用同一个ModuleID上传
                             DataTable2MESAddRow(dt2MES, dtIn, i, ECUAcronym, CALID, CVN);
                         }
-                    } else {
-                        // 多个CALID和CVN使用同一个ModuleID上传
-                        DataTable2MESAddRow(dt2MES, dtIn, i, ECUAcronym, CALID, CVN);
                     }
+                } else {
+                    string CALID = dtIn.Rows[i][26].ToString().Replace(",", "").Replace(" ", "");
+                    if (CALID.Length > 20) {
+                        CALID = CALID.Substring(0, 20);
+                    }
+                    string CVN = dtIn.Rows[i][27].ToString().Replace(",", "").Replace(" ", "");
+                    if (CVN.Length > 20) {
+                        CVN = CVN.Substring(0, 20);
+                    }
+                    DataTable2MESAddRow(dt2MES, dtIn, i, ECUAcronym, CALID, CVN);
                 }
             }
         }
