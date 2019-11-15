@@ -233,7 +233,7 @@ namespace SH_OBD {
                 this.label3Space.BackColor = m_backColor;
                 this.label3Space.ForeColor = Color.Gray;
             });
-            m_obdInterface.m_log.TraceInfo(">>>>>>>>>> Start to test vehicle of VIN: " + m_obdTest.StrVIN_IN + " <<<<<<<<<<");
+            m_obdInterface.m_log.TraceInfo(">>>>>>>>>> Start to test vehicle of [VIN: " + m_obdTest.StrVIN_IN + ", VehicleType: " + m_obdTest.StrType_IN + "] <<<<<<<<<<");
             if (m_obdInterface.ConnectedStatus) {
                 m_obdInterface.Disconnect();
             }
@@ -377,31 +377,27 @@ namespace SH_OBD {
         }
 
         private void TxtBox_TextChanged(object sender, EventArgs e) {
-            Control con = this.ActiveControl;
-            if (con is TextBox tb) {
-                if (tb.Name == "txtBoxVIN") {
-                    m_obdTest.StrVIN_IN = this.txtBoxVIN.Text.Trim();
-                    //if (this.txtBoxVIN.Text.Contains('\n')) {
-                    //    this.txtBoxVehicleType.Focus();
-                    //}
-                } else if (tb.Name == "txtBoxVehicleType") {
-                    m_obdTest.StrType_IN = this.txtBoxVehicleType.Text.Trim();
-                    //if (this.txtBoxVehicleType.Text.Contains('\n')) {
-                    //    this.txtBoxVIN.Focus();
-                    //}
-                }
-                if (!m_obdInterface.CommSettings.UseSerialScanner && m_obdTest.StrVIN_IN.Length == 17 && m_obdTest.StrType_IN.Length >= 10) {
-                    if (!m_obdTest.AdvanceMode) {
-                        StartOBDTest();
-                        this.txtBoxVIN.SelectAll();
-                        this.txtBoxVehicleType.SelectAll();
-                    }
-                }
-            }
+            //Control con = this.ActiveControl;
+            //if (con is TextBox tb) {
+            //    if (tb.Name == "txtBoxVIN") {
+            //        if (this.txtBoxVIN.Text.Contains('\n')) {
+            //        }
+            //    } else if (tb.Name == "txtBoxVehicleType") {
+            //        if (this.txtBoxVehicleType.Text.Contains('\n')) {
+            //        }
+            //    }
+            //}
         }
 
         private void OBDStartForm_Activated(object sender, EventArgs e) {
-            this.txtBoxVIN.Focus();
+            Control con = this.ActiveControl;
+            if (con is TextBox tb) {
+                if (tb.Name == "txtBoxVIN") {
+                    this.txtBoxVIN.Focus();
+                } else if (tb.Name == "txtBoxVehicleType") {
+                    this.txtBoxVehicleType.Focus();
+                }
+            }
         }
 
         private void TestOracleConnect() {
@@ -417,8 +413,18 @@ namespace SH_OBD {
                 TextBox tb = sender as TextBox;
                 if (tb.Name == "txtBoxVehicleType") {
                     this.txtBoxVIN.Focus();
+                    this.txtBoxVIN.SelectAll();
+                    m_obdTest.StrType_IN = this.txtBoxVehicleType.Text.Trim();
                 } else if (tb.Name == "txtBoxVIN") {
                     this.txtBoxVehicleType.Focus();
+                    this.txtBoxVehicleType.SelectAll();
+                    m_obdTest.StrVIN_IN = this.txtBoxVIN.Text.Trim();
+                }
+                if (!m_obdInterface.CommSettings.UseSerialScanner && m_obdTest.StrVIN_IN.Length == 17 && m_obdTest.StrType_IN.Length >= 10) {
+                    if (!m_obdTest.AdvanceMode) {
+                        StartOBDTest();
+                        this.txtBoxVIN.SelectAll();
+                    }
                 }
             }
         }
