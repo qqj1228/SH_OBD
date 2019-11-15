@@ -399,8 +399,14 @@ namespace SH_OBD {
                             }
                         }
                         if (!m_obdInterface.OBDResultSetting.CALIDCVNEmpty) {
-                            if (CALID.Length * CVN.Length == 0 && CALID.Length + CVN.Length != 0) {
-                                CALIDCVNResult = false;
+                            if (CALID.Length * CVN.Length == 0) {
+                                if (CALID.Length + CVN.Length == 0) {
+                                    if (j == 0) {
+                                        CALIDCVNResult = false;
+                                    }
+                                } else {
+                                    CALIDCVNResult = false;
+                                }
                             }
                         }
                     }
