@@ -89,6 +89,7 @@
             // txtBoxVIN
             // 
             this.txtBoxVIN.BackColor = System.Drawing.Color.SteelBlue;
+            this.txtBoxVIN.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.txtBoxVIN.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtBoxVIN.Font = new System.Drawing.Font("宋体", 50F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.txtBoxVIN.Location = new System.Drawing.Point(181, 3);
@@ -96,7 +97,6 @@
             this.txtBoxVIN.Size = new System.Drawing.Size(594, 84);
             this.txtBoxVIN.TabIndex = 1;
             this.txtBoxVIN.TextChanged += new System.EventHandler(this.TxtBoxVIN_TextChanged);
-            this.txtBoxVIN.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtBoxVIN_KeyPress);
             // 
             // tblLayoutBottom
             // 

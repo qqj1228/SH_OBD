@@ -264,10 +264,10 @@ namespace SH_OBD {
         public bool VINError { get; set; }
         public int UploadInterval { get; set; }
         public bool CALIDCVNEmpty { get; set; }
-        public bool Allow3Space { get; set; }
         public bool OBD_SUP { get; set; }
         public int StartSN { get; set; }
         public string CN6_OBD_SUP { get; set; }
+        public int UnmeaningNum { get; set; }
 
         public OBDResultSetting() {
             UploadWhenever = false;
@@ -279,11 +279,11 @@ namespace SH_OBD {
             Readiness = false;
             VINError = true;
             CALIDCVNEmpty = false;
-            Allow3Space = true;
             OBD_SUP = true;
             UploadInterval = 15;
             StartSN = 0;
             CN6_OBD_SUP = "29,2B";
+            UnmeaningNum = 5;
         }
     }
 

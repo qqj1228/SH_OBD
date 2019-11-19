@@ -19,7 +19,7 @@ namespace SH_OBD {
         }
 
         ~CommBase() {
-            Close();
+            Dispose();
         }
 
         public bool Online {
@@ -130,14 +130,15 @@ namespace SH_OBD {
         }
 
         protected void Send(byte[] tosend) {
-            CheckOnline();
-            m_writeCount = tosend.GetLength(0);
-            try {
-                m_serial.SendData(tosend, 0, m_writeCount);
-                m_writeCount = 0;
-            } catch (Exception e) {
-                m_log.TraceError("Send failed: " + e.Message);
-                ThrowException("Send failed: " + e.Message);
+            if (CheckOnline()) {
+                m_writeCount = tosend.GetLength(0);
+                try {
+                    m_serial.SendData(tosend, 0, m_writeCount);
+                    m_writeCount = 0;
+                } catch (Exception ex) {
+                    m_log.TraceError("Send failed: " + ex.Message);
+                    ThrowException("Send failed: " + ex.Message);
+                }
             }
         }
 

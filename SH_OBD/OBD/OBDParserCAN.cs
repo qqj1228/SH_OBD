@@ -21,7 +21,7 @@ namespace SH_OBD {
             List<string> lines = new List<string>();
             foreach (string item in tempLines) {
                 string strNRC = IsNegativeResponse(item, headLen);
-                if (strNRC.Length == 0 && !IsTesterPresentResponse(item)) {
+                if (strNRC.Length == 0 && !IsTesterPresentResponse(item, headLen)) {
                     lines.Add(item);
                 } else if (strNRC == "78") {
                     responseList.Pending = true;
@@ -155,8 +155,13 @@ namespace SH_OBD {
             return strNRC;
         }
 
-        private bool IsTesterPresentResponse(string strData) {
-            return strData == "7E00" || strData == "7E80";
+        private bool IsTesterPresentResponse(string strData, int headLen) {
+            if (strData.Length > 0) {
+                string strActual = strData.Substring(headLen + 2);
+                return strActual == "7E00" || strActual == "7E80";
+            } else {
+                return false;
+            }
         }
     }
 

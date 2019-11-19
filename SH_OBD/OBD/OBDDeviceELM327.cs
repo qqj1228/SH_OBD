@@ -66,8 +66,7 @@ namespace SH_OBD {
                     }
 
                     m_CommELM.SetTimeout(5000);
-                    //int[] xattr = new int[] { 6, 7, 2, 3, 1, 8, 9, 4, 5 };
-                    int[] xattr = new int[] { 6, 7, 3, 4, 5, 8, 9, 0xA, 2, 1 };
+                    int[] xattr = new int[] { 6, 7, 5, 4, 3, 9, 8, 0xA, 2, 1 };
                     for (int idx = 0; idx < xattr.Length; idx++) {
                         if (!ConfirmAT("ATTP" + xattr[idx].ToString("X1"))) {
                             m_CommELM.Close();
@@ -77,7 +76,6 @@ namespace SH_OBD {
                         if (m_iStandard != StandardType.Unknown) {
                             if (m_Parser == null) {
                                 SetProtocol((ProtocolType)xattr[idx]);
-                                //SetProtocol((ProtocolType)0xA);
                             }
                             SetBaudRateIndex(iBaud);
                             m_iComPortIndex = iPort;
@@ -169,7 +167,15 @@ namespace SH_OBD {
                 orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
             }
             if (orl.Pending && orl.RawResponse == "PENDING") {
-                for (int i = 5; i > 0; i--) {
+                //for (int i = 5; i > 0; i--) {
+                //    Thread.Sleep(1000);
+                //    param.OBDRequest = "3E00";
+                //    orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
+                //    if (!orl.ErrorDetected && orl.RawResponse != "TPPR") {
+                //        break;
+                //    }
+                //}
+                for (int i = 2; i > 0; i--) {
                     Thread.Sleep(1000);
                     param.OBDRequest = "3E00";
                     orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
@@ -265,10 +271,11 @@ namespace SH_OBD {
         }
 
         public string GetOBDResponse(string command) {
+            string strRet = "";
             if (m_CommELM.Online) {
-                return m_CommELM.GetResponse(command);
+                strRet = m_CommELM.GetResponse(command);
             }
-            return "";
+            return strRet;
         }
 
         public string GetDeviceDes() {

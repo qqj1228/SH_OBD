@@ -13,19 +13,19 @@ using System.Windows.Forms;
 
 namespace SH_OBD {
     public partial class OBDStartForm : Form {
+        public static bool m_bCanOBDTest;
         private readonly OBDInterface m_obdInterface;
         private readonly OBDTest m_obdTest;
         private MainForm f_MainForm;
         private readonly Color m_backColor;
         private float m_lastHeight;
         readonly System.Timers.Timer m_timer;
-        private DateTime m_lastTime_TXT;
         private bool m_bAcceptVIN_TXT;
 
         public OBDStartForm() {
             InitializeComponent();
+            m_bCanOBDTest = true;
             m_lastHeight = this.Height;
-            m_lastTime_TXT = DateTime.Now;
             m_bAcceptVIN_TXT = true;
             m_obdInterface = new OBDInterface();
             if (m_obdInterface.StrLoadConfigResult.Length > 0) {
@@ -59,22 +59,13 @@ namespace SH_OBD {
             m_obdTest.m_db.AddUploadField();
             // 在OBDUser表中新增SN字段，用于存储检测报表编号中顺序号的特征字符串
             m_obdTest.m_db.AddSNField();
-            // 每日定时上传以前上传失败的数据
+            // 定时上传以前上传失败的数据
             m_timer = new System.Timers.Timer(m_obdInterface.OBDResultSetting.UploadInterval * 60 * 1000);
             m_timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimeUpload);
             m_timer.AutoReset = true;
             m_timer.Enabled = true;
 
             Task.Factory.StartNew(TestNativeDatabase);
-        }
-
-        ~OBDStartForm() {
-            if (f_MainForm != null) {
-                f_MainForm.Close();
-            }
-            if (m_timer != null) {
-                m_timer.Dispose();
-            }
         }
 
         private void TestNativeDatabase() {
@@ -87,22 +78,6 @@ namespace SH_OBD {
         }
 
         private void OnTimeUpload(object source, System.Timers.ElapsedEventArgs e) {
-            #region 每天定时集中上传，现已取消
-            //            string Hour = DateTime.Now.ToLocalTime().ToString("HH");
-            //            bool result = int.TryParse(Hour, out int iHour);
-            //            if (result) {
-            //                if (iHour == m_obdInterface.OBDResultSetting.UploadInterval) {
-            //                    try {
-            //                        m_obdTest.UploadDataFromDBOnTime(out string errorMsg);
-            //#if DEBUG
-            //                        MessageBox.Show(errorMsg, WSHelper.GetMethodName(0));
-            //#endif
-            //                    } catch (Exception ex) {
-            //                        m_obdInterface.m_log.TraceError("集中上传数据出错" + ex.Message);
-            //                    }
-            //                }
-            //            }
-            #endregion
             m_obdInterface.m_log.TraceInfo("Start UploadDataFromDBOnTime");
             try {
                 m_obdTest.UploadDataFromDBOnTime(out string errorMsg);
@@ -142,17 +117,22 @@ namespace SH_OBD {
         void OnUploadDataDone() { }
 
         void SerialDataReceived(object sender, SerialDataReceivedEventArgs e, byte[] bits) {
+            if (!m_bCanOBDTest) {
+                return;
+            }
+            m_bCanOBDTest = false;
             // 跨UI线程调用UI控件要使用Invoke
             this.Invoke((EventHandler)delegate {
                 this.txtBoxVIN.Text = Encoding.Default.GetString(bits).Trim().ToUpper();
-                if (this.txtBoxVIN.Text.Length == 17) {
-                    m_obdTest.StrVIN_IN = this.txtBoxVIN.Text;
-                    m_obdInterface.m_log.TraceInfo("Get VIN: " + m_obdTest.StrVIN_IN + " by serial port scanner");
-                    if (!m_obdTest.AdvanceMode) {
-                        StartOBDTest();
-                    }
-                }
             });
+            if (this.txtBoxVIN.Text.Length == 17) {
+                m_obdTest.StrVIN_IN = this.txtBoxVIN.Text;
+                m_obdInterface.m_log.TraceInfo("Get VIN: " + m_obdTest.StrVIN_IN + " by serial port scanner");
+                if (!m_obdTest.AdvanceMode) {
+                    StartOBDTest();
+                }
+            }
+            m_bCanOBDTest = true;
         }
 
         private void LogCommSettingInfo() {
@@ -235,6 +215,7 @@ namespace SH_OBD {
         }
 
         private void StartOBDTest() {
+            m_bCanOBDTest = false;
             this.Invoke((EventHandler)delegate {
                 this.labelResult.ForeColor = Color.Black;
                 this.labelResult.Text = "准备OBD检测";
@@ -339,6 +320,9 @@ namespace SH_OBD {
             if (f_MainForm != null) {
                 f_MainForm.Close();
             }
+            if (m_timer != null) {
+                m_timer.Dispose();
+            }
 
             Monitor.Enter(m_obdInterface);
             if (m_obdInterface.ConnectedStatus) {
@@ -354,20 +338,13 @@ namespace SH_OBD {
             this.labelVINError.ForeColor = Color.Gray;
             this.labelCALIDCVN.ForeColor = Color.Gray;
             this.label3Space.ForeColor = Color.Gray;
-
-#if DEBUG
-            //////////////////////////////// TEST!!! ////////////////////////////////
-            //try {
-            //    m_obdTest.UploadDataFromDBOnTime(out string errorMsg);
-            //    MessageBox.Show(errorMsg, WSHelper.GetMethodName(0));
-            //} catch (Exception ex) {
-            //    m_obdInterface.m_log.TraceError("集中上传数据出错" + ex.Message);
-            //}
-            /////////////////////////////////////////////////////////////////////////
-#endif
         }
 
         private void TxtBoxVIN_TextChanged(object sender, EventArgs e) {
+            if (!m_bCanOBDTest) {
+                return;
+            }
+            m_bCanOBDTest = false;
             if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Trim().Length == 17 && m_bAcceptVIN_TXT) {
                 m_bAcceptVIN_TXT = false;
                 this.txtBoxVIN.Text = this.txtBoxVIN.Text.Trim().ToUpper();
@@ -379,20 +356,12 @@ namespace SH_OBD {
                 this.txtBoxVIN.SelectAll();
             }
             m_bAcceptVIN_TXT = true;
+            m_bCanOBDTest = true;
         }
 
         private void OBDStartForm_Activated(object sender, EventArgs e) {
             this.txtBoxVIN.Focus();
         }
 
-        private void TxtBoxVIN_KeyPress(object sender, KeyPressEventArgs e) {
-            //TimeSpan ts = DateTime.Now.Subtract(m_lastTime_TXT);
-            //int sec = (int)ts.TotalSeconds;
-            //m_lastTime_TXT = DateTime.Now;
-            //if (sec > 1) {
-            //    this.txtBoxVIN.Text = "";
-            //}
-            e.KeyChar = Convert.ToChar(e.KeyChar.ToString().ToUpper());
-        }
     }
 }
