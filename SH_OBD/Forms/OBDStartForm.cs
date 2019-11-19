@@ -215,7 +215,6 @@ namespace SH_OBD {
         }
 
         private void StartOBDTest() {
-            m_bCanOBDTest = false;
             this.Invoke((EventHandler)delegate {
                 this.labelResult.ForeColor = Color.Black;
                 this.labelResult.Text = "准备OBD检测";
