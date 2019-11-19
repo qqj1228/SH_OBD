@@ -23,6 +23,7 @@ namespace SH_OBD {
 
         public OBDStartForm() {
             InitializeComponent();
+            this.Text += " Ver: " + MainFileVersion.AssemblyVersion;
             m_bCanOBDTest = true;
             m_lastHeight = this.Height;
             m_obdInterface = new OBDInterface();
@@ -389,11 +390,7 @@ namespace SH_OBD {
         private void OBDStartForm_Activated(object sender, EventArgs e) {
             Control con = this.ActiveControl;
             if (con is TextBox tb) {
-                if (tb.Name == "txtBoxVIN") {
-                    this.txtBoxVIN.Focus();
-                } else if (tb.Name == "txtBoxVehicleType") {
-                    this.txtBoxVehicleType.Focus();
-                }
+                tb.Focus();
             }
         }
 
@@ -410,21 +407,22 @@ namespace SH_OBD {
                 if (!m_bCanOBDTest) {
                     return;
                 }
-                TextBox tb = sender as TextBox;
-                if (tb.Name == "txtBoxVehicleType") {
-                    this.txtBoxVIN.Focus();
-                    this.txtBoxVIN.SelectAll();
-                    m_obdTest.StrType_IN = this.txtBoxVehicleType.Text.Trim();
-                } else if (tb.Name == "txtBoxVIN") {
-                    this.txtBoxVehicleType.Focus();
-                    this.txtBoxVehicleType.SelectAll();
-                    m_obdTest.StrVIN_IN = this.txtBoxVIN.Text.Trim();
-                }
                 m_bCanOBDTest = false;
+                TextBox tb = sender as TextBox;
+                string[] codes = tb.Text.Split('*');
+                if (codes != null) {
+                    if (codes.Length > 2) {
+                        m_obdTest.StrVIN_IN = codes[2];
+                    }
+                    m_obdTest.StrType_IN = codes[0];
+                    this.txtBoxVIN.Text = m_obdTest.StrVIN_IN;
+                    this.txtBoxVehicleType.Text = m_obdTest.StrType_IN;
+                }
                 if (!m_obdInterface.CommSettings.UseSerialScanner && m_obdTest.StrVIN_IN.Length == 17 && m_obdTest.StrType_IN.Length >= 10) {
                     if (!m_obdTest.AdvanceMode) {
                         StartOBDTest();
                         this.txtBoxVIN.SelectAll();
+                        this.txtBoxVehicleType.SelectAll();
                     }
                 }
                 m_bCanOBDTest = true;

@@ -25,11 +25,8 @@
         private void InitializeComponent() {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.groupInfo = new System.Windows.Forms.GroupBox();
             this.GridViewInfo = new System.Windows.Forms.DataGridView();
-            this.groupIUPR = new System.Windows.Forms.GroupBox();
-            this.GridViewIUPR = new System.Windows.Forms.DataGridView();
             this.btnStartOBDTest = new System.Windows.Forms.Button();
             this.groupECUInfo = new System.Windows.Forms.GroupBox();
             this.GridViewECUInfo = new System.Windows.Forms.DataGridView();
@@ -39,8 +36,6 @@
             this.chkBoxManualUpload = new System.Windows.Forms.CheckBox();
             this.groupInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewInfo)).BeginInit();
-            this.groupIUPR.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.GridViewIUPR)).BeginInit();
             this.groupECUInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewECUInfo)).BeginInit();
             this.SuspendLayout();
@@ -50,7 +45,7 @@
             this.groupInfo.Controls.Add(this.GridViewInfo);
             this.groupInfo.Location = new System.Drawing.Point(10, 63);
             this.groupInfo.Name = "groupInfo";
-            this.groupInfo.Size = new System.Drawing.Size(322, 208);
+            this.groupInfo.Size = new System.Drawing.Size(322, 375);
             this.groupInfo.TabIndex = 2;
             this.groupInfo.TabStop = false;
             this.groupInfo.Text = "车辆信息";
@@ -76,43 +71,8 @@
             this.GridViewInfo.RowHeadersVisible = false;
             this.GridViewInfo.RowHeadersWidth = 51;
             this.GridViewInfo.RowTemplate.Height = 23;
-            this.GridViewInfo.Size = new System.Drawing.Size(316, 188);
+            this.GridViewInfo.Size = new System.Drawing.Size(316, 355);
             this.GridViewInfo.TabIndex = 0;
-            // 
-            // groupIUPR
-            // 
-            this.groupIUPR.Controls.Add(this.GridViewIUPR);
-            this.groupIUPR.Location = new System.Drawing.Point(338, 63);
-            this.groupIUPR.Name = "groupIUPR";
-            this.groupIUPR.Size = new System.Drawing.Size(453, 373);
-            this.groupIUPR.TabIndex = 4;
-            this.groupIUPR.TabStop = false;
-            this.groupIUPR.Text = "IUPR";
-            this.groupIUPR.Visible = false;
-            // 
-            // GridViewIUPR
-            // 
-            this.GridViewIUPR.AllowUserToAddRows = false;
-            this.GridViewIUPR.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.GridViewIUPR.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.GridViewIUPR.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.GridViewIUPR.DefaultCellStyle = dataGridViewCellStyle2;
-            this.GridViewIUPR.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.GridViewIUPR.Location = new System.Drawing.Point(3, 17);
-            this.GridViewIUPR.Name = "GridViewIUPR";
-            this.GridViewIUPR.ReadOnly = true;
-            this.GridViewIUPR.RowHeadersVisible = false;
-            this.GridViewIUPR.RowHeadersWidth = 51;
-            this.GridViewIUPR.RowTemplate.Height = 23;
-            this.GridViewIUPR.Size = new System.Drawing.Size(447, 353);
-            this.GridViewIUPR.TabIndex = 0;
             // 
             // btnStartOBDTest
             // 
@@ -127,9 +87,9 @@
             // groupECUInfo
             // 
             this.groupECUInfo.Controls.Add(this.GridViewECUInfo);
-            this.groupECUInfo.Location = new System.Drawing.Point(10, 277);
+            this.groupECUInfo.Location = new System.Drawing.Point(338, 63);
             this.groupECUInfo.Name = "groupECUInfo";
-            this.groupECUInfo.Size = new System.Drawing.Size(322, 159);
+            this.groupECUInfo.Size = new System.Drawing.Size(450, 375);
             this.groupECUInfo.TabIndex = 3;
             this.groupECUInfo.TabStop = false;
             this.groupECUInfo.Text = "ECU信息";
@@ -140,14 +100,14 @@
             this.GridViewECUInfo.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.GridViewECUInfo.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.GridViewECUInfo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.GridViewECUInfo.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.GridViewECUInfo.DefaultCellStyle = dataGridViewCellStyle2;
             this.GridViewECUInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.GridViewECUInfo.Location = new System.Drawing.Point(3, 17);
             this.GridViewECUInfo.Name = "GridViewECUInfo";
@@ -155,7 +115,7 @@
             this.GridViewECUInfo.RowHeadersVisible = false;
             this.GridViewECUInfo.RowHeadersWidth = 51;
             this.GridViewECUInfo.RowTemplate.Height = 23;
-            this.GridViewECUInfo.Size = new System.Drawing.Size(316, 139);
+            this.GridViewECUInfo.Size = new System.Drawing.Size(444, 355);
             this.GridViewECUInfo.TabIndex = 0;
             // 
             // labelInfo
@@ -211,7 +171,6 @@
             this.Controls.Add(this.labelInfo);
             this.Controls.Add(this.groupECUInfo);
             this.Controls.Add(this.btnStartOBDTest);
-            this.Controls.Add(this.groupIUPR);
             this.Controls.Add(this.groupInfo);
             this.Name = "OBDTestForm";
             this.Text = "OBDTestForm";
@@ -221,8 +180,6 @@
             this.Resize += new System.EventHandler(this.OBDTestForm_Resize);
             this.groupInfo.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.GridViewInfo)).EndInit();
-            this.groupIUPR.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.GridViewIUPR)).EndInit();
             this.groupECUInfo.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.GridViewECUInfo)).EndInit();
             this.ResumeLayout(false);
@@ -233,9 +190,7 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupInfo;
-        private System.Windows.Forms.GroupBox groupIUPR;
         private System.Windows.Forms.DataGridView GridViewInfo;
-        private System.Windows.Forms.DataGridView GridViewIUPR;
         private System.Windows.Forms.Button btnStartOBDTest;
         private System.Windows.Forms.GroupBox groupECUInfo;
         private System.Windows.Forms.DataGridView GridViewECUInfo;
