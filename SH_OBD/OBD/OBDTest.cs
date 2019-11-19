@@ -14,7 +14,6 @@ namespace SH_OBD {
         private readonly OBDInterface m_obdInterface;
         private readonly DataTable m_dtInfo;
         private readonly DataTable m_dtECUInfo;
-        //private readonly DataTable m_dtIUPR;
         private readonly Dictionary<string, bool[]> m_mode01Support;
         private readonly Dictionary<string, bool[]> m_mode09Support;
         private bool m_compIgn;
@@ -49,7 +48,6 @@ namespace SH_OBD {
             m_obdInterface = obd;
             m_dtInfo = new DataTable();
             m_dtECUInfo = new DataTable();
-            //m_dtIUPR = new DataTable();
             m_mode01Support = new Dictionary<string, bool[]>();
             m_mode09Support = new Dictionary<string, bool[]>();
             m_compIgn = false;
@@ -393,11 +391,6 @@ namespace SH_OBD {
                     for (int j = 0; j < length; j++) {
                         string CALID = CALIDArray.Length > j ? CALIDArray[j] : "";
                         string CVN = CVNArray.Length > j ? CVNArray[j] : "";
-                        if (!m_obdInterface.OBDResultSetting.Allow3Space) {
-                            if (CALID.Contains("   ") || CVN.Contains("   ")) {
-                                SpaceResult = false;
-                            }
-                        }
                         if (!m_obdInterface.OBDResultSetting.CALIDCVNEmpty) {
                             if (CALID.Length * CVN.Length == 0) {
                                 if (CALID.Length + CVN.Length == 0) {
@@ -415,131 +408,6 @@ namespace SH_OBD {
             }
 
         }
-
-        #region 读取IUPR信息，现已取消
-        //private void SetIUPRDataRow(int lineNO, string strItem, int padTotal, int padNum, DataTable dt, List<OBDParameterValue> valueList, int itemIndex, int InfoType) {
-        //    double num = 0;
-        //    double den = 0;
-        //    DataRow dr = dt.NewRow();
-        //    dr[0] = lineNO;
-        //    foreach (OBDParameterValue value in valueList) {
-        //        for (int i = 2; i < dt.Columns.Count; i++) {
-        //            if (dt.Columns[i].ColumnName == value.ECUResponseID) {
-        //                if (m_mode09Support.ContainsKey(dt.Columns[i].ColumnName) && m_mode09Support[dt.Columns[i].ColumnName][InfoType - 1]) {
-        //                    if (dr[1].ToString().Length == 0) {
-        //                        dr[1] = strItem + ": " + "监测完成次数".PadLeft(padTotal - padNum + 6);
-        //                    }
-        //                    if (value.ListStringValue.Count > itemIndex) {
-        //                        num = Utility.Hex2Int(value.ListStringValue[itemIndex]);
-        //                        dr[i] = num.ToString();
-        //                    } else {
-        //                        num = 0;
-        //                        dr[i] = "0";
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    if (dr[1].ToString().Length > 0) {
-        //        dt.Rows.Add(dr);
-        //    }
-
-        //    dr = dt.NewRow();
-        //    foreach (OBDParameterValue value in valueList) {
-        //        for (int i = 2; i < dt.Columns.Count; i++) {
-        //            if (dt.Columns[i].ColumnName == value.ECUResponseID) {
-        //                if (m_mode09Support.ContainsKey(dt.Columns[i].ColumnName) && m_mode09Support[dt.Columns[i].ColumnName][InfoType - 1]) {
-        //                    if (dr[1].ToString().Length == 0) {
-        //                        dr[1] = "符合监测条件次数".PadLeft(padTotal + 8);
-        //                    }
-        //                    if (value.ListStringValue.Count > itemIndex) {
-        //                        den = Utility.Hex2Int(value.ListStringValue[itemIndex + 1]);
-        //                        dr[i] = den.ToString();
-        //                    } else {
-        //                        den = 0;
-        //                        dr[i] = "0";
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    if (dr[1].ToString().Length > 0) {
-        //        dt.Rows.Add(dr);
-        //    }
-
-        //    dr = dt.NewRow();
-        //    foreach (OBDParameterValue value in valueList) {
-        //        for (int i = 2; i < dt.Columns.Count; i++) {
-        //            if (dt.Columns[i].ColumnName == value.ECUResponseID) {
-        //                if (m_mode09Support.ContainsKey(dt.Columns[i].ColumnName) && m_mode09Support[dt.Columns[i].ColumnName][InfoType - 1]) {
-        //                    if (dr[1].ToString().Length == 0) {
-        //                        dr[1] = "IUPR率".PadLeft(padTotal + 5);
-        //                    }
-        //                    if (den == 0) {
-        //                        dr[i] = "7.99527";
-        //                    } else {
-        //                        double r = Math.Round(num / den, 6);
-        //                        if (r > 7.99527) {
-        //                            dr[i] = "7.99527";
-        //                        } else {
-        //                            dr[i] = r.ToString();
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    if (dr[1].ToString().Length > 0) {
-        //        dt.Rows.Add(dr);
-        //    }
-        //}
-
-        //public void SetDataTableIUPR() {
-        //    DataTable dt = m_dtIUPR;
-        //    int NO = 0;
-        //    OBDParameter param;
-        //    int HByte = 0;
-        //    if (m_obdInterface.UseISO27145) {
-        //        param = new OBDParameter {
-        //            OBDRequest = "22F80B",
-        //            Service = 0x22,
-        //            Parameter = 0xF80B,
-        //            ValueTypes = (int)OBDParameter.EnumValueTypes.ListString
-        //        };
-        //        HByte = 0xF800;
-        //    } else {
-        //        param = new OBDParameter {
-        //            OBDRequest = "090B",
-        //            Service = 9,
-        //            Parameter = 0x0B,
-        //            ValueTypes = (int)OBDParameter.EnumValueTypes.ListString
-        //        };
-        //    }
-        //    List<OBDParameterValue> valueList = m_obdInterface.GetValueList(param);
-        //    SetIUPRDataRow(++NO, "NMHC催化器", 18, 12, dt, valueList, 2, param.Parameter);
-        //    SetIUPRDataRow(++NO, "NOx催化器", 18, 11, dt, valueList, 4, param.Parameter);
-        //    SetIUPRDataRow(++NO, "NOx吸附器", 18, 11, dt, valueList, 6, param.Parameter);
-        //    SetIUPRDataRow(++NO, "PM捕集器", 18, 10, dt, valueList, 8, param.Parameter);
-        //    SetIUPRDataRow(++NO, "废气传感器", 18, 12, dt, valueList, 10, param.Parameter);
-        //    SetIUPRDataRow(++NO, "EGR和VVT", 18, 10, dt, valueList, 12, param.Parameter);
-        //    SetIUPRDataRow(++NO, "增压压力", 18, 10, dt, valueList, 14, param.Parameter);
-
-        //    NO = 0;
-        //    param.Parameter = HByte + 8;
-        //    valueList = m_obdInterface.GetValueList(param);
-        //    SetIUPRDataRow(++NO, "催化器 组1", 18, 12, dt, valueList, 2, param.Parameter);
-        //    SetIUPRDataRow(++NO, "催化器 组2", 18, 12, dt, valueList, 4, param.Parameter);
-        //    SetIUPRDataRow(++NO, "前氧传感器 组1", 18, 16, dt, valueList, 6, param.Parameter);
-        //    SetIUPRDataRow(++NO, "前氧传感器 组2", 18, 16, dt, valueList, 8, param.Parameter);
-        //    SetIUPRDataRow(++NO, "后氧传感器 组1", 18, 16, dt, valueList, 16, param.Parameter);
-        //    SetIUPRDataRow(++NO, "后氧传感器 组2", 18, 16, dt, valueList, 18, param.Parameter);
-        //    SetIUPRDataRow(++NO, "EVAP", 18, 6, dt, valueList, 14, param.Parameter);
-        //    SetIUPRDataRow(++NO, "EGR和VVT", 18, 10, dt, valueList, 10, param.Parameter);
-        //    SetIUPRDataRow(++NO, "GPF 组1", 18, 9, dt, valueList, 24, param.Parameter);
-        //    SetIUPRDataRow(++NO, "GPF 组2", 18, 9, dt, valueList, 26, param.Parameter);
-        //    SetIUPRDataRow(++NO, "二次空气喷射系统", 18, 18, dt, valueList, 12, param.Parameter);
-        //}
-        #endregion
 
         private bool GetSupportStatus(int mode, Dictionary<string, bool[]> supportStatus) {
             List<List<OBDParameterValue>> ECUSupportList = new List<List<OBDParameterValue>>();
@@ -643,8 +511,6 @@ namespace SH_OBD {
             m_dtInfo.Dispose();
             m_dtECUInfo.Clear();
             m_dtECUInfo.Dispose();
-            //m_dtIUPR.Clear();
-            //m_dtIUPR.Dispose();
             m_mode01Support.Clear();
             m_mode09Support.Clear();
             m_compIgn = false;
@@ -687,17 +553,9 @@ namespace SH_OBD {
 
             SetDataTableColumns<string>(m_dtInfo, m_mode01Support);
             SetDataTableColumns<string>(m_dtECUInfo, m_mode09Support);
-            //SetDataTableColumns<string>(m_dtIUPR, m_mode09Support);
             SetupColumnsDone?.Invoke();
             SetDataTableInfo();
             SetDataTableECUInfo();
-            //SetDataTableIUPR();
-
-            //for (int i = 2; i < m_dtECUInfo.Columns.Count && m_CN6; i++) {
-            //    string strCALID = m_dtECUInfo.Rows[2][i].ToString();
-            //    string strCVN = m_dtECUInfo.Rows[3][i].ToString();
-            //    CheckCALIDCVN(StrType_IN, m_dtECUInfo.Columns[i].ColumnName, strCALID, strCVN);
-            //}
 
             OBDResult = DTCResult && ReadinessResult && VINResult && CALIDCVNResult && SpaceResult && CALIDCheckResult && CVNCheckResult && VehicleTypeExist;
             string strLog = "OBD Test Result: " + OBDResult.ToString() + " [";
@@ -1661,37 +1519,6 @@ namespace SH_OBD {
                     dr[27] = Results[i, ColsDic["CVN"]];
                     dr[28] = Results[i, ColsDic["Result"]];
                     dr[29] = Results[i, ColsDic["Upload"]];
-
-                    //if (GetCompIgn(ColsDic, Results, i)) {
-                    //    dr[12] = "不适用";         // CAT_RDY
-                    //    dr[13] = "不适用";         // HCAT_RDY
-                    //    dr[14] = "不适用";         // EVAP_RDY
-                    //    dr[15] = "不适用";         // AIR_RDY
-                    //    dr[16] = "不适用";         // ACRF_RDY
-                    //    dr[17] = "不适用";         // O2S_RDY
-                    //    dr[18] = "不适用";         // HTR_RDY
-                    //    dr[19] = Results[i, ColsDic["EGR_DRY"]];
-                    //    dr[20] = Results[i, ColsDic["HCCAT_DRY"]];
-                    //    dr[21] = Results[i, ColsDic["NCAT_DRY"]];
-                    //    dr[22] = Results[i, ColsDic["BP_DRY"]];
-                    //    dr[23] = Results[i, ColsDic["EGS_DRY"]];
-                    //    dr[24] = Results[i, ColsDic["PM_DRY"]];
-                    //} else {
-                    //    dr[12] = Results[i, ColsDic["CAT_DRY"]];
-                    //    dr[13] = Results[i, ColsDic["HCAT_DRY"]];
-                    //    dr[14] = Results[i, ColsDic["EVAP_DRY"]];
-                    //    dr[15] = Results[i, ColsDic["AIR_DRY"]];
-                    //    dr[16] = Results[i, ColsDic["ACRF_DRY"]];
-                    //    dr[17] = Results[i, ColsDic["O2S_DRY"]];
-                    //    dr[18] = Results[i, ColsDic["HTR_DRY"]];
-                    //    dr[19] = Results[i, ColsDic["EGR_DRY"]];
-                    //    dr[20] = "不适用";         // HCCAT_RDY
-                    //    dr[21] = "不适用";         // NCAT_RDY
-                    //    dr[22] = "不适用";         // BP_RDY
-                    //    dr[23] = "不适用";         // EGS_RDY
-                    //    dr[24] = "不适用";         // PM_RDY
-                    //}
-
                     dtOut.Rows.Add(dr);
                 }
             }
@@ -1762,143 +1589,6 @@ namespace SH_OBD {
 
                 // 与OBD诊断仪通讯情况
                 worksheet1.Cells["B7"].Value = "通讯成功";
-
-                #region DTC和就绪状态，已取消
-                //for (int i = 0; i < dt.Rows.Count; i++) {
-                //    // 故障代码及故障信息
-                //    string DTC = dt.Rows[i][6].ToString().Replace(",", "\n").Replace("--", "").Replace("不适用", "");
-                //    if (m_obdInterface.OBDResultSetting.DTC03 && DTC.Length > 0) {
-                //        worksheet1.Cells[10, 3 + i].Value = DTC;
-                //    }
-                //    DTC = dt.Rows[i][7].ToString().Replace(",", "\n").Replace("--", "").Replace("不适用", "");
-                //    if (m_obdInterface.OBDResultSetting.DTC07 && worksheet1.Cells[10, 3 + i].Value != null && DTC.Length > 0) {
-                //        worksheet1.Cells[10, 3 + i].Value += "\n";
-                //    }
-                //    if (m_obdInterface.OBDResultSetting.DTC07 && DTC.Length > 0) {
-                //        worksheet1.Cells[10, 3 + i].Value += DTC;
-                //    }
-                //    DTC = dt.Rows[i][8].ToString().Replace(",", "\n").Replace("--", "").Replace("不适用", "");
-                //    if (m_obdInterface.OBDResultSetting.DTC0A && worksheet1.Cells[10, 3 + i].Value != null && DTC.Length > 0) {
-                //        worksheet1.Cells[10, 3 + i].Value += "\n";
-                //    }
-                //    if (m_obdInterface.OBDResultSetting.DTC0A && DTC.Length > 0) {
-                //        worksheet1.Cells[10, 3 + i].Value += DTC;
-                //    }
-
-                //    // 诊断就绪状态未完成项目
-                //    if (m_obdInterface.OBDResultSetting.Readiness) {
-                //        string readiness = dt.Rows[i][9].ToString();
-                //        if (readiness == "未完成") {
-                //            worksheet1.Cells[11, 3 + i].Value = "失火";
-                //        }
-                //        readiness = dt.Rows[i][10].ToString();
-                //        if (readiness == "未完成") {
-                //            if (worksheet1.Cells[11, 3 + i].Value != null) {
-                //                worksheet1.Cells[11, 3 + i].Value += "\n";
-                //            }
-                //            worksheet1.Cells[11, 3 + i].Value += "燃油系统";
-                //        }
-                //        readiness = dt.Rows[i][11].ToString();
-                //        if (readiness == "未完成") {
-                //            if (worksheet1.Cells[11, 3 + i].Value != null) {
-                //                worksheet1.Cells[11, 3 + i].Value += "\n";
-                //            }
-                //            worksheet1.Cells[11, 3 + i].Value += "综合组件";
-                //        }
-                //        readiness = dt.Rows[i][12].ToString();
-                //        if (readiness == "未完成") {
-                //            if (worksheet1.Cells[11, 3 + i].Value != null) {
-                //                worksheet1.Cells[11, 3 + i].Value += "\n";
-                //            }
-                //            worksheet1.Cells[11, 3 + i].Value += "催化剂";
-                //        }
-                //        readiness = dt.Rows[i][13].ToString();
-                //        if (readiness == "未完成") {
-                //            if (worksheet1.Cells[11, 3 + i].Value != null) {
-                //                worksheet1.Cells[11, 3 + i].Value += "\n";
-                //            }
-                //            worksheet1.Cells[11, 3 + i].Value += "加热催化剂";
-                //        }
-                //        readiness = dt.Rows[i][14].ToString();
-                //        if (readiness == "未完成") {
-                //            if (worksheet1.Cells[11, 3 + i].Value != null) {
-                //                worksheet1.Cells[11, 3 + i].Value += "\n";
-                //            }
-                //            worksheet1.Cells[11, 3 + i].Value += "燃油蒸发系统";
-                //        }
-                //        readiness = dt.Rows[i][15].ToString();
-                //        if (readiness == "未完成") {
-                //            if (worksheet1.Cells[11, 3 + i].Value != null) {
-                //                worksheet1.Cells[11, 3 + i].Value += "\n";
-                //            }
-                //            worksheet1.Cells[11, 3 + i].Value += "二次空气系统";
-                //        }
-                //        readiness = dt.Rows[i][16].ToString();
-                //        if (readiness == "未完成") {
-                //            if (worksheet1.Cells[11, 3 + i].Value != null) {
-                //                worksheet1.Cells[11, 3 + i].Value += "\n";
-                //            }
-                //            worksheet1.Cells[11, 3 + i].Value += "空调系统制冷剂";
-                //        }
-                //        readiness = dt.Rows[i][17].ToString();
-                //        if (readiness == "未完成") {
-                //            if (worksheet1.Cells[11, 3 + i].Value != null) {
-                //                worksheet1.Cells[11, 3 + i].Value += "\n";
-                //            }
-                //            worksheet1.Cells[11, 3 + i].Value += "氧气传感器";
-                //        }
-                //        readiness = dt.Rows[i][18].ToString();
-                //        if (readiness == "未完成") {
-                //            if (worksheet1.Cells[11, 3 + i].Value != null) {
-                //                worksheet1.Cells[11, 3 + i].Value += "\n";
-                //            }
-                //            worksheet1.Cells[11, 3 + i].Value += "加热氧气传感器";
-                //        }
-                //        readiness = dt.Rows[i][19].ToString();
-                //        if (readiness == "未完成") {
-                //            if (worksheet1.Cells[11, 3 + i].Value != null) {
-                //                worksheet1.Cells[11, 3 + i].Value += "\n";
-                //            }
-                //            worksheet1.Cells[11, 3 + i].Value += "EGR/VVT系统监测";
-                //        }
-                //        readiness = dt.Rows[i][20].ToString();
-                //        if (readiness == "未完成") {
-                //            if (worksheet1.Cells[11, 3 + i].Value != null) {
-                //                worksheet1.Cells[11, 3 + i].Value += "\n";
-                //            }
-                //            worksheet1.Cells[11, 3 + i].Value += "NMHC催化剂";
-                //        }
-                //        readiness = dt.Rows[i][21].ToString();
-                //        if (readiness == "未完成") {
-                //            if (worksheet1.Cells[11, 3 + i].Value != null) {
-                //                worksheet1.Cells[11, 3 + i].Value += "\n";
-                //            }
-                //            worksheet1.Cells[11, 3 + i].Value += "NOx/SCR后处理";
-                //        }
-                //        readiness = dt.Rows[i][22].ToString();
-                //        if (readiness == "未完成") {
-                //            if (worksheet1.Cells[11, 3 + i].Value != null) {
-                //                worksheet1.Cells[11, 3 + i].Value += "\n";
-                //            }
-                //            worksheet1.Cells[11, 3 + i].Value += "增压系统";
-                //        }
-                //        readiness = dt.Rows[i][23].ToString();
-                //        if (readiness == "未完成") {
-                //            if (worksheet1.Cells[11, 3 + i].Value != null) {
-                //                worksheet1.Cells[11, 3 + i].Value += "\n";
-                //            }
-                //            worksheet1.Cells[11, 3 + i].Value += "废气传感器";
-                //        }
-                //        readiness = dt.Rows[i][24].ToString();
-                //        if (readiness == "未完成") {
-                //            if (worksheet1.Cells[11, 3 + i].Value != null) {
-                //                worksheet1.Cells[11, 3 + i].Value += "\n";
-                //            }
-                //            worksheet1.Cells[11, 3 + i].Value += "PM过滤器";
-                //        }
-                //    }
-                //}
-                #endregion
 
                 // 检测结果
                 string Result = OBDResult ? "合格" : "不合格";

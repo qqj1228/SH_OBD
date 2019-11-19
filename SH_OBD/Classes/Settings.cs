@@ -263,7 +263,6 @@ namespace SH_OBD {
         public bool VINError { get; set; }
         public int UploadTime { get; set; }
         public bool CALIDCVNEmpty { get; set; }
-        public bool Allow3Space { get; set; }
         public string CN6_OBD_SUP { get; set; }
         public bool CALIDCheck { get; set; }
         public bool CVNCheck { get; set; }
@@ -278,7 +277,6 @@ namespace SH_OBD {
             Readiness = false;
             VINError = true;
             CALIDCVNEmpty = false;
-            Allow3Space = true;
             UploadTime = 20;
             CN6_OBD_SUP = "29,2B";
             CALIDCheck = true;

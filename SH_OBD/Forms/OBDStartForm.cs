@@ -13,6 +13,7 @@ using System.Windows.Forms;
 
 namespace SH_OBD {
     public partial class OBDStartForm : Form {
+        public static bool m_bCanOBDTest;
         private readonly OBDInterface m_obdInterface;
         private readonly OBDTest m_obdTest;
         private MainForm f_MainForm;
@@ -22,6 +23,7 @@ namespace SH_OBD {
 
         public OBDStartForm() {
             InitializeComponent();
+            m_bCanOBDTest = true;
             m_lastHeight = this.Height;
             m_obdInterface = new OBDInterface();
             if (m_obdInterface.StrLoadConfigResult.Length > 0) {
@@ -117,6 +119,10 @@ namespace SH_OBD {
         void OnUploadDataDone() { }
 
         void SerialDataReceived(object sender, SerialDataReceivedEventArgs e, byte[] bits) {
+            if (!m_bCanOBDTest) {
+                return;
+            }
+            m_bCanOBDTest = false;
             Control con = this.ActiveControl;
             if (con is TextBox tb) {
                 // 跨UI线程调用UI控件要使用Invoke
@@ -141,6 +147,7 @@ namespace SH_OBD {
                     }
                 }
             }
+            m_bCanOBDTest = true;
         }
 
         private void LogCommSettingInfo() {
@@ -377,16 +384,6 @@ namespace SH_OBD {
         }
 
         private void TxtBox_TextChanged(object sender, EventArgs e) {
-            //Control con = this.ActiveControl;
-            //if (con is TextBox tb) {
-            //    if (tb.Name == "txtBoxVIN") {
-            //        if (this.txtBoxVIN.Text.Contains('\n')) {
-            //        }
-            //    } else if (tb.Name == "txtBoxVehicleType") {
-            //        if (this.txtBoxVehicleType.Text.Contains('\n')) {
-            //        }
-            //    }
-            //}
         }
 
         private void OBDStartForm_Activated(object sender, EventArgs e) {
@@ -410,6 +407,9 @@ namespace SH_OBD {
 
         private void TxtBox_KeyPress(object sender, KeyPressEventArgs e) {
             if (e.KeyChar == (char)Keys.Enter) {
+                if (!m_bCanOBDTest) {
+                    return;
+                }
                 TextBox tb = sender as TextBox;
                 if (tb.Name == "txtBoxVehicleType") {
                     this.txtBoxVIN.Focus();
@@ -420,12 +420,14 @@ namespace SH_OBD {
                     this.txtBoxVehicleType.SelectAll();
                     m_obdTest.StrVIN_IN = this.txtBoxVIN.Text.Trim();
                 }
+                m_bCanOBDTest = false;
                 if (!m_obdInterface.CommSettings.UseSerialScanner && m_obdTest.StrVIN_IN.Length == 17 && m_obdTest.StrType_IN.Length >= 10) {
                     if (!m_obdTest.AdvanceMode) {
                         StartOBDTest();
                         this.txtBoxVIN.SelectAll();
                     }
                 }
+                m_bCanOBDTest = true;
             }
         }
     }
