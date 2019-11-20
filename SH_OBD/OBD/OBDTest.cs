@@ -38,7 +38,7 @@ namespace SH_OBD {
         public bool VINResult { get; set; }
         public bool CALIDCVNResult { get; set; }
         public bool CALIDCVNAllEmpty { get; set; }
-        public bool SpaceResult { get; set; }
+        public bool CALIDUnmeaningResult { get; set; }
         public bool OBDSUPResult { get; set; }
         public string StrVIN_IN { get; set; }
         public string StrVIN_ECU { get; set; }
@@ -59,7 +59,7 @@ namespace SH_OBD {
             VINResult = true;
             CALIDCVNResult = true;
             CALIDCVNAllEmpty = false;
-            SpaceResult = true;
+            CALIDUnmeaningResult = true;
             OBDSUPResult = true;
             m_db = new Model(m_obdInterface.DBandMES, m_obdInterface.m_log);
             // 设置“testNo”字段中的每日顺序号初值
@@ -486,19 +486,14 @@ namespace SH_OBD {
             SetDataRow(++NO, "CVN", dt, param);     // 3
 
             // 根据配置文件，判断CAL_ID和CVN两个值的合法性
-            if (m_CN6) {
-                for (int i = 2; i < dt.Columns.Count; i++) {
-                    string[] CALIDArray = dt.Rows[2][i].ToString().Split('\n');
-                    string[] CVNArray = dt.Rows[3][i].ToString().Split('\n');
-                    int length = Math.Max(CALIDArray.Length, CVNArray.Length);
-                    for (int j = 0; j < length; j++) {
-                        string CALID = CALIDArray.Length > j ? CALIDArray[j] : "";
-                        string CVN = CVNArray.Length > j ? CVNArray[j] : "";
-                        if (!m_obdInterface.OBDResultSetting.Allow3Space) {
-                            if (CALID.Contains("   ") || CVN.Contains("   ")) {
-                                SpaceResult = false;
-                            }
-                        }
+            for (int i = 2; i < dt.Columns.Count; i++) {
+                string[] CALIDArray = dt.Rows[2][i].ToString().Split('\n');
+                string[] CVNArray = dt.Rows[3][i].ToString().Split('\n');
+                int length = Math.Max(CALIDArray.Length, CVNArray.Length);
+                for (int j = 0; j < length; j++) {
+                    string CALID = CALIDArray.Length > j ? CALIDArray[j] : "";
+                    string CVN = CVNArray.Length > j ? CVNArray[j] : "";
+                    if (m_CN6) {
                         if (!m_obdInterface.OBDResultSetting.CALIDCVNEmpty) {
                             if (CALID.Length * CVN.Length == 0) {
                                 if (CALID.Length + CVN.Length == 0) {
@@ -511,6 +506,9 @@ namespace SH_OBD {
                                 }
                             }
                         }
+                    }
+                    if (Utility.IsUnmeaningString(CALID, m_obdInterface.OBDResultSetting.UnmeaningNum, m_obdInterface.OBDResultSetting.UnmeaningSpace)) {
+                        CALIDUnmeaningResult = false;
                     }
                 }
             }
@@ -623,7 +621,6 @@ namespace SH_OBD {
         /// <returns>是否返回成功信息</returns>
         public bool StartOBDTest(out string errorMsg) {
             m_obdInterface.m_log.TraceInfo(">>>>> Enter StartOBDTest function. Ver: " + MainFileVersion.AssemblyVersion + "<<<<<");
-
             errorMsg = "";
             m_dtInfo.Clear();
             m_dtInfo.Dispose();
@@ -639,7 +636,7 @@ namespace SH_OBD {
             VINResult = true;
             CALIDCVNResult = true;
             CALIDCVNAllEmpty = false;
-            SpaceResult = true;
+            CALIDUnmeaningResult = true;
             OBDSUPResult = true;
 
             OBDTestStart?.Invoke();
@@ -657,17 +654,31 @@ namespace SH_OBD {
             while (!GetSupportStatus(mode01, m_mode01Support)) {
                 if (++count >= 3) {
                     OBDResult = false;
-                    errorMsg = "获取 Mode01 / DID F4 / DM5 支持状态出错！";
-                    m_obdInterface.m_log.TraceError("Get Mode01 / DID F4 / DM5 Support Status Error!");
-                    throw new Exception("获取 Mode01 支持状态出错！");
+                    errorMsg = "获取 Mode01 支持状态出错！";
+                    m_obdInterface.m_log.TraceError("Get Mode01 Support Status Error!");
+                    if (m_obdInterface.STDType == StandardType.ISO_27145) {
+                        errorMsg = "获取 DID F4 支持状态出错！";
+                        m_obdInterface.m_log.TraceError("Get DID F4 Support Status Error!");
+                    } else if (m_obdInterface.STDType == StandardType.SAE_J1939) {
+                        errorMsg = "获取 DM5 支持状态出错！";
+                        m_obdInterface.m_log.TraceError("Get DM5 Support Status Error!");
+                    }
+                    throw new Exception(errorMsg);
                 }
             }
             while (!GetSupportStatus(mode09, m_mode09Support)) {
                 if (++count >= 3) {
                     OBDResult = false;
-                    errorMsg = "获取 Mode09 / DID F8 / DM19 支持状态出错！";
-                    m_obdInterface.m_log.TraceError("Get Mode09 / DID F8 / DM19 Support Status Error!");
-                    throw new Exception("获取 Mode09 支持状态出错！");
+                    errorMsg = "获取 Mode09 支持状态出错！";
+                    m_obdInterface.m_log.TraceError("Get Mode09 Support Status Error!");
+                    if (m_obdInterface.STDType == StandardType.ISO_27145) {
+                        errorMsg = "获取 DID F8 支持状态出错！";
+                        m_obdInterface.m_log.TraceError("Get DID F8 Support Status Error!");
+                    } else if (m_obdInterface.STDType == StandardType.SAE_J1939) {
+                        errorMsg = "获取 DM19 支持状态出错！";
+                        m_obdInterface.m_log.TraceError("Get DM19 Support Status Error!");
+                    }
+                    throw new Exception(errorMsg);
                 }
             }
 
@@ -678,11 +689,11 @@ namespace SH_OBD {
             SetDataTableECUInfo();
 
             WriteDbStart?.Invoke();
-            OBDResult = DTCResult && ReadinessResult && VINResult && CALIDCVNResult && SpaceResult && OBDSUPResult;
+            OBDResult = DTCResult && ReadinessResult && VINResult && CALIDCVNResult && CALIDUnmeaningResult && OBDSUPResult;
             string strLog = "OBD Test Result: " + OBDResult.ToString() + " [";
             strLog += "DTCResult: " + DTCResult.ToString();
             strLog += ", ReadinessResult: " + ReadinessResult.ToString();
-            strLog += ", SpaceResult: " + SpaceResult.ToString();
+            strLog += ", CALIDUnmeaningResult: " + CALIDUnmeaningResult.ToString();
             strLog += ", OBDSUPResult: " + OBDSUPResult.ToString();
             strLog += ", VINResult: " + VINResult.ToString();
             strLog += ", CALIDCVNResult: " + CALIDCVNResult.ToString() + "]";
@@ -1537,7 +1548,7 @@ namespace SH_OBD {
                 //Result += ReadinessResult ? "" : "\n就绪状态未完成项超过2项";
                 Result += VINResult ? "" : "\nVIN号不匹配";
                 Result += CALIDCVNResult ? "" : "\nCALID和CVN数据不完整";
-                Result += SpaceResult ? "" : "\nCALID或CVN有多个空格";
+                Result += CALIDUnmeaningResult ? "" : "\nCALID含有乱码";
                 Result += OBDSUPResult ? "" : "\nOBD型式不适用或异常";
                 worksheet1.Cells["B12"].Value = Result;
 

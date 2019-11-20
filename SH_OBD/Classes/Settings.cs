@@ -267,6 +267,7 @@ namespace SH_OBD {
         public bool OBD_SUP { get; set; }
         public int StartSN { get; set; }
         public string CN6_OBD_SUP { get; set; }
+        public bool UnmeaningSpace { get; set; }
         public int UnmeaningNum { get; set; }
 
         public OBDResultSetting() {
@@ -283,6 +284,7 @@ namespace SH_OBD {
             UploadInterval = 15;
             StartSN = 0;
             CN6_OBD_SUP = "29,2B";
+            UnmeaningSpace = false;
             UnmeaningNum = 5;
         }
     }

@@ -18,14 +18,16 @@
   <VINError>true</VINError>
   <!-- OBD检测结果判定：国六车型是否允许CAL_ID或者CVN为空值 -->
   <CALIDCVNEmpty>false</CALIDCVNEmpty>
-  <!-- OBD检测结果判定：是否允许CAL_ID或者CVN含有连续3个或以上的空格 -->
-  <Allow3Space>true</Allow3Space>
-  <!-- OBD检测结果是否需要判断“OBD型式” -->
+  <!-- OBD检测结果是否需要判断“OBD型式”为空或非标准值 -->
   <OBD_SUP>true</OBD_SUP>
   <!-- 自动上传以前上传失败的数据的时间间隔（单位：分钟） -->
   <UploadInterval>15</UploadInterval>
   <!-- 检测报告编号里的顺序号起始值 -->
-  <StartSN>0</StartSN>
+  <StartSN>7000</StartSN>
   <!-- 国六车型的OBD型式列表 -->
   <CN6_OBD_SUP>29,2B</CN6_OBD_SUP>
+  <!-- 空格是否作为非字母或数字来处理 -->
+  <UnmeaningSpace>false</UnmeaningSpace>
+  <!-- CAL_ID含有连续n个或以上的非字母或数字即判定为不合格，n为下面设定的数字 -->
+  <UnmeaningNum>5</UnmeaningNum>
 </OBDResultSetting>

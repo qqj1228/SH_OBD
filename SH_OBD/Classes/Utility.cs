@@ -104,6 +104,49 @@ namespace SH_OBD {
             return str;
         }
 
+        /// <summary>
+        /// 判断字符是否为非字母或数字，bSpace表示是否把空格也作为非字母或数字处理
+        /// </summary>
+        /// <param name="ch"></param>
+        /// <param name="bSpace"></param>
+        /// <returns></returns>
+        public static bool IsUnmeaningChar(char ch, bool bSpace) {
+            bool bRet = false;
+            if ((ch != ' ' && ch < '0') || (ch > '9' && ch < 'A') || (ch > 'Z' && ch < 'a') || ch > 'z') {
+                bRet = true;
+            }
+            if (bSpace && ch == ' ') {
+                bRet = true;
+            }
+            return bRet;
+        }
+
+        /// <summary>
+        /// 判断字符串是否含有连续多个非字母或数字，iNum为连续为非字母或数字的字符个数，bSpace表示是否把空格也作为非字母或数字处理
+        /// </summary>
+        /// <param name="strValue"></param>
+        /// <param name="iNum"></param>
+        /// <param name="bSpace"></param>
+        /// <returns></returns>
+        public static bool IsUnmeaningString(string strValue, int iNum, bool bSpace = false) {
+            bool bRet = false;
+            int counter = 0;
+            if (strValue == null || strValue.Length < iNum) {
+                return bRet;
+            }
+            for (int i = 0; i < strValue.Length; i++) {
+                if (IsUnmeaningChar(strValue[i], bSpace)) {
+                    ++counter;
+                } else {
+                    counter = 0;
+                }
+                if (counter == iNum) {
+                    bRet = true;
+                    break;
+                }
+            }
+            return bRet;
+        }
     }
 
     // 获取文件版本类

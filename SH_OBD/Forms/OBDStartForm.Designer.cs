@@ -151,7 +151,7 @@
             this.labelCALIDCVN.Name = "labelCALIDCVN";
             this.labelCALIDCVN.Size = new System.Drawing.Size(184, 73);
             this.labelCALIDCVN.TabIndex = 4;
-            this.labelCALIDCVN.Text = "CALID和CVN数据不完整";
+            this.labelCALIDCVN.Text = "CALID或CVN数据异常";
             this.labelCALIDCVN.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label3Space

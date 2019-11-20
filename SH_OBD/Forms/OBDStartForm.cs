@@ -24,6 +24,7 @@ namespace SH_OBD {
 
         public OBDStartForm() {
             InitializeComponent();
+            this.Text += " Ver: " + MainFileVersion.AssemblyVersion;
             m_bCanOBDTest = true;
             m_lastHeight = this.Height;
             m_bAcceptVIN_TXT = true;
@@ -261,7 +262,7 @@ namespace SH_OBD {
                         this.labelVINError.BackColor = Color.Red;
                         this.labelVINError.ForeColor = Color.Black;
                     }
-                    if (!m_obdTest.CALIDCVNResult) {
+                    if (!m_obdTest.CALIDCVNResult || !m_obdTest.CALIDUnmeaningResult) {
                         this.labelCALIDCVN.BackColor = Color.Red;
                         this.labelCALIDCVN.ForeColor = Color.Black;
                     }
