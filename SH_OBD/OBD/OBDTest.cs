@@ -6,6 +6,7 @@ using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SH_OBD {
@@ -469,6 +470,7 @@ namespace SH_OBD {
                     SubParameter = 1,
                     ValueTypes = (int)OBDParameter.EnumValueTypes.ListString
                 };
+                m_obdInterface.SetTimeout(1000);
             }
             SetDataRow(++NO, "CAL_ID", dt, param);  // 2
 
@@ -482,8 +484,10 @@ namespace SH_OBD {
                     SubParameter = 0,
                     ValueTypes = (int)OBDParameter.EnumValueTypes.ListString
                 };
+                m_obdInterface.SetTimeout(1000);
             }
             SetDataRow(++NO, "CVN", dt, param);     // 3
+            m_obdInterface.SetTimeout(500);
 
             // 根据配置文件，判断CAL_ID和CVN两个值的合法性
             for (int i = 2; i < dt.Columns.Count; i++) {
@@ -647,8 +651,8 @@ namespace SH_OBD {
                 mode01 = 0xF4;
                 mode09 = 0xF8;
             } else if (m_obdInterface.STDType == StandardType.SAE_J1939) {
+                // J1939只取一个支持状态就够了
                 mode01 = 0xFECE;
-                mode09 = 0xD300;
             }
 
             if (!GetSupportStatus(mode01, m_mode01Support)) {
@@ -665,22 +669,27 @@ namespace SH_OBD {
                 throw new Exception(errorMsg);
             }
 
-            if (!GetSupportStatus(mode09, m_mode09Support)) {
-                OBDResult = false;
-                errorMsg = "获取 Mode09 支持状态出错！";
-                m_obdInterface.m_log.TraceError("Get Mode09 Support Status Error!");
-                if (m_obdInterface.STDType == StandardType.ISO_27145) {
-                    errorMsg = "获取 DID F8 支持状态出错！";
-                    m_obdInterface.m_log.TraceError("Get DID F8 Support Status Error!");
-                } else if (m_obdInterface.STDType == StandardType.SAE_J1939) {
-                    errorMsg = "获取 DM19 支持状态出错！";
-                    m_obdInterface.m_log.TraceError("Get DM19 Support Status Error!");
+            if (m_obdInterface.STDType != StandardType.SAE_J1939) {
+                // J1939只取一个支持状态就够了
+                if (!GetSupportStatus(mode09, m_mode09Support)) {
+                    OBDResult = false;
+                    errorMsg = "获取 Mode09 支持状态出错！";
+                    m_obdInterface.m_log.TraceError("Get Mode09 Support Status Error!");
+                    if (m_obdInterface.STDType == StandardType.ISO_27145) {
+                        errorMsg = "获取 DID F8 支持状态出错！";
+                        m_obdInterface.m_log.TraceError("Get DID F8 Support Status Error!");
+                    }
+                    throw new Exception(errorMsg);
                 }
-                throw new Exception(errorMsg);
             }
 
             SetDataTableColumns<string>(m_dtInfo, m_mode01Support);
-            SetDataTableColumns<string>(m_dtECUInfo, m_mode09Support);
+            if (m_obdInterface.STDType == StandardType.SAE_J1939) {
+                // J1939用mode01来初始化m_dtECUInfo
+                SetDataTableColumns<string>(m_dtECUInfo, m_mode01Support);
+            } else {
+                SetDataTableColumns<string>(m_dtECUInfo, m_mode09Support);
+            }
             SetupColumnsDone?.Invoke();
             SetDataTableInfo();
             SetDataTableECUInfo();
