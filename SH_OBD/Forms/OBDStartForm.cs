@@ -20,14 +20,12 @@ namespace SH_OBD {
         private readonly Color m_backColor;
         private float m_lastHeight;
         readonly System.Timers.Timer m_timer;
-        private bool m_bAcceptVIN_TXT;
 
         public OBDStartForm() {
             InitializeComponent();
             this.Text += " Ver: " + MainFileVersion.AssemblyVersion;
             m_bCanOBDTest = true;
             m_lastHeight = this.Height;
-            m_bAcceptVIN_TXT = true;
             m_obdInterface = new OBDInterface();
             if (m_obdInterface.StrLoadConfigResult.Length > 0) {
                 m_obdInterface.StrLoadConfigResult += "是否要以默认配置运行程序？点击\"否\"：将会退出程序。";
@@ -122,12 +120,13 @@ namespace SH_OBD {
                 return;
             }
             m_bCanOBDTest = false;
+            string strTxt = Encoding.Default.GetString(bits).Trim().ToUpper();
             // 跨UI线程调用UI控件要使用Invoke
             this.Invoke((EventHandler)delegate {
-                this.txtBoxVIN.Text = Encoding.Default.GetString(bits).Trim().ToUpper();
+                this.txtBoxVIN.Text = strTxt;
             });
-            if (this.txtBoxVIN.Text.Length == 17) {
-                m_obdTest.StrVIN_IN = this.txtBoxVIN.Text;
+            if (strTxt.Length == 17) {
+                m_obdTest.StrVIN_IN = strTxt;
                 m_obdInterface.m_log.TraceInfo("Get VIN: " + m_obdTest.StrVIN_IN + " by serial port scanner");
                 if (!m_obdTest.AdvanceMode) {
                     StartOBDTest();
@@ -250,6 +249,8 @@ namespace SH_OBD {
             } catch (Exception ex) {
                 m_obdInterface.m_log.TraceError("OBD test occurred error: " + errorMsg + ", " + ex.Message);
                 MessageBox.Show(errorMsg + "\n" + ex.Message, "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            } finally {
+                m_obdTest.StrVIN_IN = "";
             }
 
             this.Invoke((EventHandler)delegate {
@@ -345,17 +346,15 @@ namespace SH_OBD {
                 return;
             }
             m_bCanOBDTest = false;
-            if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Trim().Length == 17 && m_bAcceptVIN_TXT) {
-                m_bAcceptVIN_TXT = false;
-                this.txtBoxVIN.Text = this.txtBoxVIN.Text.Trim().ToUpper();
-                m_obdTest.StrVIN_IN = this.txtBoxVIN.Text;
+            string strTxt = this.txtBoxVIN.Text.Trim();
+            if (!m_obdInterface.CommSettings.UseSerialScanner && strTxt.Length == 17) {
+                m_obdTest.StrVIN_IN = strTxt;
                 m_obdInterface.m_log.TraceInfo("Get VIN: " + m_obdTest.StrVIN_IN);
                 if (!m_obdTest.AdvanceMode) {
                     StartOBDTest();
                 }
                 this.txtBoxVIN.SelectAll();
             }
-            m_bAcceptVIN_TXT = true;
             m_bCanOBDTest = true;
         }
 

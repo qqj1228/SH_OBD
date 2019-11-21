@@ -44,7 +44,7 @@ namespace SH_OBD {
                 base.m_DeviceDes = GetDeviceDes().Trim();
                 base.m_DeviceID = GetDeviceID().Trim();
                 if (m_iProtocol != ProtocolType.Unknown) {
-                    if (!ConfirmAT("ATSP" + ((int)m_iProtocol).ToString())) {
+                    if (!ConfirmAT("ATSP" + ((int)m_iProtocol).ToString("X1"))) {
                         m_CommELM.Close();
                         return false;
                     }
@@ -167,15 +167,7 @@ namespace SH_OBD {
                 orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
             }
             if (orl.Pending && orl.RawResponse == "PENDING") {
-                //for (int i = 5; i > 0; i--) {
-                //    Thread.Sleep(1000);
-                //    param.OBDRequest = "3E00";
-                //    orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
-                //    if (!orl.ErrorDetected && orl.RawResponse != "TPPR") {
-                //        break;
-                //    }
-                //}
-                for (int i = 2; i > 0; i--) {
+                for (int i = /*5*/2; i > 0; i--) {
                     Thread.Sleep(1000);
                     param.OBDRequest = "3E00";
                     orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));

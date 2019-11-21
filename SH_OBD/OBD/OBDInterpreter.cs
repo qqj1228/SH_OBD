@@ -1293,6 +1293,11 @@ namespace SH_OBD {
 
         private OBDParameterValue GetJ1939Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
+            if (response.Header.Substring(2, 2) == "E8") {
+                // J1939的确认消息，非正确的返回值
+                value2.ErrorDetected = true;
+                return value2;
+            }
             switch (param.Parameter) {
             case 0xFECE:
                 value2 = GetDM5Value(param, response);
