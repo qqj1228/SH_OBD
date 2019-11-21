@@ -126,25 +126,24 @@ namespace SH_OBD {
             m_bCanOBDTest = false;
             Control con = this.ActiveControl;
             if (con is TextBox tb) {
-                // 跨UI线程调用UI控件要使用Invoke
-                this.Invoke((EventHandler)delegate {
-                    if (tb.Name == "txtBoxVIN") {
-                        this.txtBoxVIN.Text = Encoding.Default.GetString(bits);
-                        m_obdTest.StrVIN_IN = this.txtBoxVIN.Text.Trim();
-                        if (this.txtBoxVIN.Text.Contains('\n')) {
-                            this.txtBoxVehicleType.Focus();
+                string strTxt = Encoding.Default.GetString(bits);
+                if (strTxt.Contains("\n")) {
+                    string[] codes = strTxt.Trim().Split('*');
+                    if (codes != null) {
+                        if (codes.Length > 2) {
+                            m_obdTest.StrVIN_IN = codes[2];
                         }
-                    } else if (tb.Name == "txtBoxVehicleType") {
-                        this.txtBoxVehicleType.Text = Encoding.Default.GetString(bits);
-                        m_obdTest.StrType_IN = this.txtBoxVehicleType.Text.Trim();
-                        if (this.txtBoxVehicleType.Text.Contains('\n')) {
-                            this.txtBoxVIN.Focus();
-                        }
+                        m_obdTest.StrType_IN = codes[0];
+                        // 跨UI线程调用UI控件要使用Invoke
+                        this.Invoke((EventHandler)delegate {
+                            this.txtBoxVIN.Text = m_obdTest.StrVIN_IN;
+                            this.txtBoxVehicleType.Text = m_obdTest.StrType_IN;
+                        });
                     }
-                });
-                if (m_obdTest.StrVIN_IN.Length == 17 && m_obdTest.StrType_IN.Length >= 10) {
-                    if (!m_obdTest.AdvanceMode) {
-                        StartOBDTest();
+                    if (m_obdTest.StrVIN_IN.Length == 17 && m_obdTest.StrType_IN.Length >= 10) {
+                        if (!m_obdTest.AdvanceMode) {
+                            StartOBDTest();
+                        }
                     }
                 }
             }
