@@ -1262,16 +1262,21 @@ namespace SH_OBD {
 
         private OBDParameterValue GetDM19Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
-            if (response.GetDataByteCount() < 20) {
+            if (response.GetDataByteCount() < 20 * 2) {
                 value2.ErrorDetected = true;
                 return value2;
             }
 
+            int qty = response.Data.Length / (20 * 2);
+            string strData = "";
             switch (param.SubParameter) {
             case 0:
                 // CVN
                 param.Parameter = 0x06;
-                response.Data = response.Data.Substring(0, 4 * 2);
+                for (int i = 0; i < qty; i++) {
+                    strData += response.Data.Substring(i * 20 * 2, 4 * 2);
+                }
+                response.Data = strData;
                 value2 = GetMode09Value(param, response);
                 for (int i = 0; i < value2.ListStringValue.Count; i++) {
                     string strVal = value2.ListStringValue[i];
@@ -1281,7 +1286,10 @@ namespace SH_OBD {
             case 1:
                 // CAL_ID
                 param.Parameter = 0x04;
-                response.Data = response.Data.Substring(4 * 2);
+                for (int i = 0; i < qty; i++) {
+                    strData += response.Data.Substring(4 * 2 + i * 20 * 2, 16 * 2);
+                }
+                response.Data = strData;
                 value2 = GetMode09Value(param, response);
                 break;
             default:

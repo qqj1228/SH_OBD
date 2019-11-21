@@ -147,9 +147,6 @@ namespace SH_OBD {
                     standard = StandardType.SAE_J1939;
                 }
             }
-            if (standard == StandardType.SAE_J1939) {
-                ConfirmAT("ATJHF0");
-            }
             return standard;
         }
 

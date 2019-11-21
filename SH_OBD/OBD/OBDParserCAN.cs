@@ -20,6 +20,10 @@ namespace SH_OBD {
             List<string> tempLines = SplitByCR(response);
             List<string> lines = new List<string>();
             foreach (string item in tempLines) {
+                if (param.Service == 0 && item.Length < headLen) {
+                    // 过滤J1939多帧消息的第一条，因为盗版的ELM327不会返回第一条的整个数据只会返回有效字节数
+                    continue;
+                }
                 string strNRC = IsNegativeResponse(item, headLen);
                 if (strNRC.Length == 0 && !IsTesterPresentResponse(item, headLen)) {
                     lines.Add(item);
@@ -38,9 +42,6 @@ namespace SH_OBD {
             }
 
             lines.Sort();
-            if (param.Service == 0 && lines.Count > 1) {
-                lines.RemoveAt(lines.Count - 1);
-            }
             List<List<string>> groups = new List<List<string>>();
             List<string> group = new List<string> { lines[0] };
             groups.Add(group);
