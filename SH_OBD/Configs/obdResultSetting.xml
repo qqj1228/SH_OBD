@@ -26,8 +26,6 @@
   <StartSN>7000</StartSN>
   <!-- 国六车型的OBD型式列表 -->
   <CN6_OBD_SUP>29,2B</CN6_OBD_SUP>
-  <!-- 空格是否作为非字母或数字来处理 -->
-  <UnmeaningSpace>false</UnmeaningSpace>
   <!-- CAL_ID含有连续n个或以上的非字母或数字即判定为不合格，n为下面设定的数字 -->
   <UnmeaningNum>5</UnmeaningNum>
 </OBDResultSetting>

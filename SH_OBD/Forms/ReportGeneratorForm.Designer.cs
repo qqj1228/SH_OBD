@@ -68,7 +68,7 @@
             this.btnOpen.Size = new System.Drawing.Size(318, 24);
             this.btnOpen.TabIndex = 3;
             this.btnOpen.Text = "打开报表(&O)";
-            this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
+            this.btnOpen.Click += new System.EventHandler(this.BtnOpen_Click);
             // 
             // groupVehicle
             // 
@@ -238,7 +238,7 @@
             this.btnGenerate.Size = new System.Drawing.Size(318, 25);
             this.btnGenerate.TabIndex = 5;
             this.btnGenerate.Text = "生成新报表(&G)";
-            this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
+            this.btnGenerate.Click += new System.EventHandler(this.BtnGenerate_Click);
             // 
             // groupPreparedFor
             // 

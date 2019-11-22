@@ -105,37 +105,34 @@ namespace SH_OBD {
         }
 
         /// <summary>
-        /// 判断字符是否为非字母或数字，bSpace表示是否把空格也作为非字母或数字处理
+        /// 判断字符是否为非字母或数字
         /// </summary>
         /// <param name="ch"></param>
-        /// <param name="bSpace"></param>
         /// <returns></returns>
-        public static bool IsUnmeaningChar(char ch, bool bSpace) {
+        public static bool IsUnmeaningChar(char ch) {
             bool bRet = false;
             if ((ch != ' ' && ch < '0') || (ch > '9' && ch < 'A') || (ch > 'Z' && ch < 'a') || ch > 'z') {
-                bRet = true;
-            }
-            if (bSpace && ch == ' ') {
                 bRet = true;
             }
             return bRet;
         }
 
         /// <summary>
-        /// 判断字符串是否含有连续多个非字母或数字，iNum为连续为非字母或数字的字符个数，bSpace表示是否把空格也作为非字母或数字处理
+        /// 判断字符串是否含有连续多个非字母或数字，iNum为连续为非字母或数字的字符个数，
         /// </summary>
         /// <param name="strValue"></param>
         /// <param name="iNum"></param>
-        /// <param name="bSpace"></param>
         /// <returns></returns>
-        public static bool IsUnmeaningString(string strValue, int iNum, bool bSpace = false) {
+        public static bool IsUnmeaningString(string strValue, int iNum) {
             bool bRet = false;
             int counter = 0;
-            if (strValue == null || strValue.Length < iNum) {
+            // 空格不作为判断乱码连续性依据，但是其本身并不算做乱码
+            string strTemp = strValue.Replace(" ", "");
+            if (strTemp == null || strTemp.Length < iNum) {
                 return bRet;
             }
-            for (int i = 0; i < strValue.Length; i++) {
-                if (IsUnmeaningChar(strValue[i], bSpace)) {
+            for (int i = 0; i < strTemp.Length; i++) {
+                if (IsUnmeaningChar(strTemp[i])) {
                     ++counter;
                 } else {
                     counter = 0;

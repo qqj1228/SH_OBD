@@ -511,7 +511,7 @@ namespace SH_OBD {
                             }
                         }
                     }
-                    if (Utility.IsUnmeaningString(CALID, m_obdInterface.OBDResultSetting.UnmeaningNum, m_obdInterface.OBDResultSetting.UnmeaningSpace)) {
+                    if (Utility.IsUnmeaningString(CALID, m_obdInterface.OBDResultSetting.UnmeaningNum)) {
                         CALIDUnmeaningResult = false;
                     }
                 }
@@ -1140,11 +1140,11 @@ namespace SH_OBD {
                         }
                     }
                 } else {
-                    string CALID = dtIn.Rows[i][26].ToString().Replace(",", "").Replace(" ", "").Replace("不适用", "");
+                    string CALID = dtIn.Rows[i][26].ToString().Replace(",", "").Replace("不适用", "");
                     if (CALID.Length > 20) {
                         CALID = CALID.Substring(0, 20);
                     }
-                    string CVN = dtIn.Rows[i][27].ToString().Replace(",", "").Replace(" ", "").Replace("不适用", "");
+                    string CVN = dtIn.Rows[i][27].ToString().Replace(",", "").Replace("不适用", "");
                     if (CVN.Length > 20) {
                         CVN = CVN.Substring(0, 20);
                     }
@@ -1488,11 +1488,11 @@ namespace SH_OBD {
                         worksheet1.Cells["D5"].Value = dt.Rows[i][27].ToString().Replace(",", "\n");
                     }
                 } else {
-                    string CALID = dt.Rows[0][26].ToString().Replace(",", "").Replace(" ", "");
+                    string CALID = dt.Rows[0][26].ToString().Replace(",", "");
                     if (CALID.Length > 20) {
                         CALID = CALID.Substring(0, 20);
                     }
-                    string CVN = dt.Rows[0][27].ToString().Replace(",", "").Replace(" ", "");
+                    string CVN = dt.Rows[0][27].ToString().Replace(",", "");
                     if (CVN.Length > 20) {
                         CVN = CVN.Substring(0, 20);
                     }
@@ -1500,11 +1500,11 @@ namespace SH_OBD {
                     worksheet1.Cells["D3"].Value = CVN;
 
                     for (int i = 1; i < dt.Rows.Count; i++) {
-                        CALID = dt.Rows[i][26].ToString().Replace(",", "").Replace(" ", "");
+                        CALID = dt.Rows[i][26].ToString().Replace(",", "");
                         if (CALID.Length > 20) {
                             CALID = CALID.Substring(0, 20);
                         }
-                        CVN = dt.Rows[i][27].ToString().Replace(",", "").Replace(" ", "");
+                        CVN = dt.Rows[i][27].ToString().Replace(",", "");
                         if (CVN.Length > 20) {
                             CVN = CVN.Substring(0, 20);
                         }

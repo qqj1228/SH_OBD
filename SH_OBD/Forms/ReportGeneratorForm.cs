@@ -26,7 +26,7 @@ namespace SH_OBD {
             }
         }
 
-        private void btnGenerate_Click(object sender, EventArgs e) {
+        private void BtnGenerate_Click(object sender, EventArgs e) {
             if (!m_obdInterface.ConnectedStatus) {
                 MessageBox.Show("必须首先与车辆进行连接，才能进行后续操作！", "出错", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             } else {
@@ -48,7 +48,7 @@ namespace SH_OBD {
                 DateTime now2 = DateTime.Now;
                 m_bReportForm.ReportPage1.GenerationDate = DateTime.Now.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss");
                 richTextStatus.Text = "";
-                //progressBar.Value = 0;
+                progressBar.Value = 0;
                 //progressBar.Maximum = 22;
                 Task.Factory.StartNew(CollectData);
             }
@@ -706,118 +706,121 @@ namespace SH_OBD {
             });
         }
 
-        private void btnOpen_Click(object sender, EventArgs e) {
+        private void BtnOpen_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog {
                 Title = "打开 OBD-II 诊断报告",
                 Filter = "报告文件 (*.obd)|*.obd",
                 FilterIndex = 0,
                 RestoreDirectory = true
             };
-            openFileDialog.ShowDialog();
-            if (openFileDialog.FileName.Length <= 0) {
-                return;
-            }
-            FileStream fileStream = File.OpenRead(openFileDialog.FileName);
-            BinaryReader binaryReader = new BinaryReader(fileStream);
-            m_bReportForm = new ReportForm();
-            m_bReportForm.ReportPage1.ShopName = binaryReader.ReadString();
-            m_bReportForm.ReportPage1.ShopAddress1 = binaryReader.ReadString();
-            m_bReportForm.ReportPage1.ShopAddress2 = binaryReader.ReadString();
-            m_bReportForm.ReportPage1.ShopTelephone = binaryReader.ReadString();
-            m_bReportForm.ReportPage1.ClientName = binaryReader.ReadString();
-            m_bReportForm.ReportPage1.ClientAddress1 = binaryReader.ReadString();
-            m_bReportForm.ReportPage1.ClientAddress2 = binaryReader.ReadString();
-            m_bReportForm.ReportPage1.ClientTelephone = binaryReader.ReadString();
-            m_bReportForm.ReportPage1.Vehicle = binaryReader.ReadString();
-            m_bReportForm.ReportPage1.GenerationDate = binaryReader.ReadString();
-            m_bReportForm.ReportPage1.MilStatus = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.TotalCodes = binaryReader.ReadInt32();
-            m_bReportForm.ReportPage1.FreezeFrameDTC = binaryReader.ReadString();
-            List<string> stringList1 = new List<string>();
-            for (uint i = 25U; i > 0U; i--) {
-                string str = binaryReader.ReadString();
-                if (str.Length > 0) {
-                    stringList1.Add(str);
+            try {
+                openFileDialog.ShowDialog();
+                if (openFileDialog.FileName.Length <= 0) {
+                    return;
                 }
-            }
-            m_bReportForm.ReportPage1.DTCList = stringList1;
-            List<string> stringList2 = new List<string>();
-            for (uint i = 25U; i > 0U; i--) {
-                string str = binaryReader.ReadString();
-                if (str.Length > 0) {
-                    stringList2.Add(str);
+                FileStream fileStream = File.OpenRead(openFileDialog.FileName);
+                BinaryReader binaryReader = new BinaryReader(fileStream);
+                m_bReportForm = new ReportForm();
+                m_bReportForm.ReportPage1.ShopName = binaryReader.ReadString();
+                m_bReportForm.ReportPage1.ShopAddress1 = binaryReader.ReadString();
+                m_bReportForm.ReportPage1.ShopAddress2 = binaryReader.ReadString();
+                m_bReportForm.ReportPage1.ShopTelephone = binaryReader.ReadString();
+                m_bReportForm.ReportPage1.ClientName = binaryReader.ReadString();
+                m_bReportForm.ReportPage1.ClientAddress1 = binaryReader.ReadString();
+                m_bReportForm.ReportPage1.ClientAddress2 = binaryReader.ReadString();
+                m_bReportForm.ReportPage1.ClientTelephone = binaryReader.ReadString();
+                m_bReportForm.ReportPage1.Vehicle = binaryReader.ReadString();
+                m_bReportForm.ReportPage1.GenerationDate = binaryReader.ReadString();
+                m_bReportForm.ReportPage1.MilStatus = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.TotalCodes = binaryReader.ReadInt32();
+                m_bReportForm.ReportPage1.FreezeFrameDTC = binaryReader.ReadString();
+                List<string> stringList1 = new List<string>();
+                for (uint i = 25U; i > 0U; i--) {
+                    string str = binaryReader.ReadString();
+                    if (str.Length > 0) {
+                        stringList1.Add(str);
+                    }
                 }
-            }
-            m_bReportForm.ReportPage1.DTCDefinitionList = stringList2;
-            List<string> stringList3 = new List<string>();
-            for (uint i = 25U; i > 0U; i--) {
-                string str = binaryReader.ReadString();
-                if (str.Length > 0) {
-                    stringList3.Add(str);
+                m_bReportForm.ReportPage1.DTCList = stringList1;
+                List<string> stringList2 = new List<string>();
+                for (uint i = 25U; i > 0U; i--) {
+                    string str = binaryReader.ReadString();
+                    if (str.Length > 0) {
+                        stringList2.Add(str);
+                    }
                 }
-            }
-            m_bReportForm.ReportPage1.PendingList = stringList3;
-            List<string> stringList4 = new List<string>();
-            for (uint i = 25U; i > 0U; i--) {
-                string str = binaryReader.ReadString();
-                if (str.Length > 0) {
-                    stringList4.Add(str);
+                m_bReportForm.ReportPage1.DTCDefinitionList = stringList2;
+                List<string> stringList3 = new List<string>();
+                for (uint i = 25U; i > 0U; i--) {
+                    string str = binaryReader.ReadString();
+                    if (str.Length > 0) {
+                        stringList3.Add(str);
+                    }
                 }
+                m_bReportForm.ReportPage1.PendingList = stringList3;
+                List<string> stringList4 = new List<string>();
+                for (uint i = 25U; i > 0U; i--) {
+                    string str = binaryReader.ReadString();
+                    if (str.Length > 0) {
+                        stringList4.Add(str);
+                    }
+                }
+                m_bReportForm.ReportPage1.PendingDefinitionList = stringList4;
+                m_bReportForm.ReportPage1.FuelSystem1Status = binaryReader.ReadString();
+                m_bReportForm.ReportPage1.FuelSystem2Status = binaryReader.ReadString();
+                m_bReportForm.ReportPage1.CalculatedLoad = binaryReader.ReadDouble();
+                m_bReportForm.ReportPage1.EngineCoolantTemp = binaryReader.ReadDouble();
+                m_bReportForm.ReportPage1.STFT1 = binaryReader.ReadDouble();
+                m_bReportForm.ReportPage1.STFT2 = binaryReader.ReadDouble();
+                m_bReportForm.ReportPage1.STFT3 = binaryReader.ReadDouble();
+                m_bReportForm.ReportPage1.STFT4 = binaryReader.ReadDouble();
+                m_bReportForm.ReportPage1.LTFT1 = binaryReader.ReadDouble();
+                m_bReportForm.ReportPage1.LTFT2 = binaryReader.ReadDouble();
+                m_bReportForm.ReportPage1.LTFT3 = binaryReader.ReadDouble();
+                m_bReportForm.ReportPage1.LTFT4 = binaryReader.ReadDouble();
+                m_bReportForm.ReportPage1.IntakePressure = binaryReader.ReadDouble();
+                m_bReportForm.ReportPage1.EngineRPM = binaryReader.ReadDouble();
+                m_bReportForm.ReportPage1.VehicleSpeed = binaryReader.ReadDouble();
+                m_bReportForm.ReportPage1.SparkAdvance = binaryReader.ReadDouble();
+                m_bReportForm.ReportPage1.ShowFuelSystemStatus = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.ShowCalculatedLoad = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.ShowEngineCoolantTemp = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.ShowSTFT13 = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.ShowSTFT24 = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.ShowLTFT13 = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.ShowLTFT24 = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.ShowIntakePressure = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.ShowEngineRPM = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.ShowVehicleSpeed = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.ShowSparkAdvance = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.MisfireMonitorSupported = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.MisfireMonitorCompleted = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.FuelSystemMonitorSupported = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.FuelSystemMonitorCompleted = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.ComprehensiveMonitorSupported = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.ComprehensiveMonitorCompleted = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.CatalystMonitorSupported = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.CatalystMonitorCompleted = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.HeatedCatalystMonitorSupported = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.HeatedCatalystMonitorCompleted = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.EvapSystemMonitorSupported = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.EvapSystemMonitorCompleted = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.SecondaryAirMonitorSupported = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.SecondaryAirMonitorCompleted = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.RefrigerantMonitorSupported = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.RefrigerantMonitorCompleted = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.OxygenSensorMonitorSupported = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.OxygenSensorMonitorCompleted = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.OxygenSensorHeaterMonitorSupported = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.OxygenSensorHeaterMonitorCompleted = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.EGRSystemMonitorSupported = binaryReader.ReadBoolean();
+                m_bReportForm.ReportPage1.EGRSystemMonitorCompleted = binaryReader.ReadBoolean();
+                binaryReader.Close();
+                fileStream.Close();
+                m_bReportForm.ShowDialog();
+            } finally {
+                openFileDialog.Dispose();
             }
-            m_bReportForm.ReportPage1.PendingDefinitionList = stringList4;
-            m_bReportForm.ReportPage1.FuelSystem1Status = binaryReader.ReadString();
-            m_bReportForm.ReportPage1.FuelSystem2Status = binaryReader.ReadString();
-            m_bReportForm.ReportPage1.CalculatedLoad = binaryReader.ReadDouble();
-            m_bReportForm.ReportPage1.EngineCoolantTemp = binaryReader.ReadDouble();
-            m_bReportForm.ReportPage1.STFT1 = binaryReader.ReadDouble();
-            m_bReportForm.ReportPage1.STFT2 = binaryReader.ReadDouble();
-            m_bReportForm.ReportPage1.STFT3 = binaryReader.ReadDouble();
-            m_bReportForm.ReportPage1.STFT4 = binaryReader.ReadDouble();
-            m_bReportForm.ReportPage1.LTFT1 = binaryReader.ReadDouble();
-            m_bReportForm.ReportPage1.LTFT2 = binaryReader.ReadDouble();
-            m_bReportForm.ReportPage1.LTFT3 = binaryReader.ReadDouble();
-            m_bReportForm.ReportPage1.LTFT4 = binaryReader.ReadDouble();
-            m_bReportForm.ReportPage1.IntakePressure = binaryReader.ReadDouble();
-            m_bReportForm.ReportPage1.EngineRPM = binaryReader.ReadDouble();
-            m_bReportForm.ReportPage1.VehicleSpeed = binaryReader.ReadDouble();
-            m_bReportForm.ReportPage1.SparkAdvance = binaryReader.ReadDouble();
-            m_bReportForm.ReportPage1.ShowFuelSystemStatus = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.ShowCalculatedLoad = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.ShowEngineCoolantTemp = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.ShowSTFT13 = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.ShowSTFT24 = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.ShowLTFT13 = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.ShowLTFT24 = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.ShowIntakePressure = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.ShowEngineRPM = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.ShowVehicleSpeed = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.ShowSparkAdvance = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.MisfireMonitorSupported = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.MisfireMonitorCompleted = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.FuelSystemMonitorSupported = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.FuelSystemMonitorCompleted = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.ComprehensiveMonitorSupported = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.ComprehensiveMonitorCompleted = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.CatalystMonitorSupported = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.CatalystMonitorCompleted = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.HeatedCatalystMonitorSupported = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.HeatedCatalystMonitorCompleted = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.EvapSystemMonitorSupported = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.EvapSystemMonitorCompleted = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.SecondaryAirMonitorSupported = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.SecondaryAirMonitorCompleted = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.RefrigerantMonitorSupported = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.RefrigerantMonitorCompleted = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.OxygenSensorMonitorSupported = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.OxygenSensorMonitorCompleted = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.OxygenSensorHeaterMonitorSupported = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.OxygenSensorHeaterMonitorCompleted = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.EGRSystemMonitorSupported = binaryReader.ReadBoolean();
-            m_bReportForm.ReportPage1.EGRSystemMonitorCompleted = binaryReader.ReadBoolean();
-            binaryReader.Close();
-            fileStream.Close();
-            m_bReportForm.ShowDialog();
-            openFileDialog.Dispose();
         }
 
         private void ReportGeneratorForm_Load(object sender, EventArgs e) {

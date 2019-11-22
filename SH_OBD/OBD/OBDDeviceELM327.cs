@@ -50,7 +50,7 @@ namespace SH_OBD {
                     }
 
                     m_CommELM.SetTimeout(5000);
-                    m_iStandard = SetStandardStatus();
+                    m_iStandard = SetStandardStatus(m_iProtocol);
                     if (m_iStandard != StandardType.Unknown) {
                         if (m_Parser == null) {
                             SetProtocol((ProtocolType)int.Parse(GetOBDResponse("ATDPN").Replace("A", "")));
@@ -66,13 +66,13 @@ namespace SH_OBD {
                     }
 
                     m_CommELM.SetTimeout(5000);
-                    int[] xattr = new int[] { 6, 7, 5, 4, 3, 9, 8, 0xA, 2, 1 };
+                    int[] xattr = new int[] { 6, 7, 0xA, 5, 9, 8, 4, 3, 2, 1 };
                     for (int idx = 0; idx < xattr.Length; idx++) {
                         if (!ConfirmAT("ATTP" + xattr[idx].ToString("X1"))) {
                             m_CommELM.Close();
                             return false;
                         }
-                        m_iStandard = SetStandardStatus();
+                        m_iStandard = SetStandardStatus((ProtocolType)xattr[idx]);
                         if (m_iStandard != StandardType.Unknown) {
                             if (m_Parser == null) {
                                 SetProtocol((ProtocolType)xattr[idx]);
@@ -126,26 +126,67 @@ namespace SH_OBD {
             return false;
         }
 
-        private StandardType SetStandardStatus() {
+        private StandardType SetStandardStatus(ProtocolType protocol) {
             bool bflag = false;
             StandardType standard = StandardType.Unknown;
-            for (int i = 3; i > 0 && !bflag; i--) {
-                if (GetOBDResponse("0100").Replace(" ", "").Contains("4100")) {
-                    bflag = true;
-                    standard = StandardType.ISO_15031;
+            switch (protocol) {
+            case ProtocolType.J1850_PWM:
+            case ProtocolType.J1850_VPW:
+            case ProtocolType.ISO9141_2:
+            case ProtocolType.ISO_14230_4_KWP_5BAUDINIT:
+            case ProtocolType.ISO_14230_4_KWP_FASTINIT:
+                for (int i = 3; i > 0 && !bflag; i--) {
+                    if (GetOBDResponse("0100").Replace(" ", "").Contains("4100")) {
+                        bflag = true;
+                        standard = StandardType.ISO_15031;
+                    }
                 }
-            }
-            for (int i = 3; i > 0 && !bflag; i--) {
-                if (GetOBDResponse("22F810").Replace(" ", "").Contains("62F810")) {
-                    bflag = bflag || true;
-                    standard = StandardType.ISO_27145;
+                break;
+            case ProtocolType.ISO_15765_4_CAN_11BIT_500KBAUD:
+            case ProtocolType.ISO_15765_4_CAN_29BIT_500KBAUD:
+            case ProtocolType.ISO_15765_4_CAN_11BIT_250KBAUD:
+            case ProtocolType.ISO_15765_4_CAN_29BIT_250KBAUD:
+                for (int i = 3; i > 0 && !bflag; i--) {
+                    if (GetOBDResponse("0100").Replace(" ", "").Contains("4100")) {
+                        bflag = true;
+                        standard = StandardType.ISO_15031;
+                    }
                 }
-            }
-            for (int i = 3; i > 0 && !bflag; i--) {
-                if (GetOBDResponse("00FECE").Replace(" ", "").Contains("FECE")) {
-                    bflag = bflag || true;
-                    standard = StandardType.SAE_J1939;
+                for (int i = 3; i > 0 && !bflag; i--) {
+                    if (GetOBDResponse("22F810").Replace(" ", "").Contains("62F810")) {
+                        bflag = bflag || true;
+                        standard = StandardType.ISO_27145;
+                    }
                 }
+                break;
+            case ProtocolType.SAE_J1939_CAN_29BIT_250KBAUD:
+                for (int i = 3; i > 0 && !bflag; i--) {
+                    if (GetOBDResponse("00FECE").Replace(" ", "").Contains("FECE")) {
+                        bflag = bflag || true;
+                        standard = StandardType.SAE_J1939;
+                    }
+                }
+                break;
+            default:
+                for (int i = 3; i > 0 && !bflag; i--) {
+                    if (GetOBDResponse("0100").Replace(" ", "").Contains("4100")) {
+                        bflag = true;
+                        standard = StandardType.ISO_15031;
+                    }
+                }
+                for (int i = 3; i > 0 && !bflag; i--) {
+                    if (GetOBDResponse("22F810").Replace(" ", "").Contains("62F810")) {
+                        bflag = bflag || true;
+                        standard = StandardType.ISO_27145;
+                    }
+                }
+                for (int i = 3; i > 0 && !bflag; i--) {
+                    if (GetOBDResponse("00FECE").Replace(" ", "").Contains("FECE")) {
+                        bflag = bflag || true;
+                        standard = StandardType.SAE_J1939;
+                    }
+                }
+                break;
             }
             return standard;
         }
