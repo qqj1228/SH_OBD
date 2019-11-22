@@ -267,7 +267,7 @@ namespace SH_OBD {
             SetDataRow(++NO, "存储DTC", dt, param);                                           // 4
             for (int i = 2; i < dt.Columns.Count; i++) {
                 string DTC = dt.Rows[dt.Rows.Count - 1][i].ToString();
-                if (m_obdInterface.OBDResultSetting.DTC03 && DTC != "--" && DTC != "不适用" && DTC.Length > 0) {
+                if (m_obdInterface.OBDResultSetting.DTC03 && DTC != "--" && DTC != "不适用" && DTC.Length > 0 && m_CN6) {
                     DTCResult = false;
                 }
             }
@@ -281,7 +281,7 @@ namespace SH_OBD {
             SetDataRow(++NO, "未决DTC", dt, param);                                           // 5
             for (int i = 2; i < dt.Columns.Count; i++) {
                 string DTC = dt.Rows[dt.Rows.Count - 1][i].ToString();
-                if (m_obdInterface.OBDResultSetting.DTC07 && DTC != "--" && DTC != "不适用" && DTC.Length > 0) {
+                if (m_obdInterface.OBDResultSetting.DTC07 && DTC != "--" && DTC != "不适用" && DTC.Length > 0 && m_CN6) {
                     DTCResult = false;
                 }
             }
@@ -295,7 +295,7 @@ namespace SH_OBD {
             SetDataRow(++NO, "永久DTC", dt, param);                                           // 6
             for (int i = 2; i < dt.Columns.Count; i++) {
                 string DTC = dt.Rows[dt.Rows.Count - 1][i].ToString();
-                if (m_obdInterface.OBDResultSetting.DTC0A && DTC != "--" && DTC != "不适用" && DTC.Length > 0) {
+                if (m_obdInterface.OBDResultSetting.DTC0A && DTC != "--" && DTC != "不适用" && DTC.Length > 0 && m_CN6) {
                     DTCResult = false;
                 }
             }
@@ -336,7 +336,7 @@ namespace SH_OBD {
                 SetReadinessDataRow(++NO, "加热氧气传感器监测", dt, valueList, 17, 8, ref errorCount); // 16
             }
             SetReadinessDataRow(++NO, "EGR/VVT系统监测", dt, valueList, 16, 8, ref errorCount);        // 15 / 17
-            if (m_obdInterface.OBDResultSetting.Readiness && errorCount > 2) {
+            if (m_obdInterface.OBDResultSetting.Readiness && errorCount > 2 && m_CN6) {
                 ReadinessResult = false;
             }
         }
@@ -533,22 +533,25 @@ namespace SH_OBD {
                 mode01 = 0xF4;
                 mode09 = 0xF8;
             }
-            int count = 0;
-            while (!GetSupportStatus(mode01, m_mode01Support)) {
-                if (++count >= 3) {
-                    OBDResult = false;
-                    errorMsg = "获取 Mode01 / DID F4 / DM5 支持状态出错！";
-                    m_obdInterface.m_log.TraceError("Get Mode01 / DID F4 / DM5 Support Status Error!");
-                    throw new Exception("获取 Mode01 支持状态出错！");
+            if (!GetSupportStatus(mode01, m_mode01Support)) {
+                OBDResult = false;
+                errorMsg = "获取 Mode01 支持状态出错！";
+                m_obdInterface.m_log.TraceError("Get Mode01 Support Status Error!");
+                if (m_obdInterface.STDType == StandardType.ISO_27145) {
+                    errorMsg = "获取 DID F4 支持状态出错！";
+                    m_obdInterface.m_log.TraceError("Get DID F4 Support Status Error!");
                 }
+                throw new Exception(errorMsg);
             }
-            while (!GetSupportStatus(mode09, m_mode09Support)) {
-                if (++count >= 3) {
-                    OBDResult = false;
-                    errorMsg = "获取 Mode09 / DID F8 / DM19 支持状态出错！";
-                    m_obdInterface.m_log.TraceError("Get Mode09 / DID F8 / DM19 Support Status Error!");
-                    throw new Exception("获取 Mode09 支持状态出错！");
+            if (!GetSupportStatus(mode09, m_mode09Support)) {
+                OBDResult = false;
+                errorMsg = "获取 Mode09 支持状态出错！";
+                m_obdInterface.m_log.TraceError("Get Mode09 Support Status Error!");
+                if (m_obdInterface.STDType == StandardType.ISO_27145) {
+                    errorMsg = "获取 DID F8 支持状态出错！";
+                    m_obdInterface.m_log.TraceError("Get DID F8 Support Status Error!");
                 }
+                throw new Exception(errorMsg);
             }
 
             SetDataTableColumns<string>(m_dtInfo, m_mode01Support);
