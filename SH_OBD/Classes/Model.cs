@@ -237,11 +237,16 @@ namespace SH_OBD {
         }
 
         public string[,] GetRecords(string strTable, Dictionary<string, string> whereDic) {
-            string strSQL = "select * from " + strTable + " where ";
-            foreach (string key in whereDic.Keys) {
-                strSQL += key + " = '" + whereDic[key] + "' and ";
+            string strSQL;
+            if (whereDic == null) {
+                strSQL = "select * from " + strTable;
+            } else {
+                strSQL = "select * from " + strTable + " where ";
+                foreach (string key in whereDic.Keys) {
+                    strSQL += key + " = '" + whereDic[key] + "' and ";
+                }
+                strSQL = strSQL.Substring(0, strSQL.Length - 5);
             }
-            strSQL = strSQL.Substring(0, strSQL.Length - 5);
             m_log.TraceInfo("==> T-SQL: " + strSQL);
             return SelectDB(strSQL);
         }

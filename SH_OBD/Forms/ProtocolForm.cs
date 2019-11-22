@@ -33,7 +33,7 @@ namespace SH_OBD {
         }
 
         private void SetDataTableRow(DataTable dt) {
-            string[,] results = m_obdTest.m_db.GetRecords("VehicleType", null);
+            string[,] results = m_obdTest.m_db.GetRecords("OBDProtocol", null);
             if (results == null) {
                 return;
             }
@@ -57,7 +57,14 @@ namespace SH_OBD {
 
         private void ProtocolForm_Load(object sender, EventArgs e) {
             this.GridContent.DataSource = m_dtContent;
-            //SetDataTableContent();
+            SetDataTableContent();
+        }
+
+        private void ProtocolForm_Resize(object sender, EventArgs e) {
+            int margin = this.grpBoxProtocol.Location.X - (this.grpBoxModel.Location.X + this.grpBoxModel.Width);
+            this.grpBoxModel.Width = (this.btnModify.Location.X - this.grpBoxModel.Location.X) / 3 - margin;
+            this.grpBoxProtocol.Location = new Point(this.grpBoxModel.Location.X + this.grpBoxModel.Width + margin, this.grpBoxModel.Location.Y);
+            this.grpBoxProtocol.Width = this.grpBoxModel.Width * 2 + margin;
         }
     }
 }

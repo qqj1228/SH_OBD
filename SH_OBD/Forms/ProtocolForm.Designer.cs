@@ -30,27 +30,34 @@
             this.btnRemove = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.GridContent = new System.Windows.Forms.DataGridView();
+            this.grpBoxModel = new System.Windows.Forms.GroupBox();
+            this.grpBoxProtocol = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.GridContent)).BeginInit();
+            this.grpBoxModel.SuspendLayout();
+            this.grpBoxProtocol.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(13, 13);
+            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBox1.Location = new System.Drawing.Point(3, 17);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 21);
+            this.textBox1.Size = new System.Drawing.Size(109, 21);
             this.textBox1.TabIndex = 0;
             // 
             // comboBox1
             // 
+            this.comboBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(120, 14);
+            this.comboBox1.Location = new System.Drawing.Point(3, 17);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 20);
+            this.comboBox1.Size = new System.Drawing.Size(325, 20);
             this.comboBox1.TabIndex = 1;
             // 
             // btnModify
             // 
-            this.btnModify.Location = new System.Drawing.Point(247, 13);
+            this.btnModify.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnModify.Location = new System.Drawing.Point(470, 28);
             this.btnModify.Name = "btnModify";
             this.btnModify.Size = new System.Drawing.Size(75, 23);
             this.btnModify.TabIndex = 2;
@@ -59,7 +66,8 @@
             // 
             // btnInsert
             // 
-            this.btnInsert.Location = new System.Drawing.Point(328, 13);
+            this.btnInsert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnInsert.Location = new System.Drawing.Point(551, 28);
             this.btnInsert.Name = "btnInsert";
             this.btnInsert.Size = new System.Drawing.Size(75, 23);
             this.btnInsert.TabIndex = 3;
@@ -68,7 +76,8 @@
             // 
             // btnRemove
             // 
-            this.btnRemove.Location = new System.Drawing.Point(409, 13);
+            this.btnRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRemove.Location = new System.Drawing.Point(632, 28);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(75, 23);
             this.btnRemove.TabIndex = 4;
@@ -77,7 +86,8 @@
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Location = new System.Drawing.Point(490, 13);
+            this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRefresh.Location = new System.Drawing.Point(713, 28);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(75, 23);
             this.btnRefresh.TabIndex = 5;
@@ -86,34 +96,64 @@
             // 
             // GridContent
             // 
+            this.GridContent.AllowUserToAddRows = false;
+            this.GridContent.AllowUserToDeleteRows = false;
             this.GridContent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.GridContent.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.GridContent.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.GridContent.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.GridContent.Location = new System.Drawing.Point(13, 41);
+            this.GridContent.Location = new System.Drawing.Point(12, 67);
             this.GridContent.Name = "GridContent";
+            this.GridContent.ReadOnly = true;
+            this.GridContent.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.GridContent.RowTemplate.Height = 23;
-            this.GridContent.Size = new System.Drawing.Size(775, 397);
+            this.GridContent.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.GridContent.Size = new System.Drawing.Size(776, 371);
             this.GridContent.TabIndex = 6;
+            // 
+            // grpBoxModel
+            // 
+            this.grpBoxModel.Controls.Add(this.textBox1);
+            this.grpBoxModel.Location = new System.Drawing.Point(12, 12);
+            this.grpBoxModel.Name = "grpBoxModel";
+            this.grpBoxModel.Size = new System.Drawing.Size(115, 49);
+            this.grpBoxModel.TabIndex = 7;
+            this.grpBoxModel.TabStop = false;
+            this.grpBoxModel.Text = "车型";
+            // 
+            // grpBoxProtocol
+            // 
+            this.grpBoxProtocol.Controls.Add(this.comboBox1);
+            this.grpBoxProtocol.Location = new System.Drawing.Point(133, 13);
+            this.grpBoxProtocol.Name = "grpBoxProtocol";
+            this.grpBoxProtocol.Size = new System.Drawing.Size(331, 48);
+            this.grpBoxProtocol.TabIndex = 8;
+            this.grpBoxProtocol.TabStop = false;
+            this.grpBoxProtocol.Text = "OBD协议";
             // 
             // ProtocolForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.grpBoxProtocol);
+            this.Controls.Add(this.grpBoxModel);
             this.Controls.Add(this.GridContent);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.btnRemove);
             this.Controls.Add(this.btnInsert);
             this.Controls.Add(this.btnModify);
-            this.Controls.Add(this.comboBox1);
-            this.Controls.Add(this.textBox1);
             this.Name = "ProtocolForm";
             this.Text = "ShowResultForm";
             this.Load += new System.EventHandler(this.ProtocolForm_Load);
+            this.Resize += new System.EventHandler(this.ProtocolForm_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.GridContent)).EndInit();
+            this.grpBoxModel.ResumeLayout(false);
+            this.grpBoxModel.PerformLayout();
+            this.grpBoxProtocol.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -126,5 +166,7 @@
         private System.Windows.Forms.Button btnRemove;
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.DataGridView GridContent;
+        private System.Windows.Forms.GroupBox grpBoxModel;
+        private System.Windows.Forms.GroupBox grpBoxProtocol;
     }
 }
