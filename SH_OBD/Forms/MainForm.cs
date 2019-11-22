@@ -13,7 +13,7 @@ namespace SH_OBD {
     public partial class MainForm : Form {
         private Dictionary<string, Form> dicSubForms;
         private OBDTestForm f_OBDTest;
-        private ShowResultForm f_ShowResult;
+        private ProtocolForm f_Protocol;
         private TestForm f_MonitorTests;
         private DTCForm f_DTC;
         private FreezeFramesForm f_FreezeFrames;
@@ -64,7 +64,7 @@ namespace SH_OBD {
             dicSubForms = new Dictionary<string, Form>();
 
             f_OBDTest = new OBDTestForm(m_obdInterface, m_obdTest);
-            f_ShowResult = new ShowResultForm();
+            f_Protocol = new ProtocolForm(m_obdTest);
             f_MonitorTests = new TestForm(m_obdInterface);
             f_DTC = new DTCForm(m_obdInterface);
             f_FreezeFrames = new FreezeFramesForm(m_obdInterface);
@@ -78,7 +78,7 @@ namespace SH_OBD {
             f_Terminal = new TerminalForm(m_obdInterface);
 
             buttonOBDTest.Text = Properties.Resources.buttonName_OBDTest;
-            buttonShowResult.Text = Properties.Resources.buttonName_ShowResult;
+            buttonProtocol.Text = Properties.Resources.buttonName_Protocol;
             buttonTests.Text = Properties.Resources.buttonName_Tests;
             buttonDTC.Text = Properties.Resources.buttonName_DTC;
             buttonFF.Text = Properties.Resources.buttonName_FreezeFrames;
@@ -92,7 +92,7 @@ namespace SH_OBD {
             buttonTerminal.Text = Properties.Resources.buttonName_Terminal;
 
             dicSubForms.Add(Properties.Resources.buttonName_OBDTest, f_OBDTest);
-            dicSubForms.Add(Properties.Resources.buttonName_ShowResult, f_ShowResult);
+            dicSubForms.Add(Properties.Resources.buttonName_Protocol, f_Protocol);
             dicSubForms.Add(Properties.Resources.buttonName_Tests, f_MonitorTests);
             dicSubForms.Add(Properties.Resources.buttonName_DTC, f_DTC);
             dicSubForms.Add(Properties.Resources.buttonName_FreezeFrames, f_FreezeFrames);

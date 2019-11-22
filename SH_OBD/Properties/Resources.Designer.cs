@@ -151,6 +151,15 @@ namespace SH_OBD.Properties {
         }
         
         /// <summary>
+        ///   查找类似 车型OBD协议 的本地化字符串。
+        /// </summary>
+        internal static string buttonName_Protocol {
+            get {
+                return ResourceManager.GetString("buttonName_Protocol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 报表 的本地化字符串。
         /// </summary>
         internal static string buttonName_Report {
@@ -183,15 +192,6 @@ namespace SH_OBD.Properties {
         internal static string buttonName_Settings {
             get {
                 return ResourceManager.GetString("buttonName_Settings", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 查看检测结果 的本地化字符串。
-        /// </summary>
-        internal static string buttonName_ShowResult {
-            get {
-                return ResourceManager.GetString("buttonName_ShowResult", resourceCulture);
             }
         }
         

@@ -145,11 +145,11 @@
     <Compile Include="Forms\PassWordForm.Designer.cs">
       <DependentUpon>PassWordForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ShowResultForm.cs">
+    <Compile Include="Forms\ProtocolForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ShowResultForm.Designer.cs">
-      <DependentUpon>ShowResultForm.cs</DependentUpon>
+    <Compile Include="Forms\ProtocolForm.Designer.cs">
+      <DependentUpon>ProtocolForm.cs</DependentUpon>
     </Compile>
     <Compile Include="OBD\OBDCommELM.cs" />
     <Compile Include="OBD\OBDDevice.cs" />
@@ -280,6 +280,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PassWordForm.resx">
       <DependentUpon>PassWordForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProtocolForm.resx">
+      <DependentUpon>ProtocolForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ReportForm.resx">
       <DependentUpon>ReportForm.cs</DependentUpon>

@@ -32,7 +32,7 @@
             this.StatusLabelDeviceType = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusLabelPort = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.buttonShowResult = new System.Windows.Forms.Button();
+            this.buttonProtocol = new System.Windows.Forms.Button();
             this.buttonOBDTest = new System.Windows.Forms.Button();
             this.buttonReport = new System.Windows.Forms.Button();
             this.buttonTerminal = new System.Windows.Forms.Button();
@@ -132,7 +132,7 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.buttonShowResult);
+            this.panel1.Controls.Add(this.buttonProtocol);
             this.panel1.Controls.Add(this.buttonOBDTest);
             this.panel1.Controls.Add(this.buttonReport);
             this.panel1.Controls.Add(this.buttonTerminal);
@@ -150,16 +150,15 @@
             this.panel1.Size = new System.Drawing.Size(120, 551);
             this.panel1.TabIndex = 1;
             // 
-            // buttonShowResult
+            // buttonProtocol
             // 
-            this.buttonShowResult.Location = new System.Drawing.Point(3, 32);
-            this.buttonShowResult.Name = "buttonShowResult";
-            this.buttonShowResult.Size = new System.Drawing.Size(110, 23);
-            this.buttonShowResult.TabIndex = 13;
-            this.buttonShowResult.Text = "buttonShowResult";
-            this.buttonShowResult.UseVisualStyleBackColor = true;
-            this.buttonShowResult.Visible = false;
-            this.buttonShowResult.Click += new System.EventHandler(this.Button_Click);
+            this.buttonProtocol.Location = new System.Drawing.Point(3, 32);
+            this.buttonProtocol.Name = "buttonProtocol";
+            this.buttonProtocol.Size = new System.Drawing.Size(110, 23);
+            this.buttonProtocol.TabIndex = 13;
+            this.buttonProtocol.Text = "buttonProtocol";
+            this.buttonProtocol.UseVisualStyleBackColor = true;
+            this.buttonProtocol.Click += new System.EventHandler(this.Button_Click);
             // 
             // buttonOBDTest
             // 
@@ -480,7 +479,7 @@
         private System.Windows.Forms.ToolStripComboBox toolStripCmbBoxECU;
         private System.Windows.Forms.Button buttonOBDTest;
         private System.Windows.Forms.ToolStripStatusLabel StatusLabelAppProtocol;
-        private System.Windows.Forms.Button buttonShowResult;
+        private System.Windows.Forms.Button buttonProtocol;
     }
 }
 
