@@ -267,7 +267,7 @@ namespace SH_OBD {
             SetDataRow(++NO, "存储DTC", dt, param);                                           // 4
             for (int i = 2; i < dt.Columns.Count; i++) {
                 string DTC = dt.Rows[dt.Rows.Count - 1][i].ToString();
-                if (m_obdInterface.OBDResultSetting.DTC03 && DTC != "--" && DTC != "不适用" && DTC.Length > 0 && m_CN6) {
+                if (m_obdInterface.OBDResultSetting.DTC03 && DTC != "--" && DTC != "不适用" && DTC.Length > 0) {
                     DTCResult = false;
                 }
             }
@@ -281,7 +281,7 @@ namespace SH_OBD {
             SetDataRow(++NO, "未决DTC", dt, param);                                           // 5
             for (int i = 2; i < dt.Columns.Count; i++) {
                 string DTC = dt.Rows[dt.Rows.Count - 1][i].ToString();
-                if (m_obdInterface.OBDResultSetting.DTC07 && DTC != "--" && DTC != "不适用" && DTC.Length > 0 && m_CN6) {
+                if (m_obdInterface.OBDResultSetting.DTC07 && DTC != "--" && DTC != "不适用" && DTC.Length > 0) {
                     DTCResult = false;
                 }
             }
@@ -336,7 +336,7 @@ namespace SH_OBD {
                 SetReadinessDataRow(++NO, "加热氧气传感器监测", dt, valueList, 17, 8, ref errorCount); // 16
             }
             SetReadinessDataRow(++NO, "EGR/VVT系统监测", dt, valueList, 16, 8, ref errorCount);        // 15 / 17
-            if (m_obdInterface.OBDResultSetting.Readiness && errorCount > 2 && m_CN6) {
+            if (m_obdInterface.OBDResultSetting.Readiness && errorCount > 2) {
                 ReadinessResult = false;
             }
         }
