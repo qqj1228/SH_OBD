@@ -53,7 +53,11 @@ namespace SH_OBD {
                     m_iStandard = SetStandardStatus(m_iProtocol);
                     if (m_iStandard != StandardType.Unknown) {
                         if (m_Parser == null) {
-                            SetProtocol((ProtocolType)int.Parse(GetOBDResponse("ATDPN").Replace("A", "")));
+                            string strDPN = GetOBDResponse("ATDPN").Replace("A", "");
+                            if (strDPN.Length == 0) {
+                                strDPN = "A";
+                            }
+                            SetProtocol((ProtocolType)Convert.ToInt32(strDPN, 16));
                         }
                     }
 

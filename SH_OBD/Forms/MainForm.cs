@@ -255,12 +255,10 @@ namespace SH_OBD {
         private void ToolStripBtnSettings_Click(object sender, EventArgs e) {
             Settings commSettings = m_obdInterface.CommSettings;
             DBandMES dbandMES = m_obdInterface.DBandMES;
-            OBDResultSetting obdResultSetting = m_obdInterface.OBDResultSetting;
             SettingsForm settingsForm = new SettingsForm(commSettings, dbandMES);
             settingsForm.ShowDialog();
             m_obdInterface.SaveCommSettings(commSettings);
             m_obdInterface.SaveDBandMES(dbandMES);
-            m_obdInterface.SaveOBDResultSetting(obdResultSetting);
             StatusLabelCommProtocol.Text = m_obdInterface.GetProtocol().ToString();
             StatusLabelDeviceType.Text = m_obdInterface.GetDevice().ToString();
             if (commSettings.AutoDetect) {
