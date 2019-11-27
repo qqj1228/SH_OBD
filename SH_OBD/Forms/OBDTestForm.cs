@@ -1,8 +1,10 @@
-﻿using System;
+﻿using OfficeOpenXml;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
@@ -14,6 +16,7 @@ namespace SH_OBD {
         private readonly OBDInterface m_obdInterface;
         private readonly OBDTest m_obdTest;
         private DateTime m_lastTime;
+        private string[] m_fileNames;
 
         public OBDTestForm(OBDInterface obd, OBDTest obdTest) {
             InitializeComponent();
@@ -76,10 +79,12 @@ namespace SH_OBD {
         }
 
         void OnNotUploadData() {
-            this.Invoke((EventHandler)delegate {
-                this.labelMESInfo.ForeColor = Color.Red;
-                this.labelMESInfo.Text = "因OBD检测不合格，故数据不上传";
-            });
+            if (!this.chkBoxShowData.Checked) {
+                this.Invoke((EventHandler)delegate {
+                    this.labelMESInfo.ForeColor = Color.Red;
+                    this.labelMESInfo.Text = "因OBD检测不合格，故数据不上传";
+                });
+            }
         }
 
         void OnSetDataTableColumnsError(object sender, SetDataTableColumnsErrorEventArgs e) {
@@ -168,7 +173,7 @@ namespace SH_OBD {
         private void TxtBoxVIN_TextChanged(object sender, EventArgs e) {
             TimeSpan ts = DateTime.Now.Subtract(m_lastTime);
             int sec = (int)ts.TotalSeconds;
-            if (this.chkBoxManualUpload.Checked) {
+            if (this.chkBoxManualUpload.Checked || this.chkBoxShowData.Checked) {
                 if (this.txtBoxVIN.Text.Length == 17) {
                     ManualUpload();
                 }
@@ -193,7 +198,7 @@ namespace SH_OBD {
             this.labelMESInfo.ForeColor = Color.Black;
             this.labelMESInfo.Text = "准备手动上传数据";
             try {
-                m_obdTest.UploadDataFromDB(this.txtBoxVIN.Text, out string errorMsg);
+                m_obdTest.UploadDataFromDB(this.txtBoxVIN.Text, out string errorMsg, this.chkBoxShowData.Checked);
 #if DEBUG
                 MessageBox.Show(errorMsg, WSHelper.GetMethodName(0));
 #endif
@@ -267,6 +272,102 @@ namespace SH_OBD {
         private void TxtBoxVIN_KeyPress(object sender, KeyPressEventArgs e) {
             e.KeyChar = Convert.ToChar(e.KeyChar.ToString().ToUpper());
         }
-    }
 
+        private void BtnImport_Click(object sender, EventArgs e) {
+            this.labelMESInfo.ForeColor = Color.Black;
+            this.labelMESInfo.Text = "Excel报表数据导入中。。。";
+            OpenFileDialog openFileDialog = new OpenFileDialog {
+                Title = "打开 Excel 报表文件",
+                Filter = "Excel 2007 及以上 (*.xlsx)|*.xlsx",
+                FilterIndex = 0,
+                RestoreDirectory = true,
+                Multiselect = true
+            };
+            try {
+                openFileDialog.ShowDialog();
+                if (openFileDialog.FileNames.Length <= 0) {
+                    return;
+                }
+                m_fileNames = openFileDialog.FileNames;
+                Task.Factory.StartNew(ImportExcel);
+            } finally {
+                openFileDialog.Dispose();
+            }
+        }
+
+        private void ImportExcel() {
+            DataTable dtImport = new DataTable("OBDData");
+            dtImport.Columns.Add("VIN");
+            dtImport.Columns.Add("ECU_ID");
+            dtImport.Columns.Add("OBD_SUP");
+            dtImport.Columns.Add("ODO");
+            dtImport.Columns.Add("CAL_ID");
+            dtImport.Columns.Add("CVN");
+            dtImport.Columns.Add("Result");
+            try {
+                if (m_fileNames == null) {
+                    this.Invoke((EventHandler)delegate {
+                        this.labelMESInfo.ForeColor = Color.Red;
+                        this.labelMESInfo.Text = "无Excel报表文件";
+                    });
+                    return;
+                }
+                foreach (string file in m_fileNames) {
+                    FileInfo fileInfo = new FileInfo(file);
+                    using (ExcelPackage package = new ExcelPackage(fileInfo, true)) {
+                        ExcelWorksheet worksheet1 = package.Workbook.Worksheets[1];
+                        DataRow dr = dtImport.NewRow();
+                        dr["VIN"] = worksheet1.Cells["B2"].Value;
+                        dr["ECU_ID"] = worksheet1.Cells["E3"].Value;
+                        dr["OBD_SUP"] = worksheet1.Cells["B9"].Value;
+                        dr["ODO"] = worksheet1.Cells["B10"].Value;
+                        string CALID;
+                        string CVN;
+                        CALID = worksheet1.Cells["B3"].Value == null ? "" : worksheet1.Cells["B3"].Value.ToString();
+                        CVN = worksheet1.Cells["D3"].Value == null ? "" : worksheet1.Cells["D3"].Value.ToString();
+                        if (worksheet1.Cells["B4"].Value != null && worksheet1.Cells["B4"].Value.ToString().Length > 0) {
+                            CALID += "," + worksheet1.Cells["B4"].Value.ToString();
+                        }
+                        if (worksheet1.Cells["D4"].Value != null && worksheet1.Cells["D4"].Value.ToString().Length > 0) {
+                            CVN += "," + worksheet1.Cells["D4"].Value.ToString();
+                        }
+                        dr["CAL_ID"] = CALID;
+                        dr["CVN"] = CVN;
+                        if (worksheet1.Cells["B12"].Value != null && worksheet1.Cells["B12"].Value.ToString().Length > 0) {
+                            dr["Result"] = worksheet1.Cells["B12"].Value.ToString().Contains("不合格") ? "0" : "1";
+                        }
+                        dtImport.Rows.Add(dr);
+
+                        if (worksheet1.Cells["E5"].Value != null) {
+                            dr = dtImport.NewRow();
+                            dr["VIN"] = worksheet1.Cells["B2"].Value;
+                            dr["ECU_ID"] = worksheet1.Cells["E5"].Value;
+                            dr["OBD_SUP"] = worksheet1.Cells["B9"].Value;
+                            dr["ODO"] = worksheet1.Cells["B10"].Value;
+                            dr["CAL_ID"] = worksheet1.Cells["B5"].Value == null ? "" : worksheet1.Cells["B5"].Value.ToString();
+                            dr["CVN"] = worksheet1.Cells["D5"].Value == null ? "" : worksheet1.Cells["D5"].Value.ToString();
+                            if (worksheet1.Cells["B12"].Value != null && worksheet1.Cells["B12"].Value.ToString().Length > 0) {
+                                dr["Result"] = worksheet1.Cells["B12"].Value.ToString().Contains("不合格") ? "0" : "1";
+                            }
+                            dtImport.Rows.Add(dr);
+                        }
+                        m_obdTest.m_db.ModifyDB(dtImport);
+                    }
+                }
+                this.Invoke((EventHandler)delegate {
+                    this.labelMESInfo.ForeColor = Color.ForestGreen;
+                    this.labelMESInfo.Text = "Excel报表数据导入完成";
+                });
+            } catch (Exception ex) {
+                m_obdInterface.m_log.TraceError("Import excel report file data error: " + ex.Message);
+                this.Invoke((EventHandler)delegate {
+                    this.labelMESInfo.ForeColor = Color.Red;
+                    this.labelMESInfo.Text = "Excel报表数据导入失败";
+                });
+                MessageBox.Show(ex.Message, "导入数据出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            } finally {
+                dtImport.Dispose();
+            }
+        }
+    }
 }

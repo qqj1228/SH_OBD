@@ -70,7 +70,7 @@ namespace SH_OBD {
                     }
 
                     m_CommELM.SetTimeout(5000);
-                    int[] xattr = new int[] { 6, 7, 0xA, 5, 9, 8, 4, 3, 2, 1 };
+                    int[] xattr = new int[] { 6, 7, 8, 9, 0xA, 5, 4, 3, 2, 1 };
                     for (int idx = 0; idx < xattr.Length; idx++) {
                         if (!ConfirmAT("ATTP" + xattr[idx].ToString("X1"))) {
                             m_CommELM.Close();
@@ -209,16 +209,22 @@ namespace SH_OBD {
                 orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
             }
             if (orl.Pending && orl.RawResponse == "PENDING") {
-                for (int i = /*5*/2; i > 0; i--) {
-                    Thread.Sleep(1000);
-                    param.OBDRequest = "3E00";
-                    orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
-                    if (!orl.ErrorDetected && orl.RawResponse != "TPPR") {
-                        break;
-                    }
+                PendingForm form = new PendingForm(param, m_Parser, m_CommELM);
+                form.ShowDialog();
+                if (form.Tag != null) {
+                    orl = (OBDResponseList)form.Tag;
                 }
+                form.Dispose();
             }
-
+            // 以下为调试代码
+            //if (param.OBDRequest == "0906") {
+            //    PendingForm form = new PendingForm(param, m_Parser, m_CommELM);
+            //    form.ShowDialog();
+            //    if (form.Tag != null) {
+            //        orl = (OBDResponseList)form.Tag;
+            //    }
+            //    form.Dispose();
+            //}
             return orl;
         }
 

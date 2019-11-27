@@ -117,6 +117,12 @@ namespace SH_OBD {
 
         void SerialDataReceived(object sender, SerialDataReceivedEventArgs e, byte[] bits) {
             if (!m_bCanOBDTest) {
+                if (Encoding.Default.GetString(bits).Trim().ToUpper().Length == 17) {
+                    this.Invoke((EventHandler)delegate {
+                        this.labelResult.ForeColor = Color.Red;
+                        this.labelResult.Text = "上一辆车还未完全结束检测过程，请稍后再试";
+                    });
+                }
                 return;
             }
             m_bCanOBDTest = false;
@@ -279,6 +285,7 @@ namespace SH_OBD {
             if (m_obdTest.CALIDCVNAllEmpty) {
                 MessageBox.Show("CALID和CVN均为空！请检查OBD线缆接头连接是否牢固。", "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            m_bCanOBDTest = true;
         }
 
         private void ResizeFont(Control control, float scale) {
@@ -343,6 +350,11 @@ namespace SH_OBD {
 
         private void TxtBoxVIN_TextChanged(object sender, EventArgs e) {
             if (!m_bCanOBDTest) {
+                if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Trim().Length == 17) {
+                    this.labelResult.ForeColor = Color.Red;
+                    this.labelResult.Text = "上一辆车还未完全结束检测过程，请稍后再试";
+                    this.txtBoxVIN.SelectAll();
+                }
                 return;
             }
             m_bCanOBDTest = false;

@@ -42,7 +42,7 @@
       <HintPath>..\packages\EPPlus.4.5.3.2\lib\net40\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
@@ -150,6 +150,12 @@
     </Compile>
     <Compile Include="Forms\ProtocolForm.Designer.cs">
       <DependentUpon>ProtocolForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PendingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PendingForm.Designer.cs">
+      <DependentUpon>PendingForm.cs</DependentUpon>
     </Compile>
     <Compile Include="OBD\OBDCommELM.cs" />
     <Compile Include="OBD\OBDDevice.cs" />
@@ -298,6 +304,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SpeedFactorCalcForm.resx">
       <DependentUpon>SpeedFactorCalcForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PendingForm.resx">
+      <DependentUpon>PendingForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TrackForm.resx">
       <DependentUpon>TrackForm.cs</DependentUpon>

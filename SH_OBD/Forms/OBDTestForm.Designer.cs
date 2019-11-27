@@ -23,8 +23,8 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.groupInfo = new System.Windows.Forms.GroupBox();
             this.GridViewInfo = new System.Windows.Forms.DataGridView();
             this.btnStartOBDTest = new System.Windows.Forms.Button();
@@ -34,6 +34,8 @@
             this.labelMESInfo = new System.Windows.Forms.Label();
             this.txtBoxVIN = new System.Windows.Forms.TextBox();
             this.chkBoxManualUpload = new System.Windows.Forms.CheckBox();
+            this.btnImport = new System.Windows.Forms.Button();
+            this.chkBoxShowData = new System.Windows.Forms.CheckBox();
             this.groupInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewInfo)).BeginInit();
             this.groupECUInfo.SuspendLayout();
@@ -56,14 +58,14 @@
             this.GridViewInfo.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.GridViewInfo.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.GridViewInfo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.GridViewInfo.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.GridViewInfo.DefaultCellStyle = dataGridViewCellStyle3;
             this.GridViewInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.GridViewInfo.Location = new System.Drawing.Point(3, 17);
             this.GridViewInfo.Name = "GridViewInfo";
@@ -100,14 +102,14 @@
             this.GridViewECUInfo.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.GridViewECUInfo.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.GridViewECUInfo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.GridViewECUInfo.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.GridViewECUInfo.DefaultCellStyle = dataGridViewCellStyle4;
             this.GridViewECUInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.GridViewECUInfo.Location = new System.Drawing.Point(3, 17);
             this.GridViewECUInfo.Name = "GridViewECUInfo";
@@ -133,7 +135,7 @@
             // 
             this.labelMESInfo.AutoSize = true;
             this.labelMESInfo.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labelMESInfo.Location = new System.Drawing.Point(487, 9);
+            this.labelMESInfo.Location = new System.Drawing.Point(476, 9);
             this.labelMESInfo.Name = "labelMESInfo";
             this.labelMESInfo.Size = new System.Drawing.Size(77, 12);
             this.labelMESInfo.TabIndex = 8;
@@ -154,18 +156,40 @@
             // chkBoxManualUpload
             // 
             this.chkBoxManualUpload.AutoSize = true;
-            this.chkBoxManualUpload.Location = new System.Drawing.Point(262, 38);
+            this.chkBoxManualUpload.Location = new System.Drawing.Point(261, 38);
             this.chkBoxManualUpload.Name = "chkBoxManualUpload";
             this.chkBoxManualUpload.Size = new System.Drawing.Size(96, 16);
             this.chkBoxManualUpload.TabIndex = 10;
             this.chkBoxManualUpload.Text = "手动上传数据";
             this.chkBoxManualUpload.UseVisualStyleBackColor = true;
             // 
+            // btnImport
+            // 
+            this.btnImport.Location = new System.Drawing.Point(478, 33);
+            this.btnImport.Name = "btnImport";
+            this.btnImport.Size = new System.Drawing.Size(120, 24);
+            this.btnImport.TabIndex = 11;
+            this.btnImport.Text = "导入Excel报表数据";
+            this.btnImport.UseVisualStyleBackColor = true;
+            this.btnImport.Click += new System.EventHandler(this.BtnImport_Click);
+            // 
+            // chkBoxShowData
+            // 
+            this.chkBoxShowData.AutoSize = true;
+            this.chkBoxShowData.Location = new System.Drawing.Point(364, 38);
+            this.chkBoxShowData.Name = "chkBoxShowData";
+            this.chkBoxShowData.Size = new System.Drawing.Size(108, 16);
+            this.chkBoxShowData.TabIndex = 12;
+            this.chkBoxShowData.Text = "仅查看已测数据";
+            this.chkBoxShowData.UseVisualStyleBackColor = true;
+            // 
             // OBDTestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.chkBoxShowData);
+            this.Controls.Add(this.btnImport);
             this.Controls.Add(this.chkBoxManualUpload);
             this.Controls.Add(this.txtBoxVIN);
             this.Controls.Add(this.labelMESInfo);
@@ -199,5 +223,7 @@
         private System.Windows.Forms.Label labelMESInfo;
         private System.Windows.Forms.TextBox txtBoxVIN;
         private System.Windows.Forms.CheckBox chkBoxManualUpload;
+        private System.Windows.Forms.Button btnImport;
+        private System.Windows.Forms.CheckBox chkBoxShowData;
     }
 }

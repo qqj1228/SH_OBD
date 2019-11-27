@@ -95,7 +95,7 @@ namespace SH_OBD {
             return colDic;
         }
 
-        public void InsertDB(string strTable, DataTable dt) {
+        public void InsertDB(DataTable dt) {
             string columns = " (";
             for (int i = 0; i < dt.Columns.Count; i++) {
                 columns += dt.Columns[i].ColumnName + ",";
@@ -108,7 +108,7 @@ namespace SH_OBD {
                     row += dt.Rows[i][j].ToString() + "','";
                 }
                 row = row.Substring(0, row.Length - 2) + ")";
-                string strSQL = "insert into " + strTable + columns + row;
+                string strSQL = "insert into " + dt.TableName + columns + row;
 
                 using (SqlConnection sqlConn = new SqlConnection(StrConn)) {
                     SqlCommand sqlCmd = new SqlCommand(strSQL, sqlConn);
@@ -126,9 +126,9 @@ namespace SH_OBD {
             }
         }
 
-        public void UpdateDB(string strTable, DataTable dt, Dictionary<string, string> whereDic) {
+        public void UpdateDB(DataTable dt, Dictionary<string, string> whereDic) {
             for (int i = 0; i < dt.Rows.Count; i++) {
-                string strSQL = "update " + strTable + " set ";
+                string strSQL = "update " + dt.TableName + " set ";
                 for (int j = 0; j < dt.Columns.Count; j++) {
                     strSQL += dt.Columns[j].ColumnName + " = '" + dt.Rows[i][j].ToString() + "', ";
                 }
@@ -251,16 +251,16 @@ namespace SH_OBD {
             return SelectDB(strSQL);
         }
 
-        public bool ModifyDB(string strTable, DataTable dt) {
+        public bool ModifyDB(DataTable dt) {
             for (int i = 0; i < dt.Rows.Count; i++) {
                 Dictionary<string, string> whereDic = new Dictionary<string, string> {
                     { "VIN", dt.Rows[i][0].ToString() },
                     { "ECU_ID", dt.Rows[i][1].ToString() }
                 };
                 string strSQL = "";
-                int count = GetRecordCount(strTable, whereDic);
+                int count = GetRecordCount(dt.TableName, whereDic);
                 if (count > 0) {
-                    strSQL = "update " + strTable + " set ";
+                    strSQL = "update " + dt.TableName + " set ";
                     for (int j = 0; j < dt.Columns.Count; j++) {
                         strSQL += dt.Columns[j].ColumnName + " = '" + dt.Rows[i][j].ToString() + "', ";
                     }
@@ -270,7 +270,7 @@ namespace SH_OBD {
                     }
                     strSQL = strSQL.Substring(0, strSQL.Length - 5);
                 } else if (count == 0) {
-                    strSQL = "insert " + strTable + " (";
+                    strSQL = "insert " + dt.TableName + " (";
                     for (int j = 0; j < dt.Columns.Count; j++) {
                         strSQL += dt.Columns[j].ColumnName + ", ";
                     }
@@ -343,6 +343,63 @@ namespace SH_OBD {
 
         public int SetSN(string strSN) {
             string strSQL = "update OBDUser set SN = '" + strSN + "' where ID = '1'";
+            return RunSQL(strSQL);
+        }
+
+        public bool AddProtocol(DataTable dt) {
+            for (int i = 0; i < dt.Rows.Count; i++) {
+                Dictionary<string, string> whereDic = new Dictionary<string, string> {
+                    { "CAR_CODE", dt.Rows[i]["CAR_CODE"].ToString() },
+                };
+                string strSQL = "";
+                int count = GetRecordCount(dt.TableName, whereDic);
+                if (count > 0) {
+                    strSQL = "update " + dt.TableName + " set ";
+                    for (int j = 0; j < dt.Columns.Count; j++) {
+                        strSQL += dt.Columns[j].ColumnName + " = '" + dt.Rows[i][j].ToString() + "', ";
+                    }
+                    strSQL += "' where ";
+                    foreach (string key in whereDic.Keys) {
+                        strSQL += key + " = '" + whereDic[key] + "' and ";
+                    }
+                    strSQL = strSQL.Substring(0, strSQL.Length - 5);
+                } else if (count == 0) {
+                    strSQL = "insert " + dt.TableName + " (";
+                    for (int j = 0; j < dt.Columns.Count; j++) {
+                        strSQL += dt.Columns[j].ColumnName + ", ";
+                    }
+                    strSQL = strSQL.Substring(0, strSQL.Length - 2) + ") values ('";
+
+                    for (int j = 0; j < dt.Columns.Count; j++) {
+                        strSQL += dt.Rows[i][j].ToString() + "', '";
+                    }
+                    strSQL = strSQL.Substring(0, strSQL.Length - 3) + ")";
+                } else if (count < 0) {
+                    return false;
+                }
+                RunSQL(strSQL);
+            }
+            return true;
+        }
+
+        public int InsertProtocol(string CAR_CODE, string Protocol) {
+            string strSQL = "insert into OBDProtocol (CAR_CODE, Protocol) values ('";
+            strSQL += CAR_CODE + "', '" + Protocol + "')";
+            m_log.TraceInfo("==> T-SQL: " + strSQL);
+            return RunSQL(strSQL);
+        }
+
+        public int UpdateProtocol(string CAR_CODE, string Protocol, string strID) {
+            string strSQL = "update OBDProtocol set CAR_CODE = '";
+            strSQL += CAR_CODE + "', Protocol = '" + Protocol + "' ";
+            strSQL += "where ID = '" + strID + "'";
+            m_log.TraceInfo("==> T-SQL: " + strSQL);
+            return RunSQL(strSQL);
+        }
+
+        public int DeleteProtocol(string strID) {
+            string strSQL = "delete from OBDProtocol where ID = '" + strID + "'";
+            m_log.TraceInfo("==> T-SQL: " + strSQL);
             return RunSQL(strSQL);
         }
     }

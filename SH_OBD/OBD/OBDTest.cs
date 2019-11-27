@@ -707,7 +707,7 @@ namespace SH_OBD {
 
             string strOBDResult = OBDResult ? "1" : "0";
 
-            DataTable dt = new DataTable();
+            DataTable dt = new DataTable("OBDData");
             SetDataTableResultColumns(ref dt);
             try {
                 SetDataTableResult(StrVIN_ECU, strOBDResult, ref dt);
@@ -717,7 +717,7 @@ namespace SH_OBD {
                 throw new Exception("生成 Result DataTable 出错");
             }
 
-            m_db.ModifyDB("OBDData", dt);
+            m_db.ModifyDB(dt);
             WriteDbDone?.Invoke();
 
             try {
@@ -1242,7 +1242,7 @@ namespace SH_OBD {
             SetDataRowECUInfoFromDB(++NO, "CVN", dtIn);               // 3
         }
 
-        public bool UploadDataFromDB(string strVIN, out string errorMsg) {
+        public bool UploadDataFromDB(string strVIN, out string errorMsg, bool bOnlyShowData) {
             errorMsg = "";
             DataTable dt = new DataTable();
             SetDataTableResultColumns(ref dt);
@@ -1258,6 +1258,12 @@ namespace SH_OBD {
             SetDataTableInfoFromDB(dt);
             SetDataTableECUInfoFromDB(dt);
             bool bRet = false;
+            if (bOnlyShowData) {
+                m_obdInterface.m_log.TraceInfo("Only show data from database");
+                NotUploadData?.Invoke();
+                dt.Dispose();
+                return bRet;
+            }
             if (!m_obdInterface.OBDResultSetting.UploadWhenever && dt.Rows[0]["Result"].ToString() != "1") {
                 m_obdInterface.m_log.TraceWarning("Won't upload data from database because OBD test result is NOK");
                 NotUploadData?.Invoke();
