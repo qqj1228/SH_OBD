@@ -251,6 +251,63 @@ namespace SH_OBD {
             return SelectDB(strSQL);
         }
 
+        public enum FilterTime : int {
+            NoFilter = 0,
+            Day = 1,
+            Week = 2,
+            Month = 3
+        }
+
+        public string[,] GetRecords(string strTable, string[] columns, Dictionary<string, string> whereDic, FilterTime time) {
+            string strSQL = "select ";
+            foreach (string col in columns) {
+                strSQL += col + ", ";
+            }
+            strSQL = strSQL.Substring(0, strSQL.Length - 2);
+            strSQL += " from " + strTable + " where ";
+            foreach (string key in whereDic.Keys) {
+                strSQL += key + " = '" + whereDic[key] + "' and ";
+            }
+            string strTimeStart = DateTime.Now.ToLocalTime().ToString("yyyyMMdd");
+            switch (time) {
+            case FilterTime.Week:
+                strTimeStart = DateTime.Now.AddDays(-6).ToLocalTime().ToString("yyyyMMdd");
+                break;
+            case FilterTime.Month:
+                strTimeStart = DateTime.Now.AddDays(-29).ToLocalTime().ToString("yyyyMMdd");
+                break;
+            }
+            string strTimeEnd = DateTime.Now.AddDays(1).ToLocalTime().ToString("yyyyMMdd");
+            strSQL += "WriteTime > '" + strTimeStart + "' and WriteTime < '" + strTimeEnd + "'";
+            m_log.TraceInfo("==> T-SQL: " + strSQL);
+            return SelectDB(strSQL);
+        }
+
+        public string[,] GetRecordsCount(string strTable, string[] columns, Dictionary<string, string> whereDic, FilterTime time) {
+            string strSQL = "select count(distinct ";
+            foreach (string col in columns) {
+                strSQL += col + ", ";
+            }
+            strSQL = strSQL.Substring(0, strSQL.Length - 2);
+            strSQL += ") from " + strTable + " where ";
+            foreach (string key in whereDic.Keys) {
+                strSQL += key + " = '" + whereDic[key] + "' and ";
+            }
+            string strTimeStart = DateTime.Now.ToLocalTime().ToString("yyyyMMdd");
+            switch (time) {
+            case FilterTime.Week:
+                strTimeStart = DateTime.Now.AddDays(-6).ToLocalTime().ToString("yyyyMMdd");
+                break;
+            case FilterTime.Month:
+                strTimeStart = DateTime.Now.AddDays(-29).ToLocalTime().ToString("yyyyMMdd");
+                break;
+            }
+            string strTimeEnd = DateTime.Now.AddDays(1).ToLocalTime().ToString("yyyyMMdd");
+            strSQL += "WriteTime > '" + strTimeStart + "' and WriteTime < '" + strTimeEnd + "'";
+            m_log.TraceInfo("==> T-SQL: " + strSQL);
+            return SelectDB(strSQL);
+        }
+
         public bool ModifyDB(DataTable dt) {
             for (int i = 0; i < dt.Rows.Count; i++) {
                 Dictionary<string, string> whereDic = new Dictionary<string, string> {

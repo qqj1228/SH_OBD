@@ -157,6 +157,12 @@
     <Compile Include="Forms\PendingForm.Designer.cs">
       <DependentUpon>PendingForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\StatisticForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\StatisticForm.Designer.cs">
+      <DependentUpon>StatisticForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="OBD\OBDCommELM.cs" />
     <Compile Include="OBD\OBDDevice.cs" />
     <Compile Include="OBD\OBDDeviceELM320.cs" />
@@ -307,6 +313,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PendingForm.resx">
       <DependentUpon>PendingForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\StatisticForm.resx">
+      <DependentUpon>StatisticForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TrackForm.resx">
       <DependentUpon>TrackForm.cs</DependentUpon>

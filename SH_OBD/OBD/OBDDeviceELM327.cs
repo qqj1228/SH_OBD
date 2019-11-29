@@ -208,7 +208,8 @@ namespace SH_OBD {
                 }
                 orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
             }
-            if (orl.Pending && orl.RawResponse == "PENDING") {
+            if (/*orl.Pending && */orl.RawResponse == "PENDING") {
+                m_log.TraceWarning("Receive only NRC78, enter PendingForm");
                 PendingForm form = new PendingForm(param, m_Parser, m_CommELM);
                 form.ShowDialog();
                 if (form.Tag != null) {

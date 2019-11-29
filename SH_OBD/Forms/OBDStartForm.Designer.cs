@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OBDStartForm));
             this.tblLayoutMain = new System.Windows.Forms.TableLayoutPanel();
             this.tblLayoutTop = new System.Windows.Forms.TableLayoutPanel();
@@ -35,10 +36,13 @@
             this.label3Space = new System.Windows.Forms.Label();
             this.labelResult = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.MenuItemStatistic = new System.Windows.Forms.ToolStripMenuItem();
             this.tblLayoutMain.SuspendLayout();
             this.tblLayoutTop.SuspendLayout();
             this.tblLayoutBottom.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tblLayoutMain
@@ -187,12 +191,27 @@
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuItemStatistic});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(173, 26);
+            // 
+            // MenuItemStatistic
+            // 
+            this.MenuItemStatistic.Name = "MenuItemStatistic";
+            this.MenuItemStatistic.Size = new System.Drawing.Size(172, 22);
+            this.MenuItemStatistic.Text = "显示统计信息...(&S)";
+            this.MenuItemStatistic.Click += new System.EventHandler(this.MenuItemStat_Click);
+            // 
             // OBDStartForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SteelBlue;
             this.ClientSize = new System.Drawing.Size(784, 561);
+            this.ContextMenuStrip = this.contextMenuStrip1;
             this.Controls.Add(this.tblLayoutMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
@@ -208,6 +227,7 @@
             this.tblLayoutBottom.ResumeLayout(false);
             this.tblLayoutBottom.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -225,5 +245,7 @@
         private System.Windows.Forms.Label labelVINError;
         private System.Windows.Forms.Label labelCALIDCVN;
         private System.Windows.Forms.Label label3Space;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemStatistic;
     }
 }

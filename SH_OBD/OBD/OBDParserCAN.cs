@@ -25,7 +25,12 @@ namespace SH_OBD {
                     continue;
                 }
                 string strNRC = IsNegativeResponse(item, headLen);
-                if (strNRC.Length == 0 && !IsTesterPresentResponse(item, headLen)) {
+                //if (strNRC.Length == 0 && !IsTesterPresentResponse(item, headLen)) {
+                //    lines.Add(item);
+                //} else if (strNRC == "78") {
+                //    responseList.Pending = true;
+                //}
+                if (strNRC.Length == 0) {
                     lines.Add(item);
                 } else if (strNRC == "78") {
                     responseList.Pending = true;
@@ -35,11 +40,11 @@ namespace SH_OBD {
                 responseList.RawResponse = "PENDING";
                 return responseList;
             }
-            if (lines.Count == 0) {
-                // 只含有TesterPresent的正响应
-                responseList.RawResponse = "TPPR";
-                return responseList;
-            }
+            //if (lines.Count == 0) {
+            //    // 只含有TesterPresent的正响应
+            //    responseList.RawResponse = "TPPR";
+            //    return responseList;
+            //}
 
             lines.Sort();
             List<List<string>> groups = new List<List<string>>();
@@ -159,7 +164,7 @@ namespace SH_OBD {
         private bool IsTesterPresentResponse(string strData, int headLen) {
             if (strData.Length > 0) {
                 string strActual = strData.Substring(headLen + 2);
-                return strActual == "7E00" || strActual == "7E80";
+                return strActual == "7E00";
             } else {
                 return false;
             }

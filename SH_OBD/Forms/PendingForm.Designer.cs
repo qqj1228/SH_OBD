@@ -64,7 +64,7 @@
             this.btnStop.UseVisualStyleBackColor = false;
             this.btnStop.Click += new System.EventHandler(this.BtnStop_Click);
             // 
-            // TimeoutForm
+            // PendingForm
             // 
             this.AcceptButton = this.btnStop;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -79,7 +79,8 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "TimeoutForm";
+            this.Name = "PendingForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "等待ECU返回数据";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TimeoutForm_FormClosing);
             this.Load += new System.EventHandler(this.TimeoutForm_Load);

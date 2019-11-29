@@ -54,17 +54,18 @@ namespace SH_OBD {
             } catch (Exception ex) {
                 m_obdInterface.m_log.TraceError("Delete WebService dll file failed: " + ex.Message);
             }
+            Task.Factory.StartNew(TestNativeDatabase);
             // 在OBDData表中新增Upload字段，用于存储上传是否成功的标志
-            m_obdTest.m_db.AddUploadField();
+            Task.Factory.StartNew(m_obdTest.m_db.AddUploadField);
+            //m_obdTest.m_db.AddUploadField();
             // 在OBDUser表中新增SN字段，用于存储检测报表编号中顺序号的特征字符串
-            m_obdTest.m_db.AddSNField();
+            Task.Factory.StartNew(m_obdTest.m_db.AddSNField);
+            //m_obdTest.m_db.AddSNField();
             // 定时上传以前上传失败的数据
             m_timer = new System.Timers.Timer(m_obdInterface.OBDResultSetting.UploadInterval * 60 * 1000);
             m_timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimeUpload);
             m_timer.AutoReset = true;
             m_timer.Enabled = true;
-
-            Task.Factory.StartNew(TestNativeDatabase);
         }
 
         private void TestNativeDatabase() {
@@ -259,6 +260,14 @@ namespace SH_OBD {
                 m_obdTest.StrVIN_IN = "";
             }
 
+            // 江铃股份操作工反应会有少量车辆漏检，故加入二次检查被测车辆是否已经检测过
+            Dictionary<string, string> whereDic = new Dictionary<string, string> { { "VIN", m_obdTest.StrVIN_ECU } };
+            int VINCount = m_obdTest.m_db.GetRecordCount("OBDData", whereDic);
+            if (VINCount == 0) {
+                m_obdInterface.m_log.TraceError("No test records of this vehicle: " + m_obdTest.StrVIN_ECU);
+                m_obdTest.OBDResult = false;
+            }
+
             this.Invoke((EventHandler)delegate {
                 if (m_obdTest.OBDResult) {
                     this.labelResult.ForeColor = Color.GreenYellow;
@@ -279,7 +288,11 @@ namespace SH_OBD {
                     }
 
                     this.labelResult.ForeColor = Color.Red;
-                    this.labelResult.Text = "被检车辆: " + m_obdTest.StrVIN_ECU + "\nOBD检测结果：不合格";
+                    if (VINCount == 0) {
+                        this.labelResult.Text = "被检车辆: " + m_obdTest.StrVIN_ECU + "\n没有本地检测记录";
+                    } else {
+                        this.labelResult.Text = "被检车辆: " + m_obdTest.StrVIN_ECU + "\nOBD检测结果：不合格";
+                    }
                 }
             });
             if (m_obdTest.CALIDCVNAllEmpty) {
@@ -374,5 +387,10 @@ namespace SH_OBD {
             this.txtBoxVIN.Focus();
         }
 
+        private void MenuItemStat_Click(object sender, EventArgs e) {
+            StatisticForm form = new StatisticForm(m_obdTest);
+            form.ShowDialog();
+            form.Dispose();
+        }
     }
 }

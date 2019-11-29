@@ -18,7 +18,6 @@ namespace SH_OBD {
         readonly OBDCommELM m_commELM;
 
         public PendingForm(OBDParameter param, OBDParser parser, OBDCommELM commELM) {
-            this.CenterToScreen();
             InitializeComponent();
             m_strInfo = @"ECU忙，正等待其返回数据
 可能会持续1分钟以上
