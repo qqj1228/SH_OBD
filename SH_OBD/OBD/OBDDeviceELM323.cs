@@ -7,7 +7,7 @@ namespace SH_OBD {
         private bool m_bConnected;
         private StandardType m_iStandard;
 
-        public OBDDeviceELM323(Logger log) : base(log) {
+        public OBDDeviceELM323(Logger log, string autoProtocolOrder) : base(log, autoProtocolOrder) {
             try {
                 m_Parser = new OBDParser_ISO9141_2();
                 m_bConnected = false;

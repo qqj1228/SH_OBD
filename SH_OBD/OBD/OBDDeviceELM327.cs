@@ -10,7 +10,7 @@ namespace SH_OBD {
         private int m_iComPortIndex;
         private bool m_bConnected;
 
-        public OBDDeviceELM327(Logger log) : base(log) {
+        public OBDDeviceELM327(Logger log, string autoProtocolOrder) : base(log, autoProtocolOrder) {
             try {
                 m_iProtocol = ProtocolType.Unknown;
                 m_iStandard = StandardType.Unknown;
@@ -69,7 +69,11 @@ namespace SH_OBD {
                         return false;
                     }
 
-                    int[] xattr = new int[] { 6, 7, 8, 9, 0xA, 5, 4, 3, 2, 1 };
+                    string[] strAttr = m_autoProtocolOrder.Split(',');
+                    int[] xattr = new int[strAttr.Length];
+                    for (int i = 0; i < strAttr.Length; i++) {
+                        int.TryParse(strAttr[i], out xattr[i]);
+                    }
                     m_CommELM.SetTimeout(5000);
                     for (int idx = 0; idx < xattr.Length; idx++) {
                         if (!ConfirmAT("ATTP" + xattr[idx].ToString("X1"))) {

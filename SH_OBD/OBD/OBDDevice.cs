@@ -9,10 +9,12 @@ namespace SH_OBD {
         protected Logger m_log;
         protected OBDParser m_Parser;
         protected OBDCommELM m_CommELM;
+        protected string m_autoProtocolOrder;
 
-        public OBDDevice(Logger log) {
+        public OBDDevice(Logger log, string autoProtocolOrder) {
             m_log = log;
             m_CommELM = new OBDCommELM(log);
+            m_autoProtocolOrder = autoProtocolOrder;
         }
 
         public string DeviceDesString() {

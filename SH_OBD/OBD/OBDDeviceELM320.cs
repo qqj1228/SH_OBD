@@ -7,7 +7,7 @@ namespace SH_OBD {
         private bool m_bConnected;
         private StandardType m_iStandard;
 
-        public OBDDeviceELM320(Logger log) : base(log) {
+        public OBDDeviceELM320(Logger log, string autoProtocolOrder) : base(log, autoProtocolOrder) {
             try {
                 m_Parser = new OBDParser_J1850_PWM();
                 m_bConnected = false;

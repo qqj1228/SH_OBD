@@ -521,23 +521,23 @@ namespace SH_OBD {
             switch (device) {
             case HardwareType.ELM327:
                 m_log.TraceInfo("Set device to ELM327");
-                m_obdDevice = new OBDDeviceELM327(m_log);
+                m_obdDevice = new OBDDeviceELM327(m_log, OBDResultSetting.AutoProtocolOrder);
                 break;
             case HardwareType.ELM320:
                 m_log.TraceInfo("Set device to ELM320");
-                m_obdDevice = new OBDDeviceELM320(m_log);
+                m_obdDevice = new OBDDeviceELM320(m_log, OBDResultSetting.AutoProtocolOrder);
                 break;
             case HardwareType.ELM322:
                 m_log.TraceInfo("Set device to ELM322");
-                m_obdDevice = new OBDDeviceELM322(m_log);
+                m_obdDevice = new OBDDeviceELM322(m_log, OBDResultSetting.AutoProtocolOrder);
                 break;
             case HardwareType.ELM323:
                 m_log.TraceInfo("Set device to ELM323");
-                m_obdDevice = new OBDDeviceELM323(m_log);
+                m_obdDevice = new OBDDeviceELM323(m_log, OBDResultSetting.AutoProtocolOrder);
                 break;
             default:
                 m_log.TraceInfo("Set device to ELM327");
-                m_obdDevice = new OBDDeviceELM327(m_log);
+                m_obdDevice = new OBDDeviceELM327(m_log, OBDResultSetting.AutoProtocolOrder);
                 break;
             }
         }

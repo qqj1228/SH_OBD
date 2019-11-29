@@ -6,7 +6,7 @@ namespace SH_OBD {
         private bool m_bConnected;
         private StandardType m_iStandard;
 
-        public OBDDeviceELM322(Logger log) : base(log) {
+        public OBDDeviceELM322(Logger log, string autoProtocolOrder) : base(log, autoProtocolOrder) {
             try {
                 m_Parser = new OBDParser_J1850_VPW();
                 m_bConnected = false;

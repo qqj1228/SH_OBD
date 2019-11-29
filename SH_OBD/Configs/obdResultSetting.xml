@@ -28,4 +28,17 @@
   <CN6_OBD_SUP>29,2B</CN6_OBD_SUP>
   <!-- CAL_ID含有连续n个或以上的非字母或数字即判定为不合格，n为下面设定的数字 -->
   <UnmeaningNum>5</UnmeaningNum>
+  <!-- 自定义自动连接OBD协议和顺序，数字代表协议号，多个数字之间使用“,”分隔，协议号如下：
+        1 - SAE J1850 PWM 41.6k波特率
+        2 - SAE J1850 VPW 10.4k波特率
+        3 - ISO 9141-2 5波特率初始化
+        4 - ISO 14230-4 KWP 5波特率初始化
+        5 - ISO 14230-4 KWP 快速初始化
+        6 - ISO 15765-4 CAN 11位ID 500k波特率
+        7 - ISO 15765-4 CAN 29位ID 500k波特率
+        8 - ISO 15765-4 CAN 11位ID 250k波特率
+        9 - ISO 15765-4 CAN 29位ID 250k波特率
+        10 - SAE J1939 CAN 29位ID 250k波特率
+  <AutoProtocolOrder>6,7,8,9,10</AutoProtocolOrder>
+  -->
 </OBDResultSetting>
