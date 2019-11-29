@@ -247,25 +247,28 @@ namespace SH_OBD {
                 });
                 return;
             }
+
             string errorMsg = "";
+            int VINCount = 0;
             try {
                 m_obdTest.StartOBDTest(out errorMsg);
 #if DEBUG
                 MessageBox.Show(errorMsg, WSHelper.GetMethodName(0));
 #endif
+
+                // 江铃股份操作工反应会有少量车辆漏检，故加入二次检查被测车辆是否已经检测过
+                Dictionary<string, string> whereDic = new Dictionary<string, string> { { "VIN", m_obdTest.StrVIN_ECU } };
+                VINCount = m_obdTest.m_db.GetRecordCount("OBDData", whereDic);
+                if (VINCount == 0) {
+                    m_obdInterface.m_log.TraceError("No test records of this vehicle: " + m_obdTest.StrVIN_ECU);
+                    m_obdTest.OBDResult = false;
+                }
             } catch (Exception ex) {
+                if (m_obdTest.StrVIN_ECU == null || m_obdTest.StrVIN_ECU.Length == 0) {
+                    m_obdTest.StrVIN_ECU = m_obdTest.StrVIN_IN;
+                }
                 m_obdInterface.m_log.TraceError("OBD test occurred error: " + errorMsg + ", " + ex.Message);
                 MessageBox.Show(errorMsg + "\n" + ex.Message, "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            } finally {
-                m_obdTest.StrVIN_IN = "";
-            }
-
-            // 江铃股份操作工反应会有少量车辆漏检，故加入二次检查被测车辆是否已经检测过
-            Dictionary<string, string> whereDic = new Dictionary<string, string> { { "VIN", m_obdTest.StrVIN_ECU } };
-            int VINCount = m_obdTest.m_db.GetRecordCount("OBDData", whereDic);
-            if (VINCount == 0) {
-                m_obdInterface.m_log.TraceError("No test records of this vehicle: " + m_obdTest.StrVIN_ECU);
-                m_obdTest.OBDResult = false;
             }
 
             this.Invoke((EventHandler)delegate {
@@ -298,6 +301,8 @@ namespace SH_OBD {
             if (m_obdTest.CALIDCVNAllEmpty) {
                 MessageBox.Show("CALID和CVN均为空！请检查OBD线缆接头连接是否牢固。", "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            m_obdTest.StrVIN_IN = "";
+            m_obdTest.StrVIN_ECU = "";
             m_bCanOBDTest = true;
         }
 

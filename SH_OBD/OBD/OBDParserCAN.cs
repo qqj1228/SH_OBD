@@ -20,8 +20,10 @@ namespace SH_OBD {
             List<string> tempLines = SplitByCR(response);
             List<string> lines = new List<string>();
             foreach (string item in tempLines) {
-                if (param.Service == 0 && item.Length < headLen) {
-                    // 过滤J1939多帧消息的第一条，因为盗版的ELM327不会返回第一条的整个数据只会返回有效字节数
+                if (item.Length > 0 && item.Length < headLen) {
+                    // 需要过滤数据帧总长小于帧头长度的数据，这种数据帧有两种可能：
+                    // 1、J1939多帧消息的第一条，因为目前使用的盗版ELM327不会返回第一条的整个数据只会返回有效字节数
+                    // 2、其他协议中错误的CAN或K线消息
                     continue;
                 }
                 string strNRC = IsNegativeResponse(item, headLen);

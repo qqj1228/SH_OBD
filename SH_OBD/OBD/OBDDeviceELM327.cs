@@ -69,8 +69,8 @@ namespace SH_OBD {
                         return false;
                     }
 
-                    m_CommELM.SetTimeout(5000);
                     int[] xattr = new int[] { 6, 7, 8, 9, 0xA, 5, 4, 3, 2, 1 };
+                    m_CommELM.SetTimeout(5000);
                     for (int idx = 0; idx < xattr.Length; idx++) {
                         if (!ConfirmAT("ATTP" + xattr[idx].ToString("X1"))) {
                             m_CommELM.Close();
