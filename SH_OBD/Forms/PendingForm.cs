@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace SH_OBD {
     public partial class PendingForm : Form {
-        private System.Timers.Timer m_timer;
+        private readonly System.Windows.Forms.Timer m_timer;
         private readonly string m_strInfo;
         private int m_second;
         private bool m_stop;
@@ -19,32 +19,26 @@ namespace SH_OBD {
 
         public PendingForm(OBDParameter param, OBDParser parser, OBDCommELM commELM) {
             InitializeComponent();
-            m_strInfo = @"ECU忙，正等待其返回数据
-可能会持续1分钟以上
-点击“中断OBD检测”按钮或关闭本窗口
-可以中断当前车辆检测进程";
+            m_strInfo = "ECU忙，正等待其返回数据\r\n可能会持续1分钟以上\r\n点击“中断OBD检测”按钮或关闭本窗口\r\n可以中断当前车辆检测进程";
             m_param = param;
             m_parser = parser;
             m_commELM = commELM;
-            m_timer = new System.Timers.Timer(1000);
+            m_timer = new Timer();
+            m_timer.Tick += new EventHandler(OnTimerTick);
+            m_timer.Interval = 1000;
         }
 
-        private void OnTimeout(object source, System.Timers.ElapsedEventArgs e) {
+        private void OnTimerTick(object sender, EventArgs e) {
             if (m_stop) {
                 m_timer.Enabled = false;
+                return;
             }
             ++m_second;
-            this.Invoke((EventHandler)delegate {
-                if (this.progressBar1 != null) {
-                    if (this.progressBar1.Value >= this.progressBar1.Maximum) {
-                        this.progressBar1.Value = 0;
-                    }
-                    this.progressBar1.PerformStep();
-                }
-                if (this.txtBoxInfo != null) {
-                    this.txtBoxInfo.Text = m_strInfo + Environment.NewLine + "已等待: " + m_second.ToString() + "秒";
-                }
-            });
+            if (this.progressBar1.Value >= this.progressBar1.Maximum) {
+                this.progressBar1.Value = 0;
+            }
+            this.progressBar1.PerformStep();
+            this.txtBoxInfo.Text = m_strInfo + "\r\n已等待: " + m_second.ToString() + "秒";
             OBDResponseList orl = null;
             if (m_second % 5 == 0) {
                 if (m_commELM.Online) {
@@ -53,9 +47,7 @@ namespace SH_OBD {
                         m_timer.Enabled = false;
                         m_stop = true;
                         this.Tag = orl;
-                        this.Invoke((EventHandler)delegate {
-                            this.Close();
-                        });
+                        this.Close();
                     }
                 }
             }
@@ -63,13 +55,12 @@ namespace SH_OBD {
                 m_timer.Enabled = false;
                 m_stop = true;
                 this.Tag = orl;
-                this.Invoke((EventHandler)delegate {
-                    this.Close();
-                });
+                this.Close();
             }
         }
 
-        private void TimeoutForm_FormClosing(object sender, FormClosingEventArgs e) {
+        private void PendingForm_FormClosing(object sender, FormClosingEventArgs e) {
+            m_stop = true;
             if (m_timer != null) {
                 m_timer.Enabled = false;
                 m_timer.Dispose();
@@ -81,12 +72,10 @@ namespace SH_OBD {
             this.Close();
         }
 
-        private void TimeoutForm_Load(object sender, EventArgs e) {
-            m_timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimeout);
-            m_timer.AutoReset = true;
+        private void PendingForm_Load(object sender, EventArgs e) {
             m_timer.Enabled = true;
             m_second = 0;
-            this.txtBoxInfo.Text = m_strInfo + Environment.NewLine + "已等待: " + m_second.ToString() + "秒";
+            this.txtBoxInfo.Text = m_strInfo + "\r\n已等待: " + m_second.ToString() + "秒";
         }
     }
 }

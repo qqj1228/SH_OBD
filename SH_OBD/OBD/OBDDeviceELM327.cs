@@ -208,24 +208,24 @@ namespace SH_OBD {
                 }
                 orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
             }
-            if (/*orl.Pending && */orl.RawResponse == "PENDING") {
-                m_log.TraceWarning("Receive only NRC78, enter PendingForm");
-                PendingForm form = new PendingForm(param, m_Parser, m_CommELM);
-                form.ShowDialog();
-                if (form.Tag != null) {
-                    orl = (OBDResponseList)form.Tag;
+            if (orl.RawResponse == "PENDING") {
+                m_log.TraceWarning("Receive only NRC78, open PendingForm");
+                PendingForm form = null;
+                try {
+                    form = new PendingForm(param, m_Parser, m_CommELM);
+                    form.ShowDialog();
+                    if (form.Tag != null) {
+                        orl = (OBDResponseList)form.Tag;
+                        m_log.TraceInfo("Get OBDResponseList from PendingForm, RawResponse: " + orl.RawResponse);
+                    }
+                } catch (Exception ex) {
+                    m_log.TraceError("PendingForm error: " + ex.Message);
+                } finally {
+                    if (form != null) {
+                        form.Dispose();
+                    }
                 }
-                form.Dispose();
             }
-            // 以下为调试代码
-            //if (param.OBDRequest == "0906") {
-            //    PendingForm form = new PendingForm(param, m_Parser, m_CommELM);
-            //    form.ShowDialog();
-            //    if (form.Tag != null) {
-            //        orl = (OBDResponseList)form.Tag;
-            //    }
-            //    form.Dispose();
-            //}
             return orl;
         }
 

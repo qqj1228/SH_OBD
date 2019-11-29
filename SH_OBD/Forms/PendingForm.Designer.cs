@@ -82,8 +82,8 @@
             this.Name = "PendingForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "等待ECU返回数据";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TimeoutForm_FormClosing);
-            this.Load += new System.EventHandler(this.TimeoutForm_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PendingForm_FormClosing);
+            this.Load += new System.EventHandler(this.PendingForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
