@@ -10,14 +10,10 @@ namespace SH_OBD {
         private int m_iComPortIndex;
         private bool m_bConnected;
 
-        public OBDDeviceELM327(Logger log, string autoProtocolOrder) : base(log, autoProtocolOrder) {
-            try {
-                m_iProtocol = ProtocolType.Unknown;
-                m_iStandard = StandardType.Unknown;
-                m_bConnected = false;
-            } catch (Exception) {
-                throw;
-            }
+        public OBDDeviceELM327(Logger log, int[] xattr) : base(log, xattr) {
+            m_iProtocol = ProtocolType.Unknown;
+            m_iStandard = StandardType.Unknown;
+            m_bConnected = false;
         }
 
         public override bool Initialize(int iPort, int iBaud, ProtocolType iProtocol) {
@@ -69,21 +65,16 @@ namespace SH_OBD {
                         return false;
                     }
 
-                    string[] strAttr = m_autoProtocolOrder.Split(',');
-                    int[] xattr = new int[strAttr.Length];
-                    for (int i = 0; i < strAttr.Length; i++) {
-                        int.TryParse(strAttr[i], out xattr[i]);
-                    }
                     m_CommELM.SetTimeout(5000);
-                    for (int idx = 0; idx < xattr.Length; idx++) {
-                        if (!ConfirmAT("ATTP" + xattr[idx].ToString("X1"))) {
+                    for (int idx = 0; idx < m_xattr.Length; idx++) {
+                        if (!ConfirmAT("ATTP" + m_xattr[idx].ToString("X1"))) {
                             m_CommELM.Close();
                             return false;
                         }
-                        m_iStandard = SetStandardStatus((ProtocolType)xattr[idx]);
+                        m_iStandard = SetStandardStatus((ProtocolType)m_xattr[idx]);
                         if (m_iStandard != StandardType.Unknown) {
                             if (m_Parser == null) {
-                                SetProtocol((ProtocolType)xattr[idx]);
+                                SetProtocol((ProtocolType)m_xattr[idx]);
                             }
                             SetBaudRateIndex(iBaud);
                             m_iComPortIndex = iPort;

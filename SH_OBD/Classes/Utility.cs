@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
+using System.Management;
 
 namespace SH_OBD {
     public static class Utility {
@@ -161,4 +162,58 @@ namespace SH_OBD {
         }
     }
 
+    public static class HardwareInfo {
+        public static string GetCPUID() {
+            try {
+                string cpuid = "";
+                ManagementClass mc = new ManagementClass("Win32_Processor");
+                ManagementObjectCollection moc = mc.GetInstances();
+                foreach (ManagementObject mo in moc) {
+                    cpuid += mo.Properties["ProcessorId"].Value.ToString();
+                }
+                moc = null;
+                mc = null;
+                return cpuid;
+            } catch (Exception) {
+                return "unknowCPU";
+            }
+        }
+
+        public static string GetMacAddress() {
+            try {
+                string mac = "";
+                ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
+                ManagementObjectCollection moc = mc.GetInstances();
+                foreach (ManagementObject mo in moc) {
+                    if ((bool)mo["IPEnabled"] == true) {
+                        mac += mo["MacAddress"].ToString();
+                        break;
+                    }
+                }
+                moc = null;
+                mc = null;
+                mac = mac.Replace(":", "");
+                return mac.Trim();
+            } catch (Exception) {
+                return "unknowMacAddr";
+            }
+        }
+
+        public static string GetDiskID() {
+            try {
+                string HDID = "";
+                ManagementClass mc = new ManagementClass("Win32_DiskDrive");
+                ManagementObjectCollection moc = mc.GetInstances();
+                foreach (ManagementObject mo in moc) {
+                    HDID += mo.Properties["Model"].Value.ToString();
+                }
+                moc = null;
+                mc = null;
+                HDID = HDID.Replace(" ", "");
+                return HDID;
+            } catch {
+                return "unknowHDID";
+            }
+        }
+    }
 }

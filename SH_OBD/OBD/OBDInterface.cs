@@ -30,6 +30,7 @@ namespace SH_OBD {
         public readonly SerialPortClass m_sp;
         public readonly Logger m_log;
         private LoadConfigResult m_configResult;
+        private int[] m_xattr;
 
         public UserPreferences UserPreferences { get; private set; }
         public Settings CommSettings { get; private set; }
@@ -53,6 +54,11 @@ namespace SH_OBD {
             CommSettings = LoadCommSettings();
             DBandMES = LoadDBandMES();
             OBDResultSetting = LoadOBDResultSetting();
+            string[] strAttr = OBDResultSetting.AutoProtocolOrder.Split(',');
+            m_xattr = new int[strAttr.Length];
+            for (int i = 0; i < strAttr.Length; i++) {
+                int.TryParse(strAttr[i], out m_xattr[i]);
+            }
             VehicleProfiles = LoadVehicleProfiles();
             if (m_configResult != LoadConfigResult.Success) {
                 if ((m_configResult & LoadConfigResult.UserPreferences) == LoadConfigResult.UserPreferences) {
@@ -521,23 +527,23 @@ namespace SH_OBD {
             switch (device) {
             case HardwareType.ELM327:
                 m_log.TraceInfo("Set device to ELM327");
-                m_obdDevice = new OBDDeviceELM327(m_log, OBDResultSetting.AutoProtocolOrder);
+                m_obdDevice = new OBDDeviceELM327(m_log, m_xattr);
                 break;
             case HardwareType.ELM320:
                 m_log.TraceInfo("Set device to ELM320");
-                m_obdDevice = new OBDDeviceELM320(m_log, OBDResultSetting.AutoProtocolOrder);
+                m_obdDevice = new OBDDeviceELM320(m_log, m_xattr);
                 break;
             case HardwareType.ELM322:
                 m_log.TraceInfo("Set device to ELM322");
-                m_obdDevice = new OBDDeviceELM322(m_log, OBDResultSetting.AutoProtocolOrder);
+                m_obdDevice = new OBDDeviceELM322(m_log, m_xattr);
                 break;
             case HardwareType.ELM323:
                 m_log.TraceInfo("Set device to ELM323");
-                m_obdDevice = new OBDDeviceELM323(m_log, OBDResultSetting.AutoProtocolOrder);
+                m_obdDevice = new OBDDeviceELM323(m_log, m_xattr);
                 break;
             default:
                 m_log.TraceInfo("Set device to ELM327");
-                m_obdDevice = new OBDDeviceELM327(m_log, OBDResultSetting.AutoProtocolOrder);
+                m_obdDevice = new OBDDeviceELM327(m_log, m_xattr);
                 break;
             }
         }
