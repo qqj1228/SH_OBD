@@ -16,6 +16,7 @@ namespace SH_OBD {
         private int m_allQty;
         private int m_passedQty;
         private int m_uploadedQty;
+        private int m_pageSize;
 
         public StatisticForm(OBDTest obdTest) {
             InitializeComponent();
@@ -29,6 +30,7 @@ namespace SH_OBD {
             m_allQty = 0;
             m_passedQty = 0;
             m_uploadedQty = 0;
+            m_pageSize = 500;
         }
 
         private void SetGridViewColumnsSortMode(DataGridView gridView, DataGridViewColumnSortMode sortMode) {
@@ -64,7 +66,9 @@ namespace SH_OBD {
             } else if (this.radioBtnMonth.Checked) {
                 time = Model.FilterTime.Month;
             }
-            string[,] results = m_obdTest.m_db.GetRecords("OBDData", columns, whereDic, time);
+            this.UpDownPage.Maximum = (m_allQty / m_pageSize) + (m_allQty % m_pageSize > 0 ? 1 : 0);
+            this.lblAllPage.Text = "页 / 共 " + this.UpDownPage.Maximum.ToString() + " 页";
+            string[,] results = m_obdTest.m_db.GetRecords("OBDData", columns, whereDic, time, decimal.ToInt32(this.UpDownPage.Value), m_pageSize);
             if (results == null) {
                 return;
             }
@@ -140,7 +144,7 @@ namespace SH_OBD {
             this.lblUploadedQty.Text = m_uploadedQty.ToString();
             this.lblUploadedRate.Text = "0%";
             //Task.Factory.StartNew(SetDataTableContent);
-            SetDataTableContent();
+            //SetDataTableContent();
         }
 
         private void StatisticForm_FormClosing(object sender, FormClosingEventArgs e) {
@@ -150,8 +154,8 @@ namespace SH_OBD {
         }
 
         private void Option_Click(object sender, EventArgs e) {
-            SetDataTableContent();
             GetQty();
+            SetDataTableContent();
         }
     }
 }

@@ -258,7 +258,7 @@ namespace SH_OBD {
             Month = 3
         }
 
-        public string[,] GetRecords(string strTable, string[] columns, Dictionary<string, string> whereDic, FilterTime time) {
+        public string[,] GetRecords(string strTable, string[] columns, Dictionary<string, string> whereDic, FilterTime time, int pageNum, int pageSize) {
             string strSQL = "select ";
             foreach (string col in columns) {
                 strSQL += col + ", ";
@@ -278,7 +278,8 @@ namespace SH_OBD {
                 break;
             }
             string strTimeEnd = DateTime.Now.AddDays(1).ToLocalTime().ToString("yyyyMMdd");
-            strSQL += "WriteTime > '" + strTimeStart + "' and WriteTime < '" + strTimeEnd + "'";
+            strSQL += "WriteTime > '" + strTimeStart + "' and WriteTime < '" + strTimeEnd + "' order by ID ";
+            strSQL += "offset " + ((pageNum - 1) * pageSize).ToString() + " rows fetch next " + pageSize.ToString() + " rows only";
             m_log.TraceInfo("==> T-SQL: " + strSQL);
             return SelectDB(strSQL);
         }
