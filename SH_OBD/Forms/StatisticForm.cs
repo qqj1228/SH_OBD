@@ -16,7 +16,7 @@ namespace SH_OBD {
         private int m_allQty;
         private int m_passedQty;
         private int m_uploadedQty;
-        private int m_pageSize;
+        private readonly int m_pageSize;
 
         public StatisticForm(OBDTest obdTest) {
             InitializeComponent();
@@ -48,15 +48,20 @@ namespace SH_OBD {
         }
 
         private void SetDataTableRow(DataTable dt, string[] columns) {
-            Dictionary<string, string> whereDic = new Dictionary<string, string> {
-                {"Result", "1"},
-                {"Upload", "1"}
-            };
-            if (this.chkBoxPassed.Checked) {
-                whereDic.Remove("Result");
+            Dictionary<string, string> whereDic = new Dictionary<string, string>();
+            if (this.cmbBoxResult.SelectedIndex > 0) {
+                if (this.cmbBoxResult.SelectedIndex == 1) {
+                    whereDic.Add("Result", "1");
+                } else if (this.cmbBoxResult.SelectedIndex == 2) {
+                    whereDic.Add("Result", "0");
+                }
             }
-            if (this.chkBoxUploaded.Checked) {
-                whereDic.Remove("Upload");
+            if (this.cmbBoxUpload.SelectedIndex > 0) {
+                if (this.cmbBoxUpload.SelectedIndex == 1) {
+                    whereDic.Add("Upload", "1");
+                } else if (this.cmbBoxUpload.SelectedIndex == 2) {
+                    whereDic.Add("Upload", "0");
+                }
             }
             Model.FilterTime time = Model.FilterTime.NoFilter;
             if (this.radioBtnDay.Checked) {
@@ -66,7 +71,8 @@ namespace SH_OBD {
             } else if (this.radioBtnMonth.Checked) {
                 time = Model.FilterTime.Month;
             }
-            this.UpDownPage.Maximum = (m_allQty / m_pageSize) + (m_allQty % m_pageSize > 0 ? 1 : 0);
+            int max = (m_allQty / m_pageSize) + (m_allQty % m_pageSize > 0 ? 1 : 0);
+            this.UpDownPage.Maximum = max > 0 ? max : 1;
             this.lblAllPage.Text = "页 / 共 " + this.UpDownPage.Maximum.ToString() + " 页";
             string[,] results = m_obdTest.m_db.GetRecords("OBDData", columns, whereDic, time, decimal.ToInt32(this.UpDownPage.Value), m_pageSize);
             if (results == null) {
@@ -143,6 +149,8 @@ namespace SH_OBD {
             this.lblPassedRate.Text = "0%";
             this.lblUploadedQty.Text = m_uploadedQty.ToString();
             this.lblUploadedRate.Text = "0%";
+            this.cmbBoxResult.SelectedIndex = 1;
+            this.cmbBoxUpload.SelectedIndex = 1;
             //Task.Factory.StartNew(SetDataTableContent);
             //SetDataTableContent();
         }

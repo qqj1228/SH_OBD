@@ -38,12 +38,13 @@
             this.lblUploadedQty = new System.Windows.Forms.Label();
             this.grpBoxUploadedRate = new System.Windows.Forms.GroupBox();
             this.lblUploadedRate = new System.Windows.Forms.Label();
-            this.grpBoxFilter = new System.Windows.Forms.GroupBox();
-            this.chkBoxUploaded = new System.Windows.Forms.CheckBox();
-            this.chkBoxPassed = new System.Windows.Forms.CheckBox();
             this.lblAllPage = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.UpDownPage = new System.Windows.Forms.NumericUpDown();
+            this.cmbBoxResult = new System.Windows.Forms.ComboBox();
+            this.cmbBoxUpload = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.grpBoxTime.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GridContent)).BeginInit();
             this.grpBoxAllQty.SuspendLayout();
@@ -51,7 +52,6 @@
             this.grpBoxPassedRate.SuspendLayout();
             this.grpBoxUploadedQty.SuspendLayout();
             this.grpBoxUploadedRate.SuspendLayout();
-            this.grpBoxFilter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.UpDownPage)).BeginInit();
             this.SuspendLayout();
             // 
@@ -124,7 +124,7 @@
             // grpBoxAllQty
             // 
             this.grpBoxAllQty.Controls.Add(this.lblAllQty);
-            this.grpBoxAllQty.Location = new System.Drawing.Point(12, 185);
+            this.grpBoxAllQty.Location = new System.Drawing.Point(12, 109);
             this.grpBoxAllQty.Name = "grpBoxAllQty";
             this.grpBoxAllQty.Size = new System.Drawing.Size(100, 40);
             this.grpBoxAllQty.TabIndex = 2;
@@ -143,7 +143,7 @@
             // grpBoxPassedQty
             // 
             this.grpBoxPassedQty.Controls.Add(this.lblPassedQty);
-            this.grpBoxPassedQty.Location = new System.Drawing.Point(12, 232);
+            this.grpBoxPassedQty.Location = new System.Drawing.Point(12, 156);
             this.grpBoxPassedQty.Name = "grpBoxPassedQty";
             this.grpBoxPassedQty.Size = new System.Drawing.Size(100, 40);
             this.grpBoxPassedQty.TabIndex = 3;
@@ -162,7 +162,7 @@
             // grpBoxPassedRate
             // 
             this.grpBoxPassedRate.Controls.Add(this.lblPassedRate);
-            this.grpBoxPassedRate.Location = new System.Drawing.Point(12, 279);
+            this.grpBoxPassedRate.Location = new System.Drawing.Point(12, 203);
             this.grpBoxPassedRate.Name = "grpBoxPassedRate";
             this.grpBoxPassedRate.Size = new System.Drawing.Size(100, 40);
             this.grpBoxPassedRate.TabIndex = 4;
@@ -181,7 +181,7 @@
             // grpBoxUploadedQty
             // 
             this.grpBoxUploadedQty.Controls.Add(this.lblUploadedQty);
-            this.grpBoxUploadedQty.Location = new System.Drawing.Point(12, 326);
+            this.grpBoxUploadedQty.Location = new System.Drawing.Point(12, 250);
             this.grpBoxUploadedQty.Name = "grpBoxUploadedQty";
             this.grpBoxUploadedQty.Size = new System.Drawing.Size(100, 40);
             this.grpBoxUploadedQty.TabIndex = 5;
@@ -200,7 +200,7 @@
             // grpBoxUploadedRate
             // 
             this.grpBoxUploadedRate.Controls.Add(this.lblUploadedRate);
-            this.grpBoxUploadedRate.Location = new System.Drawing.Point(12, 373);
+            this.grpBoxUploadedRate.Location = new System.Drawing.Point(12, 297);
             this.grpBoxUploadedRate.Name = "grpBoxUploadedRate";
             this.grpBoxUploadedRate.Size = new System.Drawing.Size(100, 40);
             this.grpBoxUploadedRate.TabIndex = 6;
@@ -215,39 +215,6 @@
             this.lblUploadedRate.Size = new System.Drawing.Size(41, 12);
             this.lblUploadedRate.TabIndex = 0;
             this.lblUploadedRate.Text = "99.99%";
-            // 
-            // grpBoxFilter
-            // 
-            this.grpBoxFilter.Controls.Add(this.chkBoxUploaded);
-            this.grpBoxFilter.Controls.Add(this.chkBoxPassed);
-            this.grpBoxFilter.Location = new System.Drawing.Point(12, 109);
-            this.grpBoxFilter.Name = "grpBoxFilter";
-            this.grpBoxFilter.Size = new System.Drawing.Size(100, 70);
-            this.grpBoxFilter.TabIndex = 7;
-            this.grpBoxFilter.TabStop = false;
-            this.grpBoxFilter.Text = "显示车辆";
-            // 
-            // chkBoxUploaded
-            // 
-            this.chkBoxUploaded.AutoSize = true;
-            this.chkBoxUploaded.Location = new System.Drawing.Point(6, 44);
-            this.chkBoxUploaded.Name = "chkBoxUploaded";
-            this.chkBoxUploaded.Size = new System.Drawing.Size(72, 16);
-            this.chkBoxUploaded.TabIndex = 1;
-            this.chkBoxUploaded.Text = "上传失败";
-            this.chkBoxUploaded.UseVisualStyleBackColor = true;
-            this.chkBoxUploaded.Click += new System.EventHandler(this.Option_Click);
-            // 
-            // chkBoxPassed
-            // 
-            this.chkBoxPassed.AutoSize = true;
-            this.chkBoxPassed.Location = new System.Drawing.Point(7, 20);
-            this.chkBoxPassed.Name = "chkBoxPassed";
-            this.chkBoxPassed.Size = new System.Drawing.Size(60, 16);
-            this.chkBoxPassed.TabIndex = 0;
-            this.chkBoxPassed.Text = "不合格";
-            this.chkBoxPassed.UseVisualStyleBackColor = true;
-            this.chkBoxPassed.Click += new System.EventHandler(this.Option_Click);
             // 
             // lblAllPage
             // 
@@ -285,15 +252,64 @@
             0});
             this.UpDownPage.ValueChanged += new System.EventHandler(this.Option_Click);
             // 
+            // cmbBoxResult
+            // 
+            this.cmbBoxResult.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbBoxResult.FormattingEnabled = true;
+            this.cmbBoxResult.Items.AddRange(new object[] {
+            "均显示",
+            "显示合格",
+            "显示不合格"});
+            this.cmbBoxResult.Location = new System.Drawing.Point(353, 12);
+            this.cmbBoxResult.Name = "cmbBoxResult";
+            this.cmbBoxResult.Size = new System.Drawing.Size(90, 20);
+            this.cmbBoxResult.TabIndex = 14;
+            this.cmbBoxResult.SelectedIndexChanged += new System.EventHandler(this.Option_Click);
+            // 
+            // cmbBoxUpload
+            // 
+            this.cmbBoxUpload.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbBoxUpload.FormattingEnabled = true;
+            this.cmbBoxUpload.Items.AddRange(new object[] {
+            "均显示",
+            "显示成功",
+            "显示失败"});
+            this.cmbBoxUpload.Location = new System.Drawing.Point(492, 12);
+            this.cmbBoxUpload.Name = "cmbBoxUpload";
+            this.cmbBoxUpload.Size = new System.Drawing.Size(80, 20);
+            this.cmbBoxUpload.TabIndex = 15;
+            this.cmbBoxUpload.SelectedIndexChanged += new System.EventHandler(this.Option_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(288, 16);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(59, 12);
+            this.label2.TabIndex = 16;
+            this.label2.Text = "测试结果:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(451, 16);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(35, 12);
+            this.label3.TabIndex = 17;
+            this.label3.Text = "上传:";
+            // 
             // StatisticForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(584, 461);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.cmbBoxUpload);
+            this.Controls.Add(this.cmbBoxResult);
             this.Controls.Add(this.UpDownPage);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblAllPage);
-            this.Controls.Add(this.grpBoxFilter);
             this.Controls.Add(this.grpBoxUploadedRate);
             this.Controls.Add(this.grpBoxUploadedQty);
             this.Controls.Add(this.grpBoxPassedRate);
@@ -318,8 +334,6 @@
             this.grpBoxUploadedQty.PerformLayout();
             this.grpBoxUploadedRate.ResumeLayout(false);
             this.grpBoxUploadedRate.PerformLayout();
-            this.grpBoxFilter.ResumeLayout(false);
-            this.grpBoxFilter.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.UpDownPage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -343,11 +357,12 @@
         private System.Windows.Forms.Label lblUploadedQty;
         private System.Windows.Forms.GroupBox grpBoxUploadedRate;
         private System.Windows.Forms.Label lblUploadedRate;
-        private System.Windows.Forms.GroupBox grpBoxFilter;
-        private System.Windows.Forms.CheckBox chkBoxUploaded;
-        private System.Windows.Forms.CheckBox chkBoxPassed;
         private System.Windows.Forms.Label lblAllPage;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown UpDownPage;
+        private System.Windows.Forms.ComboBox cmbBoxResult;
+        private System.Windows.Forms.ComboBox cmbBoxUpload;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
     }
 }
