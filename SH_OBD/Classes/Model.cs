@@ -250,16 +250,16 @@ namespace SH_OBD {
             return SelectDB(strSQL);
         }
 
-        public bool ModifyDB(string strTable, DataTable dt) {
+        public bool ModifyDB(DataTable dt) {
             for (int i = 0; i < dt.Rows.Count; i++) {
                 Dictionary<string, string> whereDic = new Dictionary<string, string> {
                     { "VIN", dt.Rows[i][0].ToString() },
                     { "ECU_ID", dt.Rows[i][1].ToString() }
                 };
                 string strSQL = "";
-                int count = GetRecordCount(strTable, whereDic);
+                int count = GetRecordCount(dt.TableName, whereDic);
                 if (count > 0) {
-                    strSQL = "update " + strTable + " set ";
+                    strSQL = "update " + dt.TableName + " set ";
                     for (int j = 0; j < dt.Columns.Count; j++) {
                         strSQL += dt.Columns[j].ColumnName + " = '" + dt.Rows[i][j].ToString() + "', ";
                     }
@@ -269,7 +269,7 @@ namespace SH_OBD {
                     }
                     strSQL = strSQL.Substring(0, strSQL.Length - 5);
                 } else if (count == 0) {
-                    strSQL = "insert " + strTable + " (";
+                    strSQL = "insert " + dt.TableName + " (";
                     for (int j = 0; j < dt.Columns.Count; j++) {
                         strSQL += dt.Columns[j].ColumnName + ", ";
                     }
@@ -337,7 +337,18 @@ namespace SH_OBD {
         }
 
         public int DeleteVehicleType(string strID) {
-            string strSQL = "delete from VehicleType where ID = '" + strID + "'";
+            string strSQL;
+            if (strID == null) {
+                strSQL = "delete from VehicleType";
+            } else {
+                strSQL = "delete from VehicleType where ID = '" + strID + "'";
+            }
+            m_log.TraceInfo("==> T-SQL: " + strSQL);
+            return RunSQL(strSQL);
+        }
+
+        public int ResetTableID(string strTable, int iStart = 0) {
+            string strSQL = "DBCC CHECKIDENT('" + strTable + "', RESEED, " + iStart.ToString() + ")";
             m_log.TraceInfo("==> T-SQL: " + strSQL);
             return RunSQL(strSQL);
         }

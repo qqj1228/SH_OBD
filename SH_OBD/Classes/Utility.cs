@@ -121,4 +121,71 @@ namespace SH_OBD {
         }
     }
 
+    public static class OrderArray {
+        /// <summary>
+        /// 对二维数组排序
+        /// </summary>
+        /// <param name="values">排序的二维数组</param>
+        /// <param name="orderColumnsIndexs">排序根据的列的索引号数组</param>
+        /// <param name="desc">是否采用降序排序</param>
+        /// <returns>返回排序后的二维数组</returns>
+        public static T[,] Orderby<T>(T[,] values, int[] orderColumnsIndexs, bool desc = false) {
+            T[] temp;
+            int k;
+            int compareResult;
+            for (int i = 0; i < values.GetLength(0); i++) {
+                for (k = i + 1; k < values.GetLength(0); k++) {
+                    for (int h = 0; h < orderColumnsIndexs.Length; h++) {
+                        compareResult = Comparer<T>.Default.Compare(GetRowByID(values, k)[orderColumnsIndexs[h]], GetRowByID(values, i)[orderColumnsIndexs[h]]);
+                        if (compareResult == (desc ? 1 : -1)) {
+                            temp = GetRowByID(values, i);
+                            Array.Copy(values, k * values.GetLength(1), values, i * values.GetLength(1), values.GetLength(1));
+                            CopyToRow(values, k, temp);
+                        }
+                        if (compareResult != 0) {
+                            break;
+                        }
+                    }
+                }
+            }
+            return values;
+        }
+
+        /// <summary>
+        /// 获取二维数组中一行的数据
+        /// </summary>
+        /// <param name="values">二维数据</param>
+        /// <param name="rowID">行ID</param>
+        /// <returns>返回一行的数据</returns>
+        static T[] GetRowByID<T>(T[,] values, int rowID) {
+            if (rowID > (values.GetLength(0) - 1)) {
+                throw new Exception("rowID超出最大的行索引号!");
+            }
+
+            T[] row = new T[values.GetLength(1)];
+            for (int i = 0; i < values.GetLength(1); i++) {
+                row[i] = values[rowID, i];
+            }
+            return row;
+
+        }
+
+        /// <summary>
+        /// 复制一行数据到二维数组指定的行上
+        /// </summary>
+        /// <param name="values"></param>
+        /// <param name="rowID"></param>
+        /// <param name="row"></param>
+        static void CopyToRow<T>(T[,] values, int rowID, T[] row) {
+            if (rowID > (values.GetLength(0) - 1)) {
+                throw new Exception("rowID超出最大的行索引号!");
+            }
+            if (row.Length > (values.GetLength(1))) {
+                throw new Exception("row行数据列数超过二维数组的列数!");
+            }
+            for (int i = 0; i < row.Length; i++) {
+                values[rowID, i] = row[i];
+            }
+        }
+    }
 }

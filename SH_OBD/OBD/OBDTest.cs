@@ -582,7 +582,7 @@ namespace SH_OBD {
             }
             string strOBDResult = OBDResult ? "1" : "0";
 
-            DataTable dt = new DataTable();
+            DataTable dt = new DataTable("OBDData");
             SetDataTableResultColumns(ref dt);
             try {
                 SetDataTableResult(StrVIN_ECU, strOBDResult, ref dt);
@@ -592,7 +592,7 @@ namespace SH_OBD {
                 throw new Exception("生成 Result DataTable 出错");
             }
 
-            m_db.ModifyDB("OBDData", dt);
+            m_db.ModifyDB(dt);
             WriteDbDone?.Invoke();
 
             try {
