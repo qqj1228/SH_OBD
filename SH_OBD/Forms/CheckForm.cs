@@ -22,14 +22,16 @@ namespace SH_OBD {
         }
 
         private void CheckForm_Resize(object sender, EventArgs e) {
-            int margin = this.grpBoxECUID.Location.X - (this.grpBoxType.Location.X + this.grpBoxType.Width);
-            this.grpBoxType.Width = (this.btnModify.Location.X - this.grpBoxType.Location.X) / 4 - margin;
-            this.grpBoxECUID.Location = new Point(this.grpBoxType.Location.X + this.grpBoxType.Width + margin, this.grpBoxType.Location.Y);
-            this.grpBoxECUID.Width = this.grpBoxType.Width;
-            this.grpBoxCALID.Location = new Point(this.grpBoxECUID.Location.X + this.grpBoxECUID.Width + margin, this.grpBoxType.Location.Y);
-            this.grpBoxCALID.Width = this.grpBoxType.Width;
-            this.grpBoxCVN.Location = new Point(this.grpBoxCALID.Location.X + this.grpBoxCALID.Width + margin, this.grpBoxType.Location.Y);
-            this.grpBoxCVN.Width = this.grpBoxType.Width;
+            int margin = this.grpBoxType.Location.X - (this.grpBoxProject.Location.X + this.grpBoxProject.Width);
+            this.grpBoxProject.Width = (this.btnModify.Location.X - this.grpBoxProject.Location.X) / 5 - margin;
+            this.grpBoxType.Location = new Point(this.grpBoxProject.Location.X + this.grpBoxProject.Width + margin, this.grpBoxProject.Location.Y);
+            this.grpBoxType.Width = this.grpBoxProject.Width;
+            this.grpBoxECUID.Location = new Point(this.grpBoxType.Location.X + this.grpBoxType.Width + margin, this.grpBoxProject.Location.Y);
+            this.grpBoxECUID.Width = this.grpBoxProject.Width;
+            this.grpBoxCALID.Location = new Point(this.grpBoxECUID.Location.X + this.grpBoxECUID.Width + margin, this.grpBoxProject.Location.Y);
+            this.grpBoxCALID.Width = this.grpBoxProject.Width;
+            this.grpBoxCVN.Location = new Point(this.grpBoxCALID.Location.X + this.grpBoxCALID.Width + margin, this.grpBoxProject.Location.Y);
+            this.grpBoxCVN.Width = this.grpBoxProject.Width;
         }
 
         private void SetGridViewColumnsSortMode(DataGridView gridView, DataGridViewColumnSortMode sortMode) {
@@ -70,36 +72,36 @@ namespace SH_OBD {
         }
 
         private bool ArrangeRecords(string[,] records, int[] order) {
-            bool bRet = true;
             OrderArray.Orderby(records, order);
-            string[] row = new string[records.GetLength(1) - 1];
-            List<string[]> arranged = new List<string[]>();
+            DataTable dtArranged = new DataTable("VehicleType");
+            dtArranged.Columns.Add("Project");
+            dtArranged.Columns.Add("Type");
+            dtArranged.Columns.Add("ECU_ID");
+            dtArranged.Columns.Add("CAL_ID");
+            dtArranged.Columns.Add("CVN");
+            DataRow dr = dtArranged.NewRow();
             for (int j = 0; j < records.GetLength(1) - 1; j++) {
-                row[j] = records[0, j + 1];
+                dr[j] = records[0, j + 1];
             }
-            arranged.Add(row);
+            dtArranged.Rows.Add(dr);
             for (int i = 1; i < records.GetLength(0); i++) {
                 bool equal = true;
-                row = new string[records.GetLength(1) - 1];
+                dr = dtArranged.NewRow();
                 for (int j = 0; j < records.GetLength(1) - 1; j++) {
-                    row[j] = records[i, j + 1];
-                    equal = equal && row[j] == records[i - 1, j + 1];
+                    dr[j] = records[i, j + 1];
+                    equal = equal && dr[j].ToString() == records[i - 1, j + 1];
                 }
                 if (!equal) {
-                    arranged.Add(row);
+                    dtArranged.Rows.Add(dr);
                 }
             }
-            m_obdTest.m_db.DeleteVehicleType(null);
+            m_obdTest.m_db.DeleteDB("VehicleType", null);
             m_obdTest.m_db.ResetTableID("VehicleType");
-            int count = 0;
-            foreach (string[] item in arranged) {
-                count += m_obdTest.m_db.InsertVehicleType(item[0], item[1], item[2], item[3]);
+            bool bRet = m_obdTest.m_db.InsertDB(dtArranged);
+            if (!bRet) {
+                MessageBox.Show("整理数据出错", "出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            if (arranged.Count != count) {
-                bRet = false;
-                m_obdTest.m_db.m_log.TraceError("Arrange error, arranged and inserted count: " + count.ToString() + ", arranged count: " + arranged.Count.ToString());
-                MessageBox.Show("整理数据出错，已整理行数：" + count.ToString(), "出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            dtArranged.Dispose();
             return bRet;
         }
 
@@ -114,6 +116,7 @@ namespace SH_OBD {
                 index = this.GridContent.CurrentRow.Index;
             }
             if (index >= 0 && index < m_dtContent.Rows.Count) {
+                this.txtBoxProject.Text = m_dtContent.Rows[index]["Project"].ToString();
                 this.txtBoxType.Text = m_dtContent.Rows[index]["Type"].ToString();
                 this.txtBoxECUID.Text = m_dtContent.Rows[index]["ECU_ID"].ToString();
                 this.txtBoxCALID.Text = m_dtContent.Rows[index]["CAL_ID"].ToString();
@@ -124,31 +127,57 @@ namespace SH_OBD {
         private void BtnModify_Click(object sender, EventArgs e) {
             if (txtBoxType.Text.Length > 0 && txtBoxECUID.Text.Length > 0 && txtBoxCALID.Text.Length > 0 && txtBoxCVN.Text.Length > 0) {
                 int index = this.GridContent.CurrentRow.Index;
-                string strID = m_dtContent.Rows[index]["ID"].ToString();
-                int iResult = m_obdTest.m_db.UpdateVehicleType(txtBoxType.Text, txtBoxECUID.Text, txtBoxCALID.Text, txtBoxCVN.Text, strID);
-                if (iResult > 0) {
+                DataTable dtModify = new DataTable("VehicleType");
+                dtModify.Columns.Add("Project");
+                dtModify.Columns.Add("Type");
+                dtModify.Columns.Add("ECU_ID");
+                dtModify.Columns.Add("CAL_ID");
+                dtModify.Columns.Add("CVN");
+                DataRow dr = dtModify.NewRow();
+                dr["Project"] = txtBoxProject.Text;
+                dr["Type"] = txtBoxType.Text;
+                dr["ECU_ID"] = txtBoxECUID.Text;
+                dr["CAL_ID"] = txtBoxCALID.Text;
+                dr["CVN"] = txtBoxCVN.Text;
+                dtModify.Rows.Add(dr);
+                Dictionary<string, string> whereDic = new Dictionary<string, string> {
+                    { "ID", m_dtContent.Rows[index]["ID"].ToString() }
+                };
+                if (m_obdTest.m_db.UpdateDB(dtModify, whereDic)) {
                     SetDataTableContent();
                     this.GridContent.Rows[index].Selected = true;
                     this.GridContent.CurrentCell = this.GridContent.Rows[index].Cells[0];
                 } else {
-                    m_obdTest.m_db.m_log.TraceError("Modify error, modified count: " + iResult.ToString());
-                    MessageBox.Show("修改数据出错，修改行数：" + iResult.ToString(), "出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("修改数据出错", "出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                dtModify.Dispose();
             }
         }
 
         private void BtnInsert_Click(object sender, EventArgs e) {
             if (txtBoxType.Text.Length > 0 && txtBoxECUID.Text.Length > 0 && txtBoxCALID.Text.Length > 0 && txtBoxCVN.Text.Length > 0) {
                 int index = this.GridContent.Rows.Count;
-                int iResult = m_obdTest.m_db.InsertVehicleType(txtBoxType.Text, txtBoxECUID.Text, txtBoxCALID.Text, txtBoxCVN.Text);
-                if (iResult > 0) {
+                DataTable dtInsert = new DataTable("VehicleType");
+                dtInsert.Columns.Add("Project");
+                dtInsert.Columns.Add("Type");
+                dtInsert.Columns.Add("ECU_ID");
+                dtInsert.Columns.Add("CAL_ID");
+                dtInsert.Columns.Add("CVN");
+                DataRow dr = dtInsert.NewRow();
+                dr["Project"] = txtBoxProject.Text;
+                dr["Type"] = txtBoxType.Text;
+                dr["ECU_ID"] = txtBoxECUID.Text;
+                dr["CAL_ID"] = txtBoxCALID.Text;
+                dr["CVN"] = txtBoxCVN.Text;
+                dtInsert.Rows.Add(dr);
+                if (m_obdTest.m_db.InsertDB(dtInsert)) {
                     SetDataTableContent();
                     this.GridContent.Rows[index].Selected = true;
                     this.GridContent.CurrentCell = this.GridContent.Rows[index].Cells[0];
                 } else {
-                    m_obdTest.m_db.m_log.TraceError("Insert error, inserted count: " + iResult.ToString());
-                    MessageBox.Show("插入数据出错，插入行数：" + iResult.ToString(), "出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("插入数据出错", "出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                dtInsert.Dispose();
             }
         }
 
@@ -158,7 +187,7 @@ namespace SH_OBD {
                 int deletedCount = 0;
                 for (int i = 0; i < selectedCount; i++) {
                     if ((DataRowView)this.GridContent.SelectedRows[i].DataBoundItem is DataRowView rowView) {
-                        deletedCount += m_obdTest.m_db.DeleteVehicleType(rowView.Row["ID"].ToString());
+                        deletedCount += m_obdTest.m_db.DeleteDB("VehicleType", rowView.Row["ID"].ToString());
                     }
                 }
                 SetDataTableContent();
@@ -169,18 +198,8 @@ namespace SH_OBD {
             }
         }
 
-        private void BtnArrange_Click(object sender, EventArgs e) {
-            string[,] temp = new string[m_dtContent.Rows.Count, m_dtContent.Columns.Count];
-            for (int i = 0; i < m_dtContent.Rows.Count; i++) {
-                for (int j = 0; j < m_dtContent.Columns.Count; j++) {
-                    temp[i, j] = m_dtContent.Rows[i][j].ToString();
-                }
-            }
-            ArrangeRecords(temp, new int[] { 1, 2, 3, 4 });
-            SetDataTableContent();
-        }
-
         private void MenuItemImport_Click(object sender, EventArgs e) {
+            DataTable dtImport = new DataTable("VehicleType");
             OpenFileDialog openFileDialog = new OpenFileDialog {
                 Title = "打开 Excel 导入文件",
                 Filter = "Excel 2007 及以上 (*.xlsx)|*.xlsx",
@@ -190,6 +209,11 @@ namespace SH_OBD {
             DialogResult result = openFileDialog.ShowDialog();
             try {
                 if (result == DialogResult.OK && openFileDialog.FileName.Length > 0) {
+                    dtImport.Columns.Add("Project");
+                    dtImport.Columns.Add("Type");
+                    dtImport.Columns.Add("ECU_ID");
+                    dtImport.Columns.Add("CAL_ID");
+                    dtImport.Columns.Add("CVN");
                     FileInfo xlFile = new FileInfo(openFileDialog.FileName);
                     using (ExcelPackage package = new ExcelPackage(xlFile, true)) {
                         ExcelWorksheet worksheet1 = package.Workbook.Worksheets[1];
@@ -197,22 +221,26 @@ namespace SH_OBD {
                             if (worksheet1.Cells[i, 1].Value == null || worksheet1.Cells[i, 1].Value.ToString().Length == 0) {
                                 break;
                             }
-                            string type = worksheet1.Cells[i, 2].Value.ToString();
-                            string ECUID = worksheet1.Cells[i, 3].Value.ToString();
-                            string CALID = worksheet1.Cells[i, 4].Value.ToString();
-                            string CVN = worksheet1.Cells[i, 5].Value.ToString();
-                            m_obdTest.m_db.InsertVehicleType(type, ECUID, CALID, CVN);
+                            DataRow dr = dtImport.NewRow();
+                            dr["Project"] = worksheet1.Cells[i, 2].Value.ToString();
+                            dr["Type"] = worksheet1.Cells[i, 3].Value.ToString();
+                            dr["ECU_ID"] = worksheet1.Cells[i, 4].Value.ToString();
+                            dr["CAL_ID"] = worksheet1.Cells[i, 5].Value.ToString();
+                            dr["CVN"] = worksheet1.Cells[i, 6].Value.ToString();
+                            dtImport.Rows.Add(dr);
                         }
                     }
+                    m_obdTest.m_db.InsertDB(dtImport);
                     string[,] results = m_obdTest.m_db.GetRecords("VehicleType", null);
                     if (results != null) {
-                        ArrangeRecords(results, new int[] { 1, 2, 3, 4 });
+                        ArrangeRecords(results, new int[] { 1, 2, 3, 4, 5 });
                         SetDataTableContent();
                         MessageBox.Show("导入Excel数据完成", "导入数据");
                     }
                 }
             } finally {
                 openFileDialog.Dispose();
+                dtImport.Dispose();
             }
         }
 
@@ -276,6 +304,17 @@ namespace SH_OBD {
                 this.GridContent.Rows[index].Selected = true;
                 this.GridContent.CurrentCell = this.GridContent.Rows[index].Cells[0];
             }
+        }
+
+        private void MenuItemArrange_Click(object sender, EventArgs e) {
+            string[,] temp = new string[m_dtContent.Rows.Count, m_dtContent.Columns.Count];
+            for (int i = 0; i < m_dtContent.Rows.Count; i++) {
+                for (int j = 0; j < m_dtContent.Columns.Count; j++) {
+                    temp[i, j] = m_dtContent.Rows[i][j].ToString();
+                }
+            }
+            ArrangeRecords(temp, new int[] { 1, 2, 3, 4, 5 });
+            SetDataTableContent();
         }
     }
 }

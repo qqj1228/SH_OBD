@@ -1534,9 +1534,9 @@ namespace SH_OBD {
             string[,] Results = m_db.GetRecords("VehicleType", TypeDic);
             if (Results != null && Results.GetLength(0) > 0) {
                 for (int i = 0; i < Results.GetLength(0) && !bCALID && !bCVN; i++) {
-                    bCALID = Results[i, 3] == strCALID;
-                    bCVN = Results[i, 4] == strCVN;
-                    m_obdInterface.m_log.TraceInfo("VehicleType data from database: [Type: " + Results[i, 1] + ", ECU_ID: " + Results[i, 2] + ", CAL_ID: " + Results[i, 3] + ", CVN: " + Results[i, 4] + "]");
+                    bCALID = Results[i, 4] == strCALID;
+                    bCVN = Results[i, 5] == strCVN;
+                    m_obdInterface.m_log.TraceInfo("VehicleType data from database: [Type: " + Results[i, 2] + ", ECU_ID: " + Results[i, 3] + ", CAL_ID: " + Results[i, 4] + ", CVN: " + Results[i, 5] + "]");
                 }
             } else {
                 VehicleTypeExist = false;

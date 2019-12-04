@@ -94,27 +94,29 @@ namespace SH_OBD {
             return colDic;
         }
 
-        public void InsertDB(string strTable, DataTable dt) {
+        public bool InsertDB(DataTable dt) {
             string columns = " (";
             for (int i = 0; i < dt.Columns.Count; i++) {
                 columns += dt.Columns[i].ColumnName + ",";
             }
             columns = columns.Substring(0, columns.Length - 1) + ")";
 
+            int count = 0;
             for (int i = 0; i < dt.Rows.Count; i++) {
                 string row = " values ('";
                 for (int j = 0; j < dt.Columns.Count; j++) {
                     row += dt.Rows[i][j].ToString() + "','";
                 }
                 row = row.Substring(0, row.Length - 2) + ")";
-                string strSQL = "insert into " + strTable + columns + row;
+                string strSQL = "insert into " + dt.TableName + columns + row;
 
                 using (SqlConnection sqlConn = new SqlConnection(StrConn)) {
                     SqlCommand sqlCmd = new SqlCommand(strSQL, sqlConn);
                     try {
                         sqlConn.Open();
                         m_log.TraceInfo(string.Format("==> T-SQL: {0}", strSQL));
-                        m_log.TraceInfo(string.Format("==> Insert {0} record(s)", sqlCmd.ExecuteNonQuery()));
+                        count += sqlCmd.ExecuteNonQuery();
+                        m_log.TraceInfo(string.Format("==> Insert {0} record(s)", count));
                     } catch (Exception ex) {
                         m_log.TraceError("==> SQL ERROR: " + ex.Message);
                     } finally {
@@ -123,11 +125,13 @@ namespace SH_OBD {
                     }
                 }
             }
+            return dt.Rows.Count == count;
         }
 
-        public void UpdateDB(string strTable, DataTable dt, Dictionary<string, string> whereDic) {
+        public bool UpdateDB(DataTable dt, Dictionary<string, string> whereDic) {
+            int count = 0;
             for (int i = 0; i < dt.Rows.Count; i++) {
-                string strSQL = "update " + strTable + " set ";
+                string strSQL = "update " + dt.TableName + " set ";
                 for (int j = 0; j < dt.Columns.Count; j++) {
                     strSQL += dt.Columns[j].ColumnName + " = '" + dt.Rows[i][j].ToString() + "', ";
                 }
@@ -143,7 +147,8 @@ namespace SH_OBD {
                     try {
                         sqlConn.Open();
                         m_log.TraceInfo(string.Format("==> T-SQL: {0}", strSQL));
-                        m_log.TraceInfo(string.Format("==> Update {0} record(s)", sqlCmd.ExecuteNonQuery()));
+                        count += sqlCmd.ExecuteNonQuery();
+                        m_log.TraceInfo(string.Format("==> Update {0} record(s)", count));
                     } catch (Exception ex) {
                         m_log.TraceError("==> SQL ERROR: " + ex.Message);
                     } finally {
@@ -151,8 +156,8 @@ namespace SH_OBD {
                         sqlConn.Close();
                     }
                 }
-
             }
+            return dt.Rows.Count == count;
         }
 
         int RunSQL(string strSQL) {
@@ -321,27 +326,27 @@ namespace SH_OBD {
             }
         }
 
-        public int InsertVehicleType(string strType, string strECUID, string strCALID, string strCVN) {
-            string strSQL = "insert into VehicleType (Type, ECU_ID, CAL_ID, CVN) values ('";
-            strSQL += strType + "', '" + strECUID + "', '" + strCALID + "', '" + strCVN + "')";
-            m_log.TraceInfo("==> T-SQL: " + strSQL);
-            return RunSQL(strSQL);
-        }
+        //public int InsertVehicleType(string strType, string strECUID, string strCALID, string strCVN) {
+        //    string strSQL = "insert into VehicleType (Type, ECU_ID, CAL_ID, CVN) values ('";
+        //    strSQL += strType + "', '" + strECUID + "', '" + strCALID + "', '" + strCVN + "')";
+        //    m_log.TraceInfo("==> T-SQL: " + strSQL);
+        //    return RunSQL(strSQL);
+        //}
 
-        public int UpdateVehicleType(string strType, string strECUID, string strCALID, string strCVN, string strID) {
-            string strSQL = "update VehicleType set Type = '";
-            strSQL += strType + "', ECU_ID = '" + strECUID + "', CAL_ID = '" + strCALID + "', CVN = '" + strCVN + "' ";
-            strSQL += "where ID = '" + strID + "'";
-            m_log.TraceInfo("==> T-SQL: " + strSQL);
-            return RunSQL(strSQL);
-        }
+        //public int UpdateVehicleType(string strType, string strECUID, string strCALID, string strCVN, string strID) {
+        //    string strSQL = "update VehicleType set Type = '";
+        //    strSQL += strType + "', ECU_ID = '" + strECUID + "', CAL_ID = '" + strCALID + "', CVN = '" + strCVN + "' ";
+        //    strSQL += "where ID = '" + strID + "'";
+        //    m_log.TraceInfo("==> T-SQL: " + strSQL);
+        //    return RunSQL(strSQL);
+        //}
 
-        public int DeleteVehicleType(string strID) {
+        public int DeleteDB(string strTable, string strID) {
             string strSQL;
             if (strID == null) {
-                strSQL = "delete from VehicleType";
+                strSQL = "delete from " + strTable;
             } else {
-                strSQL = "delete from VehicleType where ID = '" + strID + "'";
+                strSQL = "delete from " + strTable + " where ID = '" + strID + "'";
             }
             m_log.TraceInfo("==> T-SQL: " + strSQL);
             return RunSQL(strSQL);
