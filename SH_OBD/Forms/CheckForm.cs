@@ -204,12 +204,12 @@ namespace SH_OBD {
                             m_obdTest.m_db.InsertVehicleType(type, ECUID, CALID, CVN);
                         }
                     }
-                }
-                string[,] results = m_obdTest.m_db.GetRecords("VehicleType", null);
-                if (results != null) {
-                    ArrangeRecords(results, new int[] { 1, 2, 3, 4 });
-                    SetDataTableContent();
-                    MessageBox.Show("导入Excel数据完成", "导入数据");
+                    string[,] results = m_obdTest.m_db.GetRecords("VehicleType", null);
+                    if (results != null) {
+                        ArrangeRecords(results, new int[] { 1, 2, 3, 4 });
+                        SetDataTableContent();
+                        MessageBox.Show("导入Excel数据完成", "导入数据");
+                    }
                 }
             } finally {
                 openFileDialog.Dispose();
