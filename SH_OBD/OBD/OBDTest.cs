@@ -480,7 +480,7 @@ namespace SH_OBD {
                 supportStatus.Add(ECUValueList[0].ECUResponseID, bitFlag);
             }
             foreach (string key in supportStatus.Keys) {
-                string log = "";
+                string log;
                 if (m_obdInterface.STDType == StandardType.ISO_27145) {
                     log = "DID " + mode.ToString("X2") + " Support: [" + key + "], [";
                 } else {
