@@ -1,7 +1,9 @@
 ﻿using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
@@ -43,6 +45,8 @@ namespace SH_OBD {
         public string StrVIN_IN { get; set; }
         public string StrVIN_ECU { get; set; }
         public string StrType_IN { get; set; }
+        public List<CheckResult> Checks { get; set; }
+
 
         public OBDTest(OBDInterface obd) {
             m_obdInterface = obd;
@@ -68,6 +72,7 @@ namespace SH_OBD {
             StrType_IN = "";
             m_db = new Model(m_obdInterface.DBandMES, m_obdInterface.m_log);
             m_dbOracle = new ModelOracle(m_obdInterface.OracleMESSetting, m_obdInterface.m_log);
+            Checks = new List<CheckResult>();
         }
 
         public DataTable GetDataTable(int index) {
@@ -402,7 +407,12 @@ namespace SH_OBD {
                                 }
                             }
                         }
-                        CheckCALIDCVN(StrType_IN, dt.Columns[i].ColumnName, CALID, CVN);
+                        CheckResult check = new CheckResult {
+                            ECUID = dt.Columns[i].ColumnName,
+                            Index = j
+                        };
+                        Checks.Add(check);
+                        CheckCALIDCVN(StrType_IN, dt.Columns[i].ColumnName, CALID, CVN, check);
                     }
                 }
             }
@@ -524,6 +534,7 @@ namespace SH_OBD {
             CALIDCheckResult = true;
             CVNCheckResult = true;
             VehicleTypeExist = true;
+            Checks = new List<CheckResult>();
 
             OBDTestStart?.Invoke();
 
@@ -1527,7 +1538,7 @@ namespace SH_OBD {
             }
         }
 
-        private void CheckCALIDCVN(string strType, string strECUID, string strCALID, string strCVN) {
+        private void CheckCALIDCVN(string strType, string strECUID, string strCALID, string strCVN, CheckResult check) {
             bool bCALID = false;
             bool bCVN = false;
             Dictionary<string, string> TypeDic = new Dictionary<string, string> { { "Type", strType }, { "ECU_ID", strECUID } };
@@ -1541,6 +1552,8 @@ namespace SH_OBD {
             } else {
                 VehicleTypeExist = false;
             }
+            check.CALID = bCALID;
+            check.CVN = bCVN;
             CALIDCheckResult = CALIDCheckResult && bCALID;
             CVNCheckResult = CVNCheckResult && bCVN;
         }
@@ -1572,7 +1585,9 @@ namespace SH_OBD {
                 // moduleID
                 string moduleID = GetModuleID(dt.Rows[0][25].ToString().Split('-')[0], dt.Rows[0][1].ToString());
                 worksheet1.Cells["E3"].Value = moduleID;
-                if (worksheet1.Cells["B4"].Value.ToString().Length > 0) {
+                worksheet1.Cells["B4"].Value += "";
+                worksheet1.Cells["D4"].Value += "";
+                if (worksheet1.Cells["B4"].Value.ToString().Length > 0 || worksheet1.Cells["D4"].Value.ToString().Length > 0) {
                     if (m_obdInterface.OBDResultSetting.UseECUAcronym) {
                         if (m_obdInterface.OBDResultSetting.UseSCRName) {
                             worksheet1.Cells["E4"].Value = "SCR";
@@ -1589,6 +1604,34 @@ namespace SH_OBD {
                     OtherID += "," + moduleID;
                 }
                 worksheet1.Cells["E5"].Value = OtherID.Trim(',');
+
+                // 对校验错误的ECU_ID中的CALID和CVN单元格设置颜色
+                foreach (CheckResult check in Checks) {
+                    if (worksheet1.Cells["E3"].Value != null && worksheet1.Cells["E3"].Value.ToString() == check.ECUID && check.Index == 0) {
+                        if (!check.CALID) {
+                            SetCellErrorStyle(worksheet1.Cells["B3"]);
+                        }
+                        if (!check.CVN) {
+                            SetCellErrorStyle(worksheet1.Cells["D3"]);
+                        }
+                    }
+                    if (worksheet1.Cells["E4"].Value != null && worksheet1.Cells["E4"].Value.ToString() == check.ECUID && check.Index == 1) {
+                        if (!check.CALID) {
+                            SetCellErrorStyle(worksheet1.Cells["B4"]);
+                        }
+                        if (!check.CVN) {
+                            SetCellErrorStyle(worksheet1.Cells["D4"]);
+                        }
+                    }
+                    if (worksheet1.Cells["E5"].Value != null && worksheet1.Cells["E5"].Value.ToString() == check.ECUID && check.Index == 0) {
+                        if (!check.CALID) {
+                            SetCellErrorStyle(worksheet1.Cells["B5"]);
+                        }
+                        if (!check.CVN) {
+                            SetCellErrorStyle(worksheet1.Cells["D5"]);
+                        }
+                    }
+                }
 
                 // 与OBD诊断仪通讯情况
                 worksheet1.Cells["B7"].Value = "通讯成功";
@@ -1611,9 +1654,29 @@ namespace SH_OBD {
             }
         }
 
+        private void SetCellErrorStyle(ExcelRange cell) {
+            cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            cell.Style.Fill.BackgroundColor.SetColor(Color.Red);
+            cell.Style.Font.Color.SetColor(Color.White);
+            cell.Style.Font.Bold = true;
+        }
     }
 
     public class SetDataTableColumnsErrorEventArgs : EventArgs {
         public string ErrorMsg { get; set; }
+    }
+
+    public class CheckResult {
+        public string ECUID { get; set; }
+        public int Index { get; set; }
+        public bool CALID { get; set; }
+        public bool CVN { get; set; }
+
+        public CheckResult(string ECUID = "", int Index = 0, bool CALID = true, bool CVN = true) {
+            this.ECUID = ECUID;
+            this.Index = Index;
+            this.CALID = CALID;
+            this.CVN = CVN;
+        }
     }
 }
