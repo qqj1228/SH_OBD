@@ -624,7 +624,7 @@ namespace SH_OBD {
         /// <param name="errorMsg">错误信息</param>
         /// <returns>是否返回成功信息</returns>
         public bool StartOBDTest(out string errorMsg) {
-            m_obdInterface.m_log.TraceInfo(">>>>> Enter StartOBDTest function. Ver: " + MainFileVersion.AssemblyVersion + "<<<<<");
+            m_obdInterface.m_log.TraceInfo(">>>>> Enter StartOBDTest function. Ver: " + MainFileVersion.AssemblyVersion + " <<<<<");
             errorMsg = "";
             m_dtInfo.Clear();
             m_dtInfo.Dispose();

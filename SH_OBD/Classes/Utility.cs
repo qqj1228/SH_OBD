@@ -145,6 +145,25 @@ namespace SH_OBD {
             }
             return bRet;
         }
+
+        /// <summary>
+        /// 返回一个便于阅读的十六进制字符串
+        /// </summary>
+        /// <param name="offset">跳过头部offset个字符不做处理</param>
+        /// <param name="strHex">原始十六进制字符串</param>
+        /// <returns></returns>
+        public static string GetReadableHexString(int offset, string strHex) {
+            string strRet = "";
+            if (offset > 0) {
+                strRet += strHex.Substring(0, offset) + " ";
+            }
+            for (int i = 0; i < strHex.Length - offset; i++) {
+                if (i % 2 != 0) {
+                    strRet += strHex.Substring(offset + i - 1, 2) + " ";
+                }
+            }
+            return strRet.TrimEnd();
+        }
     }
 
     // 获取文件版本类
