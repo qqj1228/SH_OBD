@@ -381,7 +381,7 @@ namespace SH_OBD {
 
             if (m_obdInterface.STDType != StandardType.SAE_J1939) {
                 foreach (OBDParameterValue value in valueList) {
-                    if (m_mode01Support.ContainsKey(value.ECUResponseID) && m_mode01Support[value.ECUResponseID][(param.Parameter & 0x00FF) - 1]) {
+                    if (value.ECUResponseID != null && m_mode01Support.ContainsKey(value.ECUResponseID) && m_mode01Support[value.ECUResponseID][(param.Parameter & 0x00FF) - 1]) {
                         m_compIgn = value.GetBitFlag(12);
                         break;
                     }
