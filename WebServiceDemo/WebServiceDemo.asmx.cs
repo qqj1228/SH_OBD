@@ -21,7 +21,7 @@ namespace WebServiceDemo {
         public string WriteDataToJES(DataTable dt1MES, DataTable dt2MES, out string strMsg) {
             strMsg = "";
             for (int i = 0; i < dt1MES.Columns.Count; i++) {
-                if (dt1MES.Rows[0][i].ToString() != "") {
+                if (dt1MES.Rows[0][i].ToString().Length > 0) {
                     strMsg += dt1MES.Rows[0][i].ToString() + " | ";
                 }
             }
@@ -46,7 +46,7 @@ namespace WebServiceDemo {
         public string WriteDataToMes(DataTable dt1MES, DataTable dt2MES, out string strMsg) {
             strMsg = "";
             for (int i = 0; i < dt1MES.Columns.Count; i++) {
-                if (dt1MES.Rows[0][i].ToString() != "") {
+                if (dt1MES.Rows[0][i].ToString().Length > 0) {
                     strMsg += dt1MES.Rows[0][i].ToString() + " | ";
                 }
             }
@@ -59,6 +59,12 @@ namespace WebServiceDemo {
             }
             strMsg = strMsg.Substring(0, strMsg.Length - 8) + " ]]]";
             return "OK";
+        }
+
+        [WebMethod(Description = "SAP通过VIN号获取车型号的方法")]
+        public string GetCarCode(string strVIN, out string strMsg) {
+            strMsg = "VIN: [" + strVIN + "]";
+            return "testtypecode34567890";
         }
 
     }

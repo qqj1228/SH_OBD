@@ -52,7 +52,7 @@ namespace SH_OBD {
             if (strLog.Length == 0) {
                 return;
             }
-            string strLineHead = GetLineHead("[ Fatal ]");
+            string strLineHead = GetLineHead("[XFatalX]");
             Trace(strLineHead + strLog);
         }
 
@@ -60,7 +60,7 @@ namespace SH_OBD {
             if (strLog.Length == 0 || LogLevel >= EnumLogLevel.LogLevelStop) {
                 return;
             }
-            string strLineHead = GetLineHead("[ Error ]");
+            string strLineHead = GetLineHead("[XErrorX]");
             Trace(strLineHead + strLog);
         }
 
@@ -109,14 +109,14 @@ namespace SH_OBD {
                 strLineHead = string.Format(
                     "{0}-{1} {2} {3}({4})<{5}>: ",
                     DateTime.Now.ToShortDateString(),
-                    DateTime.Now.ToLongTimeString(),
+                    DateTime.Now.ToString("HH:mm:ss.fff"),
                     strInfo,
                     Path.GetFileName(sf.GetFileName()),
                     sf.GetFileLineNumber(),
                     sf.GetMethod().Name
                     );
             } else {
-                strLineHead = string.Format("{0}-{1} {2}: ", DateTime.Now.ToShortDateString(), DateTime.Now.ToLongTimeString(), strInfo);
+                strLineHead = string.Format("{0}-{1} {2}: ", DateTime.Now.ToShortDateString(), DateTime.Now.ToString("HH:mm:ss.fff"), strInfo);
             }
             return strLineHead;
         }

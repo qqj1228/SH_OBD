@@ -1479,7 +1479,8 @@ namespace SH_OBD {
             FileInfo fileInfo = new FileInfo(OriPath);
             using (ExcelPackage package = new ExcelPackage(fileInfo, true)) {
                 ExcelWorksheet worksheet1 = package.Workbook.Worksheets[1];
-                worksheet1.Cells["B2"].Value = dt.Rows[0][0].ToString(); // VIN
+                // VIN
+                worksheet1.Cells["B2"].Value = dt.Rows[0][0].ToString();
 
                 // CALID, CVN
                 if (m_CN6) {
