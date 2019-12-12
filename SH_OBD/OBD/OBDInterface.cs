@@ -528,6 +528,41 @@ namespace SH_OBD {
             return list;
         }
 
+        public bool SetXAttrByVIN(OBDTest obdTest) {
+            DBandMES.ChangeWebService = false;
+            if (!WSHelper.CreateWebService(DBandMES, out string error)) {
+                m_log.TraceError("CreateWebService Error: " + error);
+                throw new Exception("获取 WebService 接口出错");
+            }
+            string strRet;
+            try {
+                strRet = WSHelper.GetResponseOutString(WSHelper.GetMethodName(1), out string strMsg, obdTest.StrVIN_IN);
+                m_log.TraceInfo("Get CAR_CODE from SAP: " + strRet);
+            } catch (Exception ex) {
+                m_log.TraceError("WebService GetResponseString error: " + ex.Message);
+                throw;
+            }
+            string strProtocol = obdTest.m_db.GetProtocol(strRet);
+            m_log.TraceInfo("Get protocol from database: " + strProtocol);
+            if (strProtocol.Length == 0) {
+                return false;
+            }
+            if (strProtocol.Contains("15031")) {
+                m_xattr = new int[] { 6, 7, 8, 9 };
+            } else if (strProtocol.Contains("27145")) {
+                m_xattr = new int[] { 6, 7, 8, 9 };
+            } else if (strProtocol.Contains("1939")) {
+                m_xattr = new int[] { 10 };
+            } else if (strProtocol.Contains("14230")) {
+                m_xattr = new int[] { 5, 4 };
+            } else if (strProtocol.Contains("9141")) {
+                m_xattr = new int[] { 3 };
+            } else if (strProtocol.Contains("1850")) {
+                m_xattr = new int[] { 2, 1 };
+            }
+            return true;
+        }
+
         private void SetDevice(HardwareType device) {
             CommSettings.HardwareIndex = device;
             switch (device) {

@@ -166,8 +166,8 @@ namespace SH_OBD {
                     SqlCommand sqlCmd = new SqlCommand(strSQL, sqlConn);
                     try {
                         sqlConn.Open();
-                        count = sqlCmd.ExecuteNonQuery();
                         m_log.TraceInfo(string.Format("==> T-SQL: {0}", strSQL));
+                        count = sqlCmd.ExecuteNonQuery();
                         m_log.TraceInfo(string.Format("==> {0} record(s) affected", count));
                     } catch (Exception ex) {
                         m_log.TraceError("==> SQL ERROR: " + ex.Message);
@@ -387,6 +387,13 @@ namespace SH_OBD {
             }
         }
 
+        public void AddOBDProtocol() {
+            string strSQL = "IF OBJECT_ID(N'SH_OBD.dbo.OBDProtocol') IS NULL ";
+            strSQL += "Create TABLE SH_OBD.dbo.OBDProtocol (ID int IDENTITY PRIMARY KEY NOT NULL, CAR_CODE varchar(20) NOT NULL, ";
+            strSQL += "Engine varchar(20), Stage varchar(20), Fuel varchar(20), Model varchar(20), Protocol varchar(50) NOT NULL)";
+            RunSQL(strSQL);
+        }
+
         public string GetSN() {
             string strSQL = "select SN from OBDUser where ID = '1'";
             string[,] rets = SelectDB(strSQL);
@@ -416,7 +423,8 @@ namespace SH_OBD {
                     for (int j = 0; j < dt.Columns.Count; j++) {
                         strSQL += dt.Columns[j].ColumnName + " = '" + dt.Rows[i][j].ToString() + "', ";
                     }
-                    strSQL += "' where ";
+                    strSQL = strSQL.Substring(0, strSQL.Length - 2);
+                    strSQL += " where ";
                     foreach (string key in whereDic.Keys) {
                         strSQL += key + " = '" + whereDic[key] + "' and ";
                     }
@@ -459,6 +467,18 @@ namespace SH_OBD {
             string strSQL = "delete from OBDProtocol where ID = '" + strID + "'";
             m_log.TraceInfo("==> T-SQL: " + strSQL);
             return RunSQL(strSQL);
+        }
+
+        public string GetProtocol(string carCode) {
+            string strSQL = "select Protocol from OBDProtocol where CAR_CODE = '" + carCode + "'";
+            string[,] rets = SelectDB(strSQL);
+            string strRet;
+            if (rets == null || rets.GetLength(0) < 1) {
+                strRet = "";
+            } else {
+                strRet = rets[0, 0];
+            }
+            return strRet;
         }
     }
 }

@@ -158,7 +158,6 @@
             this.buttonProtocol.TabIndex = 13;
             this.buttonProtocol.Text = "buttonProtocol";
             this.buttonProtocol.UseVisualStyleBackColor = true;
-            this.buttonProtocol.Visible = false;
             this.buttonProtocol.Click += new System.EventHandler(this.Button_Click);
             // 
             // buttonOBDTest

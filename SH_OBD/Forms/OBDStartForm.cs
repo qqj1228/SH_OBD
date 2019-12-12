@@ -57,10 +57,10 @@ namespace SH_OBD {
             Task.Factory.StartNew(TestNativeDatabase);
             // 在OBDData表中新增Upload字段，用于存储上传是否成功的标志
             Task.Factory.StartNew(m_obdTest.m_db.AddUploadField);
-            //m_obdTest.m_db.AddUploadField();
             // 在OBDUser表中新增SN字段，用于存储检测报表编号中顺序号的特征字符串
             Task.Factory.StartNew(m_obdTest.m_db.AddSNField);
-            //m_obdTest.m_db.AddSNField();
+            // 新增OBDProtocol表，用于存储车型OBD协议数据
+            Task.Factory.StartNew(m_obdTest.m_db.AddOBDProtocol);
             // 定时上传以前上传失败的数据
             m_timer = new System.Timers.Timer(m_obdInterface.OBDResultSetting.UploadInterval * 60 * 1000);
             m_timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimeUpload);
@@ -190,6 +190,16 @@ namespace SH_OBD {
         private bool ConnectOBD() {
             LogCommSettingInfo();
             if (m_obdInterface.CommSettings.AutoDetect) {
+                if (m_obdInterface.OBDResultSetting.SpecifiedProtocol) {
+                    try {
+                        if (!m_obdInterface.SetXAttrByVIN(m_obdTest)) {
+                            MessageBox.Show("未从数据库中获取到指定车型的连接协议。将会自动探测连接协议。", "获取协议失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    } catch (Exception ex) {
+                        m_obdInterface.GetLogger().TraceWarning("Failed to get protocol by VIN, Reason: " + ex.Message);
+                        MessageBox.Show("获取指定车型的连接协议失败。将会自动探测连接协议。\r\n" + ex.Message, "获取协议失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
                 if (m_obdInterface.InitDeviceAuto(false)) {
                     m_obdInterface.GetLogger().TraceInfo("Connection Established!");
                 } else {

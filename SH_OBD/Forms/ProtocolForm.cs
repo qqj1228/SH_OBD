@@ -20,11 +20,11 @@ namespace SH_OBD {
         public ProtocolForm(OBDTest obdTest) {
             InitializeComponent();
             m_Protocols = new string[] {
-                "ISO 15765-4 CAN / ISO 15031",
-                "ISO 15765-4 CAN / ISO 27145",
+                "ISO 15031 CAN",
+                "ISO 27145 CAN",
                 "SAE J1939 CAN",
                 "ISO 14230-4 KWP",
-                "ISO 9141-2",
+                "ISO 9141-2 K",
                 "SAE J1850"
             };
             m_dtContent = new DataTable();
@@ -64,6 +64,7 @@ namespace SH_OBD {
             SetDataTableColumns<string>(m_dtContent, columns);
             if (this.GridContent.Columns.Count > 0) {
                 SetGridViewColumnsSortMode(this.GridContent, DataGridViewColumnSortMode.Programmatic);
+                this.GridContent.Columns[0].Width = this.GridContent.ClientSize.Width / 20;
             }
             SetDataTableRow(m_dtContent);
         }
@@ -73,21 +74,35 @@ namespace SH_OBD {
             foreach (string protocol in m_Protocols) {
                 this.cmbBoxProtocol.Items.Add(protocol);
             }
-            //Task.Factory.StartNew(SetDataTableContent);
             SetDataTableContent();
         }
 
         private void ProtocolForm_Resize(object sender, EventArgs e) {
-            int margin = this.grpBoxProtocol.Location.X - (this.grpBoxCARCODE.Location.X + this.grpBoxCARCODE.Width);
-            this.grpBoxCARCODE.Width = (this.btnImport.Location.X - this.grpBoxCARCODE.Location.X) / 3 - margin;
-            this.grpBoxProtocol.Location = new Point(this.grpBoxCARCODE.Location.X + this.grpBoxCARCODE.Width + margin, this.grpBoxCARCODE.Location.Y);
-            this.grpBoxProtocol.Width = this.grpBoxCARCODE.Width * 2 + margin;
+            int margin = this.grpBoxProtocol.Location.X - (this.grpBoxModel.Location.X + this.grpBoxModel.Width);
+            this.grpBoxCARCODE.Width = (this.btnModify.Location.X - this.grpBoxCARCODE.Location.X - margin * 6) / 6;
+            this.grpBoxEngine.Location = new Point(this.grpBoxCARCODE.Location.X + this.grpBoxCARCODE.Width + margin, this.grpBoxCARCODE.Location.Y);
+            this.grpBoxEngine.Width = this.grpBoxCARCODE.Width;
+            this.grpBoxStage.Location = new Point(this.grpBoxEngine.Location.X + this.grpBoxEngine.Width + margin, this.grpBoxCARCODE.Location.Y);
+            this.grpBoxStage.Width = this.grpBoxCARCODE.Width;
+            this.grpBoxFuel.Location = new Point(this.grpBoxStage.Location.X + this.grpBoxStage.Width + margin, this.grpBoxCARCODE.Location.Y);
+            this.grpBoxFuel.Width = this.grpBoxCARCODE.Width;
+            this.grpBoxModel.Location = new Point(this.grpBoxFuel.Location.X + this.grpBoxFuel.Width + margin, this.grpBoxCARCODE.Location.Y);
+            this.grpBoxModel.Width = this.grpBoxCARCODE.Width;
+            this.grpBoxProtocol.Location = new Point(this.grpBoxModel.Location.X + this.grpBoxModel.Width + margin, this.grpBoxCARCODE.Location.Y);
+            this.grpBoxProtocol.Width = this.grpBoxCARCODE.Width;
         }
 
         private void GridContent_Click(object sender, EventArgs e) {
+            if (this.GridContent.CurrentRow == null) {
+                return;
+            }
             int index = this.GridContent.CurrentRow.Index;
             if (index >= 0 && index < m_dtContent.Rows.Count) {
                 this.txtBoxCARCODE.Text = m_dtContent.Rows[index]["CAR_CODE"].ToString();
+                this.txtBoxEngine.Text = m_dtContent.Rows[index]["Engine"].ToString();
+                this.txtBoxStage.Text = m_dtContent.Rows[index]["Stage"].ToString();
+                this.txtBoxFuel.Text = m_dtContent.Rows[index]["Fuel"].ToString();
+                this.txtBoxModel.Text = m_dtContent.Rows[index]["Model"].ToString();
                 string strProtocol = m_dtContent.Rows[index]["Protocol"].ToString();
                 if (strProtocol.Contains("15031")) {
                     this.cmbBoxProtocol.SelectedIndex = 0;
@@ -105,16 +120,20 @@ namespace SH_OBD {
             }
         }
 
-        private void BtnImport_Click(object sender, EventArgs e) {
+        private void MenuItemImport_Click(object sender, EventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog {
-                Title = "打开 OBD 连接协议文件",
+                Title = "打开车型 OBD 协议文件",
                 Filter = "Excel 2007 及以上 (*.xlsx)|*.xlsx",
                 FilterIndex = 0,
                 RestoreDirectory = true
             };
             DataTable dtImport = new DataTable("OBDProtocol");
-            dtImport.Columns.Add("CAR_CODE");
-            dtImport.Columns.Add("Protocol");
+            string[] columns = m_obdTest.m_db.GetTableColumns(dtImport.TableName);
+            foreach (string col in columns) {
+                if (col != "ID") {
+                    dtImport.Columns.Add(new DataColumn(col, typeof(string)));
+                }
+            }
             try {
                 openFileDialog.ShowDialog();
                 if (openFileDialog.FileName.Length <= 0) {
@@ -132,6 +151,10 @@ namespace SH_OBD {
                         }
                         DataRow dr = dtImport.NewRow();
                         dr["CAR_CODE"] = worksheet1.Cells[i, 1].Value.ToString();
+                        dr["Engine"] = worksheet1.Cells[i, 2].Value.ToString();
+                        dr["Stage"] = worksheet1.Cells[i, 3].Value.ToString();
+                        dr["Fuel"] = worksheet1.Cells[i, 4].Value.ToString();
+                        dr["Model"] = worksheet1.Cells[i, 5].Value.ToString();
                         if (worksheet1.Cells[i, 6].Value.ToString().Contains("15765")) {
                             dr["Protocol"] = m_Protocols[0];
                         } else if (worksheet1.Cells[i, 6].Value.ToString().Contains("27145")) {
@@ -150,7 +173,7 @@ namespace SH_OBD {
                 }
                 m_obdTest.m_db.AddProtocol(dtImport);
                 MessageBox.Show("导入Excel数据完成", "导入数据");
-                this.btnRefresh.PerformClick();
+                this.MenuItemRefresh.PerformClick();
             } finally {
                 openFileDialog.Dispose();
                 dtImport.Dispose();
@@ -202,11 +225,15 @@ namespace SH_OBD {
             }
         }
 
-        private void BtnRefresh_Click(object sender, EventArgs e) {
-            int index = this.GridContent.CurrentRow.Index;
+        private void MenuItemRefresh_Click(object sender, EventArgs e) {
+            int index = 0;
+            if (this.GridContent.CurrentRow != null) {
+                index = this.GridContent.CurrentRow.Index;
+            }
             SetDataTableContent();
             this.GridContent.Rows[index].Selected = true;
             this.GridContent.CurrentCell = this.GridContent.Rows[index].Cells[0];
         }
+
     }
 }
