@@ -16,6 +16,7 @@ namespace SH_OBD {
         private readonly OBDInterface m_obdInterface;
         private readonly DataTable m_dtInfo;
         private readonly DataTable m_dtECUInfo;
+        private readonly DataTable m_dtIUPR;
         private readonly Dictionary<string, bool[]> m_mode01Support;
         private readonly Dictionary<string, bool[]> m_mode09Support;
         private bool m_compIgn;
@@ -52,6 +53,7 @@ namespace SH_OBD {
             m_obdInterface = obd;
             m_dtInfo = new DataTable();
             m_dtECUInfo = new DataTable();
+            m_dtIUPR = new DataTable();
             m_mode01Support = new Dictionary<string, bool[]>();
             m_mode09Support = new Dictionary<string, bool[]>();
             m_compIgn = false;
@@ -81,20 +83,26 @@ namespace SH_OBD {
                 return m_dtInfo;
             case 1:
                 return m_dtECUInfo;
-            //case 2:
-            //    return m_dtIUPR;
+            case 2:
+                return m_dtIUPR;
             default:
                 return null;
             }
         }
 
-        private void SetDataTableColumns<T>(DataTable dt, Dictionary<string, bool[]> ECUSupports) {
+        private void SetDataTableColumns<T>(DataTable dt, Dictionary<string, bool[]> ECUSupports, bool bIUPR = false) {
             dt.Clear();
             dt.Columns.Clear();
             dt.Columns.Add(new DataColumn("NO", typeof(int)));
             dt.Columns.Add(new DataColumn("Item", typeof(string)));
             foreach (string key in ECUSupports.Keys) {
-                dt.Columns.Add(new DataColumn(key, typeof(T)));
+                if (bIUPR) {
+                    if (ECUSupports[key][0xB - 1] || ECUSupports[key][0x8 - 1]) {
+                        dt.Columns.Add(new DataColumn(key, typeof(T)));
+                    }
+                } else {
+                    dt.Columns.Add(new DataColumn(key, typeof(T)));
+                }
             }
         }
 
@@ -215,6 +223,83 @@ namespace SH_OBD {
                 if (dt.Rows[lineNO - 1][i].ToString() == "未完成") {
                     ++errorCount;
                 }
+            }
+        }
+
+        private void SetIUPRDataRow(int lineNO, string strItem, int padTotal, int padNum, DataTable dt, List<OBDParameterValue> valueList, int itemIndex, int InfoType) {
+            double num = 0;
+            double den = 0;
+            DataRow dr = dt.NewRow();
+            dr[0] = lineNO;
+            foreach (OBDParameterValue value in valueList) {
+                for (int i = 2; i < dt.Columns.Count; i++) {
+                    if (dt.Columns[i].ColumnName == value.ECUResponseID) {
+                        if (m_mode09Support.ContainsKey(dt.Columns[i].ColumnName) && m_mode09Support[dt.Columns[i].ColumnName][InfoType - 1]) {
+                            if (dr[1].ToString().Length == 0) {
+                                dr[1] = strItem + ": " + "监测完成次数".PadLeft(padTotal - padNum + 6);
+                            }
+                            if (value.ListStringValue.Count > itemIndex) {
+                                num = Utility.Hex2Int(value.ListStringValue[itemIndex]);
+                                dr[i] = num.ToString();
+                            } else {
+                                num = 0;
+                                dr[i] = "0";
+                            }
+                        }
+                    }
+                }
+            }
+            if (dr[1].ToString().Length > 0) {
+                dt.Rows.Add(dr);
+            }
+
+            dr = dt.NewRow();
+            foreach (OBDParameterValue value in valueList) {
+                for (int i = 2; i < dt.Columns.Count; i++) {
+                    if (dt.Columns[i].ColumnName == value.ECUResponseID) {
+                        if (m_mode09Support.ContainsKey(dt.Columns[i].ColumnName) && m_mode09Support[dt.Columns[i].ColumnName][InfoType - 1]) {
+                            if (dr[1].ToString().Length == 0) {
+                                dr[1] = "符合监测条件次数".PadLeft(padTotal + 8);
+                            }
+                            if (value.ListStringValue.Count > itemIndex) {
+                                den = Utility.Hex2Int(value.ListStringValue[itemIndex + 1]);
+                                dr[i] = den.ToString();
+                            } else {
+                                den = 0;
+                                dr[i] = "0";
+                            }
+                        }
+                    }
+                }
+            }
+            if (dr[1].ToString().Length > 0) {
+                dt.Rows.Add(dr);
+            }
+
+            dr = dt.NewRow();
+            foreach (OBDParameterValue value in valueList) {
+                for (int i = 2; i < dt.Columns.Count; i++) {
+                    if (dt.Columns[i].ColumnName == value.ECUResponseID) {
+                        if (m_mode09Support.ContainsKey(dt.Columns[i].ColumnName) && m_mode09Support[dt.Columns[i].ColumnName][InfoType - 1]) {
+                            if (dr[1].ToString().Length == 0) {
+                                dr[1] = "IUPR率".PadLeft(padTotal + 5);
+                            }
+                            if (den == 0) {
+                                dr[i] = "7.99527";
+                            } else {
+                                double r = Math.Round(num / den, 6);
+                                if (r > 7.99527) {
+                                    dr[i] = "7.99527";
+                                } else {
+                                    dr[i] = r.ToString();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (dr[1].ToString().Length > 0) {
+                dt.Rows.Add(dr);
             }
         }
 
@@ -419,6 +504,60 @@ namespace SH_OBD {
 
         }
 
+        private void SetDataTableIUPR() {
+            DataTable dt = m_dtIUPR;
+            int NO = 0;
+            OBDParameter param;
+            List<OBDParameterValue> valueList = new List<OBDParameterValue>();
+            int HByte = 0;
+            if (m_obdInterface.STDType == StandardType.ISO_27145) {
+                param = new OBDParameter {
+                    OBDRequest = "22F80B",
+                    Service = 0x22,
+                    Parameter = 0xF80B,
+                    ValueTypes = (int)OBDParameter.EnumValueTypes.ListString
+                };
+                HByte = 0xF800;
+            } else {
+                param = new OBDParameter {
+                    OBDRequest = "090B",
+                    Service = 9,
+                    Parameter = 0x0B,
+                    ValueTypes = (int)OBDParameter.EnumValueTypes.ListString
+                };
+            }
+            for (int i = 2; i < dt.Columns.Count; i++) {
+                // 火花点火
+                if (m_mode09Support.ContainsKey(dt.Columns[i].ColumnName) && m_mode09Support[dt.Columns[i].ColumnName][param.Parameter - HByte - 1]) {
+                    valueList = m_obdInterface.GetValueList(param);
+                    SetIUPRDataRow(++NO, "NMHC催化器", 18, 12, dt, valueList, 2, param.Parameter);
+                    SetIUPRDataRow(++NO, "NOx催化器", 18, 11, dt, valueList, 4, param.Parameter);
+                    SetIUPRDataRow(++NO, "NOx吸附器", 18, 11, dt, valueList, 6, param.Parameter);
+                    SetIUPRDataRow(++NO, "PM捕集器", 18, 10, dt, valueList, 8, param.Parameter);
+                    SetIUPRDataRow(++NO, "废气传感器", 18, 12, dt, valueList, 10, param.Parameter);
+                    SetIUPRDataRow(++NO, "EGR和VVT", 18, 10, dt, valueList, 12, param.Parameter);
+                    SetIUPRDataRow(++NO, "增压压力", 18, 10, dt, valueList, 14, param.Parameter);
+                }
+                // 压缩点火
+                NO = 0;
+                param.Parameter = HByte + 8;
+                if (m_mode09Support.ContainsKey(dt.Columns[i].ColumnName) && m_mode09Support[dt.Columns[i].ColumnName][param.Parameter - HByte - 1]) {
+                    valueList = m_obdInterface.GetValueList(param);
+                    SetIUPRDataRow(++NO, "催化器 组1", 18, 12, dt, valueList, 2, param.Parameter);
+                    SetIUPRDataRow(++NO, "催化器 组2", 18, 12, dt, valueList, 4, param.Parameter);
+                    SetIUPRDataRow(++NO, "前氧传感器 组1", 18, 16, dt, valueList, 6, param.Parameter);
+                    SetIUPRDataRow(++NO, "前氧传感器 组2", 18, 16, dt, valueList, 8, param.Parameter);
+                    SetIUPRDataRow(++NO, "后氧传感器 组1", 18, 16, dt, valueList, 16, param.Parameter);
+                    SetIUPRDataRow(++NO, "后氧传感器 组2", 18, 16, dt, valueList, 18, param.Parameter);
+                    SetIUPRDataRow(++NO, "EVAP", 18, 6, dt, valueList, 14, param.Parameter);
+                    SetIUPRDataRow(++NO, "EGR和VVT", 18, 10, dt, valueList, 10, param.Parameter);
+                    SetIUPRDataRow(++NO, "GPF 组1", 18, 9, dt, valueList, 24, param.Parameter);
+                    SetIUPRDataRow(++NO, "GPF 组2", 18, 9, dt, valueList, 26, param.Parameter);
+                    SetIUPRDataRow(++NO, "二次空气喷射系统", 18, 18, dt, valueList, 12, param.Parameter);
+                }
+            }
+        }
+
         private bool GetSupportStatus(int mode, Dictionary<string, bool[]> supportStatus) {
             List<List<OBDParameterValue>> ECUSupportList = new List<List<OBDParameterValue>>();
             List<bool> ECUSupportNext = new List<bool>();
@@ -521,6 +660,8 @@ namespace SH_OBD {
             m_dtInfo.Dispose();
             m_dtECUInfo.Clear();
             m_dtECUInfo.Dispose();
+            m_dtIUPR.Clear();
+            m_dtIUPR.Dispose();
             m_mode01Support.Clear();
             m_mode09Support.Clear();
             m_compIgn = false;
@@ -567,9 +708,11 @@ namespace SH_OBD {
 
             SetDataTableColumns<string>(m_dtInfo, m_mode01Support);
             SetDataTableColumns<string>(m_dtECUInfo, m_mode09Support);
+            SetDataTableColumns<string>(m_dtIUPR, m_mode09Support, true);
             SetupColumnsDone?.Invoke();
             SetDataTableInfo();
             SetDataTableECUInfo();
+            SetDataTableIUPR();
 
             OBDResult = DTCResult && ReadinessResult && VINResult && CALIDCVNResult && SpaceResult && CALIDCheckResult && CVNCheckResult && VehicleTypeExist;
             string strLog = "OBD Test Result: " + OBDResult.ToString() + " [";
