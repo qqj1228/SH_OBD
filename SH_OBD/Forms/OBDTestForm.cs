@@ -50,6 +50,7 @@ namespace SH_OBD {
                 this.labelMESInfo.ForeColor = Color.Black;
                 this.labelMESInfo.Text = "写入数据库中。。。";
                 this.txtBoxVIN.ReadOnly = false;
+                this.txtBoxVehicleType.ReadOnly = false;
             });
         }
 
@@ -75,10 +76,12 @@ namespace SH_OBD {
         }
 
         void OnNotUploadData() {
-            this.Invoke((EventHandler)delegate {
-                this.labelMESInfo.ForeColor = Color.Red;
-                this.labelMESInfo.Text = "因OBD检测不合格，故数据不上传";
-            });
+            if (!this.chkBoxShowData.Checked) {
+                this.Invoke((EventHandler)delegate {
+                    this.labelMESInfo.ForeColor = Color.Red;
+                    this.labelMESInfo.Text = "因OBD检测不合格，故数据不上传";
+                });
+            }
         }
 
         void OnSetDataTableColumnsError(object sender, SetDataTableColumnsErrorEventArgs e) {
@@ -104,6 +107,7 @@ namespace SH_OBD {
                 this.labelInfo.ForeColor = Color.Black;
                 this.labelInfo.Text = "准备OBD检测";
                 this.txtBoxVIN.ReadOnly = false;
+                this.txtBoxVehicleType.ReadOnly = false;
                 this.txtBoxVIN.SelectAll();
                 this.txtBoxVIN.Focus();
             } else {
@@ -152,6 +156,7 @@ namespace SH_OBD {
                 SetGridViewColumnsSortMode(this.GridViewIUPR, DataGridViewColumnSortMode.Programmatic);
             }
             this.txtBoxVIN.Text = m_obdTest.StrVIN_IN;
+            this.txtBoxVehicleType.Text = m_obdTest.StrType_IN;
         }
 
         private void OBDTestForm_Resize(object sender, EventArgs e) {
@@ -173,15 +178,34 @@ namespace SH_OBD {
             }
         }
 
-        private void TxtBoxVIN_TextChanged(object sender, EventArgs e) {
-            if (this.chkBoxManualUpload.Checked) {
-                if (this.txtBoxVIN.Text.Length == 17) {
-                    ManualUpload();
+        private void TxtBox_TextChanged(object sender, EventArgs e) {
+        }
+
+        private void TxtBox_KeyPress(object sender, KeyPressEventArgs e) {
+            if (e.KeyChar == (char)Keys.Enter) {
+                TextBox tb = sender as TextBox;
+                string[] codes = tb.Text.Split('*');
+                if (codes != null) {
+                    if (codes.Length > 2) {
+                        m_obdTest.StrVIN_IN = codes[2];
+                    }
+                    m_obdTest.StrType_IN = codes[0];
+                    this.txtBoxVIN.Text = m_obdTest.StrVIN_IN;
+                    this.txtBoxVehicleType.Text = m_obdTest.StrType_IN;
                 }
-            } else {
-                if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Length == 17) {
-                    this.btnStartOBDTest.PerformClick();
-                    this.txtBoxVIN.ReadOnly = true;
+                if (this.chkBoxManualUpload.Checked || this.chkBoxShowData.Checked) {
+                    if (this.txtBoxVIN.Text.Length == 17 && m_obdTest.StrType_IN.Length >= 10) {
+                        ManualUpload();
+                    }
+                } else {
+                    if (!m_obdInterface.CommSettings.UseSerialScanner && m_obdTest.StrVIN_IN.Length == 17 && m_obdTest.StrType_IN.Length >= 10) {
+                        m_obdInterface.m_log.TraceInfo("Get VIN: " + this.txtBoxVIN.Text);
+                        if (btnStartOBDTest.Enabled) {
+                            this.btnStartOBDTest.PerformClick();
+                            this.txtBoxVIN.ReadOnly = true;
+                            this.txtBoxVehicleType.ReadOnly = true;
+                        }
+                    }
                 }
             }
         }
@@ -190,12 +214,13 @@ namespace SH_OBD {
             if (!m_obdTest.AdvanceMode) {
                 return;
             }
+            m_obdInterface.m_log.TraceInfo("Start ManualUpload");
             this.labelInfo.ForeColor = Color.Black;
             this.labelInfo.Text = "手动读取数据";
             this.labelMESInfo.ForeColor = Color.Black;
             this.labelMESInfo.Text = "准备手动上传数据";
             try {
-                m_obdTest.UploadDataFromDB(this.txtBoxVIN.Text, out string errorMsg);
+                m_obdTest.UploadDataFromDB(this.txtBoxVIN.Text, out string errorMsg, this.chkBoxShowData.Checked);
 #if DEBUG
                 MessageBox.Show(errorMsg, WSHelper.GetMethodName(0));
 #endif
@@ -245,6 +270,7 @@ namespace SH_OBD {
                 this.labelInfo.Text = "OBD检测结束，结果：不合格" + strCat;
             }
             this.txtBoxVIN.ReadOnly = false;
+            this.txtBoxVehicleType.ReadOnly = false;
         }
 
         private void OBDTestForm_FormClosing(object sender, FormClosingEventArgs e) {

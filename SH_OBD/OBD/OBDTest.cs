@@ -508,7 +508,7 @@ namespace SH_OBD {
             DataTable dt = m_dtIUPR;
             int NO = 0;
             OBDParameter param;
-            List<OBDParameterValue> valueList = new List<OBDParameterValue>();
+            List<OBDParameterValue> valueList;
             int HByte = 0;
             if (m_obdInterface.STDType == StandardType.ISO_27145) {
                 param = new OBDParameter {
@@ -527,7 +527,7 @@ namespace SH_OBD {
                 };
             }
             for (int i = 2; i < dt.Columns.Count; i++) {
-                // 火花点火
+                // 压缩点火
                 if (m_mode09Support.ContainsKey(dt.Columns[i].ColumnName) && m_mode09Support[dt.Columns[i].ColumnName][param.Parameter - HByte - 1]) {
                     valueList = m_obdInterface.GetValueList(param);
                     SetIUPRDataRow(++NO, "NMHC催化器", 18, 12, dt, valueList, 2, param.Parameter);
@@ -538,7 +538,7 @@ namespace SH_OBD {
                     SetIUPRDataRow(++NO, "EGR和VVT", 18, 10, dt, valueList, 12, param.Parameter);
                     SetIUPRDataRow(++NO, "增压压力", 18, 10, dt, valueList, 14, param.Parameter);
                 }
-                // 压缩点火
+                // 火花点火
                 NO = 0;
                 param.Parameter = HByte + 8;
                 if (m_mode09Support.ContainsKey(dt.Columns[i].ColumnName) && m_mode09Support[dt.Columns[i].ColumnName][param.Parameter - HByte - 1]) {
@@ -1483,7 +1483,7 @@ namespace SH_OBD {
             SetDataRowECUInfoFromDB(++NO, "CVN", dtIn);               // 3
         }
 
-        public bool UploadDataFromDB(string strVIN, out string errorMsg) {
+        public bool UploadDataFromDB(string strVIN, out string errorMsg, bool bOnlyShowData) {
             errorMsg = "";
             DataTable dt = new DataTable();
             SetDataTableResultColumns(ref dt);
@@ -1499,6 +1499,12 @@ namespace SH_OBD {
             SetDataTableInfoFromDB(dt);
             SetDataTableECUInfoFromDB(dt);
             bool bRet = false;
+            if (bOnlyShowData) {
+                m_obdInterface.m_log.TraceInfo("Only show data from database");
+                NotUploadData?.Invoke();
+                dt.Dispose();
+                return bRet;
+            }
             if (!m_obdInterface.OBDResultSetting.UploadWhenever && dt.Rows[0]["Result"].ToString() != "1") {
                 m_obdInterface.m_log.TraceError("Won't upload data from database because OBD test result is NOK");
                 NotUploadData?.Invoke();

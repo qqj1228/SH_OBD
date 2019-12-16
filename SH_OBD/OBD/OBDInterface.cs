@@ -254,9 +254,10 @@ namespace SH_OBD {
                 return new OBDParameterValue { ErrorDetected = true };
             } else {
                 for (int i = 0; i < responses.ResponseCount; i++) {
-                    strItem += string.Format("[{0}] ", responses.GetOBDResponse(i).Data);
+                    strItem += string.Format("[{0}] ", Utility.GetReadableHexString(0, responses.GetOBDResponse(i).Data));
                 }
             }
+            strItem = strItem.TrimEnd();
             m_log.TraceInfo(strItem);
             OBDParameterValue obdValue = m_obdInterpreter.GetValue(param, responses, bEnglishUnits);
             if (obdValue.ErrorDetected) {
@@ -289,7 +290,7 @@ namespace SH_OBD {
                 return ValueList;
             } else {
                 for (int i = 0; i < responses.ResponseCount; i++) {
-                    strItem += string.Format("[{0}] ", responses.GetOBDResponse(i).Data);
+                    strItem += string.Format("[{0}] ", Utility.GetReadableHexString(0, responses.GetOBDResponse(i).Data));
                 }
                 strItem = strItem.TrimEnd();
                 m_log.TraceInfo(strItem);
@@ -334,8 +335,9 @@ namespace SH_OBD {
                 for (int idx = 0; idx < 32; idx++) {
                     strRet += (obdValue.GetBitFlag(idx) ? "1" : "0");
                 }
-                strRet += "]";
+                strRet = strRet.TrimEnd() + "]";
             }
+            strRet = strRet.TrimEnd();
             return strRet;
         }
 
@@ -362,7 +364,7 @@ namespace SH_OBD {
             OBDResponseList responses = m_obdDevice.Query(param);
             string strItem = "Responses: ";
             for (int i = 0; i < responses.ResponseCount; i++) {
-                strItem += string.Format("[{0}] ", responses.GetOBDResponse(i).Data);
+                strItem += string.Format("[{0}] ", Utility.GetReadableHexString(0, responses.GetOBDResponse(i).Data));
             }
             m_log.TraceInfo(strItem);
             return responses;
