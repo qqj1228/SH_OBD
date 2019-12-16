@@ -192,12 +192,12 @@ namespace SH_OBD {
             if (m_obdInterface.CommSettings.AutoDetect) {
                 if (m_obdInterface.OBDResultSetting.SpecifiedProtocol) {
                     try {
-                        if (!m_obdInterface.SetXAttrByVIN(m_obdTest)) {
-                            MessageBox.Show("未从数据库中获取到指定车型的连接协议。将会自动探测连接协议。", "获取协议失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        if (!m_obdInterface.SetXAttrByVIN(m_obdTest.StrVIN_IN)) {
+                            MessageBox.Show("从SAP获取OBD协议失败。将会自动探测OBD协议。", "获取OBD协议失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     } catch (Exception ex) {
                         m_obdInterface.GetLogger().TraceWarning("Failed to get protocol by VIN, Reason: " + ex.Message);
-                        MessageBox.Show("获取指定车型的连接协议失败。将会自动探测连接协议。\r\n" + ex.Message, "获取协议失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("从SAP获取OBD协议失败。将会自动探测OBD协议。\r\n" + ex.Message, "获取OBD协议失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 if (m_obdInterface.InitDeviceAuto(false)) {
