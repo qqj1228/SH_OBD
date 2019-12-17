@@ -538,11 +538,17 @@ namespace SH_OBD {
                 };
                 dt_0001_emission_sap sap = si.si_0001_emission(request);
                 if (sap != null) {
-                    m_log.TraceInfo("");
+                    m_log.TraceInfo(string.Format("Return from SAP[MESSAGE: {0}, ZOBDWZ: {1}]", sap.MESSAGE, sap.ZODBWZ));
                     if (sap.MESSAGE.Contains("1")) {
                         bRet = true;
                         strProtocol = sap.ZODBWZ;
+                    } else {
+                        m_log.TraceError("SAP return failure");
+                        bRet = false;
                     }
+                } else {
+                    m_log.TraceError("SAP return null");
+                    bRet = false;
                 }
             } catch (Exception) {
                 throw;
@@ -561,7 +567,7 @@ namespace SH_OBD {
             } else if (strProtocol.Contains("1850")) {
                 m_xattr = new int[] { 2, 1 };
             }
-            return true;
+            return bRet;
         }
 
         private void SetDevice(HardwareType device) {

@@ -196,8 +196,8 @@ namespace SH_OBD {
                             MessageBox.Show("从SAP获取OBD协议失败。将会自动探测OBD协议。", "获取OBD协议失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     } catch (Exception ex) {
-                        m_obdInterface.GetLogger().TraceWarning("Failed to get protocol by VIN, Reason: " + ex.Message);
-                        MessageBox.Show("从SAP获取OBD协议失败。将会自动探测OBD协议。\r\n" + ex.Message, "获取OBD协议失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        m_obdInterface.GetLogger().TraceError("Failed to get protocol by VIN, Reason: " + ex.Message);
+                        MessageBox.Show("从SAP获取OBD协议发生异常。将会自动探测OBD协议。\r\n" + ex.Message, "获取OBD协议失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 if (m_obdInterface.InitDeviceAuto(false)) {

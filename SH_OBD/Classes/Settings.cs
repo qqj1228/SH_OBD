@@ -289,7 +289,7 @@ namespace SH_OBD {
             CN6_OBD_SUP = "29,2B";
             UnmeaningNum = 5;
             AutoProtocolOrder = "6,7,8,9,10,5,4,3,2,1";
-            SpecifiedProtocol = false;
+            SpecifiedProtocol = true;
             KMSSpecified = true;
         }
     }

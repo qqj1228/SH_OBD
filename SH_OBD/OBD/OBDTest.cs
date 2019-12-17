@@ -1391,18 +1391,6 @@ namespace SH_OBD {
             return compIgn;
         }
 
-        private bool GetCompIgn(Dictionary<string, int> ColsDic, string[,] Results, int iRow) {
-            bool compIgn = true;
-            compIgn = compIgn && Results[iRow, ColsDic["CAT_RDY"]] == "不适用";
-            compIgn = compIgn && Results[iRow, ColsDic["HCAT_RDY"]] == "不适用";
-            compIgn = compIgn && Results[iRow, ColsDic["EVAP_RDY"]] == "不适用";
-            compIgn = compIgn && Results[iRow, ColsDic["AIR_RDY"]] == "不适用";
-            compIgn = compIgn && Results[iRow, ColsDic["ACRF_RDY"]] == "不适用";
-            compIgn = compIgn && Results[iRow, ColsDic["O2S_RDY"]] == "不适用";
-            compIgn = compIgn && Results[iRow, ColsDic["HTR_RDY"]] == "不适用";
-            return compIgn;
-        }
-
         private void SetDataTableResultFromDB(Dictionary<string, int> ColsDic, string[,] Results, DataTable dtOut) {
             dtOut.Clear();
             if (ColsDic.Count > 0 && Results != null) {
@@ -1439,37 +1427,6 @@ namespace SH_OBD {
                     dr[27] = Results[i, ColsDic["CVN"]];
                     dr[28] = Results[i, ColsDic["Result"]];
                     dr[29] = Results[i, ColsDic["Upload"]];
-
-                    //if (GetCompIgn(ColsDic, Results, i)) {
-                    //    dr[12] = "不适用";         // CAT_RDY
-                    //    dr[13] = "不适用";         // HCAT_RDY
-                    //    dr[14] = "不适用";         // EVAP_RDY
-                    //    dr[15] = "不适用";         // AIR_RDY
-                    //    dr[16] = "不适用";         // ACRF_RDY
-                    //    dr[17] = "不适用";         // O2S_RDY
-                    //    dr[18] = "不适用";         // HTR_RDY
-                    //    dr[19] = Results[i, ColsDic["EGR_DRY"]];
-                    //    dr[20] = Results[i, ColsDic["HCCAT_DRY"]];
-                    //    dr[21] = Results[i, ColsDic["NCAT_DRY"]];
-                    //    dr[22] = Results[i, ColsDic["BP_DRY"]];
-                    //    dr[23] = Results[i, ColsDic["EGS_DRY"]];
-                    //    dr[24] = Results[i, ColsDic["PM_DRY"]];
-                    //} else {
-                    //    dr[12] = Results[i, ColsDic["CAT_DRY"]];
-                    //    dr[13] = Results[i, ColsDic["HCAT_DRY"]];
-                    //    dr[14] = Results[i, ColsDic["EVAP_DRY"]];
-                    //    dr[15] = Results[i, ColsDic["AIR_DRY"]];
-                    //    dr[16] = Results[i, ColsDic["ACRF_DRY"]];
-                    //    dr[17] = Results[i, ColsDic["O2S_DRY"]];
-                    //    dr[18] = Results[i, ColsDic["HTR_DRY"]];
-                    //    dr[19] = Results[i, ColsDic["EGR_DRY"]];
-                    //    dr[20] = "不适用";         // HCCAT_RDY
-                    //    dr[21] = "不适用";         // NCAT_RDY
-                    //    dr[22] = "不适用";         // BP_RDY
-                    //    dr[23] = "不适用";         // EGS_RDY
-                    //    dr[24] = "不适用";         // PM_RDY
-                    //}
-
                     dtOut.Rows.Add(dr);
                 }
             }
