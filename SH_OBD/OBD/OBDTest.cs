@@ -746,7 +746,11 @@ namespace SH_OBD {
                 throw new Exception("生成 Result DataTable 出错");
             }
 
+            DataTable dtIUPR = new DataTable("OBDIUPR");
+            SetDataTableIUPR(StrVIN_ECU, ref dtIUPR);
+
             m_db.ModifyDB(dt);
+            m_db.ModifyDB(dtIUPR);
             WriteDbDone?.Invoke();
 
             try {
@@ -1161,6 +1165,135 @@ namespace SH_OBD {
             }
         }
 
+        private void SetDataTableIUPRColumns(ref DataTable dtOut) {
+            dtOut.Columns.Add("VIN", typeof(string));
+            dtOut.Columns.Add("ECU_ID", typeof(string));
+            dtOut.Columns.Add("CATCOMP1", typeof(string));
+            dtOut.Columns.Add("CATCOND1", typeof(string));
+            dtOut.Columns.Add("CATCOMP2", typeof(string));
+            dtOut.Columns.Add("CATCOND2", typeof(string));
+            dtOut.Columns.Add("O2SCOMP1", typeof(string));
+            dtOut.Columns.Add("O2SCOND1", typeof(string));
+            dtOut.Columns.Add("O2SCOMP2", typeof(string));
+            dtOut.Columns.Add("O2SCOND2", typeof(string));
+            dtOut.Columns.Add("SO2SCOMP1", typeof(string));
+            dtOut.Columns.Add("SO2SCOND1", typeof(string));
+            dtOut.Columns.Add("SO2SCOMP2", typeof(string));
+            dtOut.Columns.Add("SO2SCOND2", typeof(string));
+            dtOut.Columns.Add("EVAPCOMP", typeof(string));
+            dtOut.Columns.Add("EVAPCOND", typeof(string));
+            dtOut.Columns.Add("EGRCOMP_08", typeof(string));
+            dtOut.Columns.Add("EGRCOND_08", typeof(string));
+            dtOut.Columns.Add("PFCOMP1", typeof(string));
+            dtOut.Columns.Add("PFCOND1", typeof(string));
+            dtOut.Columns.Add("PFCOMP2", typeof(string));
+            dtOut.Columns.Add("PFCOND2", typeof(string));
+            dtOut.Columns.Add("AIRCOMP", typeof(string));
+            dtOut.Columns.Add("AIRCOND", typeof(string));
+            dtOut.Columns.Add("HCCATCOMP", typeof(string));
+            dtOut.Columns.Add("HCCATCOND", typeof(string));
+            dtOut.Columns.Add("NCATCOMP", typeof(string));
+            dtOut.Columns.Add("NCATCOND", typeof(string));
+            dtOut.Columns.Add("NADSCOMP", typeof(string));
+            dtOut.Columns.Add("NADSCOND", typeof(string));
+            dtOut.Columns.Add("PMCOMP", typeof(string));
+            dtOut.Columns.Add("PMCOND", typeof(string));
+            dtOut.Columns.Add("EGSCOMP", typeof(string));
+            dtOut.Columns.Add("EGSCOND", typeof(string));
+            dtOut.Columns.Add("EGRCOMP_0B", typeof(string));
+            dtOut.Columns.Add("EGRCOND_0B", typeof(string));
+            dtOut.Columns.Add("BPCOMP", typeof(string));
+            dtOut.Columns.Add("BPCOND", typeof(string));
+        }
+
+        private void SetDataTableIUPR(string strVIN, ref DataTable dtOut) {
+            SetDataTableIUPRColumns(ref dtOut);
+            for (int i = 2; i < m_dtIUPR.Columns.Count; i++) {
+                DataRow dr = dtOut.NewRow();
+                dr["VIN"] = strVIN;
+                dr["ECU_ID"] = m_dtIUPR.Columns[i].ColumnName;
+                if (m_mode09Support.ContainsKey(m_dtIUPR.Columns[i].ColumnName) && m_mode09Support[m_dtIUPR.Columns[i].ColumnName][0x08 - 1]) {
+                    dr["CATCOMP1"] = m_dtIUPR.Rows[0][i].ToString();
+                    dr["CATCOND1"] = m_dtIUPR.Rows[1][i].ToString();
+                    dr["CATCOMP2"] = m_dtIUPR.Rows[3][i].ToString();
+                    dr["CATCOND2"] = m_dtIUPR.Rows[4][i].ToString();
+                    dr["O2SCOMP1"] = m_dtIUPR.Rows[6][i].ToString();
+                    dr["O2SCOND1"] = m_dtIUPR.Rows[7][i].ToString();
+                    dr["O2SCOMP2"] = m_dtIUPR.Rows[9][i].ToString();
+                    dr["O2SCOND2"] = m_dtIUPR.Rows[10][i].ToString();
+                    dr["SO2SCOMP1"] = m_dtIUPR.Rows[12][i].ToString();
+                    dr["SO2SCOND1"] = m_dtIUPR.Rows[13][i].ToString();
+                    dr["SO2SCOMP2"] = m_dtIUPR.Rows[15][i].ToString();
+                    dr["SO2SCOND2"] = m_dtIUPR.Rows[16][i].ToString();
+                    dr["EVAPCOMP"] = m_dtIUPR.Rows[18][i].ToString();
+                    dr["EVAPCOND"] = m_dtIUPR.Rows[19][i].ToString();
+                    dr["EGRCOMP_08"] = m_dtIUPR.Rows[21][i].ToString();
+                    dr["EGRCOND_08"] = m_dtIUPR.Rows[22][i].ToString();
+                    dr["PFCOMP1"] = m_dtIUPR.Rows[24][i].ToString();
+                    dr["PFCOND1"] = m_dtIUPR.Rows[25][i].ToString();
+                    dr["PFCOMP2"] = m_dtIUPR.Rows[27][i].ToString();
+                    dr["PFCOND2"] = m_dtIUPR.Rows[28][i].ToString();
+                    dr["AIRCOMP"] = m_dtIUPR.Rows[30][i].ToString();
+                    dr["AIRCOND"] = m_dtIUPR.Rows[31][i].ToString();
+                } else {
+                    dr["CATCOMP1"] = "-1";
+                    dr["CATCOND1"] = "-1";
+                    dr["CATCOMP2"] = "-1";
+                    dr["CATCOND2"] = "-1";
+                    dr["O2SCOMP1"] = "-1";
+                    dr["O2SCOND1"] = "-1";
+                    dr["O2SCOMP2"] = "-1";
+                    dr["O2SCOND2"] = "-1";
+                    dr["SO2SCOMP1"] = "-1";
+                    dr["SO2SCOND1"] = "-1";
+                    dr["SO2SCOMP2"] = "-1";
+                    dr["SO2SCOND2"] = "-1";
+                    dr["EVAPCOMP"] = "-1";
+                    dr["EVAPCOND"] = "-1";
+                    dr["EGRCOMP_08"] = "-1";
+                    dr["EGRCOND_08"] = "-1";
+                    dr["PFCOMP1"] = "-1";
+                    dr["PFCOND1"] = "-1";
+                    dr["PFCOMP2"] = "-1";
+                    dr["PFCOND2"] = "-1";
+                    dr["AIRCOMP"] = "-1";
+                    dr["AIRCOND"] = "-1";
+                }
+                if (m_mode09Support.ContainsKey(m_dtIUPR.Columns[i].ColumnName) && m_mode09Support[m_dtIUPR.Columns[i].ColumnName][0x0B - 1]) {
+                    dr["HCCATCOMP"] = m_dtIUPR.Rows[0][i].ToString();
+                    dr["HCCATCOND"] = m_dtIUPR.Rows[1][i].ToString();
+                    dr["NCATCOMP"] = m_dtIUPR.Rows[3][i].ToString();
+                    dr["NCATCOND"] = m_dtIUPR.Rows[4][i].ToString();
+                    dr["NADSCOMP"] = m_dtIUPR.Rows[6][i].ToString();
+                    dr["NADSCOND"] = m_dtIUPR.Rows[7][i].ToString();
+                    dr["PMCOMP"] = m_dtIUPR.Rows[9][i].ToString();
+                    dr["PMCOND"] = m_dtIUPR.Rows[10][i].ToString();
+                    dr["EGSCOMP"] = m_dtIUPR.Rows[12][i].ToString();
+                    dr["EGSCOND"] = m_dtIUPR.Rows[13][i].ToString();
+                    dr["EGRCOMP_0B"] = m_dtIUPR.Rows[15][i].ToString();
+                    dr["EGRCOND_0B"] = m_dtIUPR.Rows[16][i].ToString();
+                    dr["BPCOMP"] = m_dtIUPR.Rows[18][i].ToString();
+                    dr["BPCOND"] = m_dtIUPR.Rows[19][i].ToString();
+                } else {
+                    dr["HCCATCOMP"] = "-1";
+                    dr["HCCATCOND"] = "-1";
+                    dr["NCATCOMP"] = "-1";
+                    dr["NCATCOND"] = "-1";
+                    dr["NADSCOMP"] = "-1";
+                    dr["NADSCOND"] = "-1";
+                    dr["PMCOMP"] = "-1";
+                    dr["PMCOND"] = "-1";
+                    dr["EGSCOMP"] = "-1";
+                    dr["EGSCOND"] = "-1";
+                    dr["EGRCOMP_0B"] = "-1";
+                    dr["EGRCOND_0B"] = "-1";
+                    dr["BPCOMP"] = "-1";
+                    dr["BPCOND"] = "-1";
+                }
+                dtOut.Rows.Add(dr);
+            }
+        }
+
         private void SetDataTable1MES(DataTable dt1MES, string strVIN, string strOBDResult) {
             dt1MES.Columns.Add("TestDate");     // 0
             dt1MES.Columns.Add("SBFLAG");       // 1
@@ -1439,6 +1572,51 @@ namespace SH_OBD {
             m_dtECUInfo.Rows.Add(dr);
         }
 
+        private void SetDataRowIUPRFromDB(int lineNO, string strItem, int padTotal, int padNum, DataTable dtIn, int colIndex) {
+            double[] nums = new double[dtIn.Rows.Count];
+            double[] dens = new double[dtIn.Rows.Count];
+            DataRow dr = m_dtIUPR.NewRow();
+            dr[0] = lineNO;
+            if (dr[1].ToString().Length == 0) {
+                dr[1] = strItem + ": " + "监测完成次数".PadLeft(padTotal - padNum + 6);
+            }
+            for (int i = 0; i < dtIn.Rows.Count; i++) {
+                dr[i + 2] = dtIn.Rows[i][colIndex].ToString();
+                int.TryParse(dtIn.Rows[i][colIndex].ToString(), out int temp);
+                nums[i] = temp;
+            }
+            m_dtIUPR.Rows.Add(dr);
+
+            dr = m_dtIUPR.NewRow();
+            if (dr[1].ToString().Length == 0) {
+                dr[1] = "符合监测条件次数".PadLeft(padTotal + 8);
+            }
+            for (int i = 0; i < dtIn.Rows.Count; i++) {
+                dr[i + 2] = dtIn.Rows[i][colIndex + 1].ToString();
+                int.TryParse(dtIn.Rows[i][colIndex + 1].ToString(), out int temp);
+                dens[i] = temp;
+            }
+            m_dtIUPR.Rows.Add(dr);
+
+            dr = m_dtIUPR.NewRow();
+            if (dr[1].ToString().Length == 0) {
+                dr[1] = "IUPR率".PadLeft(padTotal + 5);
+            }
+            for (int i = 0; i < dtIn.Rows.Count; i++) {
+                if (dens[i] == 0) {
+                    dr[i + 2] = "7.99527";
+                } else {
+                    double r = Math.Round(nums[i] / dens[i], 6);
+                    if (r > 7.99527) {
+                        dr[i + 2] = "7.99527";
+                    } else {
+                        dr[i + 2] = r.ToString();
+                    }
+                }
+            }
+            m_dtIUPR.Rows.Add(dr);
+        }
+
         private void SetDataTableInfoFromDB(DataTable dtIn) {
             if (m_dtInfo.Columns.Count <= 0) {
                 return;
@@ -1483,21 +1661,59 @@ namespace SH_OBD {
             SetDataRowECUInfoFromDB(++NO, "CVN", dtIn);               // 3
         }
 
+        private void SetDataTableIUPRFromDB(DataTable dtIn, Dictionary<string, int> colsDic) {
+            if (m_dtIUPR.Columns.Count <= 0) {
+                return;
+            }
+            int NO = 0;
+            if (GetCompIgnIUPR(dtIn)) {
+                // 压缩点火
+                SetDataRowIUPRFromDB(++NO, "NMHC催化器", 18, 12, dtIn, colsDic["HCCATCOMP"] - 2);
+                SetDataRowIUPRFromDB(++NO, "NOx催化器", 18, 11, dtIn, colsDic["NCATCOMP"] - 2);
+                SetDataRowIUPRFromDB(++NO, "NOx吸附器", 18, 11, dtIn, colsDic["NADSCOMP"] - 2);
+                SetDataRowIUPRFromDB(++NO, "PM捕集器", 18, 10, dtIn, colsDic["PMCOMP"] - 2);
+                SetDataRowIUPRFromDB(++NO, "废气传感器", 18, 12, dtIn, colsDic["EGSCOMP"] - 2);
+                SetDataRowIUPRFromDB(++NO, "EGR和VVT", 18, 10, dtIn, colsDic["EGRCOMP_0B"] - 2);
+                SetDataRowIUPRFromDB(++NO, "增压压力", 18, 10, dtIn, colsDic["BPCOMP"] - 2);
+            } else {
+                // 火花点火
+                NO = 0;
+                SetDataRowIUPRFromDB(++NO, "催化器 组1", 18, 12, dtIn, colsDic["CATCOMP1"] - 2);
+                SetDataRowIUPRFromDB(++NO, "催化器 组2", 18, 12, dtIn, colsDic["CATCOMP2"] - 2);
+                SetDataRowIUPRFromDB(++NO, "前氧传感器 组1", 18, 16, dtIn, colsDic["O2SCOMP1"] - 2);
+                SetDataRowIUPRFromDB(++NO, "前氧传感器 组2", 18, 16, dtIn, colsDic["O2SCOMP2"] - 2);
+                SetDataRowIUPRFromDB(++NO, "后氧传感器 组1", 18, 16, dtIn, colsDic["SO2SCOMP1"] - 2);
+                SetDataRowIUPRFromDB(++NO, "后氧传感器 组2", 18, 16, dtIn, colsDic["SO2SCOMP2"] - 2);
+                SetDataRowIUPRFromDB(++NO, "EVAP", 18, 6, dtIn, colsDic["EVAPCOMP"] - 2);
+                SetDataRowIUPRFromDB(++NO, "EGR和VVT", 18, 10, dtIn, colsDic["EGRCOMP_08"] - 2);
+                SetDataRowIUPRFromDB(++NO, "GPF 组1", 18, 9, dtIn, colsDic["PFCOMP1"] - 2);
+                SetDataRowIUPRFromDB(++NO, "GPF 组2", 18, 9, dtIn, colsDic["PFCOMP2"] - 2);
+                SetDataRowIUPRFromDB(++NO, "二次空气喷射系统", 18, 18, dtIn, colsDic["AIRCOMP"] - 2);
+            }
+        }
+
         public bool UploadDataFromDB(string strVIN, out string errorMsg, bool bOnlyShowData) {
             errorMsg = "";
             DataTable dt = new DataTable();
             SetDataTableResultColumns(ref dt);
-
             Dictionary<string, int> ColsDic = m_db.GetTableColumnsDic("OBDData");
             Dictionary<string, string> VINDic = new Dictionary<string, string> { { "VIN", strVIN } };
             string[,] Results = m_db.GetRecords("OBDData", VINDic);
-
             SetDataTableResultFromDB(ColsDic, Results, dt);
             SetDataTableColumnsFromDB(m_dtInfo, dt);
             SetDataTableColumnsFromDB(m_dtECUInfo, dt);
+
+            DataTable dtIUPR = new DataTable();
+            SetDataTableIUPRColumns(ref dtIUPR);
+            ColsDic = m_db.GetTableColumnsDic("OBDIUPR");
+            Results = m_db.GetRecords("OBDIUPR", VINDic);
+            SetDataTableIUPRResultFromDB(ColsDic, Results, dtIUPR);
+            SetDataTableColumnsFromDB(m_dtIUPR, dtIUPR);
+
             SetupColumnsDone?.Invoke();
             SetDataTableInfoFromDB(dt);
             SetDataTableECUInfoFromDB(dt);
+            SetDataTableIUPRFromDB(dtIUPR, ColsDic);
             bool bRet = false;
             if (bOnlyShowData) {
                 m_obdInterface.m_log.TraceInfo("Only show data from database");
@@ -1634,16 +1850,16 @@ namespace SH_OBD {
             return compIgn;
         }
 
-        private bool GetCompIgn(Dictionary<string, int> ColsDic, string[,] Results, int iRow) {
-            bool compIgn = true;
-            compIgn = compIgn && Results[iRow, ColsDic["CAT_RDY"]] == "不适用";
-            compIgn = compIgn && Results[iRow, ColsDic["HCAT_RDY"]] == "不适用";
-            compIgn = compIgn && Results[iRow, ColsDic["EVAP_RDY"]] == "不适用";
-            compIgn = compIgn && Results[iRow, ColsDic["AIR_RDY"]] == "不适用";
-            compIgn = compIgn && Results[iRow, ColsDic["ACRF_RDY"]] == "不适用";
-            compIgn = compIgn && Results[iRow, ColsDic["O2S_RDY"]] == "不适用";
-            compIgn = compIgn && Results[iRow, ColsDic["HTR_RDY"]] == "不适用";
-            return compIgn;
+        private bool GetCompIgnIUPR(DataTable dtIn) {
+            bool compIgnIUPR = true;
+            compIgnIUPR = compIgnIUPR && dtIn.Rows[0]["HCCATCOMP"].ToString() == "-1";
+            compIgnIUPR = compIgnIUPR && dtIn.Rows[0]["NCATCOMP"].ToString() == "-1";
+            compIgnIUPR = compIgnIUPR && dtIn.Rows[0]["NADSCOMP"].ToString() == "-1";
+            compIgnIUPR = compIgnIUPR && dtIn.Rows[0]["PMCOMP"].ToString() == "-1";
+            compIgnIUPR = compIgnIUPR && dtIn.Rows[0]["EGSCOMP"].ToString() == "-1";
+            compIgnIUPR = compIgnIUPR && dtIn.Rows[0]["EGRCOMP_0B"].ToString() == "-1";
+            compIgnIUPR = compIgnIUPR && dtIn.Rows[0]["BPCOMP"].ToString() == "-1";
+            return !compIgnIUPR;
         }
 
         private void SetDataTableResultFromDB(Dictionary<string, int> ColsDic, string[,] Results, DataTable dtOut) {
@@ -1682,6 +1898,55 @@ namespace SH_OBD {
                     dr[27] = Results[i, ColsDic["CVN"]];
                     dr[28] = Results[i, ColsDic["Result"]];
                     dr[29] = Results[i, ColsDic["Upload"]];
+                    dtOut.Rows.Add(dr);
+                }
+            }
+        }
+
+        private void SetDataTableIUPRResultFromDB(Dictionary<string, int> ColsDic, string[,] Results, DataTable dtOut) {
+            dtOut.Clear();
+            if (ColsDic.Count > 0 && Results != null) {
+                int rowCount = Results.GetLength(0);
+                for (int i = 0; i < rowCount; i++) {
+                    DataRow dr = dtOut.NewRow();
+                    dr["VIN"] = Results[i, ColsDic["VIN"]];
+                    dr["ECU_ID"] = Results[i, ColsDic["ECU_ID"]];
+                    dr["CATCOMP1"] = Results[i, ColsDic["CATCOMP1"]];
+                    dr["CATCOND1"] = Results[i, ColsDic["CATCOND1"]];
+                    dr["CATCOMP2"] = Results[i, ColsDic["CATCOMP2"]];
+                    dr["CATCOND2"] = Results[i, ColsDic["CATCOND2"]];
+                    dr["O2SCOMP1"] = Results[i, ColsDic["O2SCOMP1"]];
+                    dr["O2SCOND1"] = Results[i, ColsDic["O2SCOND1"]];
+                    dr["O2SCOMP2"] = Results[i, ColsDic["O2SCOMP2"]];
+                    dr["O2SCOND2"] = Results[i, ColsDic["O2SCOND2"]];
+                    dr["SO2SCOMP1"] = Results[i, ColsDic["SO2SCOMP1"]];
+                    dr["SO2SCOND1"] = Results[i, ColsDic["SO2SCOND1"]];
+                    dr["SO2SCOMP2"] = Results[i, ColsDic["SO2SCOMP2"]];
+                    dr["SO2SCOND2"] = Results[i, ColsDic["SO2SCOND2"]];
+                    dr["EVAPCOMP"] = Results[i, ColsDic["EVAPCOMP"]];
+                    dr["EVAPCOND"] = Results[i, ColsDic["EVAPCOND"]];
+                    dr["EGRCOMP_08"] = Results[i, ColsDic["EGRCOMP_08"]];
+                    dr["EGRCOND_08"] = Results[i, ColsDic["EGRCOND_08"]];
+                    dr["PFCOMP1"] = Results[i, ColsDic["PFCOMP1"]];
+                    dr["PFCOND1"] = Results[i, ColsDic["PFCOND1"]];
+                    dr["PFCOMP2"] = Results[i, ColsDic["PFCOMP2"]];
+                    dr["PFCOND2"] = Results[i, ColsDic["PFCOND2"]];
+                    dr["AIRCOMP"] = Results[i, ColsDic["AIRCOMP"]];
+                    dr["AIRCOND"] = Results[i, ColsDic["AIRCOND"]];
+                    dr["HCCATCOMP"] = Results[i, ColsDic["HCCATCOMP"]];
+                    dr["HCCATCOND"] = Results[i, ColsDic["HCCATCOND"]];
+                    dr["NCATCOMP"] = Results[i, ColsDic["NCATCOMP"]];
+                    dr["NCATCOND"] = Results[i, ColsDic["NCATCOND"]];
+                    dr["NADSCOMP"] = Results[i, ColsDic["NADSCOMP"]];
+                    dr["NADSCOND"] = Results[i, ColsDic["NADSCOND"]];
+                    dr["PMCOMP"] = Results[i, ColsDic["PMCOMP"]];
+                    dr["PMCOND"] = Results[i, ColsDic["PMCOND"]];
+                    dr["EGSCOMP"] = Results[i, ColsDic["EGSCOMP"]];
+                    dr["EGSCOND"] = Results[i, ColsDic["EGSCOND"]];
+                    dr["EGRCOMP_0B"] = Results[i, ColsDic["EGRCOMP_0B"]];
+                    dr["EGRCOND_0B"] = Results[i, ColsDic["EGRCOND_0B"]];
+                    dr["BPCOMP"] = Results[i, ColsDic["BPCOMP"]];
+                    dr["BPCOND"] = Results[i, ColsDic["BPCOND"]];
                     dtOut.Rows.Add(dr);
                 }
             }

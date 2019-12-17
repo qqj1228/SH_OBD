@@ -34,14 +34,20 @@ namespace SH_OBD {
                 this.labelInfo.ForeColor = Color.Black;
                 this.labelInfo.Text = "正在显示结果。。。";
             });
-            if (GridViewInfo.Columns.Count > 0) {
+            if (GridViewInfo.Columns.Count > 1) {
                 GridViewInfo.Columns[0].Width = 30;
-                GridViewInfo.Columns[1].Width = 150;
+                GridViewInfo.Columns[1].Width = GridViewInfo.Columns[0].Width * 5;
                 SetGridViewColumnsSortMode(this.GridViewInfo, DataGridViewColumnSortMode.Programmatic);
             }
-            if (GridViewECUInfo.Columns.Count > 0) {
+            if (GridViewECUInfo.Columns.Count > 1) {
                 GridViewECUInfo.Columns[0].Width = GridViewInfo.Columns[0].Width;
+                GridViewECUInfo.Columns[1].Width = GridViewInfo.Columns[1].Width;
                 SetGridViewColumnsSortMode(this.GridViewECUInfo, DataGridViewColumnSortMode.Programmatic);
+            }
+            if (GridViewIUPR.Columns.Count > 1) {
+                GridViewIUPR.Columns[0].Width = GridViewInfo.Columns[0].Width;
+                GridViewIUPR.Columns[1].Width = GridViewInfo.Columns[0].Width * 8;
+                SetGridViewColumnsSortMode(this.GridViewIUPR, DataGridViewColumnSortMode.Programmatic);
             }
         }
 
@@ -188,10 +194,16 @@ namespace SH_OBD {
                 if (codes != null) {
                     if (codes.Length > 2) {
                         m_obdTest.StrVIN_IN = codes[2];
+                        m_obdTest.StrType_IN = codes[0];
+                        this.txtBoxVIN.Text = m_obdTest.StrVIN_IN;
+                        this.txtBoxVehicleType.Text = m_obdTest.StrType_IN;
+                    } else {
+                        if (tb.Name == "txtBoxVIN") {
+                            m_obdTest.StrVIN_IN = codes[0];
+                        } else if (tb.Name == "txtBoxVehicleType") {
+                            m_obdTest.StrType_IN = codes[0];
+                        }
                     }
-                    m_obdTest.StrType_IN = codes[0];
-                    this.txtBoxVIN.Text = m_obdTest.StrVIN_IN;
-                    this.txtBoxVehicleType.Text = m_obdTest.StrType_IN;
                 }
                 if (this.chkBoxManualUpload.Checked || this.chkBoxShowData.Checked) {
                     if (this.txtBoxVIN.Text.Length == 17 && m_obdTest.StrType_IN.Length >= 10) {
