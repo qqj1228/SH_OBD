@@ -1958,10 +1958,13 @@ namespace SH_OBD {
             Dictionary<string, string> TypeDic = new Dictionary<string, string> { { "Type", strType }, { "ECU_ID", strECUID } };
             string[,] Results = m_db.GetRecords("VehicleType", TypeDic);
             if (Results != null && Results.GetLength(0) > 0) {
-                for (int i = 0; i < Results.GetLength(0) && !bCALID && !bCVN; i++) {
+                for (int i = 0; i < Results.GetLength(0); i++) {
                     bCALID = Results[i, 4] == strCALID;
                     bCVN = Results[i, 5] == strCVN;
                     m_obdInterface.m_log.TraceInfo("VehicleType data from database: [Type: " + Results[i, 2] + ", ECU_ID: " + Results[i, 3] + ", CAL_ID: " + Results[i, 4] + ", CVN: " + Results[i, 5] + "]");
+                    if (bCALID && bCVN) {
+                        break;
+                    }
                 }
             } else {
                 VehicleTypeExist = false;
@@ -1982,7 +1985,8 @@ namespace SH_OBD {
             FileInfo fileInfo = new FileInfo(OriPath);
             using (ExcelPackage package = new ExcelPackage(fileInfo, true)) {
                 ExcelWorksheet worksheet1 = package.Workbook.Worksheets[1];
-                worksheet1.Cells["B2"].Value = dt.Rows[0][0].ToString(); // VIN
+                // VIN
+                worksheet1.Cells["B2"].Value = dt.Rows[0][0].ToString();
 
                 // CALID, CVN
                 string[] CALIDArray = dt.Rows[0][26].ToString().Split(',');
