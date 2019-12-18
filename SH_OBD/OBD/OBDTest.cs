@@ -1953,26 +1953,39 @@ namespace SH_OBD {
         }
 
         private void CheckCALIDCVN(string strType, string strECUID, string strCALID, string strCVN, CheckResult check) {
-            bool bCALID = false;
-            bool bCVN = false;
+            // CALID, CVN 状态: 0 - CALID和CVN均为false，1 - CALID为true，2 - CVN为true，3 - CALID和CVN均为true
+            byte status;
+            List<byte> ls = new List<byte>();
             Dictionary<string, string> TypeDic = new Dictionary<string, string> { { "Type", strType }, { "ECU_ID", strECUID } };
             string[,] Results = m_db.GetRecords("VehicleType", TypeDic);
             if (Results != null && Results.GetLength(0) > 0) {
                 for (int i = 0; i < Results.GetLength(0); i++) {
-                    bCALID = Results[i, 4] == strCALID;
-                    bCVN = Results[i, 5] == strCVN;
+                    status = 0;
+                    if (Results[i, 4] == strCALID) {
+                        status |= 0x01;
+                    }
+                    if (Results[i, 5] == strCVN) {
+                        status |= 0x02;
+                    }
+                    ls.Add(status);
                     m_obdInterface.m_log.TraceInfo("VehicleType data from database: [Type: " + Results[i, 2] + ", ECU_ID: " + Results[i, 3] + ", CAL_ID: " + Results[i, 4] + ", CVN: " + Results[i, 5] + "]");
-                    if (bCALID && bCVN) {
+                    if ((status & 0x03) == 3) {
                         break;
                     }
                 }
             } else {
                 VehicleTypeExist = false;
             }
-            check.CALID = bCALID;
-            check.CVN = bCVN;
-            CALIDCheckResult = CALIDCheckResult && bCALID;
-            CVNCheckResult = CVNCheckResult && bCVN;
+            if (ls.Count > 0) {
+                ls.Sort();
+                check.CALID = (ls.Last() & 0x01) == 1;
+                check.CVN = (ls.Last() & 0x02) == 2;
+            } else {
+                check.CALID = false;
+                check.CVN = false;
+            }
+            CALIDCheckResult = CALIDCheckResult && check.CALID;
+            CVNCheckResult = CVNCheckResult && check.CVN;
         }
 
         private void ExportResultFile(DataTable dt) {
