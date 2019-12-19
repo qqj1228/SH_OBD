@@ -24,11 +24,14 @@
         /// </summary>
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.GridContent = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.MenuItemImport = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemExport = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.MenuItemArrange = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemRefresh = new System.Windows.Forms.ToolStripMenuItem();
             this.txtBoxType = new System.Windows.Forms.TextBox();
             this.grpBoxType = new System.Windows.Forms.GroupBox();
@@ -41,7 +44,6 @@
             this.btnModify = new System.Windows.Forms.Button();
             this.btnInsert = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
-            this.MenuItemArrange = new System.Windows.Forms.ToolStripMenuItem();
             this.grpBoxProject = new System.Windows.Forms.GroupBox();
             this.txtBoxProject = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.GridContent)).BeginInit();
@@ -62,8 +64,24 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GridContent.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.GridContent.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.GridContent.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.GridContent.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.GridContent.ContextMenuStrip = this.contextMenuStrip1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.GridContent.DefaultCellStyle = dataGridViewCellStyle2;
             this.GridContent.Location = new System.Drawing.Point(12, 64);
             this.GridContent.Name = "GridContent";
             this.GridContent.ReadOnly = true;
@@ -103,6 +121,13 @@
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(174, 6);
+            // 
+            // MenuItemArrange
+            // 
+            this.MenuItemArrange.Name = "MenuItemArrange";
+            this.MenuItemArrange.Size = new System.Drawing.Size(177, 22);
+            this.MenuItemArrange.Text = "整理数据(A)";
+            this.MenuItemArrange.Click += new System.EventHandler(this.MenuItemArrange_Click);
             // 
             // MenuItemRefresh
             // 
@@ -215,13 +240,6 @@
             this.btnRemove.Text = "删除选中行";
             this.btnRemove.UseVisualStyleBackColor = true;
             this.btnRemove.Click += new System.EventHandler(this.BtnRemove_Click);
-            // 
-            // MenuItemArrange
-            // 
-            this.MenuItemArrange.Name = "MenuItemArrange";
-            this.MenuItemArrange.Size = new System.Drawing.Size(177, 22);
-            this.MenuItemArrange.Text = "整理数据(A)";
-            this.MenuItemArrange.Click += new System.EventHandler(this.MenuItemArrange_Click);
             // 
             // grpBoxProject
             // 

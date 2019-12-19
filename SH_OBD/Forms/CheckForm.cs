@@ -66,7 +66,7 @@ namespace SH_OBD {
             string[] columns = m_obdTest.m_db.GetTableColumns("VehicleType");
             SetDataTableColumns<string>(m_dtContent, columns);
             if (this.GridContent.Columns.Count > 0) {
-                SetGridViewColumnsSortMode(this.GridContent, DataGridViewColumnSortMode.Programmatic);
+                SetGridViewColumnsSortMode(this.GridContent, DataGridViewColumnSortMode.NotSortable);
             }
             SetDataTableRow(m_dtContent);
         }
