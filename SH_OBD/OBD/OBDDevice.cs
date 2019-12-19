@@ -11,7 +11,7 @@ namespace SH_OBD {
         protected OBDCommELM m_CommELM;
         protected int[] m_xattr;
 
-        public OBDDevice(Logger log, int[] xattr) {
+        protected OBDDevice(Logger log, int[] xattr) {
             m_log = log;
             m_CommELM = new OBDCommELM(log);
             m_xattr = xattr;
