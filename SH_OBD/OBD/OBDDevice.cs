@@ -9,7 +9,7 @@ namespace SH_OBD {
         protected OBDParser m_Parser;
         protected OBDCommELM m_CommELM;
 
-        public OBDDevice(Logger log) {
+        protected OBDDevice(Logger log) {
             m_log = log;
             m_CommELM = new OBDCommELM(log);
         }

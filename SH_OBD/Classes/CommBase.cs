@@ -14,7 +14,7 @@ namespace SH_OBD {
         private bool m_auto = false;
         private int m_writeCount = 0;
 
-        public CommBase(Logger log) {
+        protected CommBase(Logger log) {
             m_log = log;
         }
 
