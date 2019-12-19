@@ -7,7 +7,7 @@ using System.Threading;
 using System.Xml.Serialization;
 
 namespace SH_OBD {
-    public abstract class CommBase : IDisposable {
+    public abstract class CommBase {
         private SerialPortClass m_serial = null;
         private readonly Logger m_log;
         private bool m_online = false;
@@ -117,9 +117,6 @@ namespace SH_OBD {
             m_serial.ClosePort();
         }
 
-        public void Dispose() {
-            Close();
-        }
 
         protected void ThrowException(string reason) {
             if (m_online) {
