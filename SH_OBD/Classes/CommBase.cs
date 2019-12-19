@@ -50,8 +50,8 @@ namespace SH_OBD {
             SerialPort sp = new SerialPort(comPort);
             try {
                 sp.Open();
-            } catch (Exception e) {
-                if (e is UnauthorizedAccessException uae) {
+            } catch (Exception ex) {
+                if (ex is UnauthorizedAccessException uaex) {
                     return PortStatus.Absent;
                 } else {
                     return PortStatus.Unavailable;
@@ -91,8 +91,8 @@ namespace SH_OBD {
                 } else {
                     return false;
                 }
-            } catch (Exception e) {
-                m_log.TraceFatal(string.Format("Can't open {0}! Reason: {1}", commBaseSettings.Port, e.Message));
+            } catch (Exception ex) {
+                m_log.TraceFatal(string.Format("Can't open {0}! Reason: {1}", commBaseSettings.Port, ex.Message));
                 return false;
             }
         }
@@ -178,7 +178,7 @@ namespace SH_OBD {
             }
         }
 
-        public class CommBaseSettings {
+        protected class CommBaseSettings {
             public string Port = "COM1";
             public int BaudRate = 2400;
             public int Parity = 0;
@@ -243,6 +243,6 @@ namespace SH_OBD {
     public class CommPortException : ApplicationException {
         public CommPortException(string desc) : base(desc) { }
 
-        public CommPortException(Exception e) : base("Receive Thread Exception", e) { }
+        public CommPortException(Exception ex) : base("Receive Thread Exception", ex) { }
     }
 }
