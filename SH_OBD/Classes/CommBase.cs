@@ -118,7 +118,7 @@ namespace SH_OBD {
         }
 
         protected void ThrowException(string reason) {
-            if (m_online) {
+            if (m_online && reason != "Timeout") {
                 BeforeClose(true);
                 InternalClose();
             }

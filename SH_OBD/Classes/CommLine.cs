@@ -61,7 +61,7 @@ namespace SH_OBD {
             m_TxTerm = settings.TxTerminator;
         }
 
-        protected virtual void OnRxLine(string s) {
+        protected virtual void OnRxLine(string strLine) {
         }
 
         protected override void OnRxChar(byte ch) {
@@ -71,11 +71,15 @@ namespace SH_OBD {
                     m_RxString = Encoding.ASCII.GetString(m_RxBuffer, 0, m_RxIndex);
                 }
                 m_RxIndex = 0;
+                // 检测是否已经m_TransFlag.Set()了
                 if (m_TransFlag.WaitOne(0, false)) {
+                    // 已经m_TransFlag.Set()了，表示是单独接收ELM327发来的消息
                     OnRxLine(m_RxString);
                 } else {
+                    // 没有m_TransFlag.Set()，表示是给ELM327发送命令后返回的消息
                     m_TransFlag.Set();
                 }
+                m_TransFlag.Set();
             } else {
                 if (m_RxFilter != null) {
                     for (int idx = 0; idx < m_RxFilter.Length; ++idx) {
