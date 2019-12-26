@@ -14,7 +14,7 @@ namespace SH_OBD {
         private CommBase.ASCII[] m_TxTerm;
         private CommBase.ASCII[] m_RxFilter;
         private int m_TransTimeout;
-        public string RxLine { get; set; }
+        public string RxLine { get; set; } // 单独接收到的ELM327发来的消息
 
         protected CommLine(Logger log) : base(log) { }
 
