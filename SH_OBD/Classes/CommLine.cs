@@ -14,6 +14,7 @@ namespace SH_OBD {
         private CommBase.ASCII[] m_TxTerm;
         private CommBase.ASCII[] m_RxFilter;
         private int m_TransTimeout;
+        public string RxLine { get; set; } // 单独接收到的ELM327发来的消息
 
         protected CommLine(Logger log) : base(log) { }
 
@@ -49,6 +50,7 @@ namespace SH_OBD {
                 ThrowException("Timeout");
             }
             lock (locker) {
+                RxLine = "";
                 return m_RxString;
             }
         }
@@ -61,7 +63,8 @@ namespace SH_OBD {
             m_TxTerm = settings.TxTerminator;
         }
 
-        protected virtual void OnRxLine(string s) {
+        protected virtual void OnRxLine(string strLine) {
+            RxLine = m_RxString;
         }
 
         protected override void OnRxChar(byte ch) {
@@ -71,9 +74,12 @@ namespace SH_OBD {
                     m_RxString = Encoding.ASCII.GetString(m_RxBuffer, 0, m_RxIndex);
                 }
                 m_RxIndex = 0;
+                // 检测是否已经m_TransFlag.Set()了
                 if (m_TransFlag.WaitOne(0, false)) {
+                    // 已经m_TransFlag.Set()了，表示是单独接收ELM327发来的消息
                     OnRxLine(m_RxString);
                 } else {
+                    // 没有m_TransFlag.Set()，表示是给ELM327发送命令后返回的消息
                     m_TransFlag.Set();
                 }
             } else {
