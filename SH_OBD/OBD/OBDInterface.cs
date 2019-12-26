@@ -75,7 +75,7 @@ namespace SH_OBD {
             }
             SetDevice(HardwareType.ELM327);
             Disconnect();
-            STDType = StandardType.Unknown;
+            STDType = StandardType.Automatic;
             ScannerPortOpened = false;
             if (CommSettings.UseSerialScanner) {
                 m_sp = new SerialPortClass(
@@ -122,18 +122,22 @@ namespace SH_OBD {
             return CommSettings.ProtocolIndex;
         }
 
+        public StandardType GetStandard() {
+            return CommSettings.StandardIndex;
+        }
+
         public void SetTimeout(int iTimeout = 500) {
             m_obdDevice.SetTimeout(iTimeout);
         }
 
-        public bool InitDevice(HardwareType device, int port, int baud, ProtocolType protocol, bool bGetPIDStatus = true) {
+        public bool InitDevice(HardwareType device, int port, int baud, ProtocolType protocol, StandardType standard, bool bGetPIDStatus = true) {
             m_log.TraceInfo(string.Format("Attempting initialization on port {0}", port.ToString()));
             SetDevice(device);
             bool flag;
             if (bGetPIDStatus) {
-                flag = m_obdDevice.Initialize(port, baud, protocol) && InitOBD();
+                flag = m_obdDevice.Initialize(port, baud, protocol, standard) && InitOBD();
             } else {
-                flag = m_obdDevice.Initialize(port, baud, protocol);
+                flag = m_obdDevice.Initialize(port, baud, protocol, standard);
             }
             STDType = m_obdDevice.GetStandardType();
             if (flag) {
@@ -147,8 +151,17 @@ namespace SH_OBD {
 
         public bool InitDeviceAuto(bool bGetPIDStatus = true) {
             m_log.TraceInfo("Beginning AUTO initialization...");
+            string order = "";
+            foreach (int item in m_xattr) {
+                order += "," + item.ToString();
+            }
+            order = order.TrimStart(',');
+            m_log.TraceInfo("Auto Protocol Order: " + order);
+            m_log.TraceInfo("Application Layer Protocol: " + STDType.ToString());
+
             SetDevice(HardwareType.ELM327);
             bool flag;
+            CommSettings.StandardIndex = STDType;
             if (bGetPIDStatus) {
                 flag = m_obdDevice.Initialize(CommSettings) && InitOBD();
             } else {
@@ -217,6 +230,16 @@ namespace SH_OBD {
                     }
                 }
             }
+
+            if (!bRet) {
+                // 获取J1939 DM5支持情况，J1939只测试能否连接车辆，不获取PID信息
+                bRet = true;
+                param = new OBDParameter(0, 0xFECE, 0);
+                OBDParameterValue value = GetValue(param);
+                if (value.ErrorDetected) {
+                    bRet = false;
+                }
+            }
             return bRet;
         }
 
@@ -247,7 +270,7 @@ namespace SH_OBD {
             } else {
                 m_log.TraceInfo("Requesting: " + param.OBDRequest);
             }
-            if (param.Service == 0) {
+            if (param.Service == 0 && param.Parameter == 0) {
                 return SpecialValue(param);
             }
 
@@ -386,7 +409,7 @@ namespace SH_OBD {
         public void Disconnect() {
             m_obdDevice.Disconnect();
             m_obdDevice.SetConnected(false);
-            STDType = StandardType.Unknown;
+            STDType = StandardType.Automatic;
             OnDisconnect?.Invoke();
         }
 
@@ -529,25 +552,41 @@ namespace SH_OBD {
         }
 
         public bool SetXAttrByVIN(string strVIN) {
-            bool bRet = false;
+            bool bRet;
+            string strMessage = "";
             string strProtocol = "";
+            STDType = StandardType.Automatic;
             try {
+#if DEBUG
+                WebServiceDemo ws = new WebServiceDemo();
+                Request request = new Request {
+                    ZVIN = strVIN
+                };
+                Response response = ws.GetProtocol(request);
+                if (response == null) {
+                    m_log.TraceError("SAP return null");
+                    return false;
+                }
+                strMessage = response.MESSAGE;
+                strProtocol = response.ZODBWZ;
+#else
                 si_0001_emissionService si = new si_0001_emissionService();
                 dt_0001_emission_request request = new dt_0001_emission_request {
                     ZVIN = strVIN
                 };
                 dt_0001_emission_sap sap = si.si_0001_emission(request);
-                if (sap != null) {
-                    m_log.TraceInfo(string.Format("Return from SAP[MESSAGE: {0}, ZOBDWZ: {1}]", sap.MESSAGE, sap.ZODBWZ));
-                    if (sap.MESSAGE.Contains("1")) {
-                        bRet = true;
-                        strProtocol = sap.ZODBWZ;
-                    } else {
-                        m_log.TraceError("SAP return failure");
-                        bRet = false;
-                    }
-                } else {
+                if (sap == null) {
                     m_log.TraceError("SAP return null");
+                    return false;
+                }
+                strMessage = sap.MESSAGE;
+                strProtocol = sap.ZODBWZ;
+#endif
+                m_log.TraceInfo(string.Format("Return from SAP[MESSAGE: {0}, ZOBDWZ: {1}]", strMessage, strProtocol));
+                if (strMessage.Contains("1")) {
+                    bRet = true;
+                } else {
+                    m_log.TraceError("SAP return failure");
                     bRet = false;
                 }
             } catch (Exception) {
@@ -556,16 +595,24 @@ namespace SH_OBD {
             if (strProtocol == null || strProtocol.Length == 0) {
                 return false;
             }
-            if (strProtocol.Contains("15765") || strProtocol.Contains("15031") || strProtocol.Contains("27145")) {
+            if (strProtocol.Contains("15765") || strProtocol.Contains("15031")) {
                 m_xattr = new int[] { 6, 7, 8, 9 };
+                STDType = StandardType.ISO_15031;
+            } else if (strProtocol.Contains("27145")) {
+                m_xattr = new int[] { 6, 7, 8, 9 };
+                STDType = StandardType.ISO_27145;
             } else if (strProtocol.Contains("1939")) {
                 m_xattr = new int[] { 10 };
+                STDType = StandardType.SAE_J1939;
             } else if (strProtocol.Contains("14230")) {
                 m_xattr = new int[] { 5, 4 };
+                STDType = StandardType.ISO_15031;
             } else if (strProtocol.Contains("9141")) {
                 m_xattr = new int[] { 3 };
+                STDType = StandardType.ISO_15031;
             } else if (strProtocol.Contains("1850")) {
                 m_xattr = new int[] { 2, 1 };
+                STDType = StandardType.ISO_15031;
             }
             return bRet;
         }

@@ -14,6 +14,7 @@ namespace SH_OBD {
         private CommBase.ASCII[] m_TxTerm;
         private CommBase.ASCII[] m_RxFilter;
         private int m_TransTimeout;
+        public string RxLine { get; set; }
 
         protected CommLine(Logger log) : base(log) { }
 
@@ -49,6 +50,7 @@ namespace SH_OBD {
                 ThrowException("Timeout");
             }
             lock (locker) {
+                RxLine = "";
                 return m_RxString;
             }
         }
@@ -62,6 +64,7 @@ namespace SH_OBD {
         }
 
         protected virtual void OnRxLine(string strLine) {
+            RxLine = m_RxString;
         }
 
         protected override void OnRxChar(byte ch) {

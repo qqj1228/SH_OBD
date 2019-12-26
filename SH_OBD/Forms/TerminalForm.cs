@@ -53,7 +53,7 @@ namespace SH_OBD {
 
             if (txtCommand.Text.Trim() == "ClearDTC") {
                 switch (m_obdInterface.STDType) {
-                case StandardType.Unknown:
+                case StandardType.Automatic:
                     return;
                 case StandardType.ISO_15031:
                     txtCommand.Text = "04";

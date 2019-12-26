@@ -43,14 +43,15 @@ namespace SH_OBD {
             StatusLabelConnStatus.ForeColor = Color.Red;
             StatusLabelConnStatus.Text = "OBD通讯接口未连接";
             StatusLabelDeviceName.Text = "未获取到设备名";
-            StatusLabelAppProtocol.Text = "应用层协议待定";
             StatusLabelCommProtocol.Text = m_obdInterface.GetProtocol().ToString();
             StatusLabelDeviceType.Text = m_obdInterface.GetDevice().ToString();
             if (m_obdInterface.CommSettings != null) {
                 if (m_obdInterface.CommSettings.AutoDetect) {
                     StatusLabelPort.Text = "自动探测";
+                    StatusLabelAppProtocol.Text = "自动探测";
                 } else {
                     StatusLabelPort.Text = m_obdInterface.CommSettings.ComPortName;
+                    StatusLabelAppProtocol.Text = m_obdInterface.CommSettings.StandardName;
                 }
             }
 
@@ -260,6 +261,7 @@ namespace SH_OBD {
             m_obdInterface.SaveCommSettings(commSettings);
             m_obdInterface.SaveDBandMES(dbandMES);
             StatusLabelCommProtocol.Text = m_obdInterface.GetProtocol().ToString();
+            StatusLabelAppProtocol.Text = m_obdInterface.GetStandard().ToString();
             StatusLabelDeviceType.Text = m_obdInterface.GetDevice().ToString();
             if (commSettings.AutoDetect) {
                 StatusLabelPort.Text = "自动探测";
@@ -309,6 +311,7 @@ namespace SH_OBD {
             }
 
             m_obdInterface.GetLogger().TraceInfo(string.Format("   Protocol: {0}", m_obdInterface.CommSettings.ProtocolName));
+            m_obdInterface.GetLogger().TraceInfo(string.Format("   Application Layer Protocol: {0}", m_obdInterface.CommSettings.StandardName));
 
             if (m_obdInterface.CommSettings.DoInitialization) {
                 m_obdInterface.GetLogger().TraceInfo("   Initialize: YES");
@@ -346,6 +349,16 @@ namespace SH_OBD {
         private void ConnectThreadNew() {
             ShowConnectingLabel();
             if (m_obdInterface.CommSettings.AutoDetect) {
+                if (m_obdInterface.OBDResultSetting.SpecifiedProtocol) {
+                    try {
+                        if (!m_obdInterface.SetXAttrByVIN(m_obdTest.StrVIN_IN)) {
+                            MessageBox.Show("从SAP获取OBD协议失败。将会自动探测OBD协议。", "获取OBD协议失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    } catch (Exception ex) {
+                        m_obdInterface.GetLogger().TraceError("Failed to get protocol by VIN, Reason: " + ex.Message);
+                        MessageBox.Show("从SAP获取OBD协议发生异常。将会自动探测OBD协议。\r\n" + ex.Message, "获取OBD协议失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
                 if (m_obdInterface.InitDeviceAuto()) {
                     m_obdInterface.GetLogger().TraceInfo("Connection Established!");
                     ShowConnectedLabel();
@@ -358,7 +371,7 @@ namespace SH_OBD {
             } else {
                 int baudRate = m_obdInterface.CommSettings.BaudRate;
                 int comPort = m_obdInterface.CommSettings.ComPort;
-                if (m_obdInterface.InitDevice(m_obdInterface.CommSettings.HardwareIndex, comPort, baudRate, m_obdInterface.CommSettings.ProtocolIndex)) {
+                if (m_obdInterface.InitDevice(m_obdInterface.CommSettings.HardwareIndex, comPort, baudRate, m_obdInterface.CommSettings.ProtocolIndex, m_obdInterface.CommSettings.StandardIndex)) {
                     m_obdInterface.GetLogger().TraceInfo("Connection Established!");
                     ShowConnectedLabel();
                 } else {
@@ -383,8 +396,8 @@ namespace SH_OBD {
                 StatusLabelConnStatus.ForeColor = Color.Green;
                 StatusLabelConnStatus.Text = "OBD通讯接口已连接";
                 switch (m_obdInterface.STDType) {
-                case StandardType.Unknown:
-                    StatusLabelAppProtocol.Text = "Unknown";
+                case StandardType.Automatic:
+                    StatusLabelAppProtocol.Text = "Automatic";
                     break;
                 case StandardType.ISO_15031:
                     StatusLabelAppProtocol.Text = "ISO_15031";
@@ -396,7 +409,7 @@ namespace SH_OBD {
                     StatusLabelAppProtocol.Text = "SAE_J1939";
                     break;
                 default:
-                    StatusLabelAppProtocol.Text = "Unknown";
+                    StatusLabelAppProtocol.Text = "Automatic";
                     break;
                 }
             });
@@ -417,7 +430,7 @@ namespace SH_OBD {
             } else {
                 StatusLabelConnStatus.ForeColor = Color.Red;
                 StatusLabelConnStatus.Text = "OBD通讯接口未连接";
-                StatusLabelAppProtocol.Text = "应用层协议待定";
+                StatusLabelAppProtocol.Text = "自动探测";
                 toolStripBtnConnect.Enabled = true;
                 toolStripBtnDisconnect.Enabled = false;
             }

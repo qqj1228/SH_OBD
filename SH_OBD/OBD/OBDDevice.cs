@@ -25,7 +25,7 @@ namespace SH_OBD {
             return m_DeviceID;
         }
 
-        public abstract bool Initialize(int iPort, int iBaud, ProtocolType iProtocol);
+        public abstract bool Initialize(int iPort, int iBaud, ProtocolType iProtocol, StandardType iStandard);
         public abstract bool Initialize(int iPort, int iBaud);
         public abstract bool Initialize(Settings settings);
         public abstract void Disconnect();

@@ -4,19 +4,19 @@ namespace SH_OBD {
         private int m_iBaudRateIndex;
         private int m_iComPortIndex;
         private bool m_bConnected;
-        private StandardType m_iStandard;
+        private readonly StandardType m_iStandard;
 
         public OBDDeviceELM322(Logger log, int[] xattr) : base(log, xattr) {
             try {
                 m_Parser = new OBDParser_J1850_VPW();
                 m_bConnected = false;
-                m_iStandard = StandardType.Unknown;
+                m_iStandard = StandardType.ISO_15031;
             } catch (Exception) {
                 throw;
             }
         }
 
-        public override bool Initialize(int iPort, int iBaud, ProtocolType iProtocol) {
+        public override bool Initialize(int iPort, int iBaud, ProtocolType iProtocol, StandardType iStandard) {
             return Initialize(iPort, iBaud);
         }
 

@@ -45,6 +45,7 @@ namespace SH_OBD {
             m_obdTest.WriteDbDone += new Action(OnWriteDbDone);
             m_obdTest.UploadDataStart += new Action(OnUploadDataStart);
             m_obdTest.UploadDataDone += new Action(OnUploadDataDone);
+#if !DEBUG
             // 删除WebService上传接口缓存dll
             string dllPath = ".\\" + m_obdInterface.DBandMES.WebServiceName + ".dll";
             try {
@@ -54,13 +55,14 @@ namespace SH_OBD {
             } catch (Exception ex) {
                 m_obdInterface.m_log.TraceError("Delete WebService dll file failed: " + ex.Message);
             }
+#endif
             Task.Factory.StartNew(TestNativeDatabase);
             // 在OBDData表中新增Upload字段，用于存储上传是否成功的标志
             Task.Factory.StartNew(m_obdTest.m_db.AddUploadField);
             // 在OBDUser表中新增SN字段，用于存储检测报表编号中顺序号的特征字符串
             Task.Factory.StartNew(m_obdTest.m_db.AddSNField);
             // 新增OBDProtocol表，用于存储车型OBD协议数据
-            Task.Factory.StartNew(m_obdTest.m_db.AddOBDProtocol);
+            //Task.Factory.StartNew(m_obdTest.m_db.AddOBDProtocol);
             // 定时上传以前上传失败的数据
             m_timer = new System.Timers.Timer(m_obdInterface.OBDResultSetting.UploadInterval * 60 * 1000);
             m_timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimeUpload);
@@ -179,6 +181,7 @@ namespace SH_OBD {
             }
 
             m_obdInterface.GetLogger().TraceInfo(string.Format("   Protocol: {0}", m_obdInterface.CommSettings.ProtocolName));
+            m_obdInterface.GetLogger().TraceInfo(string.Format("   Application Layer Protocol: {0}", m_obdInterface.CommSettings.StandardName));
 
             if (m_obdInterface.CommSettings.DoInitialization) {
                 m_obdInterface.GetLogger().TraceInfo("   Initialize: YES");
@@ -211,7 +214,7 @@ namespace SH_OBD {
             } else {
                 int baudRate = m_obdInterface.CommSettings.BaudRate;
                 int comPort = m_obdInterface.CommSettings.ComPort;
-                if (m_obdInterface.InitDevice(m_obdInterface.CommSettings.HardwareIndex, comPort, baudRate, m_obdInterface.CommSettings.ProtocolIndex, false)) {
+                if (m_obdInterface.InitDevice(m_obdInterface.CommSettings.HardwareIndex, comPort, baudRate, m_obdInterface.CommSettings.ProtocolIndex, m_obdInterface.CommSettings.StandardIndex, false)) {
                     m_obdInterface.GetLogger().TraceInfo("Connection Established!");
                 } else {
                     m_obdInterface.GetLogger().TraceWarning("Failed to find a compatible OBD-II interface.");

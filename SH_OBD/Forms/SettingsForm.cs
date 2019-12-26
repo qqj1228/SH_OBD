@@ -49,9 +49,15 @@ namespace SH_OBD {
                 foreach (string item in Settings.ProtocolNames) {
                     comboProtocol.Items.Add(item);
                 }
-
                 comboProtocol.SelectedIndex = m_settings.ProtocolIndexInt;
+
                 comboInitialize.SelectedIndex = !m_settings.DoInitialization ? 1 : 0;
+
+                foreach (string item in Settings.StandardNames) {
+                    comboStandard.Items.Add(item);
+                }
+                comboStandard.SelectedIndex = m_settings.StandardIndexInt;
+
                 if (m_settings.AutoDetect) {
                     checkBoxAutoDetect.Checked = true;
                 } else {
@@ -98,6 +104,7 @@ namespace SH_OBD {
             m_settings.BaudRateIndex = comboBaud.SelectedIndex;
             m_settings.HardwareIndexInt = comboHardware.SelectedIndex;
             m_settings.ProtocolIndexInt = comboProtocol.SelectedIndex;
+            m_settings.StandardIndexInt = comboStandard.SelectedIndex;
             m_settings.DoInitialization = (comboInitialize.SelectedIndex == 0);
 
             m_dbandMES.UserName = this.txtBoxUser.Text;
@@ -113,14 +120,6 @@ namespace SH_OBD {
             Close();
         }
 
-        private void ComboHardware_SelectedIndexChanged(object sender, EventArgs e) {
-            //if (comboHardware.SelectedIndex == (int)HardwareType.ELM327) {
-            //    groupELM.Enabled = true;
-            //} else {
-            //    groupELM.Enabled = false;
-            //}
-        }
-
         private void CheckBoxAutoDetect_CheckedChanged(object sender, EventArgs e) {
             if (checkBoxAutoDetect.Checked) {
                 this.comboPorts.Enabled = false;
@@ -128,12 +127,14 @@ namespace SH_OBD {
                 this.comboBaud.Enabled = false;
                 this.comboProtocol.Enabled = false;
                 this.comboInitialize.Enabled = false;
+                this.comboStandard.Enabled = false;
             } else {
                 this.comboPorts.Enabled = true;
                 this.comboHardware.Enabled = true;
                 this.comboBaud.Enabled = true;
                 this.comboProtocol.Enabled = true;
                 this.comboInitialize.Enabled = true;
+                this.comboStandard.Enabled = true;
             }
         }
 
@@ -162,6 +163,38 @@ namespace SH_OBD {
             } else {
                 this.cmbBoxScannerPort.Enabled = false;
                 this.cmbBoxScannerBaud.Enabled = false;
+            }
+        }
+
+        private void ComboProtocol_SelectedIndexChanged(object sender, EventArgs e) {
+            if (comboStandard.Items.Count > 3) {
+                switch (comboProtocol.SelectedIndex) {
+                case 0:
+                    comboStandard.Enabled = true;
+                    break;
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                    comboStandard.Enabled = false;
+                    comboStandard.SelectedIndex = 1;
+                    break;
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                    comboStandard.Enabled = true;
+                    comboStandard.SelectedIndex = 2;
+                    break;
+                case 10:
+                    comboStandard.Enabled = false;
+                    comboStandard.SelectedIndex = 3;
+                    break;
+                default:
+                    comboStandard.Enabled = true;
+                    break;
+                }
             }
         }
     }

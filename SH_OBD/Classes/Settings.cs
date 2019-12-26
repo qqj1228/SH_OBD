@@ -22,6 +22,7 @@ namespace SH_OBD {
             ScannerBaudRateIndex = 0;
             HardwareIndex = HardwareType.Automatic;
             ProtocolIndex = ProtocolType.Automatic;
+            StandardIndex = StandardType.Automatic;
             DoInitialization = true;
             UseSerialScanner = true;
         }
@@ -98,6 +99,33 @@ namespace SH_OBD {
             get { return (int)HardwareIndex; }
             set { HardwareIndex = (HardwareType)value; }
         }
+
+        [XmlIgnore]
+        public static string[] StandardNames = new string[] {
+            "自动",
+            "ISO 15031",
+            "ISO 27145",
+            "SAE J1939",
+        };
+
+        [XmlIgnore]
+        public string StandardName {
+            get {
+                if (StandardIndexInt >= 0 && StandardIndexInt < StandardNames.Length) {
+                    return StandardNames[StandardIndexInt];
+                }
+                return "Automatic";
+            }
+        }
+
+        [XmlIgnore]
+        public StandardType StandardIndex { get; set; }
+
+        [XmlElement("StandardIndex")]
+        public int StandardIndexInt {
+            get { return (int)StandardIndex; }
+            set { StandardIndex = (StandardType)value; }
+        }
     }
 
     public enum ProtocolType : int {
@@ -116,7 +144,7 @@ namespace SH_OBD {
     }
 
     public enum StandardType : int {
-        Unknown = -1,
+        Automatic = 0,
         ISO_15031 = 1,
         ISO_27145 = 2,
         SAE_J1939 = 3
@@ -289,7 +317,7 @@ namespace SH_OBD {
             CN6_OBD_SUP = "29,2B";
             UnmeaningNum = 5;
             AutoProtocolOrder = "6,7,8,9,10,5,4,3,2,1";
-            SpecifiedProtocol = true;
+            SpecifiedProtocol = false;
             KMSSpecified = true;
         }
     }

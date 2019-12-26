@@ -12,12 +12,13 @@ namespace SH_OBD {
 
         public OBDDeviceELM327(Logger log, int[] xattr) : base(log, xattr) {
             m_iProtocol = ProtocolType.Unknown;
-            m_iStandard = StandardType.Unknown;
+            m_iStandard = StandardType.Automatic;
             m_bConnected = false;
         }
 
-        public override bool Initialize(int iPort, int iBaud, ProtocolType iProtocol) {
+        public override bool Initialize(int iPort, int iBaud, ProtocolType iProtocol, StandardType iStandard) {
             SetProtocol(iProtocol);
+            m_iStandard = iStandard;
             return Initialize(iPort, iBaud);
         }
 
@@ -46,8 +47,8 @@ namespace SH_OBD {
                     }
 
                     m_CommELM.SetTimeout(5000);
-                    m_iStandard = SetStandardStatus(m_iProtocol);
-                    if (m_iStandard != StandardType.Unknown) {
+                    m_iStandard = SetStandardType(m_iProtocol);
+                    if (m_iStandard != StandardType.Automatic) {
                         if (m_Parser == null) {
                             string strDPN = GetOBDResponse("ATDPN").Replace("A", "");
                             if (strDPN.Length == 0) {
@@ -58,7 +59,7 @@ namespace SH_OBD {
                     }
 
                     m_CommELM.SetTimeout(500);
-                    return m_iStandard != StandardType.Unknown;
+                    return m_iStandard != StandardType.Automatic;
                 } else {
                     if (!ConfirmAT("ATM0")) {
                         m_CommELM.Close();
@@ -71,8 +72,8 @@ namespace SH_OBD {
                             m_CommELM.Close();
                             return false;
                         }
-                        m_iStandard = SetStandardStatus((ProtocolType)m_xattr[idx]);
-                        if (m_iStandard != StandardType.Unknown) {
+                        m_iStandard = SetStandardType((ProtocolType)m_xattr[idx]);
+                        if (m_iStandard != StandardType.Automatic) {
                             if (m_Parser == null) {
                                 SetProtocol((ProtocolType)m_xattr[idx]);
                             }
@@ -102,6 +103,7 @@ namespace SH_OBD {
                 if (m_CommELM.Online) {
                     return true;
                 }
+                m_iStandard = settings.StandardIndex;
                 if (CommBase.GetPortAvailable(settings.ComPort) == CommBase.PortStatus.Available && Initialize(settings.ComPort, settings.BaudRate)) {
                     return true;
                 }
@@ -125,9 +127,12 @@ namespace SH_OBD {
             return false;
         }
 
-        private StandardType SetStandardStatus(ProtocolType protocol) {
+        private StandardType SetStandardType(ProtocolType protocol) {
+            if (m_iStandard != StandardType.Automatic) {
+                return m_iStandard;
+            }
             bool bflag = false;
-            StandardType standard = StandardType.Unknown;
+            StandardType standard = StandardType.Automatic;
             switch (protocol) {
             case ProtocolType.J1850_PWM:
             case ProtocolType.J1850_VPW:
@@ -146,15 +151,15 @@ namespace SH_OBD {
             case ProtocolType.ISO_15765_4_CAN_11BIT_250KBAUD:
             case ProtocolType.ISO_15765_4_CAN_29BIT_250KBAUD:
                 for (int i = 3; i > 0 && !bflag; i--) {
-                    if (GetOBDResponse("0100").Replace(" ", "").Contains("4100")) {
-                        bflag = true;
-                        standard = StandardType.ISO_15031;
-                    }
-                }
-                for (int i = 3; i > 0 && !bflag; i--) {
                     if (GetOBDResponse("22F810").Replace(" ", "").Contains("62F810")) {
                         bflag = bflag || true;
                         standard = StandardType.ISO_27145;
+                    }
+                }
+                for (int i = 3; i > 0 && !bflag; i--) {
+                    if (GetOBDResponse("0100").Replace(" ", "").Contains("4100")) {
+                        bflag = true;
+                        standard = StandardType.ISO_15031;
                     }
                 }
                 break;
@@ -168,15 +173,15 @@ namespace SH_OBD {
                 break;
             default:
                 for (int i = 3; i > 0 && !bflag; i--) {
-                    if (GetOBDResponse("0100").Replace(" ", "").Contains("4100")) {
-                        bflag = true;
-                        standard = StandardType.ISO_15031;
-                    }
-                }
-                for (int i = 3; i > 0 && !bflag; i--) {
                     if (GetOBDResponse("22F810").Replace(" ", "").Contains("62F810")) {
                         bflag = bflag || true;
                         standard = StandardType.ISO_27145;
+                    }
+                }
+                for (int i = 3; i > 0 && !bflag; i--) {
+                    if (GetOBDResponse("0100").Replace(" ", "").Contains("4100")) {
+                        bflag = true;
+                        standard = StandardType.ISO_15031;
                     }
                 }
                 for (int i = 3; i > 0 && !bflag; i--) {
@@ -187,6 +192,7 @@ namespace SH_OBD {
                 }
                 break;
             }
+            m_log.TraceInfo("SetStandardType: " + standard.ToString());
             return standard;
         }
 
@@ -220,6 +226,13 @@ namespace SH_OBD {
                         form.Dispose();
                     }
                 }
+                //for (int i = 100; i > 0; i--) {
+                //    Thread.Sleep(1000);
+                //    if (m_CommELM.RxLine != null && m_CommELM.RxLine.Length > 0) {
+                //        orl = m_Parser.Parse(param, m_CommELM.RxLine);
+                //        break;
+                //    }
+                //}
             }
             return orl;
         }

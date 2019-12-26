@@ -30,9 +30,11 @@ namespace SH_OBD.MES1 {
     [System.Web.Services.WebServiceBindingAttribute(Name="WebServiceDemoSoap", Namespace="http://tempuri.org/")]
     public partial class WebServiceDemo : System.Web.Services.Protocols.SoapHttpClientProtocol {
         
-        private System.Threading.SendOrPostCallback ReceiveDeviceDataOperationCompleted;
+        private System.Threading.SendOrPostCallback WriteDataToJESOperationCompleted;
         
         private System.Threading.SendOrPostCallback WriteDataToMesOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback GetProtocolOperationCompleted;
         
         private bool useDefaultCredentialsSetExplicitly;
         
@@ -73,37 +75,43 @@ namespace SH_OBD.MES1 {
         }
         
         /// <remarks/>
-        public event ReceiveDeviceDataCompletedEventHandler ReceiveDeviceDataCompleted;
+        public event WriteDataToJESCompletedEventHandler WriteDataToJESCompleted;
         
         /// <remarks/>
         public event WriteDataToMesCompletedEventHandler WriteDataToMesCompleted;
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/ReceiveDeviceData", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public string ReceiveDeviceData(string strIN) {
-            object[] results = this.Invoke("ReceiveDeviceData", new object[] {
-                        strIN});
+        public event GetProtocolCompletedEventHandler GetProtocolCompleted;
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/WriteDataToJES", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public string WriteDataToJES(System.Data.DataTable dt1MES, System.Data.DataTable dt2MES, out string strMsg) {
+            object[] results = this.Invoke("WriteDataToJES", new object[] {
+                        dt1MES,
+                        dt2MES});
+            strMsg = ((string)(results[1]));
             return ((string)(results[0]));
         }
         
         /// <remarks/>
-        public void ReceiveDeviceDataAsync(string strIN) {
-            this.ReceiveDeviceDataAsync(strIN, null);
+        public void WriteDataToJESAsync(System.Data.DataTable dt1MES, System.Data.DataTable dt2MES) {
+            this.WriteDataToJESAsync(dt1MES, dt2MES, null);
         }
         
         /// <remarks/>
-        public void ReceiveDeviceDataAsync(string strIN, object userState) {
-            if ((this.ReceiveDeviceDataOperationCompleted == null)) {
-                this.ReceiveDeviceDataOperationCompleted = new System.Threading.SendOrPostCallback(this.OnReceiveDeviceDataOperationCompleted);
+        public void WriteDataToJESAsync(System.Data.DataTable dt1MES, System.Data.DataTable dt2MES, object userState) {
+            if ((this.WriteDataToJESOperationCompleted == null)) {
+                this.WriteDataToJESOperationCompleted = new System.Threading.SendOrPostCallback(this.OnWriteDataToJESOperationCompleted);
             }
-            this.InvokeAsync("ReceiveDeviceData", new object[] {
-                        strIN}, this.ReceiveDeviceDataOperationCompleted, userState);
+            this.InvokeAsync("WriteDataToJES", new object[] {
+                        dt1MES,
+                        dt2MES}, this.WriteDataToJESOperationCompleted, userState);
         }
         
-        private void OnReceiveDeviceDataOperationCompleted(object arg) {
-            if ((this.ReceiveDeviceDataCompleted != null)) {
+        private void OnWriteDataToJESOperationCompleted(object arg) {
+            if ((this.WriteDataToJESCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.ReceiveDeviceDataCompleted(this, new ReceiveDeviceDataCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+                this.WriteDataToJESCompleted(this, new WriteDataToJESCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -140,6 +148,35 @@ namespace SH_OBD.MES1 {
         }
         
         /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetProtocol", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public Response GetProtocol(Request request) {
+            object[] results = this.Invoke("GetProtocol", new object[] {
+                        request});
+            return ((Response)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void GetProtocolAsync(Request request) {
+            this.GetProtocolAsync(request, null);
+        }
+        
+        /// <remarks/>
+        public void GetProtocolAsync(Request request, object userState) {
+            if ((this.GetProtocolOperationCompleted == null)) {
+                this.GetProtocolOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetProtocolOperationCompleted);
+            }
+            this.InvokeAsync("GetProtocol", new object[] {
+                        request}, this.GetProtocolOperationCompleted, userState);
+        }
+        
+        private void OnGetProtocolOperationCompleted(object arg) {
+            if ((this.GetProtocolCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetProtocolCompleted(this, new GetProtocolCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
         public new void CancelAsync(object userState) {
             base.CancelAsync(userState);
         }
@@ -159,18 +196,276 @@ namespace SH_OBD.MES1 {
     }
     
     /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.3752.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+    public partial class Request {
+        
+        private string zVINField;
+        
+        /// <remarks/>
+        public string ZVIN {
+            get {
+                return this.zVINField;
+            }
+            set {
+                this.zVINField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.3752.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+    public partial class Response {
+        
+        private string mESSAGEField;
+        
+        private string zCSFSField;
+        
+        private string wERKSField;
+        
+        private string zBZLField;
+        
+        private string zjField;
+        
+        private string zFDJEDGLField;
+        
+        private string zDZZDField;
+        
+        private string zFDJEDZSField;
+        
+        private string plField;
+        
+        private string zQGSField;
+        
+        private string vEHICLEMODELField;
+        
+        private string rLZLField;
+        
+        private string bSXXSField;
+        
+        private string qDFSField;
+        
+        private string qDZWField;
+        
+        private string zZLField;
+        
+        private string pQGSLField;
+        
+        private string zPFJDField;
+        
+        private string zODBWZField;
+        
+        /// <remarks/>
+        public string MESSAGE {
+            get {
+                return this.mESSAGEField;
+            }
+            set {
+                this.mESSAGEField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ZCSFS {
+            get {
+                return this.zCSFSField;
+            }
+            set {
+                this.zCSFSField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string WERKS {
+            get {
+                return this.wERKSField;
+            }
+            set {
+                this.wERKSField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ZBZL {
+            get {
+                return this.zBZLField;
+            }
+            set {
+                this.zBZLField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ZJ {
+            get {
+                return this.zjField;
+            }
+            set {
+                this.zjField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ZFDJEDGL {
+            get {
+                return this.zFDJEDGLField;
+            }
+            set {
+                this.zFDJEDGLField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ZDZZD {
+            get {
+                return this.zDZZDField;
+            }
+            set {
+                this.zDZZDField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ZFDJEDZS {
+            get {
+                return this.zFDJEDZSField;
+            }
+            set {
+                this.zFDJEDZSField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string PL {
+            get {
+                return this.plField;
+            }
+            set {
+                this.plField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ZQGS {
+            get {
+                return this.zQGSField;
+            }
+            set {
+                this.zQGSField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string VEHICLEMODEL {
+            get {
+                return this.vEHICLEMODELField;
+            }
+            set {
+                this.vEHICLEMODELField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string RLZL {
+            get {
+                return this.rLZLField;
+            }
+            set {
+                this.rLZLField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string BSXXS {
+            get {
+                return this.bSXXSField;
+            }
+            set {
+                this.bSXXSField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string QDFS {
+            get {
+                return this.qDFSField;
+            }
+            set {
+                this.qDFSField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string QDZW {
+            get {
+                return this.qDZWField;
+            }
+            set {
+                this.qDZWField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ZZL {
+            get {
+                return this.zZLField;
+            }
+            set {
+                this.zZLField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string PQGSL {
+            get {
+                return this.pQGSLField;
+            }
+            set {
+                this.pQGSLField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ZPFJD {
+            get {
+                return this.zPFJDField;
+            }
+            set {
+                this.zPFJDField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ZODBWZ {
+            get {
+                return this.zODBWZField;
+            }
+            set {
+                this.zODBWZField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
-    public delegate void ReceiveDeviceDataCompletedEventHandler(object sender, ReceiveDeviceDataCompletedEventArgs e);
+    public delegate void WriteDataToJESCompletedEventHandler(object sender, WriteDataToJESCompletedEventArgs e);
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class ReceiveDeviceDataCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    public partial class WriteDataToJESCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
         
-        internal ReceiveDeviceDataCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+        internal WriteDataToJESCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }
@@ -180,6 +475,14 @@ namespace SH_OBD.MES1 {
             get {
                 this.RaiseExceptionIfNecessary();
                 return ((string)(this.results[0]));
+            }
+        }
+        
+        /// <remarks/>
+        public string strMsg {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[1]));
             }
         }
     }
@@ -214,6 +517,32 @@ namespace SH_OBD.MES1 {
             get {
                 this.RaiseExceptionIfNecessary();
                 return ((string)(this.results[1]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    public delegate void GetProtocolCompletedEventHandler(object sender, GetProtocolCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.3752.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetProtocolCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal GetProtocolCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public Response Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((Response)(this.results[0]));
             }
         }
     }
