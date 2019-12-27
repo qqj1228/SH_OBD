@@ -362,6 +362,7 @@
     <EmbeddedResource Include="Forms\UserPreferencesForm.resx">
       <DependentUpon>UserPreferencesForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="Configs\OBD_Result.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

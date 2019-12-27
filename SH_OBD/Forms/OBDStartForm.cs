@@ -263,6 +263,8 @@ namespace SH_OBD {
 
             string errorMsg = "";
             int VINCount = 0;
+            bool bNoTestRecord = false;
+            bool bTestException = false;
             try {
                 m_obdTest.StartOBDTest(out errorMsg);
 #if DEBUG
@@ -273,14 +275,16 @@ namespace SH_OBD {
                 Dictionary<string, string> whereDic = new Dictionary<string, string> { { "VIN", m_obdTest.StrVIN_ECU } };
                 VINCount = m_obdTest.m_db.GetRecordCount("OBDData", whereDic);
                 if (VINCount == 0) {
-                    m_obdInterface.m_log.TraceError("No test records of this vehicle: " + m_obdTest.StrVIN_ECU);
+                    m_obdInterface.m_log.TraceError("No test record of this vehicle: " + m_obdTest.StrVIN_ECU);
                     m_obdTest.OBDResult = false;
+                    bNoTestRecord = true;
                 }
             } catch (Exception ex) {
                 if (m_obdTest.StrVIN_ECU == null || m_obdTest.StrVIN_ECU.Length == 0) {
                     m_obdTest.StrVIN_ECU = m_obdTest.StrVIN_IN;
                 }
                 m_obdInterface.m_log.TraceError("OBD test occurred error: " + errorMsg + ", " + ex.Message);
+                bTestException = true;
                 MessageBox.Show(errorMsg + "\n" + ex.Message, "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -304,8 +308,10 @@ namespace SH_OBD {
                     }
 
                     this.labelResult.ForeColor = Color.Red;
-                    if (VINCount == 0) {
+                    if (bNoTestRecord) {
                         this.labelResult.Text = "被检车辆: " + m_obdTest.StrVIN_ECU + "\n没有本地检测记录";
+                    } else if (bTestException) {
+                        this.labelResult.Text = "被检车辆: " + m_obdTest.StrVIN_ECU + "\nOBD检测过程发生异常";
                     } else {
                         this.labelResult.Text = "被检车辆: " + m_obdTest.StrVIN_ECU + "\nOBD检测结果：不合格";
                     }

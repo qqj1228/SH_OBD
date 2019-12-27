@@ -558,7 +558,7 @@ namespace SH_OBD {
             string strProtocol = "";
             STDType = StandardType.Automatic;
             try {
-                NetworkCredential cred = new NetworkCredential("EMISSIONPI", "123qweasdzxc");
+                NetworkCredential cred = new NetworkCredential(Properties.Settings.Default.UserName, Properties.Settings.Default.PassWord);
 #if DEBUG
                 WebServiceDemo ws = new WebServiceDemo {
                     Credentials = cred,
