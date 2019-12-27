@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.IO.Ports;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -557,8 +558,12 @@ namespace SH_OBD {
             string strProtocol = "";
             STDType = StandardType.Automatic;
             try {
+                NetworkCredential cred = new NetworkCredential("EMISSIONPI", "123qweasdzxc");
 #if DEBUG
-                WebServiceDemo ws = new WebServiceDemo();
+                WebServiceDemo ws = new WebServiceDemo {
+                    Credentials = cred,
+                    PreAuthenticate = true
+                };
                 Request request = new Request {
                     ZVIN = strVIN
                 };
@@ -570,7 +575,10 @@ namespace SH_OBD {
                 strMessage = response.MESSAGE;
                 strProtocol = response.ZODBWZ;
 #else
-                si_0001_emissionService si = new si_0001_emissionService();
+                si_0001_emissionService si = new si_0001_emissionService {
+                    Credentials = cred,
+                    PreAuthenticate = true
+                };
                 dt_0001_emission_request request = new dt_0001_emission_request {
                     ZVIN = strVIN
                 };

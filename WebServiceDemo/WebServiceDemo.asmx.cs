@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Services;
+using System.Web.Services.Protocols;
 using Newtonsoft.Json;
 
 namespace WebServiceDemo {
@@ -140,5 +141,4 @@ namespace WebServiceDemo {
         public string ZPFJD;
         public string ZODBWZ;
     }
-
 }

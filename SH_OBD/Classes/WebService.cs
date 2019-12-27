@@ -11,7 +11,7 @@ using System.Web.Services.Description;
 using System.Xml.Serialization;
 
 namespace SH_OBD {
-    public class WSHelper {
+    public static class WSHelper {
         /// <summary>
         /// 输出的dll文件名称
         /// </summary>
