@@ -119,17 +119,24 @@ namespace SH_OBD {
         }
 
         /// <summary>
-        /// 判断字符串是否含有连续多个非字母或数字，iNum为连续为非字母或数字的字符个数，
+        /// 判断字符串是否含有连续多个非字母或数字，
+        /// iNum为连续为非字母或数字的字符个数，
+        /// bSpace为是否判断纯空格为乱码
         /// </summary>
         /// <param name="strValue"></param>
         /// <param name="iNum"></param>
         /// <returns></returns>
-        public static bool IsUnmeaningString(string strValue, int iNum) {
+        public static bool IsUnmeaningString(string strValue, int iNum, bool bSpace) {
             bool bRet = false;
             int counter = 0;
+            if (strValue == null) {
+                return bRet;
+            }
             // 空格不作为判断乱码连续性依据，但是其本身并不算做乱码
             string strTemp = strValue.Replace(" ", "");
-            if (strTemp == null || strTemp.Length < iNum) {
+            if (strTemp.Length == 0 && bSpace) {
+                return true;
+            } else if (strTemp.Length < iNum) {
                 return bRet;
             }
             for (int i = 0; i < strTemp.Length; i++) {
@@ -147,7 +154,7 @@ namespace SH_OBD {
         }
 
         /// <summary>
-        /// 返回一个便于阅读的十六进制字符串
+        /// 返回一个便于阅读的十六进制字符串，即在每个字节之间加一个空格
         /// </summary>
         /// <param name="offset">跳过头部offset个字符不做处理</param>
         /// <param name="strHex">原始十六进制字符串</param>

@@ -510,8 +510,12 @@ namespace SH_OBD {
                                 }
                             }
                         }
-                    }
-                    if (Utility.IsUnmeaningString(CALID, m_obdInterface.OBDResultSetting.UnmeaningNum)) {
+                        // 国六车型，CALID全部字符均为空格的话也判为乱码
+                        if (Utility.IsUnmeaningString(CALID, m_obdInterface.OBDResultSetting.UnmeaningNum, true)) {
+                            CALIDUnmeaningResult = false;
+                        }
+                    } else if (Utility.IsUnmeaningString(CALID, m_obdInterface.OBDResultSetting.UnmeaningNum, false)) {
+                        // 国五车型，CALID全部字符均为空格的话不判为乱码
                         CALIDUnmeaningResult = false;
                     }
                 }
