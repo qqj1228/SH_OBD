@@ -661,14 +661,15 @@ namespace SH_OBD {
 
             if (!GetSupportStatus(mode01, m_mode01Support)) {
                 OBDResult = false;
-                errorMsg = "获取 Mode01 支持状态出错！";
-                m_obdInterface.m_log.TraceError("Get Mode01 Support Status Error!");
                 if (m_obdInterface.STDType == StandardType.ISO_27145) {
                     errorMsg = "获取 DID F4 支持状态出错！";
                     m_obdInterface.m_log.TraceError("Get DID F4 Support Status Error!");
                 } else if (m_obdInterface.STDType == StandardType.SAE_J1939) {
                     errorMsg = "获取 DM5 支持状态出错！";
                     m_obdInterface.m_log.TraceError("Get DM5 Support Status Error!");
+                } else {
+                    errorMsg = "获取 Mode01 支持状态出错！";
+                    m_obdInterface.m_log.TraceError("Get Mode01 Support Status Error!");
                 }
                 throw new Exception(errorMsg);
             }
@@ -677,11 +678,12 @@ namespace SH_OBD {
                 // J1939只取一个支持状态就够了
                 if (!GetSupportStatus(mode09, m_mode09Support)) {
                     OBDResult = false;
-                    errorMsg = "获取 Mode09 支持状态出错！";
-                    m_obdInterface.m_log.TraceError("Get Mode09 Support Status Error!");
                     if (m_obdInterface.STDType == StandardType.ISO_27145) {
                         errorMsg = "获取 DID F8 支持状态出错！";
                         m_obdInterface.m_log.TraceError("Get DID F8 Support Status Error!");
+                    } else {
+                        errorMsg = "获取 Mode09 支持状态出错！";
+                        m_obdInterface.m_log.TraceError("Get Mode09 Support Status Error!");
                     }
                     throw new Exception(errorMsg);
                 }

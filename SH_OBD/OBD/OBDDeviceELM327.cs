@@ -165,7 +165,7 @@ namespace SH_OBD {
                 break;
             case ProtocolType.SAE_J1939_CAN_29BIT_250KBAUD:
                 for (int i = 3; i > 0 && !bflag; i--) {
-                    if (GetOBDResponse("00FECE").Replace(" ", "").Contains("FECE")) {
+                    if (GetOBDResponse("00FECE").Replace(" ", "").Contains("60FECE")) {
                         bflag = bflag || true;
                         standard = StandardType.SAE_J1939;
                     }
@@ -185,7 +185,7 @@ namespace SH_OBD {
                     }
                 }
                 for (int i = 3; i > 0 && !bflag; i--) {
-                    if (GetOBDResponse("00FECE").Replace(" ", "").Contains("FECE")) {
+                    if (GetOBDResponse("00FECE").Replace(" ", "").Contains("60FECE")) {
                         bflag = bflag || true;
                         standard = StandardType.SAE_J1939;
                     }
