@@ -14,6 +14,7 @@ using System.Windows.Forms;
 namespace SH_OBD {
     public partial class OBDStartForm : Form {
         public static bool m_bCanOBDTest;
+        private string m_serialRecvBuf;
         private readonly OBDInterface m_obdInterface;
         private readonly OBDTest m_obdTest;
         private MainForm f_MainForm;
@@ -24,6 +25,7 @@ namespace SH_OBD {
         public OBDStartForm() {
             InitializeComponent();
             this.Text += " Ver: " + MainFileVersion.AssemblyVersion;
+            m_serialRecvBuf = "";
             m_bCanOBDTest = true;
             m_lastHeight = this.Height;
             m_obdInterface = new OBDInterface();
@@ -126,8 +128,10 @@ namespace SH_OBD {
             m_bCanOBDTest = false;
             Control con = this.ActiveControl;
             if (con is TextBox tb) {
-                string strTxt = Encoding.Default.GetString(bits);
-                if (strTxt.Contains("\n")) {
+                m_serialRecvBuf += Encoding.Default.GetString(bits);
+                if (m_serialRecvBuf.Contains("\n")) {
+                    string strTxt = m_serialRecvBuf.Split('\n')[0];
+                    m_serialRecvBuf = m_serialRecvBuf.Split('\n')[1];
                     string[] codes = strTxt.Trim().Split('*');
                     if (codes != null) {
                         if (codes.Length > 2) {
