@@ -20,16 +20,21 @@ namespace SH_OBD {
             List<string> tempLines = SplitByCR(response);
             List<string> lines = new List<string>();
             foreach (string item in tempLines) {
-                string strNRC = IsNegativeResponse(item, headLen);
+                string strNRC = GetNRC(item, headLen);
                 if (strNRC.Length == 0) {
                     lines.Add(item);
                 } else if (strNRC == "78") {
                     responseList.Pending = true;
                 }
             }
-            if (lines.Count == 0 && responseList.Pending) {
-                responseList.RawResponse = "Pending_Message";
-                return responseList;
+            if (lines.Count == 0) {
+                if (responseList.Pending) {
+                    responseList.RawResponse = "PENDING";
+                    return responseList;
+                } else {
+                    responseList.ErrorDetected = true;
+                    return responseList;
+                }
             }
             lines.Sort();
             if (param.Service == 0 && lines.Count > 1) {
@@ -133,20 +138,6 @@ namespace SH_OBD {
                 break;
             }
             return bIsMultiline ? iRet + 2 : iRet;
-        }
-
-        private string IsNegativeResponse(string strData, int headLen) {
-            string strNRC = "";
-            if (strData.Length > 0) {
-                bool result = int.TryParse(strData.Substring(headLen, 2), out int len);
-                if (result) {
-                    string strActual = strData.Substring(headLen + 2);
-                    if (strActual.Length == len * 2 && strActual.Substring(0, 2) == "7F") {
-                        strNRC = strActual.Substring(strActual.Length - 2, 2);
-                    }
-                }
-            }
-            return strNRC;
         }
 
     }
