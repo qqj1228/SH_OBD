@@ -26,27 +26,22 @@ namespace SH_OBD {
                     // 2、其他协议中错误的CAN或K线消息
                     continue;
                 }
-                string strNRC = IsNegativeResponse(item, headLen);
-                //if (strNRC.Length == 0 && !IsTesterPresentResponse(item, headLen)) {
-                //    lines.Add(item);
-                //} else if (strNRC == "78") {
-                //    responseList.Pending = true;
-                //}
+                string strNRC = GetNRC(item, headLen);
                 if (strNRC.Length == 0) {
                     lines.Add(item);
                 } else if (strNRC == "78") {
                     responseList.Pending = true;
                 }
             }
-            if (lines.Count == 0 && responseList.Pending) {
-                responseList.RawResponse = "PENDING";
-                return responseList;
+            if (lines.Count == 0) {
+                if (responseList.Pending) {
+                    responseList.RawResponse = "PENDING";
+                    return responseList;
+                } else {
+                    responseList.ErrorDetected = true;
+                    return responseList;
+                }
             }
-            //if (lines.Count == 0) {
-            //    // 只含有TesterPresent的正响应
-            //    responseList.RawResponse = "TPPR";
-            //    return responseList;
-            //}
 
             lines.Sort();
             List<List<string>> groups = new List<List<string>>();
@@ -147,20 +142,6 @@ namespace SH_OBD {
                 break;
             }
             return bIsMultiline ? iRet + 2 : iRet;
-        }
-
-        private string IsNegativeResponse(string strData, int headLen) {
-            string strNRC = "";
-            if (strData.Length > 0) {
-                bool result = int.TryParse(strData.Substring(headLen, 2), out int len);
-                if (result) {
-                    string strActual = strData.Substring(headLen + 2);
-                    if (strActual.Length == len * 2 && strActual.Substring(0, 2) == "7F") {
-                        strNRC = strActual.Substring(strActual.Length - 2, 2);
-                    }
-                }
-            }
-            return strNRC;
         }
 
         private bool IsTesterPresentResponse(string strData, int headLen) {

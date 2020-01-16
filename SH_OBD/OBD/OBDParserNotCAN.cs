@@ -16,7 +16,30 @@ namespace SH_OBD {
                 return responseList;
             }
 
-            List<string> lines = SplitByCR(response);
+            List<string> tempLines = SplitByCR(response);
+            List<string> lines = new List<string>();
+            foreach (string item in tempLines) {
+                if (item.Length > 0 && item.Length < headLen) {
+                    // 过滤数据帧总长小于帧头长度的错误数据
+                    continue;
+                }
+                string strNRC = GetNRC(item, headLen);
+                if (strNRC.Length == 0) {
+                    lines.Add(item);
+                } else if (strNRC == "78") {
+                    responseList.Pending = true;
+                }
+            }
+            if (lines.Count == 0) {
+                if (responseList.Pending) {
+                    responseList.RawResponse = "PENDING";
+                    return responseList;
+                } else {
+                    responseList.ErrorDetected = true;
+                    return responseList;
+                }
+            }
+
             lines.Sort();
             List<List<string>> groups = new List<List<string>>();
             List<string> group = new List<string> { lines[0] };

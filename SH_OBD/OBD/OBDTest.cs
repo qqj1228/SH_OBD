@@ -1490,8 +1490,8 @@ namespace SH_OBD {
                         if (CVN.Length > 20) {
                             CVN = CVN.Substring(0, 20);
                         }
-                        worksheet1.Cells[3 + i + 1, 2].Value = CALID;
-                        worksheet1.Cells[3 + i + 1, 4].Value = CVN;
+                        worksheet1.Cells[3 + i, 2].Value = CALID;
+                        worksheet1.Cells[3 + i, 4].Value = CVN;
                     }
                 }
 
@@ -1500,23 +1500,38 @@ namespace SH_OBD {
                 worksheet1.Cells["E3"].Value = moduleID;
                 worksheet1.Cells["B4"].Value += "";
                 worksheet1.Cells["D4"].Value += "";
-                if (worksheet1.Cells["B4"].Value.ToString().Length > 0 || worksheet1.Cells["D4"].Value.ToString().Length > 0) {
-                    if (m_obdInterface.OBDResultSetting.UseECUAcronym) {
-                        if (m_obdInterface.OBDResultSetting.UseSCRName) {
-                            worksheet1.Cells["E4"].Value = "SCR";
+
+                string OtherID = "";
+                if (m_CN6) {
+                    if (worksheet1.Cells["B4"].Value.ToString().Length > 0 || worksheet1.Cells["D4"].Value.ToString().Length > 0) {
+                        if (m_obdInterface.OBDResultSetting.UseECUAcronym) {
+                            if (m_obdInterface.OBDResultSetting.UseSCRName) {
+                                worksheet1.Cells["E4"].Value = "SCR";
+                            } else {
+                                worksheet1.Cells["E4"].Value = moduleID;
+                            }
                         } else {
                             worksheet1.Cells["E4"].Value = moduleID;
                         }
-                    } else {
+                    }
+                    for (int i = 1; i < dt.Rows.Count; i++) {
+                        moduleID = GetModuleID(dt.Rows[i][25].ToString().Split('-')[0], dt.Rows[i][1].ToString());
+                        OtherID += "," + moduleID;
+                    }
+                    worksheet1.Cells["E5"].Value = OtherID.Trim(',');
+                } else {
+                    if (dt.Rows.Count > 1) {
+                        moduleID = GetModuleID(dt.Rows[1][25].ToString().Split('-')[0], dt.Rows[1][1].ToString());
                         worksheet1.Cells["E4"].Value = moduleID;
+                        if (dt.Rows.Count > 2) {
+                            for (int i = 2; i < dt.Rows.Count; i++) {
+                                moduleID = GetModuleID(dt.Rows[i][25].ToString().Split('-')[0], dt.Rows[i][1].ToString());
+                                OtherID += "," + moduleID;
+                            }
+                            worksheet1.Cells["E5"].Value = OtherID.Trim(',');
+                        }
                     }
                 }
-                string OtherID = "";
-                for (int i = 1; i < dt.Rows.Count; i++) {
-                    moduleID = GetModuleID(dt.Rows[i][25].ToString().Split('-')[0], dt.Rows[i][1].ToString());
-                    OtherID += "," + moduleID;
-                }
-                worksheet1.Cells["E5"].Value = OtherID.Trim(',');
 
                 // 外观检验结果
                 worksheet1.Cells["B7"].Value = "合格";

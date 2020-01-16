@@ -50,5 +50,20 @@ namespace SH_OBD {
                 input.IndexOf("UNABLETOCONNECT") >= 0
             );
         }
+
+        protected string GetNRC(string strData, int headLen) {
+            string strNRC = "";
+            if (strData.Length > headLen + 2) {
+                bool result = int.TryParse(strData.Substring(headLen, 2), out int len);
+                if (result) {
+                    string strActual = strData.Substring(headLen + 2);
+                    if (strActual.Length == len * 2 && strActual.Substring(0, 2) == "7F") {
+                        strNRC = strActual.Substring(strActual.Length - 2, 2);
+                    }
+                }
+            }
+            return strNRC;
+        }
+
     }
 }
