@@ -119,6 +119,9 @@ namespace SH_OBD {
         void OnUploadDataDone() { }
 
         void SerialDataReceived(object sender, SerialDataReceivedEventArgs e, byte[] bits) {
+            // 该处接收串口扫码枪传进来的VIN号代码没有考虑串口数据断包问题
+            // 获取VIN号有隐患，需要串口扫码枪在VIN号结尾加个回车表示结束
+            // 但是现场使用的是USB接口的扫码枪，VIN号结尾也没有加回车，故暂时不需要处理这个问题
             if (!m_bCanOBDTest) {
                 if (Encoding.Default.GetString(bits).Trim().ToUpper().Length == 17) {
                     this.Invoke((EventHandler)delegate {
