@@ -351,6 +351,12 @@ namespace SH_OBD {
             }
             m_obdTest.StrVIN_IN = "";
             m_obdTest.StrVIN_ECU = "";
+            m_ctsOBDTestStart.Cancel();
+            m_ctsSetupColumnsDone.Cancel();
+            m_ctsWriteDbStart.Cancel();
+            if (m_ctsUploadDataStart != null) {
+                m_ctsUploadDataStart.Cancel();
+            }
             m_bCanOBDTest = true;
         }
 

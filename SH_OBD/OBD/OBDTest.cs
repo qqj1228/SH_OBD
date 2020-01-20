@@ -671,6 +671,7 @@ namespace SH_OBD {
                     errorMsg = "获取 Mode01 支持状态出错！";
                     m_obdInterface.m_log.TraceError("Get Mode01 Support Status Error!");
                 }
+                SetupColumnsDone?.Invoke();
                 throw new Exception(errorMsg);
             }
 
@@ -685,6 +686,7 @@ namespace SH_OBD {
                         errorMsg = "获取 Mode09 支持状态出错！";
                         m_obdInterface.m_log.TraceError("Get Mode09 Support Status Error!");
                     }
+                    SetupColumnsDone?.Invoke();
                     throw new Exception(errorMsg);
                 }
             }
@@ -720,6 +722,7 @@ namespace SH_OBD {
             } catch (Exception ex) {
                 m_obdInterface.m_log.TraceError("Result DataTable Error: " + ex.Message);
                 dt.Dispose();
+                WriteDbDone?.Invoke();
                 throw new Exception("生成 Result DataTable 出错");
             }
 
