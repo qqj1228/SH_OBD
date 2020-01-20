@@ -777,6 +777,7 @@ namespace SH_OBD {
                 m_obdInterface.m_log.TraceError("WebService GetResponseString error: " + ex.Message);
                 dt2MES.Dispose();
                 dt1MES.Dispose();
+                UploadDataDone?.Invoke();
                 throw;
             }
 
@@ -790,6 +791,7 @@ namespace SH_OBD {
                         m_obdInterface.m_log.TraceError("WebService GetResponseString error: " + strMsg + ", " + ex.Message);
                         dt2MES.Dispose();
                         dt1MES.Dispose();
+                        UploadDataDone?.Invoke();
                         throw;
                     }
                 } else {
@@ -812,6 +814,7 @@ namespace SH_OBD {
             } else {
                 // 上传数据接口返回失败信息
                 m_obdInterface.m_log.TraceError("Upload data function return false, VIN = " + strVIN);
+                UploadDataDone?.Invoke();
                 return false;
             }
         }

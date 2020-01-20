@@ -20,6 +20,10 @@ namespace SH_OBD {
         private readonly Color m_backColor;
         private float m_lastHeight;
         readonly System.Timers.Timer m_timer;
+        CancellationTokenSource m_ctsOBDTestStart;
+        CancellationTokenSource m_ctsSetupColumnsDone;
+        CancellationTokenSource m_ctsWriteDbStart;
+        CancellationTokenSource m_ctsUploadDataStart;
 
         public OBDStartForm() {
             InitializeComponent();
@@ -94,29 +98,49 @@ namespace SH_OBD {
 
         void OnOBDTestStart() {
             if (!m_obdTest.AdvanceMode) {
-                this.Invoke((EventHandler)delegate {
-                    this.labelResult.ForeColor = Color.Black;
-                    this.labelResult.Text = "OBD检测中。。。";
-                });
+                m_ctsOBDTestStart = UpdateUITask("OBD检测中");
             }
         }
 
         void OnSetupColumnsDone() {
             if (!m_obdTest.AdvanceMode) {
+                m_ctsOBDTestStart.Cancel();
+                m_ctsSetupColumnsDone = UpdateUITask("正在处理结果");
+            }
+        }
+
+        void OnWriteDbStart() {
+            if (!m_obdTest.AdvanceMode) {
+                m_ctsSetupColumnsDone.Cancel();
+                m_ctsWriteDbStart = UpdateUITask("正在写入本地数据库");
+            }
+        }
+
+        void OnWriteDbDone() {
+            if (!m_obdTest.AdvanceMode) {
+                m_ctsWriteDbStart.Cancel();
                 this.Invoke((EventHandler)delegate {
                     this.labelResult.ForeColor = Color.Black;
-                    this.labelResult.Text = "正在处理结果。。。";
+                    this.labelResult.Text = "写入本地数据库结束";
                 });
             }
         }
 
-        void OnWriteDbStart() { }
+        void OnUploadDataStart() {
+            if (!m_obdTest.AdvanceMode) {
+                m_ctsUploadDataStart = UpdateUITask("正在上传数据");
+            }
+        }
 
-        void OnWriteDbDone() { }
-
-        void OnUploadDataStart() { }
-
-        void OnUploadDataDone() { }
+        void OnUploadDataDone() {
+            if (!m_obdTest.AdvanceMode) {
+                m_ctsUploadDataStart.Cancel();
+                this.Invoke((EventHandler)delegate {
+                    this.labelResult.ForeColor = Color.Black;
+                    this.labelResult.Text = "上传数据结束";
+                });
+            }
+        }
 
         void SerialDataReceived(object sender, SerialDataReceivedEventArgs e, byte[] bits) {
             // 该处接收串口扫码枪传进来的VIN号代码没有考虑串口数据断包问题
@@ -125,26 +149,25 @@ namespace SH_OBD {
             if (!m_bCanOBDTest) {
                 if (Encoding.Default.GetString(bits).Trim().ToUpper().Length == 17) {
                     this.Invoke((EventHandler)delegate {
-                        this.labelResult.ForeColor = Color.Red;
-                        this.labelResult.Text = "上一辆车还未完全结束检测过程，请稍后再试";
+                        this.txtBoxVIN.SelectAll();
+                        MessageBox.Show("上一辆车还未完全结束检测过程，请稍后再试", "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     });
                 }
                 return;
             }
-            m_bCanOBDTest = false;
             string strTxt = Encoding.Default.GetString(bits).Trim().ToUpper();
             // 跨UI线程调用UI控件要使用Invoke
             this.Invoke((EventHandler)delegate {
                 this.txtBoxVIN.Text = strTxt;
             });
             if (strTxt.Length == 17) {
+                m_bCanOBDTest = false;
                 m_obdTest.StrVIN_IN = strTxt;
                 m_obdInterface.m_log.TraceInfo("Get VIN: " + m_obdTest.StrVIN_IN + " by serial port scanner");
                 if (!m_obdTest.AdvanceMode) {
-                    StartOBDTest();
+                    Task.Factory.StartNew(StartOBDTest);
                 }
             }
-            m_bCanOBDTest = true;
         }
 
         private void LogCommSettingInfo() {
@@ -256,13 +279,16 @@ namespace SH_OBD {
                 this.labelResult.ForeColor = Color.Black;
                 this.labelResult.Text = "正在连接车辆。。。";
             });
+            CancellationTokenSource tokenSource = UpdateUITask("正在连接车辆");
             if (!ConnectOBD()) {
+                tokenSource.Cancel();
                 this.Invoke((EventHandler)delegate {
                     this.labelResult.ForeColor = Color.Red;
                     this.labelResult.Text = "连接车辆失败！";
                 });
                 return;
             }
+            tokenSource.Cancel();
 
             string errorMsg = "";
             int VINCount = 0;
@@ -328,6 +354,31 @@ namespace SH_OBD {
             m_bCanOBDTest = true;
         }
 
+        private CancellationTokenSource UpdateUITask(string strMsg) {
+            CancellationTokenSource tokenSource = new CancellationTokenSource();
+            CancellationToken token = tokenSource.Token;
+            Task.Factory.StartNew(() => {
+                int count = 0;
+                while (!token.IsCancellationRequested) {
+                    try {
+                        this.Invoke((EventHandler)delegate {
+                            this.labelResult.ForeColor = Color.Black;
+                            if (count == 0) {
+                                this.labelResult.Text = strMsg + "。。。";
+                            } else {
+                                this.labelResult.Text = strMsg + "，用时" + count.ToString() + "s";
+                            }
+                        });
+                    } catch (ObjectDisposedException ex) {
+                        m_obdInterface.m_log.TraceWarning(ex.Message);
+                    }
+                    Thread.Sleep(1000);
+                    ++count;
+                }
+            }, token);
+            return tokenSource;
+        }
+
         private void ResizeFont(Control control, float scale) {
             control.Font = new Font(control.Font.FontFamily, control.Font.Size * scale, control.Font.Style);
         }
@@ -391,23 +442,21 @@ namespace SH_OBD {
         private void TxtBoxVIN_TextChanged(object sender, EventArgs e) {
             if (!m_bCanOBDTest) {
                 if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Trim().Length == 17) {
-                    this.labelResult.ForeColor = Color.Red;
-                    this.labelResult.Text = "上一辆车还未完全结束检测过程，请稍后再试";
                     this.txtBoxVIN.SelectAll();
+                    MessageBox.Show("上一辆车还未完全结束检测过程，请稍后再试", "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 return;
             }
-            m_bCanOBDTest = false;
             string strTxt = this.txtBoxVIN.Text.Trim();
             if (!m_obdInterface.CommSettings.UseSerialScanner && strTxt.Length == 17) {
+                m_bCanOBDTest = false;
                 m_obdTest.StrVIN_IN = strTxt;
                 m_obdInterface.m_log.TraceInfo("Get VIN: " + m_obdTest.StrVIN_IN);
                 if (!m_obdTest.AdvanceMode) {
-                    StartOBDTest();
+                    Task.Factory.StartNew(StartOBDTest);
                 }
                 this.txtBoxVIN.SelectAll();
             }
-            m_bCanOBDTest = true;
         }
 
         private void OBDStartForm_Activated(object sender, EventArgs e) {
