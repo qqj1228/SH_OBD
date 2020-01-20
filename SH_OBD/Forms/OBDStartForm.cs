@@ -146,17 +146,18 @@ namespace SH_OBD {
         }
 
         void SerialDataReceived(object sender, SerialDataReceivedEventArgs e, byte[] bits) {
-            if (!m_bCanOBDTest) {
-                this.Invoke((EventHandler)delegate {
-                    this.txtBoxVIN.SelectAll();
-                    MessageBox.Show("上一辆车还未完全结束检测过程，请稍后再试", "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                });
-                return;
-            }
             Control con = this.ActiveControl;
             if (con is TextBox tb) {
                 m_serialRecvBuf += Encoding.Default.GetString(bits);
                 if (m_serialRecvBuf.Contains("\n")) {
+                    if (!m_bCanOBDTest) {
+                        this.Invoke((EventHandler)delegate {
+                            this.txtBoxVIN.SelectAll();
+                            MessageBox.Show("上一辆车还未完全结束检测过程，请稍后再试", "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        });
+                        m_serialRecvBuf = "";
+                        return;
+                    }
                     m_bCanOBDTest = false;
                     string strTxt = m_serialRecvBuf.Split('\n')[0];
                     m_serialRecvBuf = m_serialRecvBuf.Split('\n')[1];
@@ -275,10 +276,6 @@ namespace SH_OBD {
             if (m_obdInterface.ConnectedStatus) {
                 m_obdInterface.Disconnect();
             }
-            this.Invoke((EventHandler)delegate {
-                this.labelResult.ForeColor = Color.Black;
-                this.labelResult.Text = "正在连接车辆。。。";
-            });
             CancellationTokenSource tokenSource = UpdateUITask("正在连接车辆");
             if (!ConnectOBD()) {
                 tokenSource.Cancel();

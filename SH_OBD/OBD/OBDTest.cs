@@ -774,7 +774,6 @@ namespace SH_OBD {
             }
 
             bool bRet;
-            UploadDataStart?.Invoke();
             try {
                 if (m_obdInterface.OracleMESSetting.Enable) {
                     bRet = UploadDataOracle(StrVIN_ECU, strOBDResult, dt, ref errorMsg);
@@ -783,11 +782,9 @@ namespace SH_OBD {
                 }
             } catch (Exception) {
                 dt.Dispose();
-                UploadDataDone?.Invoke();
                 throw;
             }
             dt.Dispose();
-            UploadDataDone?.Invoke();
             return bRet;
         }
 
@@ -991,12 +988,12 @@ namespace SH_OBD {
         }
 
         private bool UploadDataOracle(string strVIN, string strOBDResult, DataTable dtIn, ref string errorMsg) {
+            UploadDataStart?.Invoke();
             DataTable dt1 = new DataTable("IF_EM_WQPF_1");
             DataTable dt3 = new DataTable("IF_EM_WQPF_3");
             DataTable dt4 = new DataTable("IF_EM_WQPF_4");
             DataTable dt4A = new DataTable("IF_EM_WQPF_4_A");
             try {
-                UploadDataStart?.Invoke();
                 m_obdInterface.DBandMES.ChangeWebService = false;
                 SetDataTable1Oracle(strVIN, dt1);
                 string strKeyID = m_dbOracle.GetValue(dt1.TableName, "ID", "VIN", strVIN)[0];
@@ -1005,7 +1002,6 @@ namespace SH_OBD {
                 string strKeyID4 = m_dbOracle.GetValue(dt4.TableName, "ID", "WQPF_ID", strKeyID)[0];
                 SetDataTable4AOracle(strKeyID, strKeyID4, dt4A, dtIn);
                 m_db.UpdateUpload(strVIN, "1");
-                UploadDataDone?.Invoke();
             } catch (Exception ex) {
                 errorMsg = "UploadDataOracle Error: " + ex.Message;
                 m_obdInterface.m_log.TraceError("UploadDataOracle Error: " + ex.Message);
@@ -1015,6 +1011,7 @@ namespace SH_OBD {
                 dt3.Dispose();
                 dt4.Dispose();
                 dt4A.Dispose();
+                UploadDataDone?.Invoke();
             }
             return true;
         }
@@ -1078,6 +1075,7 @@ namespace SH_OBD {
             } else {
                 // 上传数据接口返回失败信息
                 m_obdInterface.m_log.TraceError("Upload data function return false, VIN = " + strVIN);
+                UploadDataDone?.Invoke();
                 return false;
             }
         }
