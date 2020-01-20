@@ -694,7 +694,8 @@ namespace SH_OBD {
                     errorMsg = "获取 Mode01 支持状态出错！";
                     m_obdInterface.m_log.TraceError("Get Mode01 Support Status Error!");
                 }
-                throw new Exception(errorMsg);
+                SetupColumnsDone?.Invoke();
+                throw new ApplicationException(errorMsg);
             }
             if (!GetSupportStatus(mode09, m_mode09Support)) {
                 OBDResult = false;
@@ -705,7 +706,8 @@ namespace SH_OBD {
                     errorMsg = "获取 Mode09 支持状态出错！";
                     m_obdInterface.m_log.TraceError("Get Mode09 Support Status Error!");
                 }
-                throw new Exception(errorMsg);
+                SetupColumnsDone?.Invoke();
+                throw new ApplicationException(errorMsg);
             }
 
             SetDataTableColumns<string>(m_dtInfo, m_mode01Support);
@@ -745,7 +747,8 @@ namespace SH_OBD {
             } catch (Exception ex) {
                 m_obdInterface.m_log.TraceError("Result DataTable Error: " + ex.Message);
                 dt.Dispose();
-                throw new Exception("生成 Result DataTable 出错");
+                WriteDbDone?.Invoke();
+                throw new ApplicationException("生成 Result DataTable 出错");
             }
 
             DataTable dtIUPR = new DataTable("OBDIUPR");
@@ -771,6 +774,7 @@ namespace SH_OBD {
             }
 
             bool bRet;
+            UploadDataStart?.Invoke();
             try {
                 if (m_obdInterface.OracleMESSetting.Enable) {
                     bRet = UploadDataOracle(StrVIN_ECU, strOBDResult, dt, ref errorMsg);
@@ -779,9 +783,11 @@ namespace SH_OBD {
                 }
             } catch (Exception) {
                 dt.Dispose();
+                UploadDataDone?.Invoke();
                 throw;
             }
             dt.Dispose();
+            UploadDataDone?.Invoke();
             return bRet;
         }
 
