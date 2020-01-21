@@ -108,7 +108,7 @@ namespace SH_OBD {
         void OnSetupColumnsDone() {
             if (!m_obdTest.AdvanceMode) {
                 m_ctsOBDTestStart.Cancel();
-                m_ctsSetupColumnsDone = UpdateUITask("正在处理结果");
+                m_ctsSetupColumnsDone = UpdateUITask("正在读取结果");
             }
         }
 
