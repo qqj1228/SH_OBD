@@ -98,14 +98,14 @@ namespace SH_OBD {
 
         void OnOBDTestStart() {
             if (!m_obdTest.AdvanceMode) {
-                m_ctsOBDTestStart = UpdateUITask("OBD检测中");
+                m_ctsOBDTestStart = UpdateUITask("开始OBD检测");
             }
         }
 
         void OnSetupColumnsDone() {
             if (!m_obdTest.AdvanceMode) {
                 m_ctsOBDTestStart.Cancel();
-                m_ctsSetupColumnsDone = UpdateUITask("正在处理结果");
+                m_ctsSetupColumnsDone = UpdateUITask("正在读取车辆信息");
             }
         }
 

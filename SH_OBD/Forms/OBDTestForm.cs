@@ -36,7 +36,7 @@ namespace SH_OBD {
         void OnSetupColumnsDone() {
             this.Invoke((EventHandler)delegate {
                 this.labelInfo.ForeColor = Color.Black;
-                this.labelInfo.Text = "正在显示结果。。。";
+                this.labelInfo.Text = "读取结果中。。。";
             });
             if (GridViewInfo.Columns.Count > 0) {
                 GridViewInfo.Columns[0].Width = 30;

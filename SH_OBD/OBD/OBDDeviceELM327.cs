@@ -210,29 +210,47 @@ namespace SH_OBD {
                 orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
             }
             if (orl.RawResponse == "PENDING") {
-                m_log.TraceWarning("Receive only NRC78, open PendingForm");
-                PendingForm form = null;
-                try {
-                    form = new PendingForm(param, m_Parser, m_CommELM);
-                    form.ShowDialog();
-                    if (form.Tag != null) {
-                        orl = (OBDResponseList)form.Tag;
-                        m_log.TraceInfo("Get OBDResponseList from PendingForm, RawResponse: " + orl.RawResponse);
+                // NRC=78 处理
+                m_log.TraceWarning("Receive only NRC78, handle pending message");
+                switch (m_iProtocol) {
+                case ProtocolType.J1850_PWM:
+                case ProtocolType.J1850_VPW:
+                    // 每隔30秒重复发送一次请求，直到有正响应消息返回，重试时间在1min内
+                    for (int i = 2; i > 0; i--) {
+                        Thread.Sleep(30000);
+                        orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
+                        if (!(orl.RawResponse == "PENDING" || orl.ErrorDetected)) {
+                            break;
+                        }
                     }
-                } catch (Exception ex) {
-                    m_log.TraceError("PendingForm error: " + ex.Message);
-                } finally {
-                    if (form != null) {
-                        form.Dispose();
+                    break;
+                case ProtocolType.ISO9141_2:
+                    // 每隔4秒重复发送一次请求，直到有正响应消息返回，重试时间在1min内
+                    for (int i = 15; i > 0; i--) {
+                        Thread.Sleep(4000);
+                        orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
+                        if (!(orl.RawResponse == "PENDING" || orl.ErrorDetected)) {
+                            break;
+                        }
                     }
+                    break;
+                default:
+                    // ISO14230-4 会在5ms内发送NRC78负响应直到发送正响应，v2.1以下的ELM327一般可收到所需要的消息，只需要过滤NRC78的负响应即可
+                    // ISO15765-4 会在5s内发送NRC78负响应直到发送正响应，v2.1以下的ELM327无法收到所需要的消息，需要上层应用自己处理
+                    // 每隔5s检测一次是否有正响应消息返回，如果没有则继续，最多执行12次，即1min内
+                    for (int i = 12; i > 0; i--) {
+                        Thread.Sleep(5000);
+                        string RxLine = m_CommELM.GetRxLine();
+                        if (RxLine != null && RxLine.Length > 0) {
+                            m_log.TraceInfo("RX: " + RxLine.Replace("\r", "\\r"));
+                            orl = m_Parser.Parse(param, RxLine);
+                            if (!(orl.RawResponse == "PENDING" || orl.ErrorDetected)) {
+                                break;
+                            }
+                        }
+                    }
+                    break;
                 }
-                //for (int i = 100; i > 0; i--) {
-                //    Thread.Sleep(1000);
-                //    if (m_CommELM.RxLine != null && m_CommELM.RxLine.Length > 0) {
-                //        orl = m_Parser.Parse(param, m_CommELM.RxLine);
-                //        break;
-                //    }
-                //}
             }
             return orl;
         }
