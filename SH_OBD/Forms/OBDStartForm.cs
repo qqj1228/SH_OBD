@@ -286,6 +286,7 @@ namespace SH_OBD {
                     this.labelResult.ForeColor = Color.Red;
                     this.labelResult.Text = "连接车辆失败！";
                 });
+                m_bCanOBDTest = true;
                 return;
             }
             tokenSource.Cancel();
