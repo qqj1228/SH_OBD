@@ -13,9 +13,9 @@ CREATE TABLE SH_OBD.dbo.OBDData (
     MIL_DIST varchar(50) default('不适用'), -- MIL亮后行驶里程（km），0121
     OBD_SUP varchar(50) default('不适用'), -- OBD型式检验类型，011C
     ODO varchar(50) default('不适用'), -- 总累计里程ODO（km），01A6
-    DTC03 varchar(50) default('--'), -- 存储DTC，03
-    DTC07 varchar(50) default('--'), -- 未决DTC，07
-    DTC0A varchar(50) default('--'), -- 永久DTC，0A
+    DTC03 varchar(100) default('--'), -- 存储DTC，03
+    DTC07 varchar(100) default('--'), -- 未决DTC，07
+    DTC0A varchar(100) default('--'), -- 永久DTC，0A
     MIS_RDY varchar(50) default('不适用'), -- 失火监测，0101
     FUEL_RDY varchar(50) default('不适用'), -- 燃油系统监测，0101
     CCM_RDY varchar(50) default('不适用'), -- 综合组件监测，0101
