@@ -210,14 +210,17 @@ namespace SH_OBD {
                 orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
             }
             if (orl.RawResponse == "PENDING") {
+                int waittingTime = 60; // 重试总时间，单位秒
+                int interval = 6; // 重试间隔时间，单位秒
                 // NRC=78 处理
                 m_log.TraceWarning("Receive only NRC78, handle pending message");
                 switch (m_iProtocol) {
                 case ProtocolType.J1850_PWM:
                 case ProtocolType.J1850_VPW:
-                    // 每隔30秒重复发送一次请求，直到有正响应消息返回，重试时间在1min内
-                    for (int i = 2; i > 0; i--) {
-                        Thread.Sleep(30000);
+                    // 间隔30秒重复发送一次请求，直到有正响应消息返回
+                    interval = 30;
+                    for (int i = waittingTime / interval; i > 0; i--) {
+                        Thread.Sleep(interval * 1000);
                         orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
                         if (!(orl.RawResponse == "PENDING" || orl.ErrorDetected)) {
                             break;
@@ -225,9 +228,10 @@ namespace SH_OBD {
                     }
                     break;
                 case ProtocolType.ISO9141_2:
-                    // 每隔4秒重复发送一次请求，直到有正响应消息返回，重试时间在1min内
-                    for (int i = 15; i > 0; i--) {
-                        Thread.Sleep(4000);
+                    // 间隔4秒重复发送一次请求，直到有正响应消息返回
+                    interval = 4;
+                    for (int i = waittingTime / interval; i > 0; i--) {
+                        Thread.Sleep(interval * 1000);
                         orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
                         if (!(orl.RawResponse == "PENDING" || orl.ErrorDetected)) {
                             break;
@@ -235,11 +239,11 @@ namespace SH_OBD {
                     }
                     break;
                 default:
-                    // ISO14230-4 会在5ms内发送NRC78负响应直到发送正响应，v2.1以下的ELM327一般可收到所需要的消息，只需要过滤NRC78的负响应即可
+                    // ISO14230-4 会在50ms内发送NRC78负响应直到发送正响应，v2.1以下的ELM327一般可收到所需要的消息，只需要过滤NRC78的负响应即可
                     // ISO15765-4 会在5s内发送NRC78负响应直到发送正响应，v2.1以下的ELM327无法收到所需要的消息，需要上层应用自己处理
-                    // 每隔5s检测一次是否有正响应消息返回，如果没有则继续，最多执行12次，即1min内
-                    for (int i = 12; i > 0; i--) {
-                        Thread.Sleep(5000);
+                    // 间隔6s(5s加上传输延时)检测一次是否有正响应消息返回，如果没有则继续
+                    for (int i = waittingTime / interval; i > 0; i--) {
+                        Thread.Sleep(interval * 1000);
                         string RxLine = m_CommELM.GetRxLine();
                         if (RxLine != null && RxLine.Length > 0) {
                             m_log.TraceInfo("RX: " + RxLine.Replace("\r", "\\r"));
