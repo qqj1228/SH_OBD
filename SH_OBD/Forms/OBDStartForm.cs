@@ -302,9 +302,15 @@ namespace SH_OBD {
             } finally {
                 m_obdTest.StrVIN_IN = "";
                 m_obdTest.StrType_IN = "";
-                m_ctsOBDTestStart.Cancel();
-                m_ctsSetupColumnsDone.Cancel();
-                m_ctsWriteDbStart.Cancel();
+                if (m_ctsOBDTestStart != null) {
+                    m_ctsOBDTestStart.Cancel();
+                }
+                if (m_ctsSetupColumnsDone != null) {
+                    m_ctsSetupColumnsDone.Cancel();
+                }
+                if (m_ctsWriteDbStart != null) {
+                    m_ctsWriteDbStart.Cancel();
+                }
                 if (m_ctsUploadDataStart != null) {
                     m_ctsUploadDataStart.Cancel();
                 }
