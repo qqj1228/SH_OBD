@@ -1114,6 +1114,7 @@ namespace SH_OBD {
         }
 
         private void SetDataTableResult(string strVIN, string strOBDResult, ref DataTable dtOut) {
+            string strDTCTemp;
             for (int i = 2; i < m_dtECUInfo.Columns.Count; i++) {
                 DataRow dr = dtOut.NewRow();
                 dr[0] = strVIN;                                                     // VIN
@@ -1124,9 +1125,27 @@ namespace SH_OBD {
                         dr[3] = m_dtInfo.Rows[1][j].ToString();                     // MIL_DIST
                         dr[4] = m_dtInfo.Rows[2][j].ToString();                     // OBD_SUP
                         dr[5] = m_dtInfo.Rows[3][j].ToString();                     // ODO
-                        dr[6] = m_dtInfo.Rows[4][j].ToString().Replace("\n", ",");  // DTC03
-                        dr[7] = m_dtInfo.Rows[5][j].ToString().Replace("\n", ",");  // DTC07
-                        dr[8] = m_dtInfo.Rows[6][j].ToString().Replace("\n", ",");  // DTC0A
+                        // DTC03，若大于数据库字段容量则截断
+                        strDTCTemp = m_dtInfo.Rows[4][j].ToString().Replace("\n", ",");
+                        if (strDTCTemp.Length > 100) {
+                            dr[6] = strDTCTemp.Substring(0, 97) + "...";
+                        } else {
+                            dr[6] = strDTCTemp;
+                        }
+                        // DTC07，若大于数据库字段容量则截断
+                        strDTCTemp = m_dtInfo.Rows[5][j].ToString().Replace("\n", ",");
+                        if (strDTCTemp.Length > 100) {
+                            dr[7] = strDTCTemp.Substring(0, 97) + "...";
+                        } else {
+                            dr[7] = strDTCTemp;
+                        }
+                        // DTC0A，若大于数据库字段容量则截断
+                        strDTCTemp = m_dtInfo.Rows[6][j].ToString().Replace("\n", ",");
+                        if (strDTCTemp.Length > 100) {
+                            dr[8] = strDTCTemp.Substring(0, 97) + "...";
+                        } else {
+                            dr[8] = strDTCTemp;
+                        }
                         dr[9] = m_dtInfo.Rows[7][j].ToString();                     // MIS_RDY
                         dr[10] = m_dtInfo.Rows[8][j].ToString();                    // FUEL_RDY
                         dr[11] = m_dtInfo.Rows[9][j].ToString();                    // CCM_RDY
@@ -1558,7 +1577,11 @@ namespace SH_OBD {
                 if (GetCompIgn(dtIn) && lineNO > 10) {
                     dr[i + 2] = dtIn.Rows[i][lineNO + (lineNO == 16 ? 3 : 9)];
                 } else {
-                    dr[i + 2] = dtIn.Rows[i][lineNO + 1];
+                    if (strItem.Contains("DTC")) {
+                        dr[i + 2] = dtIn.Rows[i][lineNO + 1].ToString().Replace(",", "\n");
+                    } else {
+                        dr[i + 2] = dtIn.Rows[i][lineNO + 1];
+                    }
                 }
             }
             m_dtInfo.Rows.Add(dr);
