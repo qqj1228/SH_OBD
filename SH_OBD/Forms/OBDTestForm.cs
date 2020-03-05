@@ -8,6 +8,7 @@ using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -17,6 +18,10 @@ namespace SH_OBD {
         private readonly OBDTest m_obdTest;
         private DateTime m_lastTime;
         private string[] m_fileNames;
+        CancellationTokenSource m_ctsOBDTestStart;
+        CancellationTokenSource m_ctsSetupColumnsDone;
+        CancellationTokenSource m_ctsWriteDbStart;
+        CancellationTokenSource m_ctsUploadDataStart;
 
         public OBDTestForm(OBDInterface obd, OBDTest obdTest) {
             InitializeComponent();
@@ -27,37 +32,40 @@ namespace SH_OBD {
         }
 
         void OnOBDTestStart() {
-            this.Invoke((EventHandler)delegate {
-                this.labelInfo.ForeColor = Color.Black;
-                this.labelInfo.Text = "OBD检测中。。。";
-            });
+            m_ctsOBDTestStart = UpdateUITask("开始OBD检测");
         }
 
         void OnSetupColumnsDone() {
+            if (m_ctsOBDTestStart != null) {
+                m_ctsOBDTestStart.Cancel();
+            }
+            m_ctsSetupColumnsDone = UpdateUITask("正在读取车辆信息");
             this.Invoke((EventHandler)delegate {
-                this.labelInfo.ForeColor = Color.Black;
-                this.labelInfo.Text = "读取结果中。。。";
+                this.GridViewInfo.DataSource = m_obdTest.GetDataTable(0);
+                this.GridViewECUInfo.DataSource = m_obdTest.GetDataTable(1);
+                if (GridViewInfo.Columns.Count > 0) {
+                    GridViewInfo.Columns[0].Width = 30;
+                    GridViewInfo.Columns[1].Width = 150;
+                    SetGridViewColumnsSortMode(this.GridViewInfo, DataGridViewColumnSortMode.Programmatic);
+                }
+                if (GridViewECUInfo.Columns.Count > 0) {
+                    GridViewECUInfo.Columns[0].Width = GridViewInfo.Columns[0].Width;
+                    SetGridViewColumnsSortMode(this.GridViewECUInfo, DataGridViewColumnSortMode.Programmatic);
+                }
             });
-            if (GridViewInfo.Columns.Count > 0) {
-                GridViewInfo.Columns[0].Width = 30;
-                GridViewInfo.Columns[1].Width = 150;
-                SetGridViewColumnsSortMode(this.GridViewInfo, DataGridViewColumnSortMode.Programmatic);
-            }
-            if (GridViewECUInfo.Columns.Count > 0) {
-                GridViewECUInfo.Columns[0].Width = GridViewInfo.Columns[0].Width;
-                SetGridViewColumnsSortMode(this.GridViewECUInfo, DataGridViewColumnSortMode.Programmatic);
-            }
         }
 
         void OnWriteDbStart() {
+            m_ctsSetupColumnsDone.Cancel();
+            m_ctsWriteDbStart = UpdateUITask("正在写入本地数据库");
             this.Invoke((EventHandler)delegate {
-                this.labelMESInfo.ForeColor = Color.Black;
-                this.labelMESInfo.Text = "写入数据库中。。。";
-                this.txtBoxVIN.ReadOnly = false;
+                this.GridViewInfo.Invalidate();
+                this.GridViewECUInfo.Invalidate();
             });
         }
 
         void OnWriteDbDone() {
+            m_ctsWriteDbStart.Cancel();
             this.Invoke((EventHandler)delegate {
                 this.labelMESInfo.ForeColor = Color.Black;
                 this.labelMESInfo.Text = "数据库写入完成";
@@ -65,26 +73,36 @@ namespace SH_OBD {
         }
 
         void OnUploadDataStart() {
+            if (m_ctsSetupColumnsDone != null) {
+                m_ctsSetupColumnsDone.Cancel();
+            }
+            m_ctsUploadDataStart = UpdateUITask("正在上传数据");
             this.Invoke((EventHandler)delegate {
-                this.labelMESInfo.ForeColor = Color.Black;
-                this.labelMESInfo.Text = "数据上传中。。。";
+                this.GridViewInfo.Invalidate();
+                this.GridViewECUInfo.Invalidate();
             });
         }
 
         void OnUploadDataDone() {
+            m_ctsUploadDataStart.Cancel();
             this.Invoke((EventHandler)delegate {
                 this.labelMESInfo.ForeColor = Color.ForestGreen;
-                this.labelMESInfo.Text = "数据上传完成";
+                this.labelMESInfo.Text = "上传数据结束";
             });
         }
 
         void OnNotUploadData() {
-            if (!this.chkBoxShowData.Checked) {
-                this.Invoke((EventHandler)delegate {
+            if (m_ctsSetupColumnsDone != null) {
+                m_ctsSetupColumnsDone.Cancel();
+            }
+            this.Invoke((EventHandler)delegate {
+                if (!this.chkBoxShowData.Checked) {
                     this.labelMESInfo.ForeColor = Color.Red;
                     this.labelMESInfo.Text = "因OBD检测不合格，故数据不上传";
-                });
-            }
+                }
+                this.GridViewInfo.Invalidate();
+                this.GridViewECUInfo.Invalidate();
+            });
         }
 
         void OnSetDataTableColumnsError(object sender, SetDataTableColumnsErrorEventArgs e) {
@@ -182,21 +200,23 @@ namespace SH_OBD {
                     m_lastTime = DateTime.Now;
                     this.txtBoxVIN.Text = this.txtBoxVIN.Text.Trim().ToUpper();
                     m_obdInterface.m_log.TraceInfo("Get VIN: " + this.txtBoxVIN.Text);
-                    this.btnStartOBDTest.PerformClick();
                     this.txtBoxVIN.ReadOnly = true;
+                    this.btnStartOBDTest.PerformClick();
                 }
             }
         }
 
-        private void ManualUpload() {
+        private void StartManualUpload() {
             if (!m_obdTest.AdvanceMode) {
                 return;
             }
             m_obdInterface.m_log.TraceInfo("Start ManualUpload");
-            this.labelInfo.ForeColor = Color.Black;
-            this.labelInfo.Text = "手动读取数据";
-            this.labelMESInfo.ForeColor = Color.Black;
-            this.labelMESInfo.Text = "准备手动上传数据";
+            this.Invoke((EventHandler)delegate {
+                this.labelInfo.ForeColor = Color.Black;
+                this.labelInfo.Text = "手动读取数据";
+                this.labelMESInfo.ForeColor = Color.Black;
+                this.labelMESInfo.Text = "准备手动上传数据";
+            });
             try {
                 m_obdTest.UploadDataFromDB(this.txtBoxVIN.Text, out string errorMsg, this.chkBoxShowData.Checked);
 #if DEBUG
@@ -205,20 +225,48 @@ namespace SH_OBD {
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message, "手动上传数据出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            this.labelInfo.ForeColor = Color.Black;
-            this.labelInfo.Text = "结果数据显示完毕";
+            this.Invoke((EventHandler)delegate {
+                this.labelInfo.ForeColor = Color.Black;
+                this.labelInfo.Text = "结果数据显示完毕";
+            });
+            if (m_ctsOBDTestStart != null) {
+                m_ctsOBDTestStart.Cancel();
+            }
+            if (m_ctsSetupColumnsDone != null) {
+                m_ctsSetupColumnsDone.Cancel();
+            }
+            if (m_ctsWriteDbStart != null) {
+                m_ctsWriteDbStart.Cancel();
+            }
+            if (m_ctsUploadDataStart != null) {
+                m_ctsUploadDataStart.Cancel();
+            }
+        }
+
+        private void ManualUpload() {
+            this.GridViewInfo.DataSource = null;
+            this.GridViewECUInfo.DataSource = null;
+            Task.Factory.StartNew(StartManualUpload);
         }
 
         private void BtnStartOBDTest_Click(object sender, EventArgs e) {
+            this.GridViewInfo.DataSource = null;
+            this.GridViewECUInfo.DataSource = null;
+            Task.Factory.StartNew(StartOBDTest);
+        }
+
+        private void StartOBDTest() {
             if (!m_obdTest.AdvanceMode) {
                 return;
             }
             m_obdInterface.m_log.TraceInfo("Start OBD test in advance mode");
             m_obdTest.StrVIN_IN = this.txtBoxVIN.Text;
-            this.labelInfo.ForeColor = Color.Black;
-            this.labelInfo.Text = "准备OBD检测";
-            this.labelMESInfo.ForeColor = Color.Black;
-            this.labelMESInfo.Text = "准备上传数据";
+            this.Invoke((EventHandler)delegate {
+                this.labelInfo.ForeColor = Color.Black;
+                this.labelInfo.Text = "准备OBD检测";
+                this.labelMESInfo.ForeColor = Color.Black;
+                this.labelMESInfo.Text = "准备上传数据";
+            });
             m_obdInterface.m_log.TraceInfo(">>>>>>>>>> Start to test vehicle of VIN: " + m_obdTest.StrVIN_IN + " <<<<<<<<<<");
             string errorMsg = "";
             try {
@@ -231,27 +279,66 @@ namespace SH_OBD {
                 MessageBox.Show(ex.Message, "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            if (m_obdTest.OBDResult) {
-                this.labelInfo.ForeColor = Color.ForestGreen;
-                this.labelInfo.Text = "OBD检测结束，结果：合格";
-            } else {
-                string strCat = "";
-                if (!m_obdTest.DTCResult) {
-                    strCat += "，存在故障码DTC";
+            this.Invoke((EventHandler)delegate {
+                if (m_obdTest.OBDResult) {
+                    this.labelInfo.ForeColor = Color.ForestGreen;
+                    this.labelInfo.Text = "OBD检测结束，结果：合格";
+                } else {
+                    string strCat = "";
+                    if (!m_obdTest.DTCResult) {
+                        strCat += "，存在故障码DTC";
+                    }
+                    if (!m_obdTest.ReadinessResult) {
+                        strCat += "，就绪状态未完成项超过2项";
+                    }
+                    if (!m_obdTest.VINResult) {
+                        strCat += "，VIN号不匹配";
+                    }
+                    this.labelInfo.ForeColor = Color.Red;
+                    this.labelInfo.Text = "OBD检测结束，结果：不合格" + strCat;
                 }
-                if (!m_obdTest.ReadinessResult) {
-                    strCat += "，就绪状态未完成项超过2项";
-                }
-                if (!m_obdTest.VINResult) {
-                    strCat += "，VIN号不匹配";
-                }
-                this.labelInfo.ForeColor = Color.Red;
-                this.labelInfo.Text = "OBD检测结束，结果：不合格" + strCat;
-            }
-            this.txtBoxVIN.ReadOnly = false;
+                this.txtBoxVIN.ReadOnly = false;
+            });
             if (m_obdTest.CALIDCVNAllEmpty) {
                 MessageBox.Show("CALID和CVN均为空！请检查OBD线缆接头连接是否牢固。", "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            if (m_ctsOBDTestStart != null) {
+                m_ctsOBDTestStart.Cancel();
+            }
+            if (m_ctsSetupColumnsDone != null) {
+                m_ctsSetupColumnsDone.Cancel();
+            }
+            if (m_ctsWriteDbStart != null) {
+                m_ctsWriteDbStart.Cancel();
+            }
+            if (m_ctsUploadDataStart != null) {
+                m_ctsUploadDataStart.Cancel();
+            }
+        }
+
+        private CancellationTokenSource UpdateUITask(string strMsg) {
+            CancellationTokenSource tokenSource = new CancellationTokenSource();
+            CancellationToken token = tokenSource.Token;
+            Task.Factory.StartNew(() => {
+                int count = 0;
+                while (!token.IsCancellationRequested) {
+                    try {
+                        this.Invoke((EventHandler)delegate {
+                            this.labelInfo.ForeColor = Color.Black;
+                            if (count == 0) {
+                                this.labelInfo.Text = strMsg + "。。。";
+                            } else {
+                                this.labelInfo.Text = strMsg + "，用时" + count.ToString() + "s";
+                            }
+                        });
+                    } catch (ObjectDisposedException ex) {
+                        m_obdInterface.m_log.TraceWarning(ex.Message);
+                    }
+                    Thread.Sleep(1000);
+                    ++count;
+                }
+            }, token);
+            return tokenSource;
         }
 
         private void OBDTestForm_FormClosing(object sender, FormClosingEventArgs e) {
