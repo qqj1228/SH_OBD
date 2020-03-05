@@ -51,9 +51,9 @@ namespace SH_OBD {
 
         public OBDTest(OBDInterface obd) {
             m_obdInterface = obd;
-            m_dtInfo = new DataTable();
-            m_dtECUInfo = new DataTable();
-            m_dtIUPR = new DataTable();
+            m_dtInfo = new DataTable("Info");
+            m_dtECUInfo = new DataTable("ECUInfo");
+            m_dtIUPR = new DataTable("IUPR");
             m_mode01Support = new Dictionary<string, bool[]>();
             m_mode09Support = new Dictionary<string, bool[]>();
             m_compIgn = false;
@@ -1723,7 +1723,7 @@ namespace SH_OBD {
 
         public bool UploadDataFromDB(string strVIN, out string errorMsg, bool bOnlyShowData) {
             errorMsg = "";
-            DataTable dt = new DataTable();
+            DataTable dt = new DataTable("OBDData");
             SetDataTableResultColumns(ref dt);
             Dictionary<string, int> ColsDic = m_db.GetTableColumnsDic("OBDData");
             Dictionary<string, string> VINDic = new Dictionary<string, string> { { "VIN", strVIN } };
