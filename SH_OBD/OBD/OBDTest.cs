@@ -756,9 +756,11 @@ namespace SH_OBD {
             return bRet;
         }
 
-        private bool UploadData(string strVIN, string strOBDResult, DataTable dtIn, ref string errorMsg) {
+        private bool UploadData(string strVIN, string strOBDResult, DataTable dtIn, ref string errorMsg, bool bShowMsg = true) {
             // 上传MES接口
-            UploadDataStart?.Invoke();
+            if (bShowMsg) {
+                UploadDataStart?.Invoke();
+            }
             m_obdInterface.DBandMES.ChangeWebService = false;
             if (!WSHelper.CreateWebService(m_obdInterface.DBandMES, out string error)) {
                 m_obdInterface.m_log.TraceError("CreateWebService Error: " + error);
@@ -780,7 +782,9 @@ namespace SH_OBD {
                 m_obdInterface.m_log.TraceError("WebService GetResponseString error: " + ex.Message);
                 dt2MES.Dispose();
                 dt1MES.Dispose();
-                UploadDataDone?.Invoke();
+                if (bShowMsg) {
+                    UploadDataDone?.Invoke();
+                }
                 throw;
             }
 
@@ -794,7 +798,9 @@ namespace SH_OBD {
                         m_obdInterface.m_log.TraceError("WebService GetResponseString error: " + strMsg + ", " + ex.Message);
                         dt2MES.Dispose();
                         dt1MES.Dispose();
-                        UploadDataDone?.Invoke();
+                        if (bShowMsg) {
+                            UploadDataDone?.Invoke();
+                        }
                         throw;
                     }
                 } else {
@@ -809,7 +815,9 @@ namespace SH_OBD {
                 // 上传数据接口返回成功信息
                 m_obdInterface.m_log.TraceInfo("Upload data success, VIN = " + strVIN);
                 m_db.UpdateUpload(strVIN, "1");
-                UploadDataDone?.Invoke();
+                if (bShowMsg) {
+                    UploadDataDone?.Invoke();
+                }
 #if DEBUG
                 errorMsg = strMsg;
 #endif
@@ -817,7 +825,9 @@ namespace SH_OBD {
             } else {
                 // 上传数据接口返回失败信息
                 m_obdInterface.m_log.TraceError("Upload data function return false, VIN = " + strVIN);
-                UploadDataDone?.Invoke();
+                if (bShowMsg) {
+                    UploadDataDone?.Invoke();
+                }
                 return false;
             }
         }
@@ -1393,7 +1403,7 @@ namespace SH_OBD {
                     continue;
                 }
                 try {
-                    bRet = UploadData(dt.Rows[0][0].ToString(), dt.Rows[0][28].ToString(), dt, ref errorMsg);
+                    bRet = UploadData(dt.Rows[0][0].ToString(), dt.Rows[0][28].ToString(), dt, ref errorMsg, false);
                 } catch (Exception ex) {
                     string strMsg = "Wrong record: VIN = " + dt.Rows[0][0].ToString() + ", OBDResult = " + dt.Rows[0][28].ToString() + " [";
                     for (int j = 0; j < dt.Rows.Count; j++) {

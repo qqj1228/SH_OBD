@@ -1,3 +1,7 @@
+USE master
+GO
+CREATE DATABASE SH_OBD
+GO
 USE SH_OBD
 GO
 -- OBD数据表
