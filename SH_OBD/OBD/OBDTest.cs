@@ -1315,13 +1315,13 @@ namespace SH_OBD {
                 dt.Dispose();
                 return bRet;
             }
-            if (!m_obdInterface.OBDResultSetting.UploadWhenever && dt.Rows[0]["Result"].ToString() != "1") {
-                m_obdInterface.m_log.TraceWarning("Won't upload data from database because OBD test result is NOK");
-                NotUploadData?.Invoke();
-                dt.Dispose();
-                return bRet;
-            }
             if (dt.Rows.Count > 0) {
+                if (!m_obdInterface.OBDResultSetting.UploadWhenever && dt.Rows[0]["Result"].ToString() != "1") {
+                    m_obdInterface.m_log.TraceWarning("Won't upload data from database because OBD test result is NOK");
+                    NotUploadData?.Invoke();
+                    dt.Dispose();
+                    return bRet;
+                }
                 try {
                     bRet = UploadData(strVIN, dt.Rows[0][28].ToString(), dt, ref errorMsg);
                 } catch (Exception) {
