@@ -300,6 +300,7 @@ namespace SH_OBD {
         public string AutoProtocolOrder { get; set; }
         public bool SpecifiedProtocol { get; set; }
         public bool KMSSpecified { get; set; }
+        public string CompanyCode { get; set; }
 
         public OBDResultSetting() {
             UploadWhenever = false;
@@ -318,7 +319,8 @@ namespace SH_OBD {
             UnmeaningNum = 5;
             AutoProtocolOrder = "6,7,8,9,10,5,4,3,2,1";
             SpecifiedProtocol = false;
-            KMSSpecified = true;
+            KMSSpecified = true; // 隐藏选项，未出现在默认配置文件里
+            CompanyCode = "0079";
         }
     }
 

@@ -63,7 +63,7 @@ namespace SH_OBD {
             CALIDUnmeaningResult = true;
             OBDSUPResult = true;
             m_db = new Model(m_obdInterface.DBandMES, m_obdInterface.m_log);
-            // 设置“testNo”字段中的每日顺序号初值
+            // 设置“TestNo”字段（即检测报告编号）中的每日顺序号初值
             GetSN(DateTime.Now.ToLocalTime().ToString("yyyyMMdd"));
         }
 
@@ -1117,7 +1117,7 @@ namespace SH_OBD {
             GetSN(strNowDateTime);
             ++m_iSN;
             m_iSN %= 10000;
-            dr["TestNo"] = "XC0079" + strNowDateTime + m_iSN.ToString("d4");
+            dr["TestNo"] = "XC" + NormalizeCompanyCode(m_obdInterface.OBDResultSetting.CompanyCode) + strNowDateTime + m_iSN.ToString("d4");
             m_strSN = strNowDateTime + "," + m_iSN.ToString();
             m_db.SetSN(m_strSN);
             dr["TestType"] = "0";
@@ -1126,6 +1126,23 @@ namespace SH_OBD {
             dr["Result"] = strOBDResult;
             dr["otestdate"] = strNowDateTime;
             dt1MES.Rows.Add(dr);
+        }
+
+        /// <summary>
+        /// 处理企业编号使之长度符合4位：
+        /// 1、原始编号长度大于4的话截取前4位
+        /// 2、原始编号长度小于4的话在左边补‘0’
+        /// </summary>
+        /// <param name="strCode"></param>
+        /// <returns></returns>
+        private string NormalizeCompanyCode(string strCode) {
+            string strRet = strCode;
+            if (strRet.Length > 4) {
+                strRet = strRet.Substring(0, 4);
+            } else if (strRet.Length < 4) {
+                strRet = new string('0', 4 - strRet.Length) + strRet;
+            }
+            return strRet;
         }
 
         private string GetModuleID(string ECUAcronym, string ECUID) {

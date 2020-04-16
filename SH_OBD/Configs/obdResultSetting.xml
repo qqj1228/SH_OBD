@@ -22,6 +22,8 @@
   <OBD_SUP>true</OBD_SUP>
   <!-- 自动上传以前上传失败的数据的时间间隔（单位：分钟） -->
   <UploadInterval>15</UploadInterval>
+  <!-- 检测报告编号中的企业编号 -->
+  <CompanyCode>0079</CompanyCode>
   <!-- 检测报告编号里的顺序号起始值 -->
   <StartSN>7000</StartSN>
   <!-- 国六车型的OBD型式列表 -->
@@ -41,4 +43,6 @@
         10 - SAE J1939 CAN 29位ID 250k波特率
   <AutoProtocolOrder>6,7,8,9,10</AutoProtocolOrder>
   -->
+  <!-- 对康明斯车型做特殊处理：只上传第一组CAL_ID和CVN -->
+  <KMSSpecified>true</KMSSpecified>
 </OBDResultSetting>

@@ -22,7 +22,8 @@ namespace SH_OBD {
             foreach (string item in tempLines) {
                 if (item.Length > 0 && item.Length < headLen) {
                     // 需要过滤数据帧总长小于帧头长度的数据，这种数据帧有两种可能：
-                    // 1、J1939多帧消息的第一条，因为目前使用的盗版ELM327不会返回第一条的整个数据只会返回有效字节数
+                    // 1、J1939多帧消息的第一条，因为目前使用的盗版ELM327的版本为v1.3a，
+                    //    这个版本的ELM327不会返回第一条的整个数据只会返回有效字节数
                     // 2、其他协议中错误的CAN或K线消息
                     continue;
                 }
