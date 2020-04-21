@@ -319,7 +319,7 @@ namespace SH_OBD {
             UnmeaningNum = 5;
             AutoProtocolOrder = "6,7,8,9,10,5,4,3,2,1";
             SpecifiedProtocol = false;
-            KMSSpecified = true; // 隐藏选项，未出现在默认配置文件里
+            KMSSpecified = true;
             CompanyCode = "0079";
         }
     }
