@@ -153,7 +153,7 @@ namespace SH_OBD {
             toolStripBtnVehicles.Enabled = true;
             toolStripBtnSettings.Enabled = true;
             BroadcastConnectionUpdate();
-            MessageBox.Show("与OBD设备的连接已断开", "断开OBD设备", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            //MessageBox.Show("与OBD设备的连接已断开", "断开OBD设备", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
         private void Button_Click(object sender, EventArgs e) {
@@ -264,7 +264,7 @@ namespace SH_OBD {
             m_obdInterface.SaveOBDResultSetting(obdResultSetting);
             m_obdInterface.SaveOracleMESSetting(oracleMESSetting);
             StatusLabelCommProtocol.Text = m_obdInterface.GetProtocol().ToString();
-            StatusLabelDeviceType.Text = m_obdInterface.GetDevice().ToString();
+            StatusLabelDeviceType.Text = m_obdInterface.GetDevice().ToString().Replace("ELM327", "SH-VCI-302U");
             if (commSettings.AutoDetect) {
                 StatusLabelPort.Text = "自动探测";
             } else {
