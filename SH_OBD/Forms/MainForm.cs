@@ -44,7 +44,7 @@ namespace SH_OBD {
             StatusLabelConnStatus.Text = "OBD通讯接口未连接";
             StatusLabelDeviceName.Text = "未获取到设备名";
             StatusLabelCommProtocol.Text = m_obdInterface.GetProtocol().ToString();
-            StatusLabelDeviceType.Text = m_obdInterface.GetDevice().ToString();
+            StatusLabelDeviceType.Text = m_obdInterface.GetDevice().ToString().Replace("ELM327", "SH-VCI-302U");
             if (m_obdInterface.CommSettings != null) {
                 if (m_obdInterface.CommSettings.AutoDetect) {
                     StatusLabelPort.Text = "自动探测";
@@ -262,7 +262,7 @@ namespace SH_OBD {
             m_obdInterface.SaveDBandMES(dbandMES);
             StatusLabelCommProtocol.Text = m_obdInterface.GetProtocol().ToString();
             StatusLabelAppProtocol.Text = m_obdInterface.GetStandard().ToString();
-            StatusLabelDeviceType.Text = m_obdInterface.GetDevice().ToString();
+            StatusLabelDeviceType.Text = m_obdInterface.GetDevice().ToString().Replace("ELM327", "SH-VCI-302U");
             if (commSettings.AutoDetect) {
                 StatusLabelPort.Text = "自动探测";
             } else {
