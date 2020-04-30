@@ -40,7 +40,7 @@ namespace SH_OBD {
                 }
 
                 base.m_DeviceDes = GetDeviceDes().Trim();
-                base.m_DeviceID = GetDeviceID().Trim();
+                base.m_DeviceID = GetDeviceID().Trim().Replace("ELM327", "SH-VCI-302U");
                 if (m_iProtocol != ProtocolType.Unknown) {
                     if (!ConfirmAT("ATSP" + ((int)m_iProtocol).ToString("X1"))) {
                         m_CommELM.Close();

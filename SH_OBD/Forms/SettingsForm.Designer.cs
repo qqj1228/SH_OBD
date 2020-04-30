@@ -311,7 +311,7 @@
             this.comboHardware.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboHardware.Items.AddRange(new object[] {
             "自动探测",
-            "ELM327 (通用型)",
+            "ELM327/SH-VCI-302U",
             "ELM320 (PWM)",
             "ELM322 (VPW)",
             "ELM323 (ISO)",
@@ -366,7 +366,7 @@
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(70, 15);
             this.label15.TabIndex = 14;
-            this.label15.Text = "ELM设备：";
+            this.label15.Text = "VCI设备：";
             this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label13

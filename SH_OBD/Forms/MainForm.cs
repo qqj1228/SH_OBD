@@ -45,7 +45,7 @@ namespace SH_OBD {
             StatusLabelDeviceName.Text = "未获取到设备名";
             StatusLabelAppProtocol.Text = "应用层协议待定";
             StatusLabelCommProtocol.Text = m_obdInterface.GetProtocol().ToString();
-            StatusLabelDeviceType.Text = m_obdInterface.GetDevice().ToString();
+            StatusLabelDeviceType.Text = m_obdInterface.GetDevice().ToString().Replace("ELM327", "SH-VCI-302U");
             if (m_obdInterface.CommSettings != null) {
                 if (m_obdInterface.CommSettings.AutoDetect) {
                     StatusLabelPort.Text = "自动探测";
