@@ -154,7 +154,7 @@ namespace SH_OBD {
             toolStripBtnVehicles.Enabled = true;
             toolStripBtnSettings.Enabled = true;
             BroadcastConnectionUpdate();
-            MessageBox.Show("与OBD设备的连接已断开", "断开OBD设备", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            //MessageBox.Show("与OBD设备的连接已断开", "断开OBD设备", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
         private void Button_Click(object sender, EventArgs e) {

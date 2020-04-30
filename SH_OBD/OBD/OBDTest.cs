@@ -627,7 +627,7 @@ namespace SH_OBD {
         /// </summary>
         /// <param name="errorMsg">错误信息</param>
         /// <returns>是否返回成功信息</returns>
-        public bool StartOBDTest(out string errorMsg) {
+        public void StartOBDTest(out string errorMsg) {
             m_obdInterface.m_log.TraceInfo(">>>>> Enter StartOBDTest function. Ver: " + MainFileVersion.AssemblyVersion + " <<<<<");
             errorMsg = "";
             m_dtInfo.Clear();
@@ -742,21 +742,19 @@ namespace SH_OBD {
                 m_obdInterface.m_log.TraceError("Won't upload data because OBD test result is NOK");
                 NotUploadData?.Invoke();
                 dt.Dispose();
-                return true;
+                return;
             }
 
-            bool bRet;
             try {
-                bRet = UploadData(StrVIN_ECU, strOBDResult, dt, ref errorMsg);
+                UploadData(StrVIN_ECU, strOBDResult, dt, ref errorMsg);
             } catch (Exception) {
                 dt.Dispose();
                 throw;
             }
             dt.Dispose();
-            return bRet;
         }
 
-        private bool UploadData(string strVIN, string strOBDResult, DataTable dtIn, ref string errorMsg, bool bShowMsg = true) {
+        private void UploadData(string strVIN, string strOBDResult, DataTable dtIn, ref string errorMsg, bool bShowMsg = true) {
             // 上传MES接口
             if (bShowMsg) {
                 UploadDataStart?.Invoke();
@@ -764,7 +762,7 @@ namespace SH_OBD {
             m_obdInterface.DBandMES.ChangeWebService = false;
             if (!WSHelper.CreateWebService(m_obdInterface.DBandMES, out string error)) {
                 m_obdInterface.m_log.TraceError("CreateWebService Error: " + error);
-                throw new Exception("获取 WebService 接口出错");
+                throw new Exception("上传失败：获取 WebService 接口出错, " + error);
             }
 
             // DataTable必须设置TableName，否则调用方法时会报错“生成 XML 文档时出错”
@@ -774,41 +772,33 @@ namespace SH_OBD {
             DataTable dt2MES = new DataTable("dt2");
             SetDataTable2MES(dt2MES, dtIn);
 
-            string strMsg;
-            string strRet;
-            try {
-                strRet = WSHelper.GetResponseOutString(WSHelper.GetMethodName(0), out strMsg, dt1MES, dt2MES);
-            } catch (Exception ex) {
-                m_obdInterface.m_log.TraceError("WebService GetResponseString error: " + ex.Message);
-                dt2MES.Dispose();
-                dt1MES.Dispose();
-                if (bShowMsg) {
-                    UploadDataDone?.Invoke();
-                }
-                throw;
-            }
-
+            string strMsg = "";
+            string strRet = "";
             int count = 0;
-            while (strRet.Contains("NOK") || strRet.Contains("false") || strRet.Contains("False")) {
-                if (++count < 4) {
-                    m_obdInterface.m_log.TraceError(WSHelper.GetMethodName(0) + " Error: " + strMsg);
+            for (count = 0; count < 4; count++) {
+                if ((strRet.Contains("OK") && !strRet.Contains("NOK")) || strRet.Contains("true") || strRet.Contains("True")) {
+                    // 返回成功信息
+                    break;
+                } else {
+                    // 返回失败信息
+                    if (strRet.Length > 0) {
+                        m_obdInterface.m_log.TraceError(WSHelper.GetMethodName(0) + " return false");
+                    }
                     try {
                         strRet = WSHelper.GetResponseOutString(WSHelper.GetMethodName(0), out strMsg, dt1MES, dt2MES);
                     } catch (Exception ex) {
-                        m_obdInterface.m_log.TraceError("WebService GetResponseString error: " + strMsg + ", " + ex.Message);
+                        m_obdInterface.m_log.TraceError("WebService GetResponseString occured Exception: " + ex.Message + (strMsg.Length > 0 ? ", " + strMsg : ""));
                         dt2MES.Dispose();
                         dt1MES.Dispose();
                         if (bShowMsg) {
                             UploadDataDone?.Invoke();
                         }
-                        throw;
+                        errorMsg = strMsg;
+                        throw new Exception("上传失败：调用 GetResponseString 接口出错，" + ex.Message);
                     }
-                } else {
-                    m_obdInterface.m_log.TraceError(WSHelper.GetMethodName(0) + " Error: " + strMsg);
-                    errorMsg = "Upload data function return false: " + strMsg;
-                    break;
                 }
             }
+
             dt2MES.Dispose();
             dt1MES.Dispose();
             if (count < 4) {
@@ -821,14 +811,14 @@ namespace SH_OBD {
 #if DEBUG
                 errorMsg = strMsg;
 #endif
-                return true;
             } else {
                 // 上传数据接口返回失败信息
-                m_obdInterface.m_log.TraceError("Upload data function return false, VIN = " + strVIN);
+                m_obdInterface.m_log.TraceError("Upload data function return false, VIN = " + strVIN + (strMsg.Length > 0 ? ", " + strMsg : ""));
                 if (bShowMsg) {
                     UploadDataDone?.Invoke();
                 }
-                return false;
+                errorMsg = strMsg;
+                throw new Exception("上传失败：" + WSHelper.GetMethodName(0) + " 返回调用失败");
             }
         }
 
@@ -1310,7 +1300,7 @@ namespace SH_OBD {
             SetDataRowECUInfoFromDB(++NO, "CVN", dtIn);               // 3
         }
 
-        public bool UploadDataFromDB(string strVIN, out string errorMsg, bool bOnlyShowData) {
+        public void UploadDataFromDB(string strVIN, out string errorMsg, bool bOnlyShowData) {
             errorMsg = "";
             DataTable dt = new DataTable("OBDData");
             SetDataTableResultColumns(ref dt);
@@ -1325,23 +1315,22 @@ namespace SH_OBD {
             SetupColumnsDone?.Invoke();
             SetDataTableInfoFromDB(dt);
             SetDataTableECUInfoFromDB(dt);
-            bool bRet = false;
             if (bOnlyShowData) {
                 m_obdInterface.m_log.TraceInfo("Only show data from database");
                 NotUploadData?.Invoke();
                 dt.Dispose();
-                return bRet;
+                return;
             }
             if (dt.Rows.Count > 0) {
                 if (!m_obdInterface.OBDResultSetting.UploadWhenever && dt.Rows[0]["Result"].ToString() != "1") {
                     m_obdInterface.m_log.TraceWarning("Won't upload data from database because OBD test result is NOK");
                     NotUploadData?.Invoke();
                     dt.Dispose();
-                    return bRet;
+                    return;
                 }
                 try {
-                    bRet = UploadData(strVIN, dt.Rows[0][28].ToString(), dt, ref errorMsg);
-                } catch (Exception) {
+                    UploadData(strVIN, dt.Rows[0][28].ToString(), dt, ref errorMsg);
+                } catch (Exception ex) {
                     string strMsg = "Wrong record: VIN = " + strVIN + ", OBDResult = " + dt.Rows[0][28].ToString() + ", ";
                     for (int i = 0; i < dt.Rows.Count; i++) {
                         strMsg += "ECU_ID = " + dt.Rows[i][1] + ", ";
@@ -1352,14 +1341,13 @@ namespace SH_OBD {
                         strMsg += "CVN = " + dt.Rows[i][27] + " || ";
                     }
                     strMsg = strMsg.Substring(0, strMsg.Length - 4);
-                    m_obdInterface.m_log.TraceError("Manual Upload Data Failed: " + errorMsg);
+                    m_obdInterface.m_log.TraceError("Manual Upload Data Failed: " + ex.Message + (errorMsg.Length > 0 ? ", " + errorMsg : ""));
                     m_obdInterface.m_log.TraceError(strMsg);
                     dt.Dispose();
                     throw;
                 }
             }
             dt.Dispose();
-            return bRet;
         }
 
         private List<string[,]> SplitResultsPerVIN(Dictionary<string, int> ColsDic, string[,] Results) {
@@ -1400,9 +1388,8 @@ namespace SH_OBD {
             return totalList;
         }
 
-        public bool UploadDataFromDBOnTime(out string errorMsg) {
+        public void UploadDataFromDBOnTime(out string errorMsg) {
             errorMsg = "";
-            bool bRet = false;
             DataTable dt = new DataTable();
             SetDataTableResultColumns(ref dt);
 
@@ -1411,7 +1398,7 @@ namespace SH_OBD {
             string[,] Results = m_db.GetRecords("OBDData", dic);
             if (Results.GetLength(0) == 0) {
                 dt.Dispose();
-                return bRet;
+                return;
             }
             List<string[,]> ResultsList = SplitResultsPerVIN(ColsDic, Results);
             for (int i = 0; i < ResultsList.Count; i++) {
@@ -1420,7 +1407,7 @@ namespace SH_OBD {
                     continue;
                 }
                 try {
-                    bRet = UploadData(dt.Rows[0][0].ToString(), dt.Rows[0][28].ToString(), dt, ref errorMsg, false);
+                    UploadData(dt.Rows[0][0].ToString(), dt.Rows[0][28].ToString(), dt, ref errorMsg, false);
                 } catch (Exception ex) {
                     string strMsg = "Wrong record: VIN = " + dt.Rows[0][0].ToString() + ", OBDResult = " + dt.Rows[0][28].ToString() + " [";
                     for (int j = 0; j < dt.Rows.Count; j++) {
@@ -1432,13 +1419,12 @@ namespace SH_OBD {
                         strMsg += "CVN = " + dt.Rows[j][27] + " || ";
                     }
                     strMsg = strMsg.Substring(0, strMsg.Length - 4) + "]";
-                    m_obdInterface.m_log.TraceError("Upload Data OnTime Failed: " + errorMsg + ", " + ex.Message);
+                    m_obdInterface.m_log.TraceError("Upload Data OnTime Failed: " + ex.Message + (errorMsg.Length > 0 ? ", " + errorMsg : ""));
                     m_obdInterface.m_log.TraceError(strMsg);
                     continue;
                 }
             }
             dt.Dispose();
-            return bRet;
         }
 
         private bool GetCompIgn(DataTable dtIn) {

@@ -313,9 +313,9 @@ namespace SH_OBD {
                 if (m_obdTest.StrVIN_ECU == null || m_obdTest.StrVIN_ECU.Length == 0) {
                     m_obdTest.StrVIN_ECU = m_obdTest.StrVIN_IN;
                 }
-                m_obdInterface.m_log.TraceError("OBD test occurred error: " + errorMsg + ", " + ex.Message);
+                m_obdInterface.m_log.TraceError("OBD test occurred error: " + ex.Message + (errorMsg.Length > 0 ? ", " + errorMsg : ""));
                 bTestException = true;
-                MessageBox.Show(errorMsg + "\n" + ex.Message, "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message + (errorMsg.Length > 0 ? "\n" + errorMsg : ""), "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             this.Invoke((EventHandler)delegate {
