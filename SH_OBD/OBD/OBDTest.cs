@@ -1177,7 +1177,7 @@ namespace SH_OBD {
                         // 若同一个ECU下有多个CALID和CVN的上传策略
                         if (m_obdInterface.STDType == StandardType.SAE_J1939 && m_obdInterface.OBDResultSetting.KMSSpecified) {
                             // 国六、有多组CALID和CVN、J1939、康明斯车型特殊处理选项为true
-                            // 以上条件均满足的话，除了第一组CALID和CVN，其余均不上传
+                            // 以上条件均满足的话，若有多组CALID和CVN，除了第一组，其余均不上传
                             m_obdInterface.m_log.TraceWarning(string.Format("KMS with CN6 vehicle ignore {0}(nd/rd/th) [CALID: {1}, CVN: {2}], won't upload", j + 1, CALID, CVN));
                             continue;
                         }
@@ -1497,10 +1497,11 @@ namespace SH_OBD {
                 if (m_CN6) {
                     string[] CALIDArray = dt.Rows[0][26].ToString().Split(',');
                     string[] CVNArray = dt.Rows[0][27].ToString().Split(',');
-                    for (int i = 0; i < 2; i++) {
+                    int length = Math.Max(CALIDArray.Length, CVNArray.Length);
+                    for (int i = 0; i < length; i++) {
                         if (m_obdInterface.STDType == StandardType.SAE_J1939 && i > 0 && m_obdInterface.OBDResultSetting.KMSSpecified) {
                             // 国六、有多组CALID和CVN、J1939、康明斯车型特殊处理选项为true
-                            // 以上条件均满足的话，除了第一组CALID和CVN，其余均不上传
+                            // 以上条件均满足的话，若有多组CALID和CVN，除了第一组，其余均不上传
                             m_obdInterface.m_log.TraceWarning(string.Format("KMS with CN6 vehicle ignore {0}(nd/rd/th) [CALID: {1}, CVN: {2}], won't export into excel file", i + 1, CALIDArray[i], CVNArray[i]));
                             continue;
                         }

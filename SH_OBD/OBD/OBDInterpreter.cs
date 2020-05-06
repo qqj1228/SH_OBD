@@ -1262,7 +1262,7 @@ namespace SH_OBD {
 
         private OBDParameterValue GetDM19Value(OBDParameter param, OBDResponse response) {
             OBDParameterValue value2 = new OBDParameterValue();
-            if (response.GetDataByteCount() < 20 * 2) {
+            if (response.GetDataByteCount() < 20) {
                 value2.ErrorDetected = true;
                 return value2;
             }
