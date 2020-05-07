@@ -51,7 +51,7 @@ namespace SH_OBD {
             try {
                 m_log.TraceInfo(string.Format("TX: {0}", command));
                 response = Transact(command);
-                m_log.TraceInfo(string.Format("RX: {0}", response.Replace("\r", @"\r")));
+                m_log.TraceInfo(string.Format("RX: {0}", response.Replace("\r", @"\r").Replace("\n", @"\n")));
             } catch (Exception ex) {
                 m_log.TraceError(ex.Message);
                 if (string.Compare(ex.Message, "Timeout") == 0) {

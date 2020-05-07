@@ -346,6 +346,14 @@ namespace SH_OBD {
             if (m_CommELM.Online) {
                 strRet = m_CommELM.GetResponse(command);
             }
+            // 返回"ERR94"说明发生CAN网络错误，ELM327会返回出厂设置
+            // 如需继续的话，需要重新初始化ELM327
+            if (strRet.Contains("ERR94")) {
+                ConfirmAT("ATE0");
+                ConfirmAT("ATL0");
+                ConfirmAT("ATH1");
+                ConfirmAT("ATCAF1");
+            }
             return strRet;
         }
 
