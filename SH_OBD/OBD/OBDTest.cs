@@ -17,8 +17,6 @@ namespace SH_OBD {
         private readonly DataTable m_dtECUInfo;
         private readonly Dictionary<string, bool[]> m_mode01Support;
         private readonly Dictionary<string, bool[]> m_mode09Support;
-        private static int m_iSN;
-        private string m_strSN;
         private bool m_compIgn;
         private bool m_CN6;
         public readonly Model m_db;
@@ -63,25 +61,34 @@ namespace SH_OBD {
             CALIDUnmeaningResult = true;
             OBDSUPResult = true;
             m_db = new Model(m_obdInterface.DBandMES, m_obdInterface.m_log);
-            // 设置“TestNo”字段（即检测报告编号）中的每日顺序号初值
-            GetSN(DateTime.Now.ToLocalTime().ToString("yyyyMMdd"));
         }
 
         private int GetSN(string strNowDate) {
-            m_strSN = m_db.GetSN();
-            if (m_strSN.Length == 0) {
-                m_iSN = m_obdInterface.OBDResultSetting.StartSN;
-            } else if (m_strSN.Split(',')[0] != strNowDate) {
-                m_iSN = m_obdInterface.OBDResultSetting.StartSN;
+            int iRet;
+            string strSN = m_db.GetSN();
+            if (strSN.Length == 0) {
+                iRet = m_obdInterface.OBDResultSetting.StartSN;
+            } else if (strSN.Split(',')[0] != strNowDate) {
+                iRet = m_obdInterface.OBDResultSetting.StartSN;
             } else {
-                bool result = int.TryParse(m_strSN.Split(',')[1], out m_iSN);
+                bool result = int.TryParse(strSN.Split(',')[1], out iRet);
                 if (result) {
-                    m_iSN = (m_iSN % 1000) + m_obdInterface.OBDResultSetting.StartSN;
+                    iRet = (iRet % 1000) + m_obdInterface.OBDResultSetting.StartSN;
                 } else {
-                    m_iSN = m_obdInterface.OBDResultSetting.StartSN;
+                    iRet = m_obdInterface.OBDResultSetting.StartSN;
                 }
             }
-            return m_iSN;
+            return iRet;
+        }
+
+        private void ReduceSN() {
+            string strNowDateTime = DateTime.Now.ToLocalTime().ToString("yyyyMMdd");
+            int iSN = GetSN(strNowDateTime);
+            if (iSN % 1000 != 0) {
+                --iSN;
+            }
+            iSN %= 10000;
+            m_db.SetSN(strNowDateTime + "," + iSN.ToString());
         }
 
         public DataTable GetDataTable(int index) {
@@ -794,6 +801,7 @@ namespace SH_OBD {
                             UploadDataDone?.Invoke();
                         }
                         errorMsg = strMsg;
+                        ReduceSN();
                         throw new Exception("上传失败：调用 GetResponseString 接口出错，" + ex.Message);
                     }
                 }
@@ -818,6 +826,7 @@ namespace SH_OBD {
                     UploadDataDone?.Invoke();
                 }
                 errorMsg = strMsg;
+                ReduceSN();
                 throw new Exception("上传失败：" + WSHelper.GetMethodName(0) + " 返回调用失败");
             }
         }
@@ -1104,12 +1113,11 @@ namespace SH_OBD {
             dr["SBFLAG"] = "OBD";
             dr["VIN"] = strVIN;
             string strNowDateTime = DateTime.Now.ToLocalTime().ToString("yyyyMMdd");
-            GetSN(strNowDateTime);
-            ++m_iSN;
-            m_iSN %= 10000;
-            dr["TestNo"] = "XC" + NormalizeCompanyCode(m_obdInterface.OBDResultSetting.CompanyCode) + strNowDateTime + m_iSN.ToString("d4");
-            m_strSN = strNowDateTime + "," + m_iSN.ToString();
-            m_db.SetSN(m_strSN);
+            int iSN = GetSN(strNowDateTime);
+            ++iSN;
+            iSN %= 10000;
+            dr["TestNo"] = "XC" + NormalizeCompanyCode(m_obdInterface.OBDResultSetting.CompanyCode) + strNowDateTime + iSN.ToString("d4");
+            m_db.SetSN(strNowDateTime + "," + iSN.ToString());
             dr["TestType"] = "0";
             dr["APASS"] = "1";
             dr["OPASS"] = strOBDResult;
