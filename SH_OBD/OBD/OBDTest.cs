@@ -1152,8 +1152,21 @@ namespace SH_OBD {
             // OBD型式和ODO只用第一个ECU（即7E8，ECM）的数据上传
             string OBD_SUP = dtIn.Rows[0][4].ToString().Split(',')[0].Replace("不适用", "");
             string ODO = dtIn.Rows[0][5].ToString().Replace("不适用", "");
-            if (OBD_SUP.Length > 2) {
+            // 限制上传字段长度，避免上传错误数据导致上传出错
+            if (OBD_SUP.Length >= 2) {
                 OBD_SUP = OBD_SUP.Substring(0, 2);
+            }
+            if (ODO.Length >= 8) {
+                ODO = ODO.Substring(0, 8);
+            }
+            if (moduleID.Length >= 11) {
+                moduleID = moduleID.Substring(0, 11);
+            }
+            if (CALID.Length >= 20) {
+                CALID = CALID.Substring(0, 20);
+            }
+            if (CVN.Length >= 20) {
+                CVN = CVN.Substring(0, 20);
             }
             dt2MES.Rows.Add(OBD_SUP, ODO, moduleID, CALID, CVN);
         }
