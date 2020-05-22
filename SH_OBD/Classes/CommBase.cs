@@ -77,7 +77,7 @@ namespace SH_OBD {
             };
             m_writeCount = 0;
             m_auto = false;
-            m_serial.DataReceived += new SerialPortClass.SerialPortDataReceiveEventArgs(SerialDataReceived);
+            m_serial.DataReceived += SerialDataReceived;
             try {
                 if (m_serial.OpenPort()) {
                     m_online = true;
@@ -114,6 +114,7 @@ namespace SH_OBD {
         }
 
         private void InternalClose() {
+            m_serial.DataReceived -= SerialDataReceived;
             m_serial.ClosePort();
         }
 
