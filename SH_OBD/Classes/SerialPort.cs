@@ -138,9 +138,9 @@ namespace SH_OBD {
                 //设置触发DataReceived事件的字节数为1
                 _serialPort.ReceivedBytesThreshold = 1;
                 //接收到一个字节时，也会触发DataReceived事件
-                _serialPort.DataReceived += new SerialDataReceivedEventHandler(SerialPort_DataReceived);
+                _serialPort.DataReceived += SerialPort_DataReceived;
                 //接收数据出错,触发事件
-                _serialPort.ErrorReceived += new SerialErrorReceivedEventHandler(SerialPort_ErrorReceived);
+                _serialPort.ErrorReceived += SerialPort_ErrorReceived;
                 //打开串口
                 //openPort();
             }
