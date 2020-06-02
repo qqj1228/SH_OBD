@@ -19,6 +19,7 @@ namespace SH_OBD {
         private MainForm f_MainForm;
         private readonly Color m_backColor;
         private float m_lastHeight;
+        private string m_serialRecvBuf;
         readonly System.Timers.Timer m_timer;
         CancellationTokenSource m_ctsOBDTestStart;
         CancellationTokenSource m_ctsSetupColumnsDone;
@@ -30,6 +31,7 @@ namespace SH_OBD {
             this.Text += " Ver: " + MainFileVersion.AssemblyVersion;
             m_bCanOBDTest = true;
             m_lastHeight = this.Height;
+            m_serialRecvBuf = "";
             m_obdInterface = new OBDInterface();
             if (m_obdInterface.StrLoadConfigResult.Length > 0) {
                 m_obdInterface.StrLoadConfigResult += "是否要以默认配置运行程序？点击\"否\"：将会退出程序。";
@@ -143,29 +145,32 @@ namespace SH_OBD {
         }
 
         void SerialDataReceived(object sender, SerialDataReceivedEventArgs e, byte[] bits) {
-            // 该处接收串口扫码枪传进来的VIN号代码没有考虑串口数据断包问题
-            // 获取VIN号有隐患，需要串口扫码枪在VIN号结尾加个回车表示结束
-            // 但是现场使用的是USB接口的扫码枪，VIN号结尾也没有加回车，故暂时不需要处理这个问题
-            if (!m_bCanOBDTest) {
-                if (Encoding.Default.GetString(bits).Trim().ToUpper().Length == 17) {
+            // 以回车符作为输入结束标志，处理串口输入的VIN号，串口数据可能会有断包问题需要处理
+            Control con = this.ActiveControl;
+            if (con is TextBox tb) {
+                m_serialRecvBuf += Encoding.Default.GetString(bits);
+                if (m_serialRecvBuf.Contains("\n")) {
+                    if (!m_bCanOBDTest) {
+                        this.Invoke((EventHandler)delegate {
+                            this.txtBoxVIN.SelectAll();
+                            MessageBox.Show("上一辆车还未完全结束检测过程，请稍后再试", "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        });
+                        m_serialRecvBuf = "";
+                        return;
+                    }
+                    m_serialRecvBuf = m_serialRecvBuf.Trim().ToUpper();
                     this.Invoke((EventHandler)delegate {
-                        this.txtBoxVIN.SelectAll();
-                        MessageBox.Show("上一辆车还未完全结束检测过程，请稍后再试", "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        this.txtBoxVIN.Text = m_serialRecvBuf;
                     });
-                }
-                return;
-            }
-            string strTxt = Encoding.Default.GetString(bits).Trim().ToUpper();
-            // 跨UI线程调用UI控件要使用Invoke
-            this.Invoke((EventHandler)delegate {
-                this.txtBoxVIN.Text = strTxt;
-            });
-            if (strTxt.Length == 17) {
-                m_bCanOBDTest = false;
-                m_obdTest.StrVIN_IN = strTxt;
-                m_obdInterface.m_log.TraceInfo("Get VIN: " + m_obdTest.StrVIN_IN + " by serial port scanner");
-                if (!m_obdTest.AdvanceMode) {
-                    Task.Factory.StartNew(StartOBDTest);
+                    if (m_serialRecvBuf.Length >= 17) {
+                        m_bCanOBDTest = false;
+                        m_obdTest.StrVIN_IN = m_serialRecvBuf;
+                        m_serialRecvBuf = "";
+                        m_obdInterface.m_log.TraceInfo("Get scanned VIN: " + m_obdTest.StrVIN_IN + " by serial port scanner");
+                        if (!m_obdTest.AdvanceMode) {
+                            Task.Factory.StartNew(StartOBDTest);
+                        }
+                    }
                 }
             }
         }
@@ -452,23 +457,25 @@ namespace SH_OBD {
             this.label3Space.ForeColor = Color.Gray;
         }
 
-        private void TxtBoxVIN_TextChanged(object sender, EventArgs e) {
-            if (!m_bCanOBDTest) {
-                if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Trim().Length == 17) {
+        private void TxtBoxVIN_KeyPress(object sender, KeyPressEventArgs e) {
+            // 以回车符作为输入结束标志，处理USB扫码枪扫描的或者人工输入的VIN号
+            if (e.KeyChar == (char)Keys.Enter) {
+                if (!m_bCanOBDTest) {
                     this.txtBoxVIN.SelectAll();
                     MessageBox.Show("上一辆车还未完全结束检测过程，请稍后再试", "OBD检测出错", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
-                return;
-            }
-            string strTxt = this.txtBoxVIN.Text.Trim();
-            if (!m_obdInterface.CommSettings.UseSerialScanner && strTxt.Length == 17) {
-                m_bCanOBDTest = false;
-                m_obdTest.StrVIN_IN = strTxt;
-                m_obdInterface.m_log.TraceInfo("Get VIN: " + m_obdTest.StrVIN_IN);
-                if (!m_obdTest.AdvanceMode) {
-                    Task.Factory.StartNew(StartOBDTest);
+                string strTxt = this.txtBoxVIN.Text.Trim();
+                if (!m_obdInterface.CommSettings.UseSerialScanner && strTxt.Length >= 17) {
+                    m_bCanOBDTest = false;
+                    m_obdTest.StrVIN_IN = strTxt.Substring(strTxt.Length - 17, 17);
+                    m_obdInterface.m_log.TraceInfo("Get scanned VIN: " + m_obdTest.StrVIN_IN);
+                    if (!m_obdTest.AdvanceMode) {
+                        Task.Factory.StartNew(StartOBDTest);
+                    }
+                    this.txtBoxVIN.Text = m_obdTest.StrVIN_IN;
+                    this.txtBoxVIN.SelectAll();
                 }
-                this.txtBoxVIN.SelectAll();
             }
         }
 

@@ -100,7 +100,7 @@
             this.txtBoxVIN.Name = "txtBoxVIN";
             this.txtBoxVIN.Size = new System.Drawing.Size(594, 84);
             this.txtBoxVIN.TabIndex = 1;
-            this.txtBoxVIN.TextChanged += new System.EventHandler(this.TxtBoxVIN_TextChanged);
+            this.txtBoxVIN.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtBoxVIN_KeyPress);
             // 
             // tblLayoutBottom
             // 
