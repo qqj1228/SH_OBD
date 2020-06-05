@@ -144,13 +144,13 @@
             // 
             // txtBoxVIN
             // 
+            this.txtBoxVIN.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.txtBoxVIN.Location = new System.Drawing.Point(135, 35);
             this.txtBoxVIN.Margin = new System.Windows.Forms.Padding(2);
             this.txtBoxVIN.Name = "txtBoxVIN";
             this.txtBoxVIN.Size = new System.Drawing.Size(121, 21);
             this.txtBoxVIN.TabIndex = 9;
             this.txtBoxVIN.Text = "等待扫描VIN号";
-            this.txtBoxVIN.TextChanged += new System.EventHandler(this.TxtBoxVIN_TextChanged);
             this.txtBoxVIN.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtBoxVIN_KeyPress);
             // 
             // chkBoxManualUpload

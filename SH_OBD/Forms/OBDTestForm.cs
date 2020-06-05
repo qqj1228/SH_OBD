@@ -16,8 +16,8 @@ namespace SH_OBD {
     public partial class OBDTestForm : Form {
         private readonly OBDInterface m_obdInterface;
         private readonly OBDTest m_obdTest;
-        private DateTime m_lastTime;
         private string[] m_fileNames;
+        private string m_serialRecvBuf;
         CancellationTokenSource m_ctsOBDTestStart;
         CancellationTokenSource m_ctsSetupColumnsDone;
         CancellationTokenSource m_ctsWriteDbStart;
@@ -28,7 +28,6 @@ namespace SH_OBD {
             m_obdInterface = obd;
             m_obdTest = obdTest;
             btnStartOBDTest.Enabled = false;
-            m_lastTime = DateTime.Now;
         }
 
         void OnOBDTestStart() {
@@ -113,14 +112,32 @@ namespace SH_OBD {
         }
 
         void SerialDataReceived(object sender, SerialDataReceivedEventArgs e, byte[] bits) {
-            // 跨UI线程调用UI控件要使用Invoke
-            this.Invoke((EventHandler)delegate {
-                this.txtBoxVIN.Text = Encoding.Default.GetString(bits).Trim().ToUpper();
-                if (this.txtBoxVIN.Text.Length == 17 && !this.chkBoxManualUpload.Checked) {
-                    m_obdInterface.m_log.TraceInfo("Get VIN: " + this.txtBoxVIN.Text + " by serial port scanner");
-                    this.btnStartOBDTest.PerformClick();
+            // 以回车符作为输入结束标志，处理串口输入的VIN号，串口数据可能会有断包问题需要处理
+            Control con = this.ActiveControl;
+            if (con is TextBox tb) {
+                m_serialRecvBuf += Encoding.Default.GetString(bits);
+                if (m_serialRecvBuf.Contains("\n")) {
+                    m_serialRecvBuf = m_serialRecvBuf.Trim().ToUpper();
+                    if (m_serialRecvBuf.Length >= 17) {
+                        this.Invoke((EventHandler)delegate {
+                            m_obdTest.StrVIN_IN = m_serialRecvBuf.Substring(m_serialRecvBuf.Length - 17, 17);
+                            this.txtBoxVIN.Text = m_obdTest.StrVIN_IN;
+                            m_serialRecvBuf = "";
+                        });
+                        if (this.chkBoxManualUpload.Checked || this.chkBoxShowData.Checked) {
+                            this.Invoke((EventHandler)delegate {
+                                ManualUpload();
+                            });
+                        } else {
+                            m_obdInterface.m_log.TraceInfo("Get scanned VIN: " + m_obdTest.StrVIN_IN + " by serial port scanner in advance mode");
+                            this.Invoke((EventHandler)delegate {
+                                this.btnStartOBDTest.PerformClick();
+                            });
+                        }
+                    }
                 }
-            });
+            }
+
         }
 
         public void CheckConnection() {
@@ -188,24 +205,6 @@ namespace SH_OBD {
             }
         }
 
-        private void TxtBoxVIN_TextChanged(object sender, EventArgs e) {
-            TimeSpan ts = DateTime.Now.Subtract(m_lastTime);
-            int sec = (int)ts.TotalSeconds;
-            if (this.chkBoxManualUpload.Checked || this.chkBoxShowData.Checked) {
-                if (this.txtBoxVIN.Text.Length == 17) {
-                    ManualUpload();
-                }
-            } else {
-                if (!m_obdInterface.CommSettings.UseSerialScanner && this.txtBoxVIN.Text.Length == 17 && sec > 1) {
-                    m_lastTime = DateTime.Now;
-                    this.txtBoxVIN.Text = this.txtBoxVIN.Text.Trim().ToUpper();
-                    m_obdInterface.m_log.TraceInfo("Get VIN: " + this.txtBoxVIN.Text);
-                    this.txtBoxVIN.ReadOnly = true;
-                    this.btnStartOBDTest.PerformClick();
-                }
-            }
-        }
-
         private void StartManualUpload() {
             if (!m_obdTest.AdvanceMode) {
                 return;
@@ -218,7 +217,7 @@ namespace SH_OBD {
                 this.labelMESInfo.Text = "准备手动上传数据";
             });
             try {
-                m_obdTest.UploadDataFromDB(this.txtBoxVIN.Text, out string errorMsg, this.chkBoxShowData.Checked);
+                m_obdTest.UploadDataFromDB(m_obdTest.StrVIN_IN, out string errorMsg, this.chkBoxShowData.Checked);
 #if DEBUG
                 MessageBox.Show(errorMsg, WSHelper.GetMethodName(0));
 #endif
@@ -260,7 +259,6 @@ namespace SH_OBD {
                 return;
             }
             m_obdInterface.m_log.TraceInfo("Start OBD test in advance mode");
-            m_obdTest.StrVIN_IN = this.txtBoxVIN.Text;
             this.Invoke((EventHandler)delegate {
                 this.labelInfo.ForeColor = Color.Black;
                 this.labelInfo.Text = "准备OBD检测";
@@ -357,7 +355,22 @@ namespace SH_OBD {
         }
 
         private void TxtBoxVIN_KeyPress(object sender, KeyPressEventArgs e) {
-            e.KeyChar = Convert.ToChar(e.KeyChar.ToString().ToUpper());
+            // 以回车符作为输入结束标志，处理USB扫码枪扫描的或者人工输入的VIN号
+            if (e.KeyChar == (char)Keys.Enter) {
+                string strTxt = this.txtBoxVIN.Text.Trim();
+                if (strTxt.Length >= 17) {
+                    m_obdTest.StrVIN_IN = strTxt.Substring(strTxt.Length - 17, 17);
+                    this.txtBoxVIN.Text = m_obdTest.StrVIN_IN;
+                    this.txtBoxVIN.SelectAll();
+                    if (this.chkBoxManualUpload.Checked || this.chkBoxShowData.Checked) {
+                        ManualUpload();
+                    } else {
+                        m_obdInterface.m_log.TraceInfo("Get scanned VIN: " + this.txtBoxVIN.Text + "in advance mode");
+                        this.txtBoxVIN.ReadOnly = true;
+                        this.btnStartOBDTest.PerformClick();
+                    }
+                }
+            }
         }
 
         private void BtnImport_Click(object sender, EventArgs e) {

@@ -466,7 +466,7 @@ namespace SH_OBD {
                     return;
                 }
                 string strTxt = this.txtBoxVIN.Text.Trim();
-                if (!m_obdInterface.CommSettings.UseSerialScanner && strTxt.Length >= 17) {
+                if (strTxt.Length >= 17) {
                     m_bCanOBDTest = false;
                     m_obdTest.StrVIN_IN = strTxt.Substring(strTxt.Length - 17, 17);
                     m_obdInterface.m_log.TraceInfo("Get scanned VIN: " + m_obdTest.StrVIN_IN);
