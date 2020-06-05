@@ -490,7 +490,7 @@ namespace SH_OBD {
                     this.txtBoxVIN.Text = m_obdTest.StrVIN_IN;
                     this.txtBoxVehicleType.Text = m_obdTest.StrType_IN;
                 }
-                if (!m_obdInterface.CommSettings.UseSerialScanner && m_obdTest.StrVIN_IN.Length == 17 && m_obdTest.StrType_IN.Length >= 10) {
+                if (m_obdTest.StrVIN_IN.Length == 17 && m_obdTest.StrType_IN.Length >= 10) {
                     if (!m_obdTest.AdvanceMode) {
                         Task.Factory.StartNew(StartOBDTest);
                         this.txtBoxVIN.SelectAll();

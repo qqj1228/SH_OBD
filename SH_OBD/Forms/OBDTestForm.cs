@@ -233,7 +233,7 @@ namespace SH_OBD {
                         ManualUpload();
                     }
                 } else {
-                    if (!m_obdInterface.CommSettings.UseSerialScanner && m_obdTest.StrVIN_IN.Length == 17 && m_obdTest.StrType_IN.Length >= 10) {
+                    if (m_obdTest.StrVIN_IN.Length == 17 && m_obdTest.StrType_IN.Length >= 10) {
                         m_obdInterface.m_log.TraceInfo("Get VIN: " + this.txtBoxVIN.Text);
                         if (btnStartOBDTest.Enabled) {
                             this.txtBoxVIN.ReadOnly = true;
