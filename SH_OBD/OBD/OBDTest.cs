@@ -456,7 +456,7 @@ namespace SH_OBD {
             }
             StrVIN_ECU = strVIN;
             if (m_obdInterface.OBDResultSetting.VINError && StrVIN_IN != null && StrVIN_ECU != StrVIN_IN && StrVIN_IN.Length > 0) {
-                m_obdInterface.m_log.TraceWarning("Scan tool VIN[" + StrVIN_IN + "] and ECU VIN[" + StrVIN_ECU + "] are not consistent");
+                m_obdInterface.m_log.TraceWarning("Scanner VIN[" + StrVIN_IN + "] and ECU VIN[" + StrVIN_ECU + "] are not consistent");
                 VINResult = false;
             }
 

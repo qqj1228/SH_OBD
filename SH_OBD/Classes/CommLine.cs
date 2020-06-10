@@ -10,11 +10,12 @@ namespace SH_OBD {
         private string m_RxString = "";
         private readonly ManualResetEvent m_TransFlag = new ManualResetEvent(true);
         private byte[] m_RxBuffer;
-        private CommBase.ASCII m_RxTerm;
-        private CommBase.ASCII[] m_TxTerm;
-        private CommBase.ASCII[] m_RxFilter;
+        private byte m_RxTerm;
+        private byte[] m_TxTerm;
+        private byte[] m_RxFilter;
         private int m_TransTimeout;
         private string m_RxLine; // 单独接收到的ELM327发来的消息
+        private string m_RxRest = ""; // 接收到ELM327发来的消息中，最后一个m_RxTerm字符之后的内容
 
         protected CommLine(Logger log) : base(log) { }
 
@@ -22,7 +23,7 @@ namespace SH_OBD {
             m_TransTimeout = iTimeOut;
         }
 
-        protected void SetRxFilter(CommBase.ASCII[] RxFilter) {
+        protected void SetRxFilter(byte[] RxFilter) {
             m_RxFilter = RxFilter;
         }
 
@@ -44,6 +45,7 @@ namespace SH_OBD {
         }
 
         protected string Transact(string data) {
+            m_RxRest = "";
             Send(data);
             m_TransFlag.Reset();
             if (!m_TransFlag.WaitOne(m_TransTimeout, false)) {
@@ -77,9 +79,60 @@ namespace SH_OBD {
             m_RxLine += m_RxString;
         }
 
+        protected string StringFilter(string strOld) {
+            char[] chars = strOld.ToCharArray();
+            int offset = 0;
+            char[] result = new char[chars.Length];
+            bool bSkip;
+            for (int i = 0; i < chars.Length; i++) {
+                bSkip = false;
+                foreach (byte item in m_RxFilter) {
+                    if (chars[i] == item) {
+                        bSkip = true;
+                        break;
+                    }
+                }
+                if (bSkip) {
+                    continue;
+                }
+                result[offset] = chars[i];
+                offset++;
+            }
+            return new string(result, 0, offset);
+        }
+
+        protected override void OnRxString(string strRx) {
+            int index;
+            int startIndex = 0;
+            string strRxFilter = strRx;
+            if (m_RxFilter != null) {
+                strRxFilter = StringFilter(strRxFilter);
+            }
+            while (startIndex < strRxFilter.Length) {
+                index = strRxFilter.IndexOf((char)m_RxTerm, startIndex);
+                if (index > -1) {
+                    lock (locker) {
+                        m_RxString = m_RxRest + strRxFilter.Substring(startIndex, index);
+                        m_RxRest = "";
+                    }
+                    // 检测是否已经m_TransFlag.Set()了
+                    if (m_TransFlag.WaitOne(0, false)) {
+                        // 已经m_TransFlag.Set()了，表示是单独接收ELM327发来的消息，即startIndex > 0
+                        OnRxLine();
+                    } else {
+                        // 没有m_TransFlag.Set()，表示是给ELM327发送命令后返回的消息，即startIndex == 0
+                        m_TransFlag.Set();
+                    }
+                    startIndex = index + 1;
+                } else {
+                    m_RxRest += strRxFilter.Substring(startIndex);
+                    break;
+                }
+            }
+        }
+
         protected override void OnRxChar(byte ch) {
-            CommBase.ASCII ascii = (CommBase.ASCII)ch;
-            if (ascii == m_RxTerm || m_RxIndex >= m_RxBuffer.Length) {
+            if (ch == m_RxTerm || m_RxIndex >= m_RxBuffer.Length) {
                 lock (locker) {
                     m_RxString = Encoding.ASCII.GetString(m_RxBuffer, 0, m_RxIndex);
                 }
@@ -96,7 +149,7 @@ namespace SH_OBD {
             } else {
                 if (m_RxFilter != null) {
                     for (int idx = 0; idx < m_RxFilter.Length; ++idx) {
-                        if (m_RxFilter[idx] == ascii) {
+                        if (m_RxFilter[idx] == ch) {
                             return;
                         }
                     }
@@ -108,10 +161,10 @@ namespace SH_OBD {
 
         protected class CommLineSettings : CommBase.CommBaseSettings {
             public int RxStringBufferSize = 256;
-            public CommBase.ASCII RxTerminator = CommBase.ASCII.CR;
+            public byte RxTerminator = 0x0D;
             public int TransactTimeout = 500;
-            public CommBase.ASCII[] RxFilter;
-            public CommBase.ASCII[] TxTerminator;
+            public byte[] RxFilter;
+            public byte[] TxTerminator;
         }
     }
 }

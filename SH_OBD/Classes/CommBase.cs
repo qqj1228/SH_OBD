@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 namespace SH_OBD {
     public abstract class CommBase {
         private SerialPortClass m_serial = null;
-        private readonly Logger m_log;
+        protected readonly Logger m_log;
         private bool m_online = false;
         private bool m_auto = false;
         private int m_writeCount = 0;
@@ -98,9 +98,11 @@ namespace SH_OBD {
         }
 
         void SerialDataReceived(object sender, SerialDataReceivedEventArgs e, byte[] bits) {
-            foreach (byte item in bits) {
-                OnRxChar(item);
-            }
+            string RxString = Encoding.ASCII.GetString(bits);
+            OnRxString(RxString);
+            //foreach (byte item in bits) {
+            //    OnRxChar(item);
+            //}
         }
 
         public void Close() {
@@ -153,6 +155,9 @@ namespace SH_OBD {
         protected virtual void OnRxChar(byte ch) {
         }
 
+        protected virtual void OnRxString(string strRx) {
+        }
+
         protected virtual void OnTxDone() {
         }
 
@@ -199,42 +204,6 @@ namespace SH_OBD {
             Available = 1,
         }
 
-        public enum ASCII : byte {
-            NULL = (byte)0,
-            SOH = (byte)1,
-            STX = (byte)2,
-            ETX = (byte)3,
-            EOT = (byte)4,
-            ENQ = (byte)5,
-            ACK = (byte)6,
-            BELL = (byte)7,
-            BS = (byte)8,
-            HT = (byte)9,
-            LF = (byte)10,
-            VT = (byte)11,
-            FF = (byte)12,
-            CR = (byte)13,
-            SO = (byte)14,
-            SI = (byte)15,
-            DC1 = (byte)17,
-            DC2 = (byte)18,
-            DC3 = (byte)19,
-            DC4 = (byte)20,
-            NAK = (byte)21,
-            SYN = (byte)22,
-            ETB = (byte)23,
-            CAN = (byte)24,
-            EM = (byte)25,
-            SUB = (byte)26,
-            ESC = (byte)27,
-            FS = (byte)28,
-            GS = (byte)29,
-            RS = (byte)30,
-            US = (byte)31,
-            SP = (byte)32,
-            GT = (byte)62,
-            DEL = (byte)127,
-        }
     }
 
     public class CommPortException : ApplicationException {
