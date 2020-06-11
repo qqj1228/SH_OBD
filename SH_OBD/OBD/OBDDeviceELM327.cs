@@ -38,6 +38,7 @@ namespace SH_OBD {
                     return false;
                 }
 
+                GetVoltage();
                 base.m_DeviceDes = GetDeviceDes().Trim();
                 base.m_DeviceID = GetDeviceID().Trim().Replace("ELM327", "SH-VCI-302U");
                 if (m_iProtocol != ProtocolType.Unknown) {
@@ -333,7 +334,7 @@ namespace SH_OBD {
             }
             for (int i = attempts; i > 0; i--) {
                 string response = m_CommELM.GetResponse(command);
-                if (response.IndexOf("OK") >= 0 || response.IndexOf("ELM") >= 0) {
+                if (response.Contains("OK") || response.Contains("ELM")) {
                     return true;
                 }
             }
@@ -367,6 +368,13 @@ namespace SH_OBD {
         public string GetDeviceID() {
             if (m_CommELM.Online) {
                 return m_CommELM.GetResponse("ATI");
+            }
+            return "";
+        }
+
+        public string GetVoltage() {
+            if (m_CommELM.Online) {
+                return m_CommELM.GetResponse("ATRV");
             }
             return "";
         }
