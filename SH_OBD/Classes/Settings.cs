@@ -286,6 +286,7 @@ namespace SH_OBD {
         public bool UploadWhenever { get; set; }
         public bool UseECUAcronym { get; set; }
         public bool UseSCRName { get; set; }
+        public bool MIL { get; set; }
         public bool DTC03 { get; set; }
         public bool DTC07 { get; set; }
         public bool DTC0A { get; set; }
@@ -306,6 +307,7 @@ namespace SH_OBD {
             UploadWhenever = false;
             UseECUAcronym = false;
             UseSCRName = false;
+            MIL = false;
             DTC03 = false;
             DTC07 = false;
             DTC0A = false;
