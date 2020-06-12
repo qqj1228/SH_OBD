@@ -27,8 +27,8 @@ namespace SH_OBD {
                 if (m_CommELM.Online) {
                     return true;
                 }
-                m_CommELM.SetPort(iPort);
-                m_CommELM.SetBaudRate(iBaud);
+                m_CommELM.Port = iPort;
+                m_CommELM.BaudRate = iBaud;
                 if (m_CommELM.Open()) {
                     if (ConfirmAT("ATZ") && ConfirmAT("ATE0") && ConfirmAT("ATL0") && ConfirmAT("ATH1")) {
                         m_DeviceID = GetDeviceID();
@@ -74,7 +74,7 @@ namespace SH_OBD {
         }
 
         override public void SetTimeout(int iTimeout) {
-            m_CommELM.SetTimeout(iTimeout);
+            m_CommELM.Timeout = iTimeout;
         }
 
         public override void Disconnect() {

@@ -12,6 +12,8 @@ namespace SH_OBD {
         public int ScannerPort { get; set; }
         public bool AutoDetect { get; set; }
         public bool UseSerialScanner { get; set; }
+        [XmlIgnore]
+        public bool FirstRun { get; set; }
 
         public Settings() {
             AutoDetect = true;
@@ -25,6 +27,7 @@ namespace SH_OBD {
             StandardIndex = StandardType.Automatic;
             DoInitialization = true;
             UseSerialScanner = true;
+            FirstRun = true;
         }
 
         public int BaudRate {

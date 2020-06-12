@@ -2,14 +2,15 @@
 using System.IO;
 using System.IO.Ports;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using System.Xml.Serialization;
 
 namespace SH_OBD {
     public abstract class CommBase {
-        private SerialPortClass m_serial = null;
         protected readonly Logger m_log;
+        private SerialPortClass m_serial = null;
         private bool m_online = false;
         private bool m_auto = false;
         private int m_writeCount = 0;
@@ -149,23 +150,17 @@ namespace SH_OBD {
             return true;
         }
 
-        protected virtual void BeforeClose(bool error) {
-        }
+        protected virtual void BeforeClose(bool error) { }
 
-        protected virtual void OnRxChar(byte ch) {
-        }
+        protected virtual void OnRxChar(byte ch) { }
 
-        protected virtual void OnRxString(string strRx) {
-        }
+        protected virtual void OnRxString(string strRx) { }
 
-        protected virtual void OnTxDone() {
-        }
+        protected virtual void OnTxDone() { }
 
-        protected virtual void OnBreak() {
-        }
+        protected virtual void OnBreak() { }
 
-        protected virtual void OnRxException(Exception e) {
-        }
+        protected virtual void OnRxException(Exception ex) { }
 
         private bool CheckOnline() {
             if (m_online) {
@@ -209,6 +204,6 @@ namespace SH_OBD {
     public class CommPortException : ApplicationException {
         public CommPortException(string desc) : base(desc) { }
 
-        public CommPortException(Exception e) : base("Receive Thread Exception", e) { }
+        public CommPortException(Exception ex) : base("Receive Thread Exception", ex) { }
     }
 }

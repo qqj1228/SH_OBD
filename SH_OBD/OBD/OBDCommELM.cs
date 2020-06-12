@@ -1,43 +1,48 @@
-﻿using System;
+﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
+using System;
 
 namespace SH_OBD {
     public class OBDCommELM : CommLine {
         protected string m_Port = "COM1";
+        public int Port {
+            get {
+                return int.Parse(m_Port.Substring(3));
+            }
+            set {
+                m_Port = "COM" + value.ToString();
+                m_log.TraceInfo(string.Format("Port set to {0}", m_Port));
+            }
+        }
+
         protected int m_BaudRate = 38400;
-        protected int m_Timeout = 300;
+        public int BaudRate {
+            get { return m_BaudRate; }
+            set {
+                m_BaudRate = value;
+                m_log.TraceInfo(string.Format("Baud rate set to {0}", m_BaudRate.ToString()));
+            }
+        }
+
+        public int Timeout {
+            get { return TransTimeout; }
+            set {
+                TransTimeout = value;
+                m_log.TraceInfo(string.Format("Timeout set to {0} ms", TransTimeout.ToString()));
+            }
+        }
+
         protected byte m_asciiRxTerm = (byte)'>';
+        public byte RxTerminator {
+            get { return m_asciiRxTerm; }
+            set { m_asciiRxTerm = value; }
+        }
+
         protected byte[] m_RxFilterWithSpace;
         protected byte[] m_RxFilterNoSpace;
-        protected Logger m_log;
 
         public OBDCommELM(Logger log) : base(log) {
-            m_log = log;
             m_RxFilterWithSpace = new byte[] { 0x0A, 0x20, 0 };
             m_RxFilterNoSpace = new byte[] { 0x0A, 0 };
-        }
-
-        public void SetPort(int iPort) {
-            m_Port = "COM" + iPort.ToString();
-            m_log.TraceInfo(string.Format("Port set to {0}", m_Port));
-        }
-
-        public void SetBaudRate(int iBaudRate) {
-            m_BaudRate = iBaudRate;
-            m_log.TraceInfo(string.Format("Baud rate set to {0}", m_BaudRate.ToString()));
-        }
-
-        public int GetBaudRate() {
-            return m_BaudRate;
-        }
-
-        public void SetTimeout(int iTimeout) {
-            m_Timeout = iTimeout;
-            SetTransTimeout(iTimeout);
-            m_log.TraceInfo(string.Format("Timeout set to {0} ms", m_Timeout.ToString()));
-        }
-
-        public void SetRxTerminator(byte ch) {
-            m_asciiRxTerm = ch;
         }
 
         public string GetResponse(string command) {
@@ -74,7 +79,6 @@ namespace SH_OBD {
             settings.RxTerminator = m_asciiRxTerm;
             settings.RxFilter = m_RxFilterWithSpace;
             settings.TxTerminator = new byte[] { 0x0D };
-            settings.TransactTimeout = m_Timeout;
             base.Setup(settings);
             return settings;
         }

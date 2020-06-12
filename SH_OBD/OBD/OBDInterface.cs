@@ -127,7 +127,7 @@ namespace SH_OBD {
             return CommSettings.StandardIndex;
         }
 
-        public void SetTimeout(int iTimeout = 500) {
+        public void SetTimeout(int iTimeout) {
             m_obdDevice.SetTimeout(iTimeout);
         }
 

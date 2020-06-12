@@ -7,7 +7,6 @@ namespace SH_OBD {
         private ProtocolType m_iProtocol;
         private StandardType m_iStandard;
         private int m_iBaudRateIndex;
-        private int m_iComPortIndex;
         private bool m_bConnected;
 
         public OBDDeviceELM327(Logger log, int[] xattr) : base(log, xattr) {
@@ -27,8 +26,8 @@ namespace SH_OBD {
                 if (m_CommELM.Online) {
                     return true;
                 }
-                m_CommELM.SetPort(iPort);
-                m_CommELM.SetBaudRate(iBaud);
+                m_CommELM.Port = iPort;
+                m_CommELM.BaudRate = iBaud;
 
                 if (!m_CommELM.Open()) {
                     return false;
@@ -47,7 +46,7 @@ namespace SH_OBD {
                         return false;
                     }
 
-                    m_CommELM.SetTimeout(5000);
+                    m_CommELM.Timeout = 5000;
                     m_iStandard = SetStandardType(m_iProtocol);
                     if (m_iStandard != StandardType.Automatic) {
                         if (m_Parser == null) {
@@ -59,7 +58,7 @@ namespace SH_OBD {
                         }
                     }
 
-                    m_CommELM.SetTimeout(500);
+                    m_CommELM.Timeout = 1000;
                     return m_iStandard != StandardType.Automatic;
                 } else {
                     if (!ConfirmAT("ATM0")) {
@@ -67,7 +66,7 @@ namespace SH_OBD {
                         return false;
                     }
 
-                    m_CommELM.SetTimeout(5000);
+                    m_CommELM.Timeout = 5000;
                     for (int idx = 0; idx < m_xattr.Length; idx++) {
                         if (!ConfirmAT("ATTP" + m_xattr[idx].ToString("X1"))) {
                             m_CommELM.Close();
@@ -79,8 +78,7 @@ namespace SH_OBD {
                                 SetProtocol((ProtocolType)m_xattr[idx]);
                             }
                             SetBaudRateIndex(iBaud);
-                            m_iComPortIndex = iPort;
-                            m_CommELM.SetTimeout(500);
+                            m_CommELM.Timeout = 1000;
                             ConfirmAT("ATM1");
                             return true;
                         }
@@ -106,15 +104,19 @@ namespace SH_OBD {
                 }
                 m_iStandard = settings.StandardIndex;
                 if (CommBase.GetPortAvailable(settings.ComPort) == CommBase.PortStatus.Available && Initialize(settings.ComPort, settings.BaudRate)) {
+                    settings.FirstRun = false;
                     return true;
                 }
-                string[] serials = SerialPort.GetPortNames();
-                for (int i = 0; i < serials.Length; i++) {
-                    if (int.TryParse(serials[i].Substring(3), out int iPort)) {
-                        if (iPort != settings.ComPort) {
-                            if (CommBase.GetPortAvailable(iPort) == CommBase.PortStatus.Available
-                                && (Initialize(iPort, 38400)/* || Initialize(iPort, 115200) || Initialize(iPort, 9600)*/)) {
-                                return true;
+                if (settings.FirstRun) {
+                    string[] serials = SerialPort.GetPortNames();
+                    for (int i = 0; i < serials.Length; i++) {
+                        if (int.TryParse(serials[i].Substring(3), out int iPort)) {
+                            if (iPort != settings.ComPort) {
+                                if (CommBase.GetPortAvailable(iPort) == CommBase.PortStatus.Available
+                                    && (Initialize(iPort, 38400)/* || Initialize(iPort, 115200) || Initialize(iPort, 9600)*/)) {
+                                    settings.FirstRun = false;
+                                    return true;
+                                }
                             }
                         }
                     }
@@ -267,8 +269,8 @@ namespace SH_OBD {
             return "";
         }
 
-        override public void SetTimeout(int iTimeout = 500) {
-            m_CommELM.SetTimeout(iTimeout);
+        override public void SetTimeout(int iTimeout) {
+            m_CommELM.Timeout = iTimeout;
         }
 
         public override void Disconnect() {
@@ -398,7 +400,7 @@ namespace SH_OBD {
             }
         }
 
-        public override int GetComPortIndex() { return m_iComPortIndex; }
+        public override int GetComPortIndex() { return m_CommELM.Port; }
 
         public override StandardType GetStandardType() { return m_iStandard; }
 

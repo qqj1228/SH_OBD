@@ -13,15 +13,11 @@ namespace SH_OBD {
         private byte m_RxTerm;
         private byte[] m_TxTerm;
         private byte[] m_RxFilter;
-        private int m_TransTimeout;
         private string m_RxLine; // 单独接收到的ELM327发来的消息
         private string m_RxRest = ""; // 接收到ELM327发来的消息中，最后一个m_RxTerm字符之后的内容
+        protected int TransTimeout { get; set; }
 
         protected CommLine(Logger log) : base(log) { }
-
-        protected void SetTransTimeout(int iTimeOut) {
-            m_TransTimeout = iTimeOut;
-        }
 
         protected void SetRxFilter(byte[] RxFilter) {
             m_RxFilter = RxFilter;
@@ -48,7 +44,7 @@ namespace SH_OBD {
             m_RxRest = "";
             Send(data);
             m_TransFlag.Reset();
-            if (!m_TransFlag.WaitOne(m_TransTimeout, false)) {
+            if (!m_TransFlag.WaitOne(TransTimeout, false)) {
                 ThrowException("Timeout");
             }
             lock (locker) {
@@ -61,7 +57,7 @@ namespace SH_OBD {
             m_RxBuffer = new byte[settings.RxStringBufferSize];
             m_RxTerm = settings.RxTerminator;
             m_RxFilter = settings.RxFilter;
-            m_TransTimeout = settings.TransactTimeout;
+            TransTimeout = settings.TransactTimeout;
             m_TxTerm = settings.TxTerminator;
         }
 
@@ -162,7 +158,7 @@ namespace SH_OBD {
         protected class CommLineSettings : CommBase.CommBaseSettings {
             public int RxStringBufferSize = 256;
             public byte RxTerminator = 0x0D;
-            public int TransactTimeout = 500;
+            public int TransactTimeout = 1000;
             public byte[] RxFilter;
             public byte[] TxTerminator;
         }

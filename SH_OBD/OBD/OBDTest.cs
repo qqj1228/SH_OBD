@@ -525,7 +525,6 @@ namespace SH_OBD {
                     SubParameter = 1,
                     ValueTypes = (int)OBDParameter.EnumValueTypes.ListString
                 };
-                m_obdInterface.SetTimeout(1000);
             }
             SetDataRow(++NO, "CAL_ID", dt, param);  // 2
 
@@ -539,10 +538,8 @@ namespace SH_OBD {
                     SubParameter = 0,
                     ValueTypes = (int)OBDParameter.EnumValueTypes.ListString
                 };
-                m_obdInterface.SetTimeout(1000);
             }
             SetDataRow(++NO, "CVN", dt, param);     // 3
-            m_obdInterface.SetTimeout(500);
 
             // 根据配置文件，判断CAL_ID和CVN两个值的合法性
             for (int i = 2; i < dt.Columns.Count; i++) {
