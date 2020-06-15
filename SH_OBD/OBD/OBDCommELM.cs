@@ -58,12 +58,13 @@ namespace SH_OBD {
                 response = Transact(command);
                 m_log.TraceInfo(string.Format("RX: {0}", response.Replace("\r", @"\r").Replace("\n", @"\n")));
             } catch (Exception ex) {
-                m_log.TraceError(ex.Message);
+                m_log.TraceError("Transact() occur exception: " + ex.Message);
                 if (string.Compare(ex.Message, "Timeout") == 0) {
                     Open();
+                    m_log.TraceError("RX: COMM TIMED OUT!");
+                    response = "TIMEOUT";
                 }
-                m_log.TraceError("RX: COMM TIMED OUT!");
-                response = "TIMEOUT";
+                response = ex.Message;
             } finally {
                 if (bRxFilterNoSpace) {
                     // 将返回值重设为过滤空格

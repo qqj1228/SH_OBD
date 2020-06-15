@@ -46,6 +46,7 @@ namespace SH_OBD {
                         return false;
                     }
 
+                    int originalTimeout = m_CommELM.Timeout;
                     m_CommELM.Timeout = 5000;
                     m_iStandard = SetStandardType(m_iProtocol);
                     if (m_iStandard != StandardType.Automatic) {
@@ -58,7 +59,7 @@ namespace SH_OBD {
                         }
                     }
 
-                    m_CommELM.Timeout = 1000;
+                    m_CommELM.Timeout = originalTimeout;
                     return m_iStandard != StandardType.Automatic;
                 } else {
                     if (!ConfirmAT("ATM0")) {
@@ -66,6 +67,7 @@ namespace SH_OBD {
                         return false;
                     }
 
+                    int originalTimeout = m_CommELM.Timeout;
                     m_CommELM.Timeout = 5000;
                     for (int idx = 0; idx < m_xattr.Length; idx++) {
                         if (!ConfirmAT("ATTP" + m_xattr[idx].ToString("X1"))) {
@@ -78,7 +80,7 @@ namespace SH_OBD {
                                 SetProtocol((ProtocolType)m_xattr[idx]);
                             }
                             SetBaudRateIndex(iBaud);
-                            m_CommELM.Timeout = 1000;
+                            m_CommELM.Timeout = originalTimeout;
                             ConfirmAT("ATM1");
                             return true;
                         }

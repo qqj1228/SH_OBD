@@ -283,32 +283,36 @@ namespace SH_OBD {
             }
             SetDataRow(++NO, "MIL状态", dt, param);              // 0
 
-            if (m_obdInterface.STDType == StandardType.ISO_27145) {
-                param = new OBDParameter {
-                    OBDRequest = "22F421",
-                    Service = 0x22,
-                    Parameter = 0xF421,
-                    SubParameter = 0,
-                    ValueTypes = (int)OBDParameter.EnumValueTypes.Double
-                };
-                HByte = 0xF400;
-            } else if (m_obdInterface.STDType == StandardType.ISO_15031) {
-                param = new OBDParameter {
-                    OBDRequest = "0121",
-                    Service = 1,
-                    Parameter = 0x21,
-                    SubParameter = 0,
-                    ValueTypes = (int)OBDParameter.EnumValueTypes.Double
-                };
-            } else if (m_obdInterface.STDType == StandardType.SAE_J1939) {
+            if (m_obdInterface.OBDResultSetting.MIL) {
+                if (m_obdInterface.STDType != StandardType.SAE_J1939) {
+                    param.Parameter = HByte + 0x21;
+                    param.ValueTypes = (int)OBDParameter.EnumValueTypes.Double;
+                } else {
+                    param = new OBDParameter();
+                }
+            } else {
                 param = new OBDParameter();
             }
             SetDataRow(++NO, "MIL亮后行驶里程（km）", dt, param); // 1
 
-            if (m_obdInterface.STDType != StandardType.SAE_J1939) {
-                param.Parameter = HByte + 0x1C;
-                param.ValueTypes = (int)OBDParameter.EnumValueTypes.ShortString;
-            } else {
+            if (m_obdInterface.STDType == StandardType.ISO_27145) {
+                param = new OBDParameter {
+                    OBDRequest = "22F41C",
+                    Service = 0x22,
+                    Parameter = 0xF41C,
+                    SubParameter = 0,
+                    ValueTypes = (int)OBDParameter.EnumValueTypes.ShortString
+                };
+                HByte = 0xF400;
+            } else if (m_obdInterface.STDType == StandardType.ISO_15031) {
+                param = new OBDParameter {
+                    OBDRequest = "011C",
+                    Service = 1,
+                    Parameter = 0x1C,
+                    SubParameter = 0,
+                    ValueTypes = (int)OBDParameter.EnumValueTypes.ShortString
+                };
+            } else if (m_obdInterface.STDType == StandardType.SAE_J1939) {
                 param = new OBDParameter {
                     OBDRequest = "00FECE",
                     Service = 0,
@@ -621,9 +625,9 @@ namespace SH_OBD {
                         if (value.ErrorDetected) {
                             return false;
                         }
-                        for (int j = 0; j < ECUSupportNext.Count; j++) {
-                            ECUSupportNext[j] = false;
-                        }
+                        //for (int j = 0; j < ECUSupportNext.Count; j++) {
+                        //    ECUSupportNext[j] = false;
+                        //}
                         for (int j = 0; j < ECUSupportList.Count; j++) {
                             if (ECUSupportList[j][0].ECUResponseID == value.ECUResponseID) {
                                 ECUSupportList[j].Add(value);

@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace SH_OBD {
     public abstract class CommLine : CommBase {
-        private static readonly Object locker = new Object();
+        private static readonly object locker = new object();
         private int m_RxIndex = 0;
         private string m_RxString = "";
         private readonly ManualResetEvent m_TransFlag = new ManualResetEvent(true);
@@ -14,7 +14,8 @@ namespace SH_OBD {
         private byte[] m_TxTerm;
         private byte[] m_RxFilter;
         private string m_RxLine; // 单独接收到的ELM327发来的消息
-        private string m_RxRest = ""; // 接收到ELM327发来的消息中，最后一个m_RxTerm字符之后的内容
+        private bool m_bReceivedMsg = false; // 表示给ELM327发送命令后是否收到了返回数据
+        private bool m_bRxEnd = false; // 表示已把串口返回的一包数据处理完毕
         protected int TransTimeout { get; set; }
 
         protected CommLine(Logger log) : base(log) { }
@@ -41,11 +42,17 @@ namespace SH_OBD {
         }
 
         protected string Transact(string data) {
-            m_RxRest = "";
+            m_RxString = "";
             Send(data);
+            m_bReceivedMsg = false;
             m_TransFlag.Reset();
             if (!m_TransFlag.WaitOne(TransTimeout, false)) {
-                ThrowException("Timeout");
+                if (!m_bReceivedMsg) {
+                    ThrowException("Timeout");
+                }
+                while (!m_bRxEnd) {
+                    Thread.Sleep(10);
+                }
             }
             lock (locker) {
                 m_RxLine = "";
@@ -98,18 +105,19 @@ namespace SH_OBD {
         }
 
         protected override void OnRxString(string strRx) {
+            m_bReceivedMsg = true;
             int index;
             int startIndex = 0;
             string strRxFilter = strRx;
             if (m_RxFilter != null) {
                 strRxFilter = StringFilter(strRxFilter);
             }
+            m_bRxEnd = false;
             while (startIndex < strRxFilter.Length) {
                 index = strRxFilter.IndexOf((char)m_RxTerm, startIndex);
                 if (index > -1) {
                     lock (locker) {
-                        m_RxString = m_RxRest + strRxFilter.Substring(startIndex, index);
-                        m_RxRest = "";
+                        m_RxString += strRxFilter.Substring(startIndex, index);
                     }
                     // 检测是否已经m_TransFlag.Set()了
                     if (m_TransFlag.WaitOne(0, false)) {
@@ -121,18 +129,22 @@ namespace SH_OBD {
                     }
                     startIndex = index + 1;
                 } else {
-                    m_RxRest += strRxFilter.Substring(startIndex);
+                    m_RxString += strRxFilter.Substring(startIndex);
                     break;
                 }
             }
+            m_bRxEnd = true;
         }
 
         protected override void OnRxChar(byte ch) {
+            m_bReceivedMsg = true;
+            m_bRxEnd = false;
             if (ch == m_RxTerm || m_RxIndex >= m_RxBuffer.Length) {
                 lock (locker) {
                     m_RxString = Encoding.ASCII.GetString(m_RxBuffer, 0, m_RxIndex);
                 }
                 m_RxIndex = 0;
+                m_bRxEnd = true;
                 // 检测是否已经m_TransFlag.Set()了
                 if (m_TransFlag.WaitOne(0, false)) {
                     // 已经m_TransFlag.Set()了，表示是单独接收ELM327发来的消息
