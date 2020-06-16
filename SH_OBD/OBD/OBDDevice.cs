@@ -10,11 +10,13 @@ namespace SH_OBD {
         protected OBDParser m_Parser;
         protected OBDCommELM m_CommELM;
         protected int[] m_xattr;
+        public bool CanRetry { get; set; }
 
         protected OBDDevice(Logger log, int[] xattr) {
             m_log = log;
             m_CommELM = new OBDCommELM(log);
             m_xattr = xattr;
+            CanRetry = false;
         }
 
         public string DeviceDesString() {

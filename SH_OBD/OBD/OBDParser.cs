@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 namespace SH_OBD {
     public abstract class OBDParser {
@@ -32,23 +31,69 @@ namespace SH_OBD {
         }
 
         protected bool ErrorCheck(string input) {
-            return (
-                input.IndexOf("TIMEOUT") >= 0 ||
-                input.IndexOf("?") >= 0 ||
-                input.IndexOf("NODATA") >= 0 ||
-                input.IndexOf("BUFFERFULL") >= 0 ||
-                input.IndexOf("BUSBUSY") >= 0 ||
-                input.IndexOf("BUSERROR") >= 0 ||
-                input.IndexOf("CANERROR") >= 0 ||
-                input.IndexOf("DATAERROR") >= 0 ||
-                input.IndexOf("<DATAERROR") >= 0 ||
-                input.IndexOf("<RXERROR") >= 0 ||
-                input.IndexOf("FBERROR") >= 0 ||
-                input.IndexOf("ERR") >= 0 ||
-                input.IndexOf("LVRESET") >= 0 ||
-                input.IndexOf("STOPPED") >= 0 ||
-                input.IndexOf("UNABLETOCONNECT") >= 0
-            );
+            if (input == null) {
+                return false;
+            } else {
+                return (
+                    input.Contains("TIMEOUT") ||
+                    input.Contains("?") ||
+                    input.Contains("NODATA") ||
+                    input.Contains("BUFFERFULL") ||
+                    input.Contains("BUSBUSY") ||
+                    input.Contains("BUSERROR") ||
+                    input.Contains("CANERROR") ||
+                    input.Contains("DATAERROR") ||
+                    input.Contains("<DATAERROR") ||
+                    input.Contains("<RXERROR") ||
+                    input.Contains("FBERROR") ||
+                    input.Contains("ERR") ||
+                    input.Contains("LVRESET") ||
+                    input.Contains("STOPPED") ||
+                    input.Contains("UNABLETOCONNECT")
+                );
+            }
+        }
+
+        protected string ErrorFilter(string input) {
+            if (input == null) {
+                return "";
+            }
+            string output = input
+                .Replace("TIMEOUT", "")
+                .Replace("?", "")
+                .Replace("NODATA", "")
+                .Replace("BUFFERFULL", "")
+                .Replace("BUSBUSY", "")
+                .Replace("BUSERROR", "")
+                .Replace("CANERROR", "")
+                .Replace("DATAERROR", "")
+                .Replace("<DATAERROR", "")
+                .Replace("<RXERROR", "")
+                .Replace("FBERROR", "")
+                .Replace("LVRESET", "")
+                .Replace("STOPPED", "")
+                .Replace("UNABLETOCONNECT", "");
+            int start = 0;
+            int pos;
+            string strRet = string.Empty;
+            // 过滤"ERRxx"
+            while (start < output.Length) {
+                pos = output.IndexOf("ERR", start);
+                if (pos < 0) {
+                    // 没有"ERR"，则退出循环
+                    strRet += output.Substring(start);
+                    break;
+                }
+                if (output.Substring(pos + 3, 2) == "94") {
+                    // 不过滤"ERR94"，因为遇到"ERR94"需要重新初始化ELM327
+                    strRet += output.Substring(start, pos - start + 5);
+                    start = pos + 5;
+                } else {
+                    strRet += output.Substring(start, pos - start);
+                    start = pos + 5;
+                }
+            }
+            return strRet;
         }
 
         protected string GetNRC(string strData, int headLen) {

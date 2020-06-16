@@ -212,6 +212,7 @@ namespace SH_OBD {
                 if (!orl.ErrorDetected) {
                     break;
                 }
+                //Thread.Sleep(500);
                 orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
             }
             if (orl.RawResponse == "PENDING") {
