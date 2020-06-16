@@ -201,19 +201,35 @@ namespace SH_OBD {
             return standard;
         }
 
-        /// <summary>
-        /// 获取OBD响应结果，若有错误的话总共尝试3次
-        /// </summary>
-        /// <param name="param"></param>
-        /// <returns></returns>
         public override OBDResponseList Query(OBDParameter param) {
             OBDResponseList orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
-            for (int i = 2; i > 0; i--) {
+            int errorQty;
+            for (errorQty = 0; errorQty < 2; errorQty++) {
                 if (!orl.ErrorDetected) {
                     break;
                 }
-                //Thread.Sleep(500);
+                if (m_bConnected) {
+                    Thread.Sleep(500);
+                }
                 orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
+            }
+            // 重试3次后还是出错的话，软重启ELM327后再重试3次
+            if (errorQty >= 2) {
+                ConfirmAT("ATWS");
+                ConfirmAT("ATE0");
+                ConfirmAT("ATL0");
+                ConfirmAT("ATH1");
+                ConfirmAT("ATCAF1");
+                ConfirmAT("ATSP" + ((int)m_iProtocol).ToString("X1"));
+                for (errorQty = 0; errorQty < 3; errorQty++) {
+                    if (!orl.ErrorDetected) {
+                        break;
+                    }
+                    if (m_bConnected && errorQty != 0) {
+                        Thread.Sleep(500);
+                    }
+                    orl = m_Parser.Parse(param, GetOBDResponse(param.OBDRequest));
+                }
             }
             if (orl.RawResponse == "PENDING") {
                 int waittingTime = 60; // 重试总时间，单位秒
@@ -327,12 +343,6 @@ namespace SH_OBD {
             }
         }
 
-        /// <summary>
-        /// Send command
-        /// </summary>
-        /// <param name="command"></param>
-        /// <param name="attempts"></param>
-        /// <returns></returns>
         public bool ConfirmAT(string command, int attempts = 3) {
             if (!m_CommELM.Online) {
                 return false;

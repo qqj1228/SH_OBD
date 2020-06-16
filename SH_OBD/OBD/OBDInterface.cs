@@ -649,7 +649,6 @@ namespace SH_OBD {
                 m_obdDevice = new OBDDeviceELM327(m_log, m_xattr);
                 break;
             }
-            m_obdDevice.CanRetry = false;
         }
 
         public int LoadDTCDefinitions(string fileName) {
