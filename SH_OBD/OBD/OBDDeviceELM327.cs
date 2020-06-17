@@ -154,7 +154,22 @@ namespace SH_OBD {
             case ProtocolType.ISO_15765_4_CAN_11BIT_500KBAUD:
             case ProtocolType.ISO_15765_4_CAN_29BIT_500KBAUD:
             case ProtocolType.ISO_15765_4_CAN_11BIT_250KBAUD:
+                for (int i = 3; i > 0 && !bflag; i--) {
+                    if (GetOBDResponse("22F810").Replace(" ", "").Contains("62F810")) {
+                        bflag = bflag || true;
+                        standard = StandardType.ISO_27145;
+                    }
+                }
+                for (int i = 3; i > 0 && !bflag; i--) {
+                    if (GetOBDResponse("0100").Replace(" ", "").Contains("4100")) {
+                        bflag = true;
+                        standard = StandardType.ISO_15031;
+                    }
+                }
+                break;
             case ProtocolType.ISO_15765_4_CAN_29BIT_250KBAUD:
+                ConfirmAT("ATCF18DAF100");
+                ConfirmAT("ATCM1FFFFF00");
                 for (int i = 3; i > 0 && !bflag; i--) {
                     if (GetOBDResponse("22F810").Replace(" ", "").Contains("62F810")) {
                         bflag = bflag || true;
@@ -351,6 +366,8 @@ namespace SH_OBD {
                 string response = m_CommELM.GetResponse(command);
                 if (response.Contains("OK") || response.Contains("ELM")) {
                     return true;
+                } else if (response.Contains("STOPPED")) {
+                    Thread.Sleep(500);
                 }
             }
             m_log.TraceWarning("Current device can't support command \"" + command + "\"!");

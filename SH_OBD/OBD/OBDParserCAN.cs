@@ -16,10 +16,10 @@ namespace SH_OBD {
             OBDResponseList responseList = new OBDResponseList(response);
             response = Strip(response);
             response = ErrorFilter(response);
-            //if (ErrorCheck(response)) {
-            //    responseList.ErrorDetected = true;
-            //    return responseList;
-            //}
+            if (ErrorCheck(response)) {
+                responseList.ErrorDetected = true;
+                return responseList;
+            }
 
             List<string> tempLines = SplitByCR(response);
             List<string> legalLines = new List<string>();
