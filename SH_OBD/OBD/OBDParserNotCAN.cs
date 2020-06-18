@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SH_OBD {
     public abstract class OBDParserNotCAN : OBDParser {
@@ -11,14 +12,16 @@ namespace SH_OBD {
 
             OBDResponseList responseList = new OBDResponseList(response);
             response = Strip(response);
+            response = ErrorFilter(response);
             if (ErrorCheck(response)) {
                 responseList.ErrorDetected = true;
                 return responseList;
             }
 
-            List<string> tempLines = SplitByCR(response);
+            List<string> legalLines = SplitByCR(response);
+            legalLines = GetLegalLines(param, legalLines, headLen);
             List<string> lines = new List<string>();
-            foreach (string item in tempLines) {
+            foreach (string item in legalLines) {
                 if (item.Length > 0 && item.Length < headLen) {
                     // 过滤数据帧总长小于帧头长度的错误数据
                     continue;
@@ -109,6 +112,59 @@ namespace SH_OBD {
             }
             return bIsMultiline ? iRet + 2 : iRet;
         }
+
+        /// <summary>
+        /// 返回符合标准协议规定的K线/J1850帧
+        /// </summary>
+        /// <param name="param"></param>
+        /// <param name="tempLines"></param>
+        /// <param name="headLen"></param>
+        /// <returns></returns>
+        private List<string> GetLegalLines(OBDParameter param, List<string> tempLines, int headLen) {
+            List<string> lines = new List<string>();
+            // dicFrameType表示找到的正响应的PDU帧类型，key: ECU ID，value: 多帧计数
+            // value值，-1：未确认类型，0：单帧，1~7：多帧计数
+            Dictionary<string, int> dicFrameType = new Dictionary<string, int>();
+
+            string positiveResponse = (param.Service + 0x40).ToString("X2") + param.OBDRequest.Substring(2);
+            string negativeResponse = "7F" + param.OBDRequest.Substring(0, 2);
+
+            for (int i = 0; i < tempLines.Count; i++) {
+                if (tempLines[i].Length < headLen) {
+                    continue;
+                }
+                string ECU_ID = tempLines[i].Substring(2, headLen - 2);
+                if (!dicFrameType.Keys.Contains(ECU_ID)) {
+                    dicFrameType.Add(ECU_ID, -1);
+                }
+
+                if (tempLines[i].Contains(negativeResponse)) {
+                    // 响应本命令的负反馈，可能有多个
+                    lines.Add(tempLines[i]);
+                } else if (tempLines[i].Contains(positiveResponse)) {
+                    // 响应本命令的正反馈，每个ECU只会有一个
+                    int pos = tempLines[i].IndexOf(positiveResponse);
+                    try {
+                        int iCount = Convert.ToInt32(tempLines[i].Substring(pos + positiveResponse.Length, 2), 16);
+                        if (pos == headLen) {
+                            if (dicFrameType[ECU_ID] + 1 == iCount) {
+                                dicFrameType[ECU_ID] = iCount;
+                                lines.Add(tempLines[i]);
+                            } else if (dicFrameType[ECU_ID] == -1) {
+                                dicFrameType[ECU_ID] = iCount;
+                                lines.Add(tempLines[i]);
+                            }
+                        } else {
+                            dicFrameType[ECU_ID] = -1;
+                        }
+                    } catch (Exception) {
+                        dicFrameType[ECU_ID] = -1;
+                    }
+                }
+            }
+            return lines;
+        }
+
     }
 
     public class OBDParser_ISO14230_4_KWP : OBDParserNotCAN {

@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace SH_OBD {
     public abstract class OBDParserCAN : OBDParser {
@@ -21,12 +20,9 @@ namespace SH_OBD {
                 return responseList;
             }
 
-            List<string> tempLines = SplitByCR(response);
-            List<string> legalLines = new List<string>();
-            if (bJ1939) {
-                legalLines = tempLines;
-            } else {
-                legalLines = GetLegalLines(param, tempLines, headLen);
+            List<string> legalLines = SplitByCR(response);
+            if (!bJ1939) {
+                legalLines = GetLegalLines(param, legalLines, headLen);
             }
             List<string> lines = new List<string>();
             foreach (string item in legalLines) {
@@ -222,7 +218,9 @@ namespace SH_OBD {
                                     if (dicFrameType[ECU_ID] > 1) {
                                         // 处理连续帧
                                         for (int j = 1; j <= iCF; j++) {
-                                            lines.Add(tempLines[i + j]);
+                                            if (tempLines.Count > i + j) {
+                                                lines.Add(tempLines[i + j]);
+                                            }
                                         }
                                         i += iCF;
                                     }
