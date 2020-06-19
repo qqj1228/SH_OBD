@@ -120,7 +120,7 @@ namespace SH_OBD {
         /// <param name="tempLines"></param>
         /// <param name="headLen"></param>
         /// <returns></returns>
-        private List<string> GetLegalLines(OBDParameter param, List<string> tempLines, int headLen) {
+        protected override List<string> GetLegalLines(OBDParameter param, List<string> tempLines, int headLen) {
             List<string> lines = new List<string>();
             // dicFrameType表示找到的正响应的PDU帧类型，key: ECU ID，value: 多帧计数
             // value值，-1：未确认类型，0：单帧，1~7：多帧计数

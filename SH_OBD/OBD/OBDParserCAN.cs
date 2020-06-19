@@ -7,7 +7,6 @@ namespace SH_OBD {
     public abstract class OBDParserCAN : OBDParser {
         public OBDResponseList Parse(OBDParameter param, string response, int headLenRaw) {
             int headLen = Math.Abs(headLenRaw);
-            bool bJ1939 = headLenRaw < 0;
             if (string.IsNullOrEmpty(response)) {
                 response = "";
             }
@@ -21,9 +20,7 @@ namespace SH_OBD {
             }
 
             List<string> legalLines = SplitByCR(response);
-            if (!bJ1939) {
-                legalLines = GetLegalLines(param, legalLines, headLen);
-            }
+            legalLines = GetLegalLines(param, legalLines, headLenRaw);
             List<string> lines = new List<string>();
             foreach (string item in legalLines) {
                 if (item.Length > 0 && item.Length < headLen) {
@@ -151,12 +148,20 @@ namespace SH_OBD {
             return bIsMultiline ? iRet + 2 : iRet;
         }
 
+        protected override List<string> GetLegalLines(OBDParameter param, List<string> tempLines, int headLenRaw) {
+            if (headLenRaw < 0) {
+                return InternalGetLegalLinesJ1939(param, tempLines, -headLenRaw);
+            } else {
+                return InternalGetLegalLinesCAN(param, tempLines, headLenRaw);
+            }
+        }
+
         /// <summary>
         /// 返回符合标准协议规定的CAN帧
         /// </summary>
         /// <param name="tempLines"></param>
         /// <returns></returns>
-        private List<string> GetLegalLines(OBDParameter param, List<string> tempLines, int headLen) {
+        private List<string> InternalGetLegalLinesCAN(OBDParameter param, List<string> tempLines, int headLen) {
             List<string> lines = new List<string>();
             // dicFrameType表示找到的正响应的PDU帧类型，key: ECU ID，value: 帧类型
             // value值，-1：未确认类型，0：单帧SF，1：首帧FF，2：连续帧CF，3：流控帧FC（ELM327不会返回FC帧）
@@ -227,6 +232,60 @@ namespace SH_OBD {
                                 }
                             }
                         }
+                    }
+                }
+            }
+            return lines;
+        }
+
+        /// <summary>
+        /// 返回符合标准协议规定的J1939帧
+        /// </summary>
+        /// <param name="tempLines"></param>
+        /// <returns></returns>
+        private List<string> InternalGetLegalLinesJ1939(OBDParameter param, List<string> tempLines, int headLen) {
+            List<string> lines = new List<string>();
+            // dicFrameType表示找到的正响应的PDU帧类型，key: ECU ID，value: 帧类型
+            // value值，-1：未确认类型，0：单帧，1~255：多帧计数
+            Dictionary<string, int> dicFrameType = new Dictionary<string, int>();
+
+            string PGN = param.OBDRequest.Substring(2);
+
+            for (int i = 0; i < tempLines.Count; i++) {
+                if (tempLines[i].Length < headLen) {
+                    try {
+                    } catch (Exception) { }
+                    continue;
+                }
+                string ECU_ID = tempLines[i].Substring(headLen - 2, 2);
+                if (!dicFrameType.Keys.Contains(ECU_ID)) {
+                    dicFrameType.Add(ECU_ID, -1);
+                }
+                if (tempLines[i].Contains(PGN) && dicFrameType[ECU_ID] < 0) {
+                    int pos = tempLines[i].IndexOf(PGN);
+                    if (pos == 2) {
+                        // 单帧
+                        dicFrameType[ECU_ID] = 0;
+                        lines.Add(tempLines[i]);
+                    }
+                } else if (tempLines[i].Substring(2, 4) == "EBFF" && dicFrameType[ECU_ID] < 0) {
+                    int iNum_M;
+                    string ECU_ID_M;
+                    for (int j = 0; i + j < tempLines.Count; j++) {
+                        try {
+                            if (tempLines.Count - 1 >= i + j) {
+                                iNum_M = Convert.ToInt32(tempLines[i + j].Substring(headLen, 2), 16);
+                                ECU_ID_M = tempLines[i + j].Substring(headLen - 2, 2);
+                                if (ECU_ID != ECU_ID_M) {
+                                    continue;
+                                }
+                                if (iNum_M == dicFrameType[ECU_ID] + 1 || (j == 0 && iNum_M == 1)) {
+                                    // 多帧
+                                    dicFrameType[ECU_ID] = iNum_M;
+                                    lines.Add(tempLines[i + j]);
+                                }
+                            }
+                        } catch (Exception) { }
                     }
                 }
             }

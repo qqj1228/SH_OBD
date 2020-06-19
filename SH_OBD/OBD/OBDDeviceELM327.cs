@@ -21,6 +21,13 @@ namespace SH_OBD {
             return Initialize(iPort, iBaud);
         }
 
+        private void InitELM327Format() {
+            ConfirmAT("ATE0");
+            ConfirmAT("ATL0");
+            ConfirmAT("ATH1");
+            ConfirmAT("ATCAF1");
+        }
+
         public override bool Initialize(int iPort, int iBaud) {
             try {
                 if (m_CommELM.Online) {
@@ -182,6 +189,10 @@ namespace SH_OBD {
                         standard = StandardType.ISO_15031;
                     }
                 }
+                if (standard == StandardType.Automatic) {
+                    ConfirmAT("ATD");
+                    InitELM327Format();
+                }
                 break;
             case ProtocolType.SAE_J1939_CAN_29BIT_250KBAUD:
                 for (int i = 3; i > 0 && !bflag; i--) {
@@ -231,10 +242,7 @@ namespace SH_OBD {
             // 重试3次后还是出错的话，软重启ELM327后再重试3次
             if (errorQty >= 2) {
                 ConfirmAT("ATWS");
-                ConfirmAT("ATE0");
-                ConfirmAT("ATL0");
-                ConfirmAT("ATH1");
-                ConfirmAT("ATCAF1");
+                InitELM327Format();
                 ConfirmAT("ATSP" + ((int)m_iProtocol).ToString("X1"));
                 for (errorQty = 0; errorQty < 3; errorQty++) {
                     if (!orl.ErrorDetected) {
@@ -382,10 +390,7 @@ namespace SH_OBD {
             // 返回"ERR94"说明发生CAN网络错误，ELM327会返回出厂设置
             // 如需继续的话，需要重新初始化ELM327
             if (strRet.Contains("ERR94")) {
-                ConfirmAT("ATE0");
-                ConfirmAT("ATL0");
-                ConfirmAT("ATH1");
-                ConfirmAT("ATCAF1");
+                InitELM327Format();
             }
             return strRet;
         }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 namespace SH_OBD {
     public abstract class OBDParser {
         public abstract OBDResponseList Parse(OBDParameter param, string response);
+        protected abstract List<string> GetLegalLines(OBDParameter param, List<string> tempLines, int headLen);
 
         protected string Strip(string input) {
             if (input == null) {
