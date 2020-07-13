@@ -159,8 +159,9 @@ namespace SH_OBD {
                 }
                 break;
             case ProtocolType.ISO_15765_4_CAN_11BIT_500KBAUD:
-            case ProtocolType.ISO_15765_4_CAN_29BIT_500KBAUD:
             case ProtocolType.ISO_15765_4_CAN_11BIT_250KBAUD:
+                ConfirmAT("ATCF7E0");
+                ConfirmAT("ATCM7F0");
                 for (int i = 3; i > 0 && !bflag; i--) {
                     if (GetOBDResponse("22F810").Replace(" ", "").Contains("62F810")) {
                         bflag = bflag || true;
@@ -173,7 +174,11 @@ namespace SH_OBD {
                         standard = StandardType.ISO_15031;
                     }
                 }
+                if (standard == StandardType.Automatic) {
+                    ConfirmAT("ATAR");
+                }
                 break;
+            case ProtocolType.ISO_15765_4_CAN_29BIT_500KBAUD:
             case ProtocolType.ISO_15765_4_CAN_29BIT_250KBAUD:
                 ConfirmAT("ATCF18DAF100");
                 ConfirmAT("ATCM1FFFFF00");
@@ -190,8 +195,7 @@ namespace SH_OBD {
                     }
                 }
                 if (standard == StandardType.Automatic) {
-                    ConfirmAT("ATD");
-                    InitELM327Format();
+                    ConfirmAT("ATAR");
                 }
                 break;
             case ProtocolType.SAE_J1939_CAN_29BIT_250KBAUD:
