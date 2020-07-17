@@ -39,6 +39,7 @@ namespace SH_OBD {
                     return false;
                 }
 
+                GetVoltage();
                 base.m_DeviceDes = GetDeviceDes().Trim();
                 base.m_DeviceID = GetDeviceID().Trim().Replace("ELM327", "SH-VCI-302U");
                 if (m_iProtocol != ProtocolType.Unknown) {
@@ -144,9 +145,9 @@ namespace SH_OBD {
                 }
                 break;
             case ProtocolType.ISO_15765_4_CAN_11BIT_500KBAUD:
-            case ProtocolType.ISO_15765_4_CAN_29BIT_500KBAUD:
             case ProtocolType.ISO_15765_4_CAN_11BIT_250KBAUD:
-            case ProtocolType.ISO_15765_4_CAN_29BIT_250KBAUD:
+                ConfirmAT("ATCF7E0");
+                ConfirmAT("ATCM7F0");
                 for (int i = 3; i > 0 && !bflag; i--) {
                     if (GetOBDResponse("0100").Replace(" ", "").Contains("4100")) {
                         bflag = true;
@@ -158,6 +159,29 @@ namespace SH_OBD {
                         bflag = bflag || true;
                         standard = StandardType.ISO_27145;
                     }
+                }
+                if (standard == StandardType.Unknown) {
+                    ConfirmAT("ATAR");
+                }
+                break;
+            case ProtocolType.ISO_15765_4_CAN_29BIT_500KBAUD:
+            case ProtocolType.ISO_15765_4_CAN_29BIT_250KBAUD:
+                ConfirmAT("ATCF18DAF100");
+                ConfirmAT("ATCM1FFFFF00");
+                for (int i = 3; i > 0 && !bflag; i--) {
+                    if (GetOBDResponse("0100").Replace(" ", "").Contains("4100")) {
+                        bflag = true;
+                        standard = StandardType.ISO_15031;
+                    }
+                }
+                for (int i = 3; i > 0 && !bflag; i--) {
+                    if (GetOBDResponse("22F810").Replace(" ", "").Contains("62F810")) {
+                        bflag = bflag || true;
+                        standard = StandardType.ISO_27145;
+                    }
+                }
+                if (standard == StandardType.Unknown) {
+                    ConfirmAT("ATAR");
                 }
                 break;
             case ProtocolType.SAE_J1939_CAN_29BIT_250KBAUD:
@@ -282,7 +306,7 @@ namespace SH_OBD {
             }
             for (int i = attempts; i > 0; i--) {
                 string response = m_CommELM.GetResponse(command);
-                if (response.IndexOf("OK") >= 0 || response.IndexOf("ELM") >= 0) {
+                if (response.Contains("OK") || response.Contains("ELM")) {
                     return true;
                 }
             }
@@ -307,6 +331,13 @@ namespace SH_OBD {
         public string GetDeviceID() {
             if (m_CommELM.Online) {
                 return m_CommELM.GetResponse("ATI");
+            }
+            return "";
+        }
+
+        public string GetVoltage() {
+            if (m_CommELM.Online) {
+                return m_CommELM.GetResponse("ATRV");
             }
             return "";
         }

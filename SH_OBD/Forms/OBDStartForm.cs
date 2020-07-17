@@ -272,7 +272,8 @@ namespace SH_OBD {
                 this.label3Space.BackColor = m_backColor;
                 this.label3Space.ForeColor = Color.Gray;
             });
-            m_obdInterface.m_log.TraceInfo(">>>>>>>>>> Start to test vehicle of [VIN: " + m_obdTest.StrVIN_IN + ", VehicleType: " + m_obdTest.StrType_IN + "] <<<<<<<<<<");
+            m_obdInterface.m_log.TraceInfo(string.Format(">>>>>>>>>> Start to test vehicle of [VIN: {0}, VehicleType: {1}] Ver: {2} <<<<<<<<<<",
+                m_obdTest.StrVIN_IN, m_obdTest.StrType_IN, MainFileVersion.AssemblyVersion));
             if (m_obdInterface.ConnectedStatus) {
                 m_obdInterface.Disconnect();
             }
