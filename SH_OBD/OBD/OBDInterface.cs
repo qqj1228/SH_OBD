@@ -321,10 +321,12 @@ namespace SH_OBD {
             }
             if ((param.ValueTypes & (int)OBDParameter.EnumValueTypes.ListString) == (int)OBDParameter.EnumValueTypes.ListString) {
                 strRet += "[ListString: ";
-                foreach (string strx in obdValue.ListStringValue) {
-                    strRet = string.Concat(strRet, strx + ", ");
+                if (obdValue.ListStringValue != null && obdValue.ListStringValue.Count > 0) {
+                    foreach (string strx in obdValue.ListStringValue) {
+                        strRet = string.Concat(strRet, strx + ", ");
+                    }
+                    strRet = strRet.Substring(0, strRet.Length - 2);
                 }
-                strRet = strRet.Substring(0, strRet.Length - 2);
                 strRet += "]";
             }
             if ((param.ValueTypes & (int)OBDParameter.EnumValueTypes.ShortString) == (int)OBDParameter.EnumValueTypes.ShortString) {
