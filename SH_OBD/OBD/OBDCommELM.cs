@@ -4,7 +4,7 @@ namespace SH_OBD {
     public class OBDCommELM : CommLine {
         protected string m_Port = "COM1";
         protected int m_BaudRate = 38400;
-        protected int m_Timeout = 300;
+        protected int m_Timeout = 1000;
         protected CommBase.ASCII m_asciiRxTerm = (CommBase.ASCII)62;
         protected CommBase.ASCII[] m_RxFilterWithSpace;
         protected CommBase.ASCII[] m_RxFilterNoSpace;

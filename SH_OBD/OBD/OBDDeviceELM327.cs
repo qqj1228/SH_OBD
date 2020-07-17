@@ -59,7 +59,7 @@ namespace SH_OBD {
                             SetProtocol((ProtocolType)Convert.ToInt32(strDPN, 16));
                         }
                     }
-                    m_CommELM.SetTimeout(500);
+                    m_CommELM.SetTimeout(1000);
                     return m_iStandard != StandardType.Unknown;
                 } else {
                     if (!ConfirmAT("ATM0")) {
@@ -81,7 +81,7 @@ namespace SH_OBD {
                             }
                             SetBaudRateIndex(iBaud);
                             m_iComPortIndex = iPort;
-                            m_CommELM.SetTimeout(500);
+                            m_CommELM.SetTimeout(1000);
                             ConfirmAT("ATM1");
                             return true;
                         }

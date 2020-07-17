@@ -98,7 +98,7 @@ namespace SH_OBD {
         protected class CommLineSettings : CommBase.CommBaseSettings {
             public int RxStringBufferSize = 256;
             public CommBase.ASCII RxTerminator = CommBase.ASCII.CR;
-            public int TransactTimeout = 500;
+            public int TransactTimeout = 1000;
             public CommBase.ASCII[] RxFilter;
             public CommBase.ASCII[] TxTerminator;
         }
