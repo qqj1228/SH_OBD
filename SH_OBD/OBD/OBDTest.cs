@@ -127,17 +127,19 @@ namespace SH_OBD {
                         }
                         break;
                     }
-                    if (value.ListStringValue.Count > maxLine) {
-                        maxLine = value.ListStringValue.Count;
-                    }
-                    for (int i = 2; i < dt.Columns.Count; i++) {
-                        if (dt.Columns[i].ColumnName == value.ECUResponseID) {
-                            if (value.ListStringValue.Count == 0 || value.ListStringValue[0].Length == 0) {
-                                dr[i] = "";
-                            } else {
-                                dr[i] = value.ListStringValue[0];
-                                for (int j = 1; j < value.ListStringValue.Count; j++) {
-                                    dr[i] += "\n" + value.ListStringValue[j];
+                    if (value.ListStringValue != null) {
+                        if (value.ListStringValue.Count > maxLine) {
+                            maxLine = value.ListStringValue.Count;
+                        }
+                        for (int i = 2; i < dt.Columns.Count; i++) {
+                            if (dt.Columns[i].ColumnName == value.ECUResponseID) {
+                                if (value.ListStringValue.Count == 0 || value.ListStringValue[0].Length == 0) {
+                                    dr[i] = "";
+                                } else {
+                                    dr[i] = value.ListStringValue[0];
+                                    for (int j = 1; j < value.ListStringValue.Count; j++) {
+                                        dr[i] += "\n" + value.ListStringValue[j];
+                                    }
                                 }
                             }
                         }
@@ -530,30 +532,30 @@ namespace SH_OBD {
                 // 压缩点火
                 if (m_mode09Support.ContainsKey(dt.Columns[i].ColumnName) && m_mode09Support[dt.Columns[i].ColumnName][param.Parameter - HByte - 1]) {
                     valueList = m_obdInterface.GetValueList(param);
-                    SetIUPRDataRow(++NO, "NMHC催化器", 18, 12, dt, valueList, 2, param.Parameter);
-                    SetIUPRDataRow(++NO, "NOx催化器", 18, 11, dt, valueList, 4, param.Parameter);
-                    SetIUPRDataRow(++NO, "NOx吸附器", 18, 11, dt, valueList, 6, param.Parameter);
-                    SetIUPRDataRow(++NO, "PM捕集器", 18, 10, dt, valueList, 8, param.Parameter);
-                    SetIUPRDataRow(++NO, "废气传感器", 18, 12, dt, valueList, 10, param.Parameter);
-                    SetIUPRDataRow(++NO, "EGR和VVT", 18, 10, dt, valueList, 12, param.Parameter);
-                    SetIUPRDataRow(++NO, "增压压力", 18, 10, dt, valueList, 14, param.Parameter);
+                    SetIUPRDataRow(++NO, "NMHC催化器", 18, 12, dt, valueList, 2, param.Parameter - HByte);
+                    SetIUPRDataRow(++NO, "NOx催化器", 18, 11, dt, valueList, 4, param.Parameter - HByte);
+                    SetIUPRDataRow(++NO, "NOx吸附器", 18, 11, dt, valueList, 6, param.Parameter - HByte);
+                    SetIUPRDataRow(++NO, "PM捕集器", 18, 10, dt, valueList, 8, param.Parameter - HByte);
+                    SetIUPRDataRow(++NO, "废气传感器", 18, 12, dt, valueList, 10, param.Parameter - HByte);
+                    SetIUPRDataRow(++NO, "EGR和VVT", 18, 10, dt, valueList, 12, param.Parameter - HByte);
+                    SetIUPRDataRow(++NO, "增压压力", 18, 10, dt, valueList, 14, param.Parameter - HByte);
                 }
                 // 火花点火
                 NO = 0;
                 param.Parameter = HByte + 8;
                 if (m_mode09Support.ContainsKey(dt.Columns[i].ColumnName) && m_mode09Support[dt.Columns[i].ColumnName][param.Parameter - HByte - 1]) {
                     valueList = m_obdInterface.GetValueList(param);
-                    SetIUPRDataRow(++NO, "催化器 组1", 18, 12, dt, valueList, 2, param.Parameter);
-                    SetIUPRDataRow(++NO, "催化器 组2", 18, 12, dt, valueList, 4, param.Parameter);
-                    SetIUPRDataRow(++NO, "前氧传感器 组1", 18, 16, dt, valueList, 6, param.Parameter);
-                    SetIUPRDataRow(++NO, "前氧传感器 组2", 18, 16, dt, valueList, 8, param.Parameter);
-                    SetIUPRDataRow(++NO, "后氧传感器 组1", 18, 16, dt, valueList, 16, param.Parameter);
-                    SetIUPRDataRow(++NO, "后氧传感器 组2", 18, 16, dt, valueList, 18, param.Parameter);
-                    SetIUPRDataRow(++NO, "EVAP", 18, 6, dt, valueList, 14, param.Parameter);
-                    SetIUPRDataRow(++NO, "EGR和VVT", 18, 10, dt, valueList, 10, param.Parameter);
-                    SetIUPRDataRow(++NO, "GPF 组1", 18, 9, dt, valueList, 24, param.Parameter);
-                    SetIUPRDataRow(++NO, "GPF 组2", 18, 9, dt, valueList, 26, param.Parameter);
-                    SetIUPRDataRow(++NO, "二次空气喷射系统", 18, 18, dt, valueList, 12, param.Parameter);
+                    SetIUPRDataRow(++NO, "催化器 组1", 18, 12, dt, valueList, 2, param.Parameter - HByte);
+                    SetIUPRDataRow(++NO, "催化器 组2", 18, 12, dt, valueList, 4, param.Parameter - HByte);
+                    SetIUPRDataRow(++NO, "前氧传感器 组1", 18, 16, dt, valueList, 6, param.Parameter - HByte);
+                    SetIUPRDataRow(++NO, "前氧传感器 组2", 18, 16, dt, valueList, 8, param.Parameter - HByte);
+                    SetIUPRDataRow(++NO, "后氧传感器 组1", 18, 16, dt, valueList, 16, param.Parameter - HByte);
+                    SetIUPRDataRow(++NO, "后氧传感器 组2", 18, 16, dt, valueList, 18, param.Parameter - HByte);
+                    SetIUPRDataRow(++NO, "EVAP", 18, 6, dt, valueList, 14, param.Parameter - HByte);
+                    SetIUPRDataRow(++NO, "EGR和VVT", 18, 10, dt, valueList, 10, param.Parameter - HByte);
+                    SetIUPRDataRow(++NO, "GPF 组1", 18, 9, dt, valueList, 24, param.Parameter - HByte);
+                    SetIUPRDataRow(++NO, "GPF 组2", 18, 9, dt, valueList, 26, param.Parameter - HByte);
+                    SetIUPRDataRow(++NO, "二次空气喷射系统", 18, 18, dt, valueList, 12, param.Parameter - HByte);
                 }
             }
         }

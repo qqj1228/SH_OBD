@@ -1255,12 +1255,14 @@ namespace SH_OBD {
                 // ISO 27145 ReadDataByIdentifer
                 int HByte = (param.Parameter >> 8) & 0xFF;
                 int LByte = param.Parameter & 0x00FF;
+                int OriginalParam = param.Parameter;
                 param.Parameter = LByte;
                 if (HByte == 0xF4) {
                     value2 = GetMode0102Value(param, response, bEnglishUnits);
                 } else if (HByte == 0xF8) {
                     value2 = GetMode09Value(param, response);
                 }
+                param.Parameter = OriginalParam;
                 break;
             default:
                 value2.ErrorDetected = true;
