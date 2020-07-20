@@ -1269,16 +1269,16 @@ namespace SH_OBD {
 
             int qty = response.Data.Length / (20 * 2);
             string strData = "";
-            OBDParameter param2 = new OBDParameter();
+            int OriginalParam = param.Parameter;
             switch (param.SubParameter) {
             case 0:
                 // CVN
-                param2.Parameter = 0x06;
+                param.Parameter = 0x06;
                 for (int i = 0; i < qty; i++) {
                     strData += response.Data.Substring(i * 20 * 2, 4 * 2);
                 }
                 response.Data = strData;
-                value2 = GetMode09Value(param2, response);
+                value2 = GetMode09Value(param, response);
                 for (int i = 0; i < value2.ListStringValue.Count; i++) {
                     string strVal = value2.ListStringValue[i];
                     value2.ListStringValue[i] = strVal.Substring(6, 2) + strVal.Substring(4, 2) + strVal.Substring(2, 2) + strVal.Substring(0, 2);
@@ -1286,17 +1286,18 @@ namespace SH_OBD {
                 break;
             case 1:
                 // CAL_ID
-                param2.Parameter = 0x04;
+                param.Parameter = 0x04;
                 for (int i = 0; i < qty; i++) {
                     strData += response.Data.Substring(4 * 2 + i * 20 * 2, 16 * 2);
                 }
                 response.Data = strData;
-                value2 = GetMode09Value(param2, response);
+                value2 = GetMode09Value(param, response);
                 break;
             default:
                 value2.ErrorDetected = true;
                 break;
             }
+            param.Parameter = OriginalParam;
             return value2;
         }
 
@@ -1361,12 +1362,14 @@ namespace SH_OBD {
                 // ISO 27145 ReadDataByIdentifer
                 int HByte = (param.Parameter >> 8) & 0xFF;
                 int LByte = param.Parameter & 0x00FF;
+                int OriginalParam = param.Parameter;
                 param.Parameter = LByte;
                 if (HByte == 0xF4) {
                     value2 = GetMode0102Value(param, response, bEnglishUnits);
                 } else if (HByte == 0xF8) {
                     value2 = GetMode09Value(param, response);
                 }
+                param.Parameter = OriginalParam;
                 break;
             default:
                 value2.ErrorDetected = true;
