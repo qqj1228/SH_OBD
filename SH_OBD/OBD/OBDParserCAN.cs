@@ -23,6 +23,10 @@ namespace SH_OBD {
             legalLines = GetLegalLines(param, legalLines, headLenRaw);
             List<string> lines = new List<string>();
             foreach (string item in legalLines) {
+                if (item.Length == 0) {
+                    // 过滤空行
+                    continue;
+                }
                 if (item.Length > 0 && item.Length < headLen) {
                     // 需要过滤数据帧总长小于帧头长度的数据，这种数据帧有两种可能：
                     // 1、J1939多帧消息的第一条，因为目前使用的盗版ELM327的版本为v1.3a，
@@ -124,7 +128,11 @@ namespace SH_OBD {
                 iRet = headLen + 8;
                 break;
             case 9:
-                iRet = param.Parameter % 2 == 0 && param.Parameter % 0x20 != 0 ? headLen + 8 : headLen + 6;
+                if (param.Parameter < 0x0B) {
+                    iRet = param.Parameter % 2 == 0 && param.Parameter % 0x20 != 0 ? headLen + 8 : headLen + 6;
+                } else {
+                    iRet = param.Parameter % 2 != 0 && param.Parameter % 0x20 != 0 ? headLen + 8 : headLen + 6;
+                }
                 break;
             case 0x19:
                 // ISO 27145 ReadDTCInformation
