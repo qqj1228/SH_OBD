@@ -240,7 +240,7 @@ namespace SH_OBD {
                             if (dr[1].ToString().Length == 0) {
                                 dr[1] = strItem + ": " + "监测完成次数".PadLeft(padTotal - padNum + 6);
                             }
-                            if (value.ListStringValue.Count > itemIndex) {
+                            if (value.ListStringValue.Count > (itemIndex + 1)) {
                                 num = Utility.Hex2Int(value.ListStringValue[itemIndex]);
                                 dr[i] = num.ToString();
                             } else {
@@ -263,7 +263,7 @@ namespace SH_OBD {
                             if (dr[1].ToString().Length == 0) {
                                 dr[1] = "符合监测条件次数".PadLeft(padTotal + 8);
                             }
-                            if (value.ListStringValue.Count > itemIndex) {
+                            if (value.ListStringValue.Count > (itemIndex + 1)) {
                                 den = Utility.Hex2Int(value.ListStringValue[itemIndex + 1]);
                                 dr[i] = den.ToString();
                             } else {
@@ -1239,7 +1239,7 @@ namespace SH_OBD {
                 DataRow dr = dtOut.NewRow();
                 dr["VIN"] = strVIN;
                 dr["ECU_ID"] = m_dtIUPR.Columns[i].ColumnName;
-                if (m_mode09Support.ContainsKey(m_dtIUPR.Columns[i].ColumnName) && m_mode09Support[m_dtIUPR.Columns[i].ColumnName][0x08 - 1]) {
+                if (m_mode09Support.ContainsKey(m_dtIUPR.Columns[i].ColumnName) && m_mode09Support[m_dtIUPR.Columns[i].ColumnName][0x08 - 1] && m_dtIUPR.Rows.Count > 0) {
                     dr["CATCOMP1"] = m_dtIUPR.Rows[0][i].ToString();
                     dr["CATCOND1"] = m_dtIUPR.Rows[1][i].ToString();
                     dr["CATCOMP2"] = m_dtIUPR.Rows[3][i].ToString();
@@ -1286,7 +1286,7 @@ namespace SH_OBD {
                     dr["AIRCOMP"] = "-1";
                     dr["AIRCOND"] = "-1";
                 }
-                if (m_mode09Support.ContainsKey(m_dtIUPR.Columns[i].ColumnName) && m_mode09Support[m_dtIUPR.Columns[i].ColumnName][0x0B - 1]) {
+                if (m_mode09Support.ContainsKey(m_dtIUPR.Columns[i].ColumnName) && m_mode09Support[m_dtIUPR.Columns[i].ColumnName][0x0B - 1] && m_dtIUPR.Rows.Count > 0) {
                     dr["HCCATCOMP"] = m_dtIUPR.Rows[0][i].ToString();
                     dr["HCCATCOND"] = m_dtIUPR.Rows[1][i].ToString();
                     dr["NCATCOMP"] = m_dtIUPR.Rows[3][i].ToString();

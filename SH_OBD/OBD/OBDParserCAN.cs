@@ -12,6 +12,7 @@ namespace SH_OBD {
 
             OBDResponseList responseList = new OBDResponseList(response);
             response = Strip(response);
+            response = response.Replace("BUFFERFULL", "");
             if (ErrorCheck(response)) {
                 responseList.ErrorDetected = true;
                 return responseList;
@@ -20,6 +21,9 @@ namespace SH_OBD {
             List<string> tempLines = SplitByCR(response);
             List<string> lines = new List<string>();
             foreach (string item in tempLines) {
+                if (item.Length == 0) {
+                    continue;
+                }
                 string strNRC = GetNRC(item, headLen);
                 if (strNRC.Length == 0) {
                     lines.Add(item);
@@ -116,7 +120,11 @@ namespace SH_OBD {
                 iRet = headLen + 8;
                 break;
             case 9:
-                iRet = param.Parameter % 2 == 0 && param.Parameter % 0x20 != 0 ? headLen + 8 : headLen + 6;
+                if (param.Parameter < 0x0B) {
+                    iRet = param.Parameter % 2 == 0 && param.Parameter % 0x20 != 0 ? headLen + 8 : headLen + 6;
+                } else {
+                    iRet = param.Parameter % 2 != 0 && param.Parameter % 0x20 != 0 ? headLen + 8 : headLen + 6;
+                }
                 break;
             case 0x19:
                 // ISO 27145 ReadDTCInformation
