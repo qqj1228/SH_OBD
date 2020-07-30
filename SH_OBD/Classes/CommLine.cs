@@ -5,6 +5,7 @@ using System.Threading;
 
 namespace SH_OBD {
     public abstract class CommLine : CommBase {
+        private const int BUFF_SIZE = 512;
         private static readonly object locker = new object();
         private int m_RxIndex = 0;
         private string m_RxString = "";
@@ -130,6 +131,17 @@ namespace SH_OBD {
                     startIndex = index + 1;
                 } else {
                     m_RxString += strRxFilter.Substring(startIndex);
+                    if (m_RxString.Length > BUFF_SIZE) {
+                        m_RxString = m_RxString.Substring(0, BUFF_SIZE);
+                        // 检测是否已经m_TransFlag.Set()了
+                        if (m_TransFlag.WaitOne(0, false)) {
+                            // 已经m_TransFlag.Set()了，表示是单独接收ELM327发来的消息，即startIndex > 0
+                            OnRxLine();
+                        } else {
+                            // 没有m_TransFlag.Set()，表示是给ELM327发送命令后返回的消息，即startIndex == 0
+                            m_TransFlag.Set();
+                        }
+                    }
                     break;
                 }
             }

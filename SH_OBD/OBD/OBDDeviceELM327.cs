@@ -160,8 +160,8 @@ namespace SH_OBD {
                 break;
             case ProtocolType.ISO_15765_4_CAN_11BIT_500KBAUD:
             case ProtocolType.ISO_15765_4_CAN_11BIT_250KBAUD:
-                ConfirmAT("ATCF7E0");
-                ConfirmAT("ATCM7F0");
+                ConfirmAT("ATCF700");
+                ConfirmAT("ATCMF00");
                 for (int i = 3; i > 0 && !bflag; i--) {
                     if (GetOBDResponse("22F810").Replace(" ", "").Contains("62F810")) {
                         bflag = bflag || true;
