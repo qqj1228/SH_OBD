@@ -20,7 +20,7 @@ namespace SH_OBD {
             ComPort = 1;
             ScannerPort = 2;
             ActiveProfileIndex = 0;
-            BaudRateIndex = 0;
+            BaudRateIndex = 1;
             ScannerBaudRateIndex = 0;
             HardwareIndex = HardwareType.Automatic;
             ProtocolIndex = ProtocolType.Automatic;

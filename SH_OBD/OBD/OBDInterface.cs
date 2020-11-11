@@ -633,6 +633,8 @@ namespace SH_OBD {
             case HardwareType.ELM327:
                 m_log.TraceInfo("Set device to ELM327");
                 m_obdDevice = new OBDDeviceELM327(m_log, m_xattr);
+                // 青云谱工厂经常会意外断电导致串口波特率变成默认的9600，故这里直接设为38400
+                CommSettings.BaudRateIndex = 1;
                 break;
             case HardwareType.ELM320:
                 m_log.TraceInfo("Set device to ELM320");
