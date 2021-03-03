@@ -92,7 +92,7 @@
             // 
             // txtBoxVIN
             // 
-            this.txtBoxVIN.BackColor = System.Drawing.Color.SteelBlue;
+            this.txtBoxVIN.BackColor = System.Drawing.Color.LightBlue;
             this.txtBoxVIN.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.txtBoxVIN.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtBoxVIN.Font = new System.Drawing.Font("宋体", 50F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -124,7 +124,7 @@
             // 
             // btnAdvanceMode
             // 
-            this.btnAdvanceMode.BackColor = System.Drawing.Color.SkyBlue;
+            this.btnAdvanceMode.BackColor = System.Drawing.Color.SteelBlue;
             this.btnAdvanceMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnAdvanceMode.Font = new System.Drawing.Font("宋体", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnAdvanceMode.Location = new System.Drawing.Point(585, 6);
@@ -209,14 +209,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.SteelBlue;
+            this.BackColor = System.Drawing.Color.LightBlue;
             this.ClientSize = new System.Drawing.Size(784, 561);
             this.ContextMenuStrip = this.contextMenuStrip1;
             this.Controls.Add(this.tblLayoutMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "OBDStartForm";
-            this.Text = "江铃OBD检测";
+            this.Text = "OBD检测系统";
             this.Activated += new System.EventHandler(this.OBDStartForm_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OBDStartForm_FormClosing);
             this.Load += new System.EventHandler(this.OBDStartForm_Load);
