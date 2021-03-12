@@ -20,6 +20,7 @@ namespace SH_OBD {
             }
 
             List<string> legalLines = SplitByCR(response);
+            legalLines.Sort();
             legalLines = GetLegalLines(param, legalLines, headLenRaw);
             List<string> lines = new List<string>();
             foreach (string item in legalLines) {
