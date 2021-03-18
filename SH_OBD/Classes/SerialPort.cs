@@ -124,7 +124,7 @@ namespace SH_OBD {
             _serialPort.Handshake = Handshake.None;
             _serialPort.RtsEnable = false;
             _serialPort.ReadTimeout = 3000;
-            _serialPort.NewLine = "/r/n";
+            _serialPort.NewLine = Environment.NewLine;
             SetSerialPort();
         }
         #endregion

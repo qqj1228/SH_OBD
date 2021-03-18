@@ -168,7 +168,9 @@ namespace SH_OBD {
         /// <summary>
         /// 返回符合标准协议规定的CAN帧
         /// </summary>
+        /// <param name="param"></param>
         /// <param name="tempLines"></param>
+        /// <param name="headLen"></param>
         /// <returns></returns>
         private List<string> InternalGetLegalLinesCAN(OBDParameter param, List<string> tempLines, int headLen) {
             List<string> lines = new List<string>();
