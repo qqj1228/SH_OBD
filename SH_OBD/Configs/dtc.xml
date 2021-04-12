@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ArrayOfDTC xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ArrayOfDTC>
   <DTC>
     <Description>燃油量调节器控制电路/开路</Description>
     <Name>P0001</Name>
@@ -11301,18 +11301,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氮氧化物（NOx）的捕集器效率低于阈值（组1）</Description>
-    <Name>P2000</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>进气歧管通路控制电路低（组1）</Description>
     <Name>P2009</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氮氧化物（NOx）的捕集器效率低于阈值（组2）</Description>
-    <Name>P2001</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11321,23 +11311,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>柴油机微粒过滤器（DPF）效率低于阈值（组1）</Description>
-    <Name>P2002</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>进气歧管通路性能（组2）</Description>
     <Name>P200B</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>柴油机微粒过滤器（DPF）效率低于阈值（组2）</Description>
-    <Name>P2003</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>进气歧管通路控制卡在开的位置（组1）</Description>
-    <Name>P2004</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11346,28 +11321,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>进气歧管通路控制卡在开的位置（组2）</Description>
-    <Name>P2005</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>柴油机微粒过滤器（DPF）温度过高（组2）</Description>
     <Name>P200D</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>进气歧管通路控制卡在关的位置（组1）</Description>
-    <Name>P2006</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>催化转换器系统温度过高（组1）</Description>
     <Name>P200E</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>进气歧管通路控制卡在关的位置（组2）</Description>
-    <Name>P2007</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11376,18 +11336,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>进气歧管通路控制电路/开路（组1）</Description>
-    <Name>P2008</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>进气歧管通路控制电路高（组1）</Description>
     <Name>P2010</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>进气歧管通路控制电路低（组1）</Description>
-    <Name>P2009</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11396,18 +11346,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>进气歧管通路性能（组1）</Description>
-    <Name>P200A</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>进气歧管通路控制电路低（组2）</Description>
     <Name>P2012</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>进气歧管通路性能（组2）</Description>
-    <Name>P200B</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11416,28 +11356,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>柴油机微粒过滤器（DPF）温度过高（组1）</Description>
-    <Name>P200C</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>进气歧管通路位置传感器/开关电路故障（组1）</Description>
     <Name>P2014</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>柴油机微粒过滤器（DPF）温度过高（组2）</Description>
-    <Name>P200D</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>进气歧管通路位置传感器/开关电路范围/性能（组1）</Description>
     <Name>P2015</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>催化转换器系统温度过高（组1）</Description>
-    <Name>P200E</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11456,53 +11381,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>催化转换器系统温度过高（组2）</Description>
-    <Name>P200F</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>进气歧管通路位置传感器/开关电路故障（组2）</Description>
     <Name>P2019</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>进气歧管通路控制电路高（组1）</Description>
-    <Name>P2010</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂喷射阀门电路范围/性能（组2，第1个）</Description>
     <Name>P201A</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>进气歧管通路控制电路/开路（组2）</Description>
-    <Name>P2011</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>进气歧管通路控制电路低（组2）</Description>
-    <Name>P2012</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>进气歧管通路控制电路高（组2）</Description>
-    <Name>P2013</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>进气歧管通路位置传感器/开关电路故障（组1）</Description>
-    <Name>P2014</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>进气歧管通路位置传感器/开关电路范围/性能（组1）</Description>
-    <Name>P2015</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>进气歧管通路位置传感器/开关电路低（组1）</Description>
-    <Name>P2016</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11511,18 +11396,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>进气歧管通路位置传感器/开关电路高（组1）</Description>
-    <Name>P2017</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>进气歧管通路位置传感器/开关电路低（组2）</Description>
     <Name>P2021</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>进气歧管通路位置传感器/开关电路间歇（组1）</Description>
-    <Name>P2018</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11531,18 +11406,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>进气歧管通路位置传感器/开关电路故障（组2）</Description>
-    <Name>P2019</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>进气歧管通路位置传感器/开关电路间歇（组2）</Description>
     <Name>P2023</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂喷射阀门电路范围/性能（组2，第1个）</Description>
-    <Name>P201A</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11576,18 +11441,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>进气歧管通路位置传感器/开关电路范围/性能（组2）</Description>
-    <Name>P2020</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂箱加热器控制电路/开路</Description>
     <Name>P202A</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>进气歧管通路位置传感器/开关电路低（组2）</Description>
-    <Name>P2021</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11596,18 +11451,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>进气歧管通路位置传感器/开关电路高（组2）</Description>
-    <Name>P2022</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂箱加热器控制电路高</Description>
     <Name>P202C</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>进气歧管通路位置传感器/开关电路间歇（组2）</Description>
-    <Name>P2023</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11616,18 +11461,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>蒸发排放（EVAP）燃油蒸气温度传感器电路</Description>
-    <Name>P2024</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂喷射阀门电路范围/性能（组1，第1个）</Description>
     <Name>P202E</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>蒸发排放（EVAP）燃油蒸气温度传感器性能</Description>
-    <Name>P2025</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11636,28 +11471,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>蒸发排放（EVAP）燃油蒸气温度传感器电路低电压</Description>
-    <Name>P2026</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>烧燃油的加热器性能问题</Description>
     <Name>P2030</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>蒸发排放（EVAP）燃油蒸气温度传感器电路高电压</Description>
-    <Name>P2027</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>排气温度传感器电路（组1，传感器 2）</Description>
     <Name>P2031</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>蒸发排放（EVAP）燃油蒸气温度传感器电路间歇</Description>
-    <Name>P2028</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11666,18 +11486,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>烧燃油的加热器被禁用</Description>
-    <Name>P2029</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>排气温度传感器电路高（组1，传感器 2）</Description>
     <Name>P2033</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂箱加热器控制电路/开路</Description>
-    <Name>P202A</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11686,18 +11496,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂箱加热器控制电路低</Description>
-    <Name>P202B</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>排气温度传感器电路低（组2，传感器 2）</Description>
     <Name>P2035</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂箱加热器控制电路高</Description>
-    <Name>P202C</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11706,38 +11506,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂泄漏</Description>
-    <Name>P202D</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂喷射空气压力传感器电路</Description>
     <Name>P2037</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂喷射阀门电路范围/性能（组1，第1个）</Description>
-    <Name>P202E</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂喷射空气压力传感器电路范围/性能</Description>
     <Name>P2038</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂/再生供应控制电路范围/性能</Description>
-    <Name>P202F</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>烧燃油的加热器性能问题</Description>
-    <Name>P2030</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>排气温度传感器电路（组1，传感器 2）</Description>
-    <Name>P2031</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11746,18 +11521,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>排气温度传感器电路低（组1，传感器 2）</Description>
-    <Name>P2032</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂液位传感器电路</Description>
     <Name>P203A</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>排气温度传感器电路高（组1，传感器 2）</Description>
-    <Name>P2033</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11766,18 +11531,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>排气温度传感器电路（组2，传感器 2）</Description>
-    <Name>P2034</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂液位传感器电路低</Description>
     <Name>P203C</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>排气温度传感器电路低（组2，传感器 2）</Description>
-    <Name>P2035</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11786,28 +11541,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>排气温度传感器电路高（组2，传感器 2）</Description>
-    <Name>P2036</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂液位传感器电路间歇/不稳定</Description>
     <Name>P203E</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂喷射空气压力传感器电路</Description>
-    <Name>P2037</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂液位太低</Description>
     <Name>P203F</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂喷射空气压力传感器电路范围/性能</Description>
-    <Name>P2038</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11816,18 +11556,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂喷射空气压力传感器电路低</Description>
-    <Name>P2039</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂喷射空气压力传感器A电路间歇</Description>
     <Name>P2041</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂液位传感器电路</Description>
-    <Name>P203A</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11836,18 +11566,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂液位传感器电路范围/性能</Description>
-    <Name>P203B</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂温度传感器电路范围/性能</Description>
     <Name>P2043</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂液位传感器电路低</Description>
-    <Name>P203C</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11856,28 +11576,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂液位传感器电路高</Description>
-    <Name>P203D</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂温度传感器电路高</Description>
     <Name>P2045</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂液位传感器电路间歇/不稳定</Description>
-    <Name>P203E</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂温度传感器电路间歇</Description>
     <Name>P2046</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂液位太低</Description>
-    <Name>P203F</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11886,18 +11591,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂喷射空气压力传感器A电路高</Description>
-    <Name>P2040</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂喷射阀门电路低（组1，第1个）</Description>
     <Name>P2048</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂喷射空气压力传感器A电路间歇</Description>
-    <Name>P2041</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11906,18 +11601,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂温度传感器电路</Description>
-    <Name>P2042</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂压力传感器电路</Description>
     <Name>P204A</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂温度传感器电路范围/性能</Description>
-    <Name>P2043</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11926,28 +11611,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂温度传感器电路低</Description>
-    <Name>P2044</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂压力传感器电路低</Description>
     <Name>P204C</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂温度传感器电路高</Description>
-    <Name>P2045</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂压力传感器电路高</Description>
     <Name>P204D</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂温度传感器电路间歇</Description>
-    <Name>P2046</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11966,28 +11636,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂喷射阀门电路/开路（组1，第1个）</Description>
-    <Name>P2047</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂喷射阀门电路低（组2，第1个）</Description>
     <Name>P2051</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂喷射阀门电路低（组1，第1个）</Description>
-    <Name>P2048</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂喷射阀门电路高（组2，第1个）</Description>
     <Name>P2052</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂喷射阀门电路高（组1，第1个）</Description>
-    <Name>P2049</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -11996,18 +11651,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂压力传感器电路</Description>
-    <Name>P204A</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂喷射阀门电路低（组1，第2个）</Description>
     <Name>P2054</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂压力传感器电路范围/性能</Description>
-    <Name>P204B</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12016,18 +11661,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂压力传感器电路低</Description>
-    <Name>P204C</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂喷射阀门电路/开路（组2，第2个）</Description>
     <Name>P2056</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂压力传感器电路高</Description>
-    <Name>P204D</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12036,18 +11671,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂压力传感器电路间歇/不稳定</Description>
-    <Name>P204E</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂喷射阀门电路高（组2，第2个）</Description>
     <Name>P2058</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂系统性能（组1）</Description>
-    <Name>P204F</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12056,28 +11681,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂喷射阀门电路/开路（组2，第1个）</Description>
-    <Name>P2050</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂箱温度传感器电路</Description>
     <Name>P205A</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂喷射阀门电路低（组2，第1个）</Description>
-    <Name>P2051</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂箱温度传感器电路范围/性能</Description>
     <Name>P205B</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂喷射阀门电路高（组2，第1个）</Description>
-    <Name>P2052</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12086,18 +11696,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂喷射阀门电路/开路（组1，第2个）</Description>
-    <Name>P2053</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂箱温度传感器电路高</Description>
     <Name>P205D</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂喷射阀门电路低（组1，第2个）</Description>
-    <Name>P2054</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12106,18 +11706,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂喷射阀门电路高（组1，第2个）</Description>
-    <Name>P2055</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂系统性能（组2）</Description>
     <Name>P205F</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂喷射阀门电路/开路（组2，第2个）</Description>
-    <Name>P2056</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12126,18 +11716,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂喷射阀门电路低（组2，第2个）</Description>
-    <Name>P2057</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂喷射空气泵控制电路高</Description>
     <Name>P2061</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂喷射阀门电路高（组2，第2个）</Description>
-    <Name>P2058</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12146,28 +11726,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂喷射空气泵控制电路/开路</Description>
-    <Name>P2059</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂/再生供应控制电路低</Description>
     <Name>P2063</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂箱温度传感器电路</Description>
-    <Name>P205A</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂/再生供应控制电路高</Description>
     <Name>P2064</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂箱温度传感器电路范围/性能</Description>
-    <Name>P205B</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12181,18 +11746,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂箱温度传感器电路低</Description>
-    <Name>P205C</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>燃油液位传感器B电路低</Description>
     <Name>P2067</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂箱温度传感器电路高</Description>
-    <Name>P205D</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12201,18 +11756,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂箱温度传感器电路间歇/不稳定</Description>
-    <Name>P205E</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>燃油液位传感器B电路间歇</Description>
     <Name>P2069</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂系统性能（组2）</Description>
-    <Name>P205F</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12221,18 +11766,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂喷射空气泵控制电路低</Description>
-    <Name>P2060</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂质量（品质）传感器电路范围/性能</Description>
     <Name>P206B</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂喷射空气泵控制电路高</Description>
-    <Name>P2061</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12241,18 +11776,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂/再生供应控制电路/开路</Description>
-    <Name>P2062</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂质量（品质）传感器电路高</Description>
     <Name>P206D</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂/再生供应控制电路低</Description>
-    <Name>P2063</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12261,18 +11786,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂/再生供应控制电路高</Description>
-    <Name>P2064</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>进气歧管调谐（IMT）阀门卡在关闭位置 （组2）</Description>
     <Name>P206F</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油液位传感器B电路</Description>
-    <Name>P2065</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12281,18 +11796,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>燃油液位传感器B性能</Description>
-    <Name>P2066</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>进气歧管调谐（IMT）阀门卡在关闭位置 （组1）</Description>
     <Name>P2071</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油液位传感器B电路低</Description>
-    <Name>P2067</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12301,18 +11806,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>燃油液位传感器B电路高</Description>
-    <Name>P2068</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>歧管绝对压力（传感器）/空气流量（传感器） - 节气门位置在怠速时的相关性</Description>
     <Name>P2073</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油液位传感器B电路间歇</Description>
-    <Name>P2069</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12321,18 +11816,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂质量（品质）传感器电路</Description>
-    <Name>P206A</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>进气歧管调谐（IMT）阀门位置传感器/开关电路 （组1）</Description>
     <Name>P2075</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂质量（品质）传感器电路范围/性能</Description>
-    <Name>P206B</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12341,18 +11826,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂质量（品质）传感器电路低</Description>
-    <Name>P206C</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>进气歧管调谐（IMT）阀门位置传感器/开关电路低 （组1）</Description>
     <Name>P2077</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂质量（品质）传感器电路高</Description>
-    <Name>P206D</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12361,18 +11836,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>进气歧管调谐（IMT）阀门卡在开启位置 （组2）</Description>
-    <Name>P206E</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>进气歧管调谐（IMT）阀门位置传感器/开关电路间歇 （组1）</Description>
     <Name>P2079</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>进气歧管调谐（IMT）阀门卡在关闭位置 （组2）</Description>
-    <Name>P206F</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12381,18 +11846,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>进气歧管调谐（IMT）阀门卡在开启位置 （组1）</Description>
-    <Name>P2070</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>进气歧管调谐（IMT）阀门位置传感器/开关电路范围/性能 （组2）</Description>
     <Name>P207B</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>进气歧管调谐（IMT）阀门卡在关闭位置 （组1）</Description>
-    <Name>P2071</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12401,23 +11856,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门执行器控制系统 - 被冰堵住</Description>
-    <Name>P2072</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>进气歧管调谐（IMT）阀门位置传感器/开关电路高 （组2）</Description>
     <Name>P207D</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>歧管绝对压力（传感器）/空气流量（传感器） - 节气门位置在怠速时的相关性</Description>
-    <Name>P2073</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>歧管绝对压力（传感器）/空气流量（传感器） - 节气门位置在更高负荷时的相关性</Description>
-    <Name>P2074</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12426,28 +11866,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>进气歧管调谐（IMT）阀门位置传感器/开关电路 （组1）</Description>
-    <Name>P2075</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂质量（品质）性能</Description>
     <Name>P207F</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>进气歧管调谐（IMT）阀门位置传感器/开关电路范围/性能 （组1）</Description>
-    <Name>P2076</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>排气温度传感器电路范围/性能（组1，传感器 1）</Description>
     <Name>P2080</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>进气歧管调谐（IMT）阀门位置传感器/开关电路低 （组1）</Description>
-    <Name>P2077</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12456,18 +11881,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>进气歧管调谐（IMT）阀门位置传感器/开关电路高 （组1）</Description>
-    <Name>P2078</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>排气温度传感器电路范围/性能（组2，传感器 1）</Description>
     <Name>P2082</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>进气歧管调谐（IMT）阀门位置传感器/开关电路间歇 （组1）</Description>
-    <Name>P2079</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12476,18 +11891,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>进气歧管调谐（IMT）阀门位置传感器/开关电路 （组2）</Description>
-    <Name>P207A</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>排气温度传感器电路范围/性能（组1，传感器 2）</Description>
     <Name>P2084</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>进气歧管调谐（IMT）阀门位置传感器/开关电路范围/性能 （组2）</Description>
-    <Name>P207B</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12496,18 +11901,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>进气歧管调谐（IMT）阀门位置传感器/开关电路低 （组2）</Description>
-    <Name>P207C</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>排气温度传感器电路范围/性能（组2，传感器 2）</Description>
     <Name>P2086</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>进气歧管调谐（IMT）阀门位置传感器/开关电路高 （组2）</Description>
-    <Name>P207D</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12516,28 +11911,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>进气歧管调谐（IMT）阀门位置传感器/开关电路间歇 （组2）</Description>
-    <Name>P207E</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>A凸轮轴位置执行器控制电路低（组1）</Description>
     <Name>P2088</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂质量（品质）性能</Description>
-    <Name>P207F</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>A（进气/左/前） 凸轮轴位置执行器控制电路高（组1）</Description>
     <Name>P2089</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>排气温度传感器电路范围/性能（组1，传感器 1）</Description>
-    <Name>P2080</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12546,18 +11926,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>排气温度传感器电路间歇（组1传感器 1）</Description>
-    <Name>P2081</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂泵控制范围/性能</Description>
     <Name>P208B</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>排气温度传感器电路范围/性能（组2，传感器 1）</Description>
-    <Name>P2082</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12566,18 +11936,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>排气温度传感器电路间歇（组2，传感器 1）</Description>
-    <Name>P2083</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂泵控制电路高</Description>
     <Name>P208D</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>排气温度传感器电路范围/性能（组1，传感器 2）</Description>
-    <Name>P2084</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12586,18 +11946,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>排气温度传感器电路间歇（组1，传感器 2）</Description>
-    <Name>P2085</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂喷射阀门卡在关闭的位置（组2，第1个）</Description>
     <Name>P208F</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>排气温度传感器电路范围/性能（组2，传感器 2）</Description>
-    <Name>P2086</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12606,28 +11956,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>排气温度传感器电路间歇（组2，传感器 2）</Description>
-    <Name>P2087</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>B凸轮轴位置执行器控制电路高（组1）</Description>
     <Name>P2091</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>A凸轮轴位置执行器控制电路低（组1）</Description>
-    <Name>P2088</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>A（进气/左/前） 凸轮轴位置执行器控制电路低（组2）</Description>
     <Name>P2092</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>A（进气/左/前） 凸轮轴位置执行器控制电路高（组1）</Description>
-    <Name>P2089</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12636,18 +11971,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂泵控制电路/开路</Description>
-    <Name>P208A</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>B（排气/右/后） 凸轮轴位置执行器控制电路低（组2）</Description>
     <Name>P2094</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂泵控制范围/性能</Description>
-    <Name>P208B</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12656,18 +11981,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂泵控制电路低</Description>
-    <Name>P208C</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>后催化转换器燃油修剪系统（混和比）太稀（组1）</Description>
     <Name>P2096</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂泵控制电路高</Description>
-    <Name>P208D</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12676,18 +11991,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂喷射阀门卡在关闭的位置（组1，第1个）</Description>
-    <Name>P208E</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>后催化转换器燃油修剪系统（混和比）太稀（组2）</Description>
     <Name>P2098</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂喷射阀门卡在关闭的位置（组2，第1个）</Description>
-    <Name>P208F</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12696,28 +12001,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>B凸轮轴位置执行器控制电路低（组1）</Description>
-    <Name>P2090</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂喷射空气压力传感器B电路</Description>
     <Name>P209A</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>B凸轮轴位置执行器控制电路高（组1）</Description>
-    <Name>P2091</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂喷射空气压力传感器B电路范围/性能</Description>
     <Name>P209B</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>A（进气/左/前） 凸轮轴位置执行器控制电路低（组2）</Description>
-    <Name>P2092</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12726,18 +12016,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>A（进气/左/前） 凸轮轴位置执行器控制电路高（组2）</Description>
-    <Name>P2093</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂喷射空气压力传感器B电路高</Description>
     <Name>P209D</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>B（排气/右/后） 凸轮轴位置执行器控制电路低（组2）</Description>
-    <Name>P2094</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12746,18 +12026,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>B（排气/右/后） 凸轮轴位置执行器控制电路高（组2）</Description>
-    <Name>P2095</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂箱加热器控制电路性能</Description>
     <Name>P209F</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>后催化转换器燃油修剪系统（混和比）太稀（组1）</Description>
-    <Name>P2096</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12766,18 +12036,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>后催化转换器燃油修剪系统（混和比）太浓（组1）</Description>
-    <Name>P2097</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂吹扫控制阀门性能</Description>
     <Name>P20A1</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>后催化转换器燃油修剪系统（混和比）太稀（组2）</Description>
-    <Name>P2098</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12786,28 +12046,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>后催化转换器燃油修剪系统（混和比）太浓（组2）</Description>
-    <Name>P2099</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂吹扫控制阀门电路高</Description>
     <Name>P20A3</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂喷射空气压力传感器B电路</Description>
-    <Name>P209A</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂吹扫控制阀门卡在开的位置</Description>
     <Name>P20A4</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂喷射空气压力传感器B电路范围/性能</Description>
-    <Name>P209B</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12821,23 +12066,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂喷射空气压力传感器B电路低</Description>
-    <Name>P209C</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂喷射空气压力控制阀门性能</Description>
     <Name>P20A7</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂喷射空气压力传感器B电路高</Description>
-    <Name>P209D</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂喷射空气压力传感器A/B电路相关性</Description>
-    <Name>P209E</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12851,11 +12081,6 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂箱加热器控制电路性能</Description>
-    <Name>P209F</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂喷射空气压力控制阀门卡在开的位置</Description>
     <Name>P20AA</Name>
     <Category>燃油，空气或排放控制</Category>
@@ -12863,11 +12088,6 @@
   <DTC>
     <Description>还原剂喷射空气压力控制阀门卡在关的位置</Description>
     <Name>P20AB</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂吹扫控制阀门电路/开路</Description>
-    <Name>P20A0</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12876,18 +12096,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂吹扫控制阀门性能</Description>
-    <Name>P20A1</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂计量设备温度传感器电路范围/性能</Description>
     <Name>P20AD</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂吹扫控制阀门电路低</Description>
-    <Name>P20A2</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12896,18 +12106,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂吹扫控制阀门电路高</Description>
-    <Name>P20A3</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂计量设备温度传感器电路高</Description>
     <Name>P20AF</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂吹扫控制阀门卡在开的位置</Description>
-    <Name>P20A4</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12916,18 +12116,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂吹扫控制阀门卡在关的位置</Description>
-    <Name>P20A5</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂加热器冷却液控制阀门电路/开路</Description>
     <Name>P20B1</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂喷射空气压力控制阀门电路/开路</Description>
-    <Name>P20A6</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12936,38 +12126,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂喷射空气压力控制阀门性能</Description>
-    <Name>P20A7</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂加热器冷却液控制阀门电路低</Description>
     <Name>P20B3</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂喷射空气压力控制阀门电路低</Description>
-    <Name>P20A8</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂加热器冷却液控制阀门电路高</Description>
     <Name>P20B4</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂喷射空气压力控制阀门电路高</Description>
-    <Name>P20A9</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂喷射空气压力控制阀门卡在开的位置</Description>
-    <Name>P20AA</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂喷射空气压力控制阀门卡在关的位置</Description>
-    <Name>P20AB</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12976,18 +12141,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂计量设备温度传感器电路</Description>
-    <Name>P20AC</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂计量设备加热器控制电路性能</Description>
     <Name>P20B6</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂计量设备温度传感器电路范围/性能</Description>
-    <Name>P20AD</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -12996,18 +12151,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂计量设备温度传感器电路低</Description>
-    <Name>P20AE</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂计量设备加热器控制电路高</Description>
     <Name>P20B8</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂计量设备温度传感器电路高</Description>
-    <Name>P20AF</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13016,18 +12161,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂计量设备温度传感器电路间歇/不稳定</Description>
-    <Name>P20B0</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂加热器A控制电路性能</Description>
     <Name>P20BA</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂加热器冷却液控制阀门电路/开路</Description>
-    <Name>P20B1</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13036,28 +12171,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂加热器冷却液控制阀门性能</Description>
-    <Name>P20B2</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂加热器A控制电路高</Description>
     <Name>P20BC</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂加热器冷却液控制阀门电路低</Description>
-    <Name>P20B3</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂加热器B控制电路/开路</Description>
     <Name>P20BD</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂加热器冷却液控制阀门电路高</Description>
-    <Name>P20B4</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13066,18 +12186,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂计量设备加热器控制电路/开路</Description>
-    <Name>P20B5</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂加热器B控制电路低</Description>
     <Name>P20BF</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂计量设备加热器控制电路性能</Description>
-    <Name>P20B6</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13086,18 +12196,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂计量设备加热器控制电路低</Description>
-    <Name>P20B7</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂加热器C控制电路/开路</Description>
     <Name>P20C1</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂计量设备加热器控制电路高</Description>
-    <Name>P20B8</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13106,18 +12206,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂加热器A控制电路/开路</Description>
-    <Name>P20B9</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂加热器C控制电路低</Description>
     <Name>P20C3</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂加热器A控制电路性能</Description>
-    <Name>P20BA</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13126,28 +12216,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂加热器A控制电路低</Description>
-    <Name>P20BB</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂加热器D控制电路/开路</Description>
     <Name>P20C5</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂加热器A控制电路高</Description>
-    <Name>P20BC</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂加热器D控制电路性能</Description>
     <Name>P20C6</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂加热器B控制电路/开路</Description>
-    <Name>P20BD</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13156,18 +12231,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂加热器B控制电路性能</Description>
-    <Name>P20BE</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂加热器D控制电路高</Description>
     <Name>P20C8</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂加热器B控制电路低</Description>
-    <Name>P20BF</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13176,18 +12241,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂加热器B控制电路高</Description>
-    <Name>P20C0</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂喷射空气压力泄漏</Description>
     <Name>P20CA</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂加热器C控制电路/开路</Description>
-    <Name>P20C1</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13196,18 +12251,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂加热器C控制电路性能</Description>
-    <Name>P20C2</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>尾气后处理喷油器A控制性能</Description>
     <Name>P20CC</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂加热器C控制电路低</Description>
-    <Name>P20C3</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13216,28 +12261,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂加热器C控制电路高</Description>
-    <Name>P20C4</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>尾气后处理喷油器A控制电路高</Description>
     <Name>P20CE</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂加热器D控制电路/开路</Description>
-    <Name>P20C5</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>尾气后处理喷油器A卡在开的位置</Description>
     <Name>P20CF</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂加热器D控制电路性能</Description>
-    <Name>P20C6</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13246,18 +12276,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂加热器D控制电路低</Description>
-    <Name>P20C7</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>尾气后处理喷油器B控制电路/开路</Description>
     <Name>P20D1</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂加热器D控制电路高</Description>
-    <Name>P20C8</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13266,18 +12286,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂控制模块请求点亮故障指示灯（MIL）</Description>
-    <Name>P20C9</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>尾气后处理喷油器B控制电路低</Description>
     <Name>P20D3</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂喷射空气压力泄漏</Description>
-    <Name>P20CA</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13286,18 +12296,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>尾气后处理喷油器A控制电路/开路</Description>
-    <Name>P20CB</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>尾气后处理喷油器B卡在开的位置</Description>
     <Name>P20D5</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>尾气后处理喷油器A控制性能</Description>
-    <Name>P20CC</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13306,28 +12306,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>尾气后处理喷油器A控制电路低</Description>
-    <Name>P20CD</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>尾气后处理燃油供应控制电路/开路</Description>
     <Name>P20D7</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>尾气后处理喷油器A控制电路高</Description>
-    <Name>P20CE</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>尾气后处理燃油供应控制性能</Description>
     <Name>P20D8</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>尾气后处理喷油器A卡在开的位置</Description>
-    <Name>P20CF</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13336,18 +12321,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>尾气后处理喷油器A卡在关的位置</Description>
-    <Name>P20D0</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>尾气后处理燃油供应控制电路高</Description>
     <Name>P20DA</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>尾气后处理喷油器B控制电路/开路</Description>
-    <Name>P20D1</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13356,18 +12331,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>尾气后处理喷油器B控制性能</Description>
-    <Name>P20D2</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>尾气后处理燃油供应控制卡在关的位置</Description>
     <Name>P20DC</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>尾气后处理喷油器B控制电路低</Description>
-    <Name>P20D3</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13376,18 +12341,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>尾气后处理喷油器B控制电路高</Description>
-    <Name>P20D4</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>尾气后处理燃油压力传感器电路范围/性能</Description>
     <Name>P20DE</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>尾气后处理喷油器B卡在开的位置</Description>
-    <Name>P20D5</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13396,28 +12351,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>尾气后处理喷油器B卡在关的位置</Description>
-    <Name>P20D6</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>尾气后处理燃油压力传感器电路高</Description>
     <Name>P20E0</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>尾气后处理燃油供应控制电路/开路</Description>
-    <Name>P20D7</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>尾气后处理燃油压力传感器电路间歇/不稳定</Description>
     <Name>P20E1</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>尾气后处理燃油供应控制性能</Description>
-    <Name>P20D8</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13426,28 +12366,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>尾气后处理燃油供应控制电路低</Description>
-    <Name>P20D9</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>尾气后处理燃油供应控制电路高</Description>
-    <Name>P20DA</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>尾气后处理燃油供应控制卡在开的位置</Description>
-    <Name>P20DB</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>尾气温度传感器1/3相关性（组1）</Description>
     <Name>P20E3</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>尾气后处理燃油供应控制卡在关的位置</Description>
-    <Name>P20DC</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13456,18 +12376,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>尾气后处理燃油压力传感器电路</Description>
-    <Name>P20DD</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>尾气温度传感器1/2相关性（组2）</Description>
     <Name>P20E5</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>尾气后处理燃油压力传感器电路范围/性能</Description>
-    <Name>P20DE</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13476,28 +12386,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>尾气后处理燃油压力传感器电路低</Description>
-    <Name>P20DF</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂喷射空气压力太高</Description>
     <Name>P20E7</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>尾气后处理燃油压力传感器电路高</Description>
-    <Name>P20E0</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂压力太低</Description>
     <Name>P20E8</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>尾气后处理燃油压力传感器电路间歇/不稳定</Description>
-    <Name>P20E1</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13506,18 +12401,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>尾气温度传感器1/2相关性（组1）</Description>
-    <Name>P20E2</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂控制模块电源继电器去能性能 - 太早</Description>
     <Name>P20EA</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>尾气温度传感器1/3相关性（组1）</Description>
-    <Name>P20E3</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13526,18 +12411,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>尾气温度传感器2/3相关性（组1）</Description>
-    <Name>P20E4</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>选择性催化还原（SCR）氮氧化合物催化转换器 - 温度过高（组1）</Description>
     <Name>P20EC</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>尾气温度传感器1/2相关性（组2）</Description>
-    <Name>P20E5</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13546,28 +12421,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂喷射空气压力太低</Description>
-    <Name>P20E6</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>选择性催化还原（SCR）氮氧化合物催化转换器 - 效率低于阈值（组1）</Description>
     <Name>P20EE</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂喷射空气压力太高</Description>
-    <Name>P20E7</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>选择性催化还原（SCR）氮氧化合物前催化转换器 - 效率低于阈值（组1）</Description>
     <Name>P20EF</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂压力太低</Description>
-    <Name>P20E8</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13576,18 +12436,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂压力太高</Description>
-    <Name>P20E9</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>选择性催化还原（SCR）氮氧化合物前催化转换器 - 温度过高（组2）</Description>
     <Name>P20F1</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂控制模块电源继电器去能性能 - 太早</Description>
-    <Name>P20EA</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13596,18 +12446,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>还原剂控制模块电源继电器去能性能 - 太晚</Description>
-    <Name>P20EB</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>选择性催化还原（SCR）氮氧化合物前催化转换器 - 效率低于阈值（组2）</Description>
     <Name>P20F3</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>选择性催化还原（SCR）氮氧化合物催化转换器 - 温度过高（组1）</Description>
-    <Name>P20EC</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13616,68 +12456,18 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>选择性催化还原（SCR）氮氧化合物前催化转换器 - 温度过高（组1）</Description>
-    <Name>P20ED</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂消耗太高</Description>
     <Name>P20F5</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>选择性催化还原（SCR）氮氧化合物催化转换器 - 效率低于阈值（组1）</Description>
-    <Name>P20EE</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>还原剂喷射阀门开在开的位置（组1 第1个）</Description>
     <Name>P20F6</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>选择性催化还原（SCR）氮氧化合物前催化转换器 - 效率低于阈值（组1）</Description>
-    <Name>P20EF</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
     <Description>还原剂喷射阀门开在开的位置（组2 第1个）</Description>
     <Name>P20F7</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>选择性催化还原（SCR）氮氧化合物催化转换器 - 温度过高（组2）</Description>
-    <Name>P20F0</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>选择性催化还原（SCR）氮氧化合物前催化转换器 - 温度过高（组2）</Description>
-    <Name>P20F1</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>选择性催化还原（SCR）氮氧化合物催化转换器 - 效率低于阈值（组2）</Description>
-    <Name>P20F2</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>选择性催化还原（SCR）氮氧化合物前催化转换器 - 效率低于阈值（组2）</Description>
-    <Name>P20F3</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂消耗太低</Description>
-    <Name>P20F4</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂消耗太高</Description>
-    <Name>P20F5</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂喷射阀门开在开的位置（组1 第1个）</Description>
-    <Name>P20F6</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13688,11 +12478,6 @@
   <DTC>
     <Description>节气门执行器A控制电机（TACM）电路范围/性能</Description>
     <Name>P2101</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>还原剂喷射阀门开在开的位置（组2 第1个）</Description>
-    <Name>P20F7</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13741,18 +12526,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门执行器A控制电机电路/开路</Description>
-    <Name>P2100</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>节气门执行器B控制电机电路范围/性能</Description>
     <Name>P210B</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门执行器A控制电机（TACM）电路范围/性能</Description>
-    <Name>P2101</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13761,18 +12536,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门执行器A控制电机电路低</Description>
-    <Name>P2102</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>节气门执行器B控制电机电路高</Description>
     <Name>P210D</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门执行器A控制电机电路高</Description>
-    <Name>P2103</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13781,23 +12546,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门执行器控制系统 - （发动机）被强迫怠速</Description>
-    <Name>P2104</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门执行器控制系统 - 发动机被强迫关闭</Description>
-    <Name>P2105</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>节气门执行器控制系统 - （发动机）被强迫限制转速</Description>
     <Name>P2110</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门执行器控制系统 - （发动机）被强迫限制功率</Description>
-    <Name>P2106</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13806,28 +12556,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门执行器控制模块微处理器</Description>
-    <Name>P2107</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>节气门执行器控制系统 - 卡在关的位置</Description>
     <Name>P2112</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门执行器控制模块性能</Description>
-    <Name>P2108</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>节气门/油门踏板位置传感器B最小停止位置的性能</Description>
     <Name>P2113</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器A最小停止位置性能</Description>
-    <Name>P2109</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13836,18 +12571,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门执行器B控制电机电路/开路</Description>
-    <Name>P210A</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>节气门/油门踏板位置传感器D最小停止位置的性能</Description>
     <Name>P2115</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门执行器B控制电机电路范围/性能</Description>
-    <Name>P210B</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13856,18 +12581,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门执行器B控制电机电路低</Description>
-    <Name>P210C</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>节气门/油门踏板位置传感器F最小停止位置的性能</Description>
     <Name>P2117</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门执行器B控制电机电路高</Description>
-    <Name>P210D</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13876,33 +12591,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门/踏板位置传感器/开关C/F电压的相关性</Description>
-    <Name>P210E</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>节气门执行器控制节气门体范围/性能</Description>
     <Name>P2119</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门执行器控制系统 - （发动机）被强迫限制转速</Description>
-    <Name>P2110</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门执行器控制系统 - 卡在开的位置</Description>
-    <Name>P2111</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门执行器控制系统 - 卡在关的位置</Description>
-    <Name>P2112</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器B最小停止位置的性能</Description>
-    <Name>P2113</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13911,18 +12601,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门/油门踏板位置传感器C最小停止位置的性能</Description>
-    <Name>P2114</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>节气门/油门踏板位置传感器/开关D 电路范围/性能</Description>
     <Name>P2121</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器D最小停止位置的性能</Description>
-    <Name>P2115</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13931,18 +12611,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门/油门踏板位置传感器E最小停止位置的性能</Description>
-    <Name>P2116</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>节气门/油门踏板位置传感器/开关D 电路高</Description>
     <Name>P2123</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器F最小停止位置的性能</Description>
-    <Name>P2117</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -13951,18 +12621,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门执行器控制电机电流范围/性能</Description>
-    <Name>P2118</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>节气门/油门踏板位置传感器/开关E 电路</Description>
     <Name>P2125</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门执行器控制节气门体范围/性能</Description>
-    <Name>P2119</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14001,18 +12661,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门/油门踏板位置传感器/开关D 电路</Description>
-    <Name>P2120</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>节气门位置（TP）传感器/开关G 电路高</Description>
     <Name>P212D</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器/开关D 电路范围/性能</Description>
-    <Name>P2121</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14021,23 +12671,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门/油门踏板位置传感器/开关D 电路低</Description>
-    <Name>P2122</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器/开关D 电路高</Description>
-    <Name>P2123</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>节气门/油门踏板位置传感器/开关F 电路</Description>
     <Name>P2130</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器/开关D 电路间歇</Description>
-    <Name>P2124</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14046,18 +12681,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门/油门踏板位置传感器/开关E 电路</Description>
-    <Name>P2125</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>节气门/油门踏板位置传感器/开关F 电路低</Description>
     <Name>P2132</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器/开关E 电路范围/性能</Description>
-    <Name>P2126</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14066,18 +12691,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门/油门踏板位置传感器/开关E 电路低</Description>
-    <Name>P2127</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>节气门/油门踏板位置传感器/开关F 电路间歇</Description>
     <Name>P2134</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器/开关E 电路高</Description>
-    <Name>P2128</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14086,18 +12701,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门/油门踏板位置传感器/开关E 电路间歇</Description>
-    <Name>P2129</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>节气门/油门踏板位置传感器/开关A/C电压相关性</Description>
     <Name>P2136</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门位置（TP）传感器/开关G 电路</Description>
-    <Name>P212A</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14106,18 +12711,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门位置（TP）传感器/开关G 电路范围/性能</Description>
-    <Name>P212B</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>节气门/油门踏板位置传感器/开关D/E电压相关性</Description>
     <Name>P2138</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门位置（TP）传感器/开关G 电路低</Description>
-    <Name>P212C</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14126,143 +12721,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门位置（TP）传感器/开关G 电路高</Description>
-    <Name>P212D</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>废气再循环节气门控制电路B/开路</Description>
     <Name>P213A</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门位置（TP）传感器/开关G 电路间歇</Description>
-    <Name>P212E</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>废气再循环节气门控制电路B范围/性能</Description>
     <Name>P213B</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器/开关F 电路</Description>
-    <Name>P2130</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>废气再循环节气门控制电路B低</Description>
-    <Name>P213C</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器/开关F 电路范围/性能</Description>
-    <Name>P2131</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>废气再循环节气门控制电路B高</Description>
-    <Name>P213D</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器/开关F 电路低</Description>
-    <Name>P2132</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油喷射系统错误 - 发动机被强迫关闭</Description>
-    <Name>P213E</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器/开关F 电路高</Description>
-    <Name>P2133</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油泵系统错误 - 发动机被强迫关闭</Description>
-    <Name>P213F</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器/开关F 电路间歇</Description>
-    <Name>P2134</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器/开关E/F电压相关性</Description>
-    <Name>P2140</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器/开关A/B电压相关性</Description>
-    <Name>P2135</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>废气再循环节气门控制电路A低</Description>
-    <Name>P2141</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器/开关A/C电压相关性</Description>
-    <Name>P2136</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>废气再循环节气门控制电路A高</Description>
-    <Name>P2142</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器/开关B/C电压相关性</Description>
-    <Name>P2137</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>废气再循环通风控制电路/开路</Description>
-    <Name>P2143</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器/开关D/E电压相关性</Description>
-    <Name>P2138</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>废气再循环通风控制电路低</Description>
-    <Name>P2144</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器/开关D/F电压相关性</Description>
-    <Name>P2139</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>废气再循环通风控制电路高</Description>
-    <Name>P2145</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>废气再循环节气门控制电路B/开路</Description>
-    <Name>P213A</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油喷射器A组电源电压电路/开路</Description>
-    <Name>P2146</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>废气再循环节气门控制电路B范围/性能</Description>
-    <Name>P213B</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油喷射器A组电源电压电路低</Description>
-    <Name>P2147</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14281,18 +12746,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>燃油喷射器A组电源电压电路高</Description>
-    <Name>P2148</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>燃油泵系统错误 - 发动机被强迫关闭</Description>
     <Name>P213F</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油喷射器B组电源电压电路/开路</Description>
-    <Name>P2149</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14331,18 +12786,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>燃油喷射器B组电源电压电路低</Description>
-    <Name>P2150</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>燃油喷射器A组电源电压电路低</Description>
     <Name>P2147</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油喷射器B组电源电压电路高</Description>
-    <Name>P2151</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14351,48 +12796,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>燃油喷射器C组电源电压电路/开路</Description>
-    <Name>P2152</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>燃油喷射器B组电源电压电路/开路</Description>
     <Name>P2149</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油喷射器C组电源电压电路低</Description>
-    <Name>P2153</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油喷射器C组电源电压电路高</Description>
-    <Name>P2154</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油喷射器D组电源电压电路/开路</Description>
-    <Name>P2155</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油喷射器D组电源电压电路低</Description>
-    <Name>P2156</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油喷射器D组电源电压电路高</Description>
-    <Name>P2157</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>车速传感器（VSS）的B</Description>
-    <Name>P2158</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>车速传感器（VSS）B的范围/性能</Description>
-    <Name>P2159</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14401,28 +12806,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>车速 - 轮子速度的相关性</Description>
-    <Name>P215A</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>燃油喷射器B组电源电压电路高</Description>
     <Name>P2151</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>车速 - 输出轴速度的相关性</Description>
-    <Name>P215B</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>燃油喷射器C组电源电压电路/开路</Description>
     <Name>P2152</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>输出轴速度 - 轮子速度的相关性</Description>
-    <Name>P215C</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14446,18 +12836,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>车速传感器（VSS）B电路低</Description>
-    <Name>P2160</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>燃油喷射器D组电源电压电路高</Description>
     <Name>P2157</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>车速传感器（VSS）B电路间歇/错误</Description>
-    <Name>P2161</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14466,18 +12846,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>车速传感器（VSS）A/B相关性</Description>
-    <Name>P2162</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>车速传感器（VSS）B的范围/性能</Description>
     <Name>P2159</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器A最大停止位置的性能</Description>
-    <Name>P2163</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14486,18 +12856,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门/油门踏板位置传感器B最大停止位置的性能</Description>
-    <Name>P2164</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>车速 - 输出轴速度的相关性</Description>
     <Name>P215B</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器C最大停止位置的性能</Description>
-    <Name>P2165</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14506,33 +12866,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门/油门踏板位置传感器D最大停止位置的性能</Description>
-    <Name>P2166</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器E最大停止位置的性能</Description>
-    <Name>P2167</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门/油门踏板位置传感器F最大停止位置的性能</Description>
-    <Name>P2168</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>排气压力调节器通风电磁阀控制电路/开路</Description>
-    <Name>P2169</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>车速传感器（VSS）B电路低</Description>
     <Name>P2160</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>喷油器E组供电电压电路/开路</Description>
-    <Name>P216A</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14541,18 +12876,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>喷油器E组供电电压电路低</Description>
-    <Name>P216B</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>车速传感器（VSS）A/B相关性</Description>
     <Name>P2162</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>喷油器E组供电电压电路高</Description>
-    <Name>P216C</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14561,18 +12886,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>喷油器F组供电电压电路/开路</Description>
-    <Name>P216D</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>节气门/油门踏板位置传感器B最大停止位置的性能</Description>
     <Name>P2164</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>喷油器F组供电电压电路低</Description>
-    <Name>P216E</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14581,18 +12896,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>喷油器F组供电电压电路高</Description>
-    <Name>P216F</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>节气门/油门踏板位置传感器D最大停止位置的性能</Description>
     <Name>P2166</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>排气压力调节器通风电磁阀控制电路低</Description>
-    <Name>P2170</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14601,18 +12906,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>排气压力调节器通风电磁阀控制电路高</Description>
-    <Name>P2171</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>节气门/油门踏板位置传感器F最大停止位置的性能</Description>
     <Name>P2168</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门执行器控制系统 - 检测到突然的高空气流量</Description>
-    <Name>P2172</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14621,18 +12916,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门执行器控制系统 - 检测到高空气流量</Description>
-    <Name>P2173</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>喷油器E组供电电压电路/开路</Description>
     <Name>P216A</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门执行器控制系统 - 检测到突然的低空气流量</Description>
-    <Name>P2174</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14641,18 +12926,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门执行器控制系统 - 检测到低空气流量</Description>
-    <Name>P2175</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>喷油器E组供电电压电路高</Description>
     <Name>P216C</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>节气门执行器控制系统 - 怠速位置没有学会</Description>
-    <Name>P2176</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14661,18 +12936,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>离开怠速时系统（混合比）太稀（组1）</Description>
-    <Name>P2177</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>喷油器F组供电电压电路低</Description>
     <Name>P216E</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>离开怠速时系统（混合比）太浓（组1）</Description>
-    <Name>P2178</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14681,18 +12946,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>离开怠速时系统（混合比）太稀（组2）</Description>
-    <Name>P2179</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>排气压力调节器通风电磁阀控制电路低</Description>
     <Name>P2170</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>喷油器G组供电电压电路/开路</Description>
-    <Name>P217A</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14701,18 +12956,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>喷油器G组供电电压电路低</Description>
-    <Name>P217B</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>节气门执行器控制系统 - 检测到突然的高空气流量</Description>
     <Name>P2172</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>喷油器G组供电电压电路高</Description>
-    <Name>P217C</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14721,18 +12966,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>喷油器H组供电电压电路/开路</Description>
-    <Name>P217D</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>节气门执行器控制系统 - 检测到突然的低空气流量</Description>
     <Name>P2174</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>喷油器H组供电电压电路低</Description>
-    <Name>P217E</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14741,28 +12976,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>喷油器H组供电电压电路高</Description>
-    <Name>P217F</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>离开怠速时系统（混合比）太浓（组2）</Description>
-    <Name>P2180</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>冷却系统性能</Description>
-    <Name>P2181</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>节气门执行器控制系统 - 怠速位置没有学会</Description>
     <Name>P2176</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>发动机冷却液温度（ECT）传感器2电路</Description>
-    <Name>P2182</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14771,18 +12986,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>发动机冷却液温度（ECT）传感器2电路范围/性能</Description>
-    <Name>P2183</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>离开怠速时系统（混合比）太浓（组1）</Description>
     <Name>P2178</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>发动机冷却液温度（ECT）传感器2电路低</Description>
-    <Name>P2184</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14791,18 +12996,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>发动机冷却液温度（ECT）传感器2电路高</Description>
-    <Name>P2185</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>喷油器G组供电电压电路/开路</Description>
     <Name>P217A</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>发动机冷却液温度（ECT）传感器2电路间歇/错误</Description>
-    <Name>P2186</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14811,28 +13006,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>怠速时系统（混合比）太稀（组1）</Description>
-    <Name>P2187</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>喷油器G组供电电压电路高</Description>
     <Name>P217C</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>怠速时系统（混合比）太浓（组1）</Description>
-    <Name>P2188</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>喷油器H组供电电压电路/开路</Description>
     <Name>P217D</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>怠速时系统（混合比）太稀（组2）</Description>
-    <Name>P2189</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14871,18 +13051,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>怠速时系统（混合比）太浓（组2）</Description>
-    <Name>P2190</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>发动机冷却液温度（ECT）传感器2电路高</Description>
     <Name>P2185</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>发动机更高负荷时系统（混合比）太稀（组1）</Description>
-    <Name>P2191</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14891,18 +13061,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>发动机更高负荷时系统（混合比）太浓（组1）</Description>
-    <Name>P2192</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>怠速时系统（混合比）太稀（组1）</Description>
     <Name>P2187</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>发动机更高负荷时系统（混合比）太稀（组1）</Description>
-    <Name>P2193</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -14911,38 +13071,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>发动机更高负荷时系统（混合比）太浓（组1）</Description>
-    <Name>P2194</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>怠速时系统（混合比）太稀（组2）</Description>
     <Name>P2189</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器信号有偏差/卡在（混合比）太稀的位置（组1传感器1）</Description>
-    <Name>P2195</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器信号有偏差/卡在（混合比）太浓的位置（组1传感器1）</Description>
-    <Name>P2196</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器信号有偏差/卡在（混合比）太稀的位置（组2传感器1）</Description>
-    <Name>P2197</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器信号有偏差/卡在（混合比）太浓的位置（组2传感器1）</Description>
-    <Name>P2198</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>进气温度（IAT）传感器1/2的相关性</Description>
-    <Name>P2199</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15046,28 +13176,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氮氧化物传感器电路（组1）</Description>
-    <Name>P2200</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氮氧化物传感器电路范围/性能（组1）</Description>
-    <Name>P2201</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氮氧化物传感器电路低（组1）</Description>
-    <Name>P2202</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氮氧化物传感器加热器监控电路的低（组1）</Description>
     <Name>P2210</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氮氧化物传感器电路高（组1）</Description>
-    <Name>P2203</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15086,18 +13196,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氮氧化物传感器电路间歇（组1）</Description>
-    <Name>P2204</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氮氧化物传感器电路范围/性能（组2）</Description>
     <Name>P2214</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氮氧化物传感器加热器控制电路/开路（组1）</Description>
-    <Name>P2205</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15106,18 +13206,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氮氧化物传感器加热器控制电路低（组1）</Description>
-    <Name>P2206</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氮氧化物传感器电路高（组2）</Description>
     <Name>P2216</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氮氧化物传感器加热器控制电路高（组1）</Description>
-    <Name>P2207</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15126,28 +13216,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氮氧化物传感器加热器监控电路（组1）</Description>
-    <Name>P2208</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氮氧化物传感器加热器控制电路/开路（组2）</Description>
     <Name>P2218</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氮氧化物传感器加热器监控电路范围/性能（组1）</Description>
-    <Name>P2209</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氮氧化物传感器加热器控制电路低（组2）</Description>
     <Name>P2219</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氮氧化物传感器加热器监控电路的低（组1）</Description>
-    <Name>P2210</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15156,18 +13231,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氮氧化物传感器加热器监控电路高（组1）</Description>
-    <Name>P2211</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氮氧化物传感器加热器监控电路（组2）</Description>
     <Name>P2221</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氮氧化物传感器加热器监控电路间歇（组1）</Description>
-    <Name>P2212</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15176,18 +13241,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氮氧化物传感器电路（组2）</Description>
-    <Name>P2213</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氮氧化物传感器加热器监控电路的低（组2）</Description>
     <Name>P2223</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氮氧化物传感器电路范围/性能（组2）</Description>
-    <Name>P2214</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15196,18 +13251,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氮氧化物传感器电路低（组2）</Description>
-    <Name>P2215</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氮氧化物传感器加热器监控电路间歇（组2）</Description>
     <Name>P2225</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氮氧化物传感器电路高（组2）</Description>
-    <Name>P2216</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15216,28 +13261,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氮氧化物传感器电路间歇（组2）</Description>
-    <Name>P2217</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>大气压力（BARO）传感器A电路范围/性能</Description>
     <Name>P2227</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氮氧化物传感器加热器控制电路/开路（组2）</Description>
-    <Name>P2218</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>大气压力（BARO）传感器A电路低</Description>
     <Name>P2228</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氮氧化物传感器加热器控制电路低（组2）</Description>
-    <Name>P2219</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15253,136 +13283,6 @@
   <DTC>
     <Description>大气压力（BARO）传感器B电路范围/性能</Description>
     <Name>P222B</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>大气压力（BARO）传感器B电路低</Description>
-    <Name>P222C</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>大气压力（BARO）传感器B电路高</Description>
-    <Name>P222D</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氮氧化物传感器加热器控制电路高（组2）</Description>
-    <Name>P2220</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>大气压力（BARO）传感器B电路间歇/不稳定</Description>
-    <Name>P222E</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氮氧化物传感器加热器监控电路（组2）</Description>
-    <Name>P2221</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>大气压力（BARO）传感器A/B的相关性</Description>
-    <Name>P222F</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氮氧化物传感器加热器监控电路范围/性能（组2）</Description>
-    <Name>P2222</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>大气压力（BARO）传感器A电路间歇/不稳定</Description>
-    <Name>P2230</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氮氧化物传感器加热器监控电路的低（组2）</Description>
-    <Name>P2223</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器信号电路短路到加热电路（组1传感器 1）</Description>
-    <Name>P2231</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氮氧化物传感器加热器监控电路高（组2）</Description>
-    <Name>P2224</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器信号电路短路到加热电路（组1传感器 2）</Description>
-    <Name>P2232</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氮氧化物传感器加热器监控电路间歇（组2）</Description>
-    <Name>P2225</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器信号电路短路到加热电路（组1传感器 3）</Description>
-    <Name>P2233</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>大气压力（BARO）传感器A电路</Description>
-    <Name>P2226</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器信号电路短路到加热电路（组2传感器 1）</Description>
-    <Name>P2234</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>大气压力（BARO）传感器A电路范围/性能</Description>
-    <Name>P2227</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器信号电路短路到加热电路（组2传感器 2）</Description>
-    <Name>P2235</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>大气压力（BARO）传感器A电路低</Description>
-    <Name>P2228</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器信号电路短路到加热电路（组2传感器 3）</Description>
-    <Name>P2236</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>大气压力（BARO）传感器A电路高</Description>
-    <Name>P2229</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器正电流电路/开路（组1传感器 1）</Description>
-    <Name>P2237</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>大气压力（BARO）传感器B电路</Description>
-    <Name>P222A</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器正电流电路低（组1传感器 1）</Description>
-    <Name>P2238</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>大气压力（BARO）传感器B电路范围/性能</Description>
-    <Name>P222B</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器正电流电路高（组1传感器 1）</Description>
-    <Name>P2239</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15416,18 +13316,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氧传感器正电流电路/开路（组2传感器 1）</Description>
-    <Name>P2240</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氧传感器信号电路短路到加热电路（组1传感器 2）</Description>
     <Name>P2232</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器正电流电路低（组2传感器 1）</Description>
-    <Name>P2241</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15436,18 +13326,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氧传感器正电流电路高（组2传感器 1）</Description>
-    <Name>P2242</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氧传感器信号电路短路到加热电路（组2传感器 1）</Description>
     <Name>P2234</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器参考电压电路/开路（组1传感器 1）</Description>
-    <Name>P2243</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15456,18 +13336,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氧传感器参考电压性能（组1传感器 1）</Description>
-    <Name>P2244</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氧传感器信号电路短路到加热电路（组2传感器 3）</Description>
     <Name>P2236</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器参考电压电路低（组1传感器 1）</Description>
-    <Name>P2245</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15476,18 +13346,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氧传感器参考电压电路高（组1传感器 1）</Description>
-    <Name>P2246</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氧传感器正电流电路低（组1传感器 1）</Description>
     <Name>P2238</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器参考电压电路/开路（组2传感器 1）</Description>
-    <Name>P2247</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15496,23 +13356,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氧传感器参考电压性能（组2传感器 1）</Description>
-    <Name>P2248</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器参考电压电路低（组2传感器 1）</Description>
-    <Name>P2249</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氧传感器正电流电路/开路（组2传感器 1）</Description>
     <Name>P2240</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器参考电压电路高（组2传感器 1）</Description>
-    <Name>P2250</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15521,18 +13366,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氧传感器负电流控制电路/开路（组1传感器 1）</Description>
-    <Name>P2251</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氧传感器正电流电路高（组2传感器 1）</Description>
     <Name>P2242</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器负电流控制电路低（组1传感器 1）</Description>
-    <Name>P2252</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15541,18 +13376,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氧传感器负电流控制电路高（组1传感器 1）</Description>
-    <Name>P2253</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氧传感器参考电压性能（组1传感器 1）</Description>
     <Name>P2244</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器负电流控制电路/开路（组2传感器 1）</Description>
-    <Name>P2254</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15561,18 +13386,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氧传感器负电流控制电路低（组2传感器 1）</Description>
-    <Name>P2255</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氧传感器参考电压电路高（组1传感器 1）</Description>
     <Name>P2246</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器负电流控制电路高（组2传感器 1）</Description>
-    <Name>P2256</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15581,18 +13396,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>二次空气喷射系统控制的A电路低</Description>
-    <Name>P2257</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氧传感器参考电压性能（组2传感器 1）</Description>
     <Name>P2248</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>二次空气喷射系统控制的A电路高</Description>
-    <Name>P2258</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15601,18 +13406,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>二次空气喷射系统控制的B电路低</Description>
-    <Name>P2259</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氧传感器参考电压电路高（组2传感器 1）</Description>
     <Name>P2250</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>二次空气喷射系统控制的B电路高</Description>
-    <Name>P2260</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15621,18 +13416,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>涡轮/超级增压器旁路阀门 - 机械故障</Description>
-    <Name>P2261</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氧传感器负电流控制电路低（组1传感器 1）</Description>
     <Name>P2252</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>涡轮/超级增压器未检测到增压压力 - 机械故障</Description>
-    <Name>P2262</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15641,18 +13426,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>涡轮/超级增压器增压系统性能</Description>
-    <Name>P2263</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氧传感器负电流控制电路/开路（组2传感器 1）</Description>
     <Name>P2254</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油含水传感器电路</Description>
-    <Name>P2264</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15661,18 +13436,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>燃油含水传感器电路范围/性能</Description>
-    <Name>P2265</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氧传感器负电流控制电路高（组2传感器 1）</Description>
     <Name>P2256</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油含水传感器电路低</Description>
-    <Name>P2266</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15681,38 +13446,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>燃油含水传感器电路高</Description>
-    <Name>P2267</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>二次空气喷射系统控制的A电路高</Description>
     <Name>P2258</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>燃油含水传感器电路间歇</Description>
-    <Name>P2268</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>二次空气喷射系统控制的B电路低</Description>
     <Name>P2259</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油中含水</Description>
-    <Name>P2269</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油中含水指示灯控制电路</Description>
-    <Name>P226A</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>涡轮/超级增压器增压压力太高 - 机械性故障</Description>
-    <Name>P226B</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15726,18 +13466,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氧传感器信号有偏差/卡在（混合比）稀的状态（组1传感器 2）</Description>
-    <Name>P2270</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>涡轮/超级增压器未检测到增压压力 - 机械故障</Description>
     <Name>P2262</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器信号有偏差/卡在（混合比）浓的状态（组1传感器 2）</Description>
-    <Name>P2271</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15746,18 +13476,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氧传感器信号有偏差/卡在（混合比）稀的状态（组2传感器 2）</Description>
-    <Name>P2272</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>燃油含水传感器电路</Description>
     <Name>P2264</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器信号有偏差/卡在（混合比）浓的状态（组2传感器 2）</Description>
-    <Name>P2273</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15766,18 +13486,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氧传感器信号有偏差/卡在（混合比）稀的状态（组1传感器 3）</Description>
-    <Name>P2274</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>燃油含水传感器电路低</Description>
     <Name>P2266</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器信号有偏差/卡在（混合比）浓的状态（组1传感器 3）</Description>
-    <Name>P2275</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15791,18 +13501,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氧传感器信号有偏差/卡在（混合比）稀的状态（组2传感器 3）</Description>
-    <Name>P2276</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>燃油中含水</Description>
     <Name>P2269</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器信号有偏差/卡在（混合比）浓的状态（组2传感器 3）</Description>
-    <Name>P2277</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15811,18 +13511,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氧传感器信号有偏差/被替换（组1，传感器3） /（组2，传感器3）</Description>
-    <Name>P2278</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>涡轮/超级增压器增压压力太高 - 机械性故障</Description>
     <Name>P226B</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>进气系统泄漏</Description>
-    <Name>P2279</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15841,18 +13531,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>空气滤清器与空气流量（MAF）传感器之间空气流量限制/空气泄漏</Description>
-    <Name>P2280</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氧传感器信号有偏差/卡在（混合比）浓的状态（组2传感器 2）</Description>
     <Name>P2273</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>空气流量（MAF）传感器与节气门体之间空气泄漏</Description>
-    <Name>P2281</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15861,18 +13541,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>节气门体与进气阀门之间空气泄漏</Description>
-    <Name>P2282</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氧传感器信号有偏差/卡在（混合比）浓的状态（组1传感器 3）</Description>
     <Name>P2275</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>喷油器控制压力传感器电路</Description>
-    <Name>P2283</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15881,18 +13551,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>喷油器控制压力传感器电路范围/性能</Description>
-    <Name>P2284</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>氧传感器信号有偏差/卡在（混合比）浓的状态（组2传感器 3）</Description>
     <Name>P2277</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>喷油器控制压力传感器电路低</Description>
-    <Name>P2285</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15901,43 +13561,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>喷油器控制压力传感器电路高</Description>
-    <Name>P2286</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>进气系统泄漏</Description>
     <Name>P2279</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>喷油器控制压力传感器电路间歇</Description>
-    <Name>P2287</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>喷油器控制压力过高</Description>
-    <Name>P2288</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>喷油器控制压力过高 - 发动机关闭</Description>
-    <Name>P2289</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油压力调节器1 - 发动机被强迫关闭</Description>
-    <Name>P228A</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油压力调节器2 - 发动机被强迫关闭</Description>
-    <Name>P228B</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油压力调节器1超过控制极限 - 压力太低</Description>
-    <Name>P228C</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15946,18 +13571,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>燃油压力调节器1超过控制极限 - 压力太高</Description>
-    <Name>P228D</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>空气流量（MAF）传感器与节气门体之间空气泄漏</Description>
     <Name>P2281</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油压力调节器1超过学习极限 - 太低</Description>
-    <Name>P228E</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15966,18 +13581,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>燃油压力调节器1超过学习极限 - 太高</Description>
-    <Name>P228F</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>喷油器控制压力传感器电路</Description>
     <Name>P2283</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>喷油器控制压力过低</Description>
-    <Name>P2290</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -15986,18 +13591,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>喷油器控制压力过低发动机在启动</Description>
-    <Name>P2291</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>喷油器控制压力传感器电路低</Description>
     <Name>P2285</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>喷油器控制压力不稳定</Description>
-    <Name>P2292</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -16006,18 +13601,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>燃油压力调节器2性能</Description>
-    <Name>P2293</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>喷油器控制压力传感器电路间歇</Description>
     <Name>P2287</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油压力调节器2控制电路</Description>
-    <Name>P2294</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -16026,18 +13611,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>燃油压力调节器2控制电路低</Description>
-    <Name>P2295</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>喷油器控制压力过高 - 发动机关闭</Description>
     <Name>P2289</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油压力调节器2控制电路高</Description>
-    <Name>P2296</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -16046,18 +13621,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>氧传感器在减速时超出正常范围（组1传感器 1）</Description>
-    <Name>P2297</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>燃油压力调节器2 - 发动机被强迫关闭</Description>
     <Name>P228B</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>氧传感器在减速时超出正常范围（组2传感器 1）</Description>
-    <Name>P2298</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -16066,18 +13631,8 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>刹车踏板位置/油门踏板位置不兼容</Description>
-    <Name>P2299</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>燃油压力调节器1超过控制极限 - 压力太高</Description>
     <Name>P228D</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油压力调节器2超过控制极限 - 压力太低</Description>
-    <Name>P229A</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -16086,28 +13641,13 @@
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>燃油压力调节器2超过控制极限 - 压力太高</Description>
-    <Name>P229B</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>燃油压力调节器1超过学习极限 - 太高</Description>
     <Name>P228F</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
-    <Description>燃油压力调节器2超过学习极限 - 太低</Description>
-    <Name>P229C</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
     <Description>喷油器控制压力过低</Description>
     <Name>P2290</Name>
-    <Category>燃油，空气或排放控制</Category>
-  </DTC>
-  <DTC>
-    <Description>燃油压力调节器2超过学习极限 - 太高</Description>
-    <Name>P229D</Name>
     <Category>燃油，空气或排放控制</Category>
   </DTC>
   <DTC>
@@ -16216,11 +13756,6 @@
     <Category>点火系统</Category>
   </DTC>
   <DTC>
-    <Description>点火线圈A主控制电路低</Description>
-    <Name>P2300</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
     <Description>点火线圈C次电路</Description>
     <Name>P2308</Name>
     <Category>点火系统</Category>
@@ -16228,56 +13763,11 @@
   <DTC>
     <Description>点火线圈D主控制电路低</Description>
     <Name>P2309</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈A主控制电路高</Description>
-    <Name>P2301</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈A次电路</Description>
-    <Name>P2302</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈B主控制电路低</Description>
-    <Name>P2303</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈B主控制电路高</Description>
-    <Name>P2304</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈B次电路</Description>
-    <Name>P2305</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈C主控制电路低</Description>
-    <Name>P2306</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈C主控制电路高</Description>
-    <Name>P2307</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈C次电路</Description>
-    <Name>P2308</Name>
     <Category>点火系统</Category>
   </DTC>
   <DTC>
     <Description>点火线圈D主控制电路高</Description>
     <Name>P2310</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈D主控制电路低</Description>
-    <Name>P2309</Name>
     <Category>点火系统</Category>
   </DTC>
   <DTC>
@@ -16293,56 +13783,6 @@
   <DTC>
     <Description>点火线圈E主控制电路高</Description>
     <Name>P2313</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈E次电路</Description>
-    <Name>P2314</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈F主控制电路低</Description>
-    <Name>P2315</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈F主控制电路高</Description>
-    <Name>P2316</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈D主控制电路高</Description>
-    <Name>P2310</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈F次电路</Description>
-    <Name>P2317</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈D次电路</Description>
-    <Name>P2311</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈E主控制电路低</Description>
-    <Name>P2312</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈G主控制电路低</Description>
-    <Name>P2318</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈E主控制电路高</Description>
-    <Name>P2313</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈G主控制电路高</Description>
-    <Name>P2319</Name>
     <Category>点火系统</Category>
   </DTC>
   <DTC>
@@ -16393,56 +13833,6 @@
   <DTC>
     <Description>点火线圈H次电路</Description>
     <Name>P2323</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈I主控制电路低</Description>
-    <Name>P2324</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈I主控制电路高</Description>
-    <Name>P2325</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈G次电路</Description>
-    <Name>P2320</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈IC次电路</Description>
-    <Name>P2326</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈H主控制电路低</Description>
-    <Name>P2321</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈J主控制电路低</Description>
-    <Name>P2327</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈H主控制电路高</Description>
-    <Name>P2322</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈J主控制电路高</Description>
-    <Name>P2328</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈H次电路</Description>
-    <Name>P2323</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈J次电路</Description>
-    <Name>P2329</Name>
     <Category>点火系统</Category>
   </DTC>
   <DTC>
@@ -16516,103 +13906,13 @@
     <Category>点火系统</Category>
   </DTC>
   <DTC>
-    <Description>点火线圈K主控制电路低</Description>
-    <Name>P2330</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
     <Description>气缸3高于爆震阈值</Description>
     <Name>P2338</Name>
     <Category>点火系统</Category>
   </DTC>
   <DTC>
-    <Description>点火线圈K主控制电路高</Description>
-    <Name>P2331</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
     <Description>气缸4高于爆震阈值</Description>
     <Name>P2339</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈K次电路</Description>
-    <Name>P2332</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈L主控制电路低</Description>
-    <Name>P2333</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈L主控制电路高</Description>
-    <Name>P2334</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>点火线圈L次电路</Description>
-    <Name>P2335</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>气缸1高于爆震阈值</Description>
-    <Name>P2336</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>气缸2高于爆震阈值</Description>
-    <Name>P2337</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>气缸3高于爆震阈值</Description>
-    <Name>P2338</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>气缸5高于爆震阈值</Description>
-    <Name>P2340</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>气缸4高于爆震阈值</Description>
-    <Name>P2339</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>气缸6高于爆震阈值</Description>
-    <Name>P2341</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>气缸7高于爆震阈值</Description>
-    <Name>P2342</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>气缸8高于爆震阈值</Description>
-    <Name>P2343</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>气缸9高于爆震阈值</Description>
-    <Name>P2344</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>气缸10高于爆震阈值</Description>
-    <Name>P2345</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>气缸11高于爆震阈值</Description>
-    <Name>P2346</Name>
-    <Category>点火系统</Category>
-  </DTC>
-  <DTC>
-    <Description>气缸12高于爆震阈值</Description>
-    <Name>P2347</Name>
     <Category>点火系统</Category>
   </DTC>
   <DTC>
@@ -20298,36 +17598,6 @@
   <DTC>
     <Description>气缸12停缸系统/进气门控制 - 电路低</Description>
     <Name>P3491</Name>
-    <Category>气缸停缸</Category>
-  </DTC>
-  <DTC>
-    <Description>气缸12停缸系统/进气门控制 - 电路高</Description>
-    <Name>P3492</Name>
-    <Category>气缸停缸</Category>
-  </DTC>
-  <DTC>
-    <Description>气缸12排气门控制 - 电路开路</Description>
-    <Name>P3493</Name>
-    <Category>气缸停缸</Category>
-  </DTC>
-  <DTC>
-    <Description>气缸12排气门控制 - 性能问题</Description>
-    <Name>P3494</Name>
-    <Category>气缸停缸</Category>
-  </DTC>
-  <DTC>
-    <Description>气缸12排气门控制 - 电路低</Description>
-    <Name>P3495</Name>
-    <Category>气缸停缸</Category>
-  </DTC>
-  <DTC>
-    <Description>气缸12排气门控制 - 电路高</Description>
-    <Name>P3496</Name>
-    <Category>气缸停缸</Category>
-  </DTC>
-  <DTC>
-    <Description>气缸停缸系统（组2）</Description>
-    <Name>P3497</Name>
     <Category>气缸停缸</Category>
   </DTC>
   <DTC>
